@@ -207,6 +207,9 @@ button, .btn { font: inherit; font-weight: 600; font-size: 0.88rem; border: 1px 
     } catch (err) { $("res").innerHTML = `<p class="note">A pesquisa de moradas não respondeu. Clique diretamente no mapa.</p>`; }
   });
   map.on("click", (e) => { analisar(e.latlng.lat, e.latlng.lng); reverse(e.latlng.lat, e.latlng.lng); });
+  // Morada vinda da app (?q=...): pesquisa logo ao abrir.
+  const q0 = new URLSearchParams(location.search).get("q");
+  if (q0) { $("q").value = q0; $("f").requestSubmit(); }
 })();
 </script>
 </body>
