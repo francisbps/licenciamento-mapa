@@ -1246,12 +1246,22 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   window.addEventListener("message", (e) => {
     if (e.origin !== location.origin || e.source !== frame.contentWindow || !e.data || e.data.tipo !== "licenciamento-mapa") return;
     aplicarMapa(e.data.dados || {}, Date.now() - pedidoApp > 15000);
+    if (e.data.limpo) { state.doMapa = false; save(); render(); return; }
+    pinAtivo = true;
     fillForm(); render();
     toast("Condicionantes do mapa passadas para o questionário");
   });
+  // Mudar ou apagar a morada tira o pin do mapa (e as condicionantes que vieram dele); ao sair do campo, volta a procurar.
+  let pinAtivo = !!qMapa();
+  $("f").addEventListener("input", (e) => {
+    if (!["morada", "freguesia", "concelho"].includes(e.target.id) || !pinAtivo) return;
+    pinAtivo = false;
+    frame.contentWindow.postMessage({ tipo: "limpar" }, location.origin);
+    aplicarMapa({ k: [] }, false); state.doMapa = false; save(); render();
+  });
   $("f").addEventListener("change", (e) => {
     if (!["morada", "freguesia", "concelho"].includes(e.target.id) || !qMapa()) return;
-    pedidoApp = Date.now();
+    pedidoApp = Date.now(); pinAtivo = true;
     frame.contentWindow.postMessage({ tipo: "pesquisar", q: qMapa() }, location.origin);
   });
   // Dados vindos do Mapa de Condicionantes: #mapa.<base64url de {m, f, c, k}>

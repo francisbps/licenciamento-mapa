@@ -53,6 +53,7 @@ button, .btn { font: inherit; font-weight: 600; font-size: 0.88rem; border: 1px 
 .cta { display: grid; gap: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 6px; }
 .foot { font-size: 0.78rem; color: var(--muted); }
 .leaflet-container { font-family: var(--f-body); }
+.pin { background: none; border: 0; filter: drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
 /* Dentro da app (?embed=1): sem título nem rodapé, painel mais estreito. */
 .embed .eyebrow, .embed h1, .embed .intro, .embed #cta, .embed .foot { display: none; }
 .embed body { grid-template-columns: minmax(340px, 400px) 1fr; }
@@ -126,7 +127,18 @@ button, .btn { font: inherit; font-weight: 600; font-size: 0.88rem; border: 1px 
   $("layers").innerHTML = LAYERS.map((l) => `<label><input type="checkbox" data-l="${l.id}" ${l.on ? "checked" : ""}><span><span class="sw" style="display:inline-block;width:10px;height:10px;background:${l.cor};margin-right:6px;border-radius:2px"></span>${esc(l.nome)}</span></label>`).join("");
   $("layers").addEventListener("change", (e) => { const id = e.target.dataset.l; if (!id) return; e.target.checked ? wms[id].addTo(map) : map.removeLayer(wms[id]); });
 
-  let marker = null, local = { morada: "", concelho: "", freguesia: "" }, achados = {};
+  let marker = null, local = { morada: "", concelho: "", freguesia: "" }, achados = {}, ger = 0, ultimaQ = "";
+  const PIN = L.divIcon({ className: "pin", iconSize: [28, 40], iconAnchor: [14, 40],
+    html: '<svg viewBox="0 0 28 40" width="28" height="40" aria-hidden="true"><path d="M14 1C7 1 1.5 6.4 1.5 13.3 1.5 22.5 14 39 14 39s12.5-16.5 12.5-25.7C26.5 6.4 21 1 14 1z" fill="#b3261e" stroke="#fff" stroke-width="2"/><circle cx="14" cy="13.5" r="4.6" fill="#fff"/></svg>' });
+  // Tira o pin e o resultado (morada apagada ou alterada) e avisa a app.
+  function limpar() {
+    ger++; ultimaQ = "";
+    if (marker) { map.removeLayer(marker); marker = null; }
+    achados = {}; local = { morada: "", concelho: "", freguesia: "" };
+    $("where").hidden = true; $("cta").hidden = true;
+    $("res").innerHTML = `<p class="note">Ainda não escolheu um local.</p>`;
+    if (EMBED) window.parent.postMessage({ tipo: "licenciamento-mapa", dados: { k: [] }, limpo: true }, location.origin);
+  }
 
   // Consulta um serviço WMS no ponto (GetFeatureInfo). Resolve "sim", "nao" ou "erro".
   async function consultar(l, lat, lng) {
@@ -162,11 +174,12 @@ button, .btn { font: inherit; font-weight: 600; font-size: 0.88rem; border: 1px 
   }
 
   async function analisar(lat, lng) {
-    if (marker) marker.setLatLng([lat, lng]); else marker = L.marker([lat, lng]).addTo(map);
+    const g = ++ger;
+    if (marker) marker.setLatLng([lat, lng]); else marker = L.marker([lat, lng], { icon: PIN, keyboard: false }).addTo(map);
     achados = {};
     const estado = {}; renderRes(estado);
-    await Promise.all(LAYERS.map(async (l) => { const r = await consultar(l, lat, lng); estado[l.id] = r.s; if (r.s === "sim" && l.app) achados[l.app] = true; renderRes(estado); }));
-    atualizarCTA();
+    await Promise.all(LAYERS.map(async (l) => { const r = await consultar(l, lat, lng); if (g !== ger) return; estado[l.id] = r.s; if (r.s === "sim" && l.app) achados[l.app] = true; renderRes(estado); }));
+    if (g === ger) atualizarCTA();
   }
 
   // Passa a morada e as condicionantes à app num token seguro para o #anchor (base64url, sem "=").
@@ -202,13 +215,16 @@ button, .btn { font: inherit; font-weight: 600; font-size: 0.88rem; border: 1px 
 
   $("f").addEventListener("submit", async (e) => {
     e.preventDefault();
-    const q = $("q").value.trim(); if (!q) return;
+    const q = $("q").value.trim(); if (!q) { limpar(); return; }
+    const g0 = ++ger;
     $("res").innerHTML = `<p class="note">A procurar a morada…</p>`;
     try {
       const r = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=1&countrycodes=pt&accept-language=pt&q=${encodeURIComponent(q)}`);
       const j = await r.json();
-      if (!j.length) { $("res").innerHTML = `<p class="note">Não encontrei essa morada. Experimente indicar o concelho, ou clique no mapa.</p>`; return; }
+      if (!j.length) { if (g0 !== ger) return; limpar(); $("res").innerHTML = `<p class="note">Não encontrei essa morada. Experimente indicar o concelho, ou clique no mapa.</p>`; return; }
+      if (g0 !== ger) return;
       const lat = +j[0].lat, lng = +j[0].lon;
+      ultimaQ = q;
       aplicarMorada(j[0]); mostrarLocal();
       map.setView([lat, lng], 17);
       analisar(lat, lng);
@@ -218,9 +234,13 @@ button, .btn { font: inherit; font-weight: 600; font-size: 0.88rem; border: 1px 
   // Morada vinda da app (?q=...): pesquisa logo ao abrir.
   const q0 = new URLSearchParams(location.search).get("q");
   if (q0) { $("q").value = q0; $("f").requestSubmit(); }
+  // Apagar ou mudar a morada tira o pin.
+  $("q").addEventListener("input", () => { if ($("q").value.trim() === ultimaQ) return; if (marker) limpar(); else ger++; });
   // A app pede uma pesquisa quando o utilizador escreve a morada no questionário.
   window.addEventListener("message", (e) => {
-    if (e.origin !== location.origin || !e.data || e.data.tipo !== "pesquisar" || !e.data.q) return;
+    if (e.origin !== location.origin || !e.data) return;
+    if (e.data.tipo === "limpar") { $("q").value = ""; limpar(); return; }
+    if (e.data.tipo !== "pesquisar" || !e.data.q) return;
     if ($("q").value.trim() === e.data.q) return;
     $("q").value = e.data.q; $("f").requestSubmit();
   });
