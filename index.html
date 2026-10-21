@@ -50,16 +50,25 @@ h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(1.6rem, 3
 .legend span::before { content: ""; display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 6px; }
 .legend .r::before { background: var(--red); } .legend .y::before { background: var(--ochre); }
 .lede { margin: 6px 0 0; color: var(--muted); max-width: 65ch; }
-.grid { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 20px; align-items: start; }
+.grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; align-items: start; }
+body:not([data-vista="resumo"]) #resultado { display: none; }
+body[data-vista="resumo"] #questionario { display: none; }
+#questionario { max-width: 860px; width: 100%; justify-self: center; }
+.resbar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.fim { display: flex; justify-content: flex-end; padding-top: 8px; border-top: 1px solid var(--line); }
+.btn.grande { font-size: 1rem; padding: 10px 18px; }
+p.sub { font-family: var(--f-display); font-weight: 700; font-size: 0.85rem; margin: 6px 0 4px; }
+.cond-item { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 0.9rem; }
+.cond-item span.note { grid-column: 1 / -1; }
+.qsel { font: inherit; padding: 7px 8px; border: 1px solid var(--line); border-radius: 4px; background: var(--field, var(--panel)); color: var(--ink); max-width: 100%; }
 @media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
 details.mais summary, details.regra summary { cursor: pointer; font-weight: 600; padding: 6px 0; }
 details.regra { border-bottom: 1px solid var(--line); padding-bottom: 6px; }
 .rg { padding: 6px 0 6px 12px; border-left: 2px solid var(--line); margin: 4px 0; }
 .rg p { margin: 0; }
 ul.regs { margin: 0 0 12px; padding-left: 18px; }
-.mapa iframe { width: 100%; height: 540px; border: 1px solid var(--line); border-radius: 6px; display: block; background: var(--bg); }
-.mapa .mhd { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 8px 16px; margin-bottom: 12px; }
-.mapa .mhd h2 { margin: 0; font: 700 1.15rem/1.2 var(--f-display, inherit); }
+.mapa iframe { width: 100%; height: 560px; border: 1px solid var(--line); border-radius: 6px; display: block; background: var(--bg); }
+.mapa p { margin: 4px 0 0; text-align: right; }
 @media (max-width: 760px) { .mapa iframe { height: 720px; } }
 .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 18px; min-width: 0; }
 h2 { font-family: var(--f-display); font-size: 1.05rem; font-weight: 700; margin: 0 0 4px; }
@@ -171,76 +180,44 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     <div>
       <div class="eyebrow">RJUE · DL 555/99 na redação do DL 10/2024 (Simplex Urbanístico)</div>
       <h1>Licenciamento de Obras</h1>
-      <p class="lede">Responda às perguntas sobre o imóvel e a obra. O enquadramento, a lista de documentos, os passos e as minutas atualizam-se à medida que preenche.</p>
+      <p class="lede">Diga que obra quer fazer e onde. Fazemos as perguntas que importam para esse caso, identificamos as condicionantes do local e, no fim, mostramos o enquadramento, os documentos, as entidades, os passos e as minutas.</p>
     </div>
     <div class="legend" aria-hidden="true"><span class="r">a construir</span><span class="y">a demolir</span></div>
   </header>
 
-  <section class="panel mapa" id="mapaSec" aria-label="Mapa de condicionantes">
-    <div class="mhd">
-      <div>
-        <h2>Onde fica a obra?</h2>
-        <p class="note" style="margin:4px 0 0">Pesquise a morada ou clique no local. O mapa consulta as cartas oficiais e as condicionantes encontradas passam para o questionário (secção 3).</p>
-      </div>
-      <a class="btn" style="text-decoration:none" href="mapa/" target="_blank" rel="noopener">Abrir o mapa em página própria</a>
-    </div>
-    <iframe id="mapaFrame" title="Mapa de condicionantes"></iframe>
-  </section>
-
   <div class="grid">
     <!-- QUESTIONÁRIO -->
-    <section class="panel" aria-label="Questionário">
+    <section class="panel" id="questionario" aria-label="Questionário">
       <div class="sample" id="sampleBar"><span>Preenchido com um exemplo fictício.</span><span style="display:flex;gap:6px"><button class="btn" type="button" id="btnClear">Limpar tudo</button><button class="btn" type="button" id="btnSample">Repor exemplo</button></span></div>
       <form id="f" autocomplete="off" style="margin-top:16px">
         <fieldset>
           <legend class="sec">1 · A obra</legend>
           <label class="f">Tipo de intervenção
-            <select id="tipo" name="tipo">
-              <option value="conservacao">Conservação (pinturas, reparações, impermeabilização)</option>
-              <option value="interior">Alteração no interior (paredes, cozinha, casas de banho)</option>
-              <option value="exterior">Alteração exterior (fachada, vãos, cobertura)</option>
-              <option value="escassa">Pequena obra (anexo, muro, painéis solares, janelas)</option>
-              <option value="ampliacao">Ampliação</option>
-              <option value="reconstrucao">Reconstrução</option>
-              <option value="nova">Construção nova</option>
-              <option value="piscina">Piscina</option>
-              <option value="demolicao">Demolição</option>
-              <option value="uso">Mudança de uso sem obras</option>
-              <option value="loteamento">Loteamento ou obras de urbanização</option>
-            </select>
+            <select id="tipoSel" name="tipoSel"></select>
           </label>
-          <label class="f">Descrição curta
-            <textarea id="descricao" name="descricao" rows="2"></textarea>
+          <label class="f">Descrição
+            <textarea id="descricao" name="descricao" rows="3" placeholder="Por exemplo: remodelação da cozinha e da casa de banho de um apartamento, com troca de canalizações."></textarea>
           </label>
-          <div class="row2">
-            <label class="f">Uso atual<input type="text" id="usoAtual" name="usoAtual"></label>
-            <label class="f">Uso pretendido<input type="text" id="usoNovo" name="usoNovo"></label>
-          </div>
-          <div class="row2">
-            <label class="f">Pisos acima do solo (final)<input type="text" inputmode="numeric" id="pisos" name="pisos"></label>
-            <label class="f">Área bruta de construção (m²)<input type="text" inputmode="decimal" id="abc" name="abc"></label>
-          </div>
         </fieldset>
 
         <fieldset id="qs">
-          <legend class="sec">2 · O que decide o procedimento</legend>
+          <legend class="sec">2 · Sobre a obra</legend>
         </fieldset>
 
         <fieldset id="cs">
-          <legend class="sec">3 · Condicionantes do local</legend>
-          <p class="note" style="margin:0">Assinale o que aparece na planta de condicionantes do PDM ou no geoportal do município. Cada uma destas situações obriga a ouvir uma entidade.</p>
-          <p style="margin:4px 0"><a class="btn primary" style="text-decoration:none" href="#mapaSec">Ver as condicionantes da morada no mapa</a></p>
-          <div class="chk" id="condBox" style="display:grid;gap:6px"></div>
-        </fieldset>
-
-        <fieldset>
-          <legend class="sec">4 · O imóvel</legend>
+          <legend class="sec">3 · O imóvel</legend>
           <label class="f">Morada<input type="text" id="morada" name="morada"></label>
-          <p style="margin:0"><a class="btn" style="text-decoration:none" href="#mapaSec">Ver esta morada no mapa</a></p>
           <div class="row2">
             <label class="f">Freguesia<input type="text" id="freguesia" name="freguesia"></label>
             <label class="f">Concelho<input type="text" id="concelho" name="concelho"></label>
           </div>
+          <div><button class="btn primary" type="button" id="btnMapa">Pesquisar no mapa</button></div>
+          <div id="mapaSlot" class="mapa"><iframe id="mapaFrame" title="Mapa de condicionantes"></iframe><p class="note"><a href="mapa/" target="_blank" rel="noopener">Abrir o mapa em página própria</a></p></div>
+          <div class="condres">
+            <p class="sub">Condicionantes do local</p>
+            <div id="condBox"></div>
+          </div>
+          <div id="qs3"></div>
           <div class="row2">
             <label class="f">Artigo matricial<input type="text" id="artigo" name="artigo"></label>
             <label class="f">Descrição predial n.º<input type="text" id="descPredial" name="descPredial"></label>
@@ -249,7 +226,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
         </fieldset>
 
         <fieldset>
-          <legend class="sec">5 · O requerente</legend>
+          <legend class="sec">4 · O requerente</legend>
           <div class="row2">
             <label class="f">Nome<input type="text" id="nome" name="nome"></label>
             <label class="f">NIF<input type="text" id="nif" name="nif"></label>
@@ -272,11 +249,13 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
             <label class="f">Inscrição na ordem<input type="text" id="ordem" name="ordem" placeholder="OA n.º / OE n.º"></label>
           </div>
         </fieldset>
+        <div class="fim"><button class="btn primary grande" type="button" id="btnResumo">Ver o resumo da situação</button></div>
       </form>
     </section>
 
     <!-- RESULTADO -->
-    <section class="panel" aria-live="polite" aria-label="Resultado">
+    <section class="panel" id="resultado" aria-live="polite" aria-label="Resumo da situação">
+      <div class="resbar"><button class="btn" type="button" id="btnVoltar">← Voltar ao questionário</button><span class="note" id="resLocal"></span></div>
       <div class="eyebrow">Enquadramento provável</div>
       <div class="verdict" id="verdict"></div>
       <ul class="alerts" id="alerts"></ul>
@@ -305,21 +284,106 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   const KEY = "licenciamento-obras-v1";
   const $ = (id) => document.getElementById(id);
 
-  // Perguntas que decidem o enquadramento. "show" indica os tipos em que a pergunta aparece.
-  const QUESTIONS = [
-    { id: "classificado", q: "O imóvel é classificado, está em vias de classificação ou fica numa zona de proteção?", h: "Por exemplo, junto a um castelo, aqueduto, igreja ou outro monumento. Sem zona especial fixada, a zona geral de proteção vai até 50 m do monumento.", show: "*" },
-    { id: "pip", q: "Existe um PIP (informação prévia) favorável, ainda válido, para esta obra?", h: "Emitido nos termos do art. 14.º, n.os 2 e 3, há menos de 2 anos.", show: ["exterior","ampliacao","reconstrucao","nova","piscina","demolicao","loteamento"] },
-    { id: "fachada", q: "A obra mexe também na fachada, na cobertura ou na cércea?", h: "", show: ["conservacao","interior"] },
-    { id: "estrutura", q: "Mexe na estrutura (paredes resistentes, lajes, vigas, pilares)?", h: "", show: ["conservacao","interior"] },
-    { id: "azulejos", q: "Implica remover azulejos da fachada?", h: "", show: ["conservacao","exterior","reconstrucao"] },
-    { id: "altura", q: "Aumenta a altura da fachada?", h: "Mais pisos ou área sem subir a fachada não conta como aumento.", show: ["ampliacao","reconstrucao"] },
-    { id: "loteamento", q: "O terreno está em loteamento, plano de pormenor ou unidade de execução com parâmetros definidos?", h: "Por exemplo, um lote com alvará de loteamento.", show: ["exterior","ampliacao","reconstrucao","nova","loteamento"] },
-    { id: "zuc", q: "Fica em zona urbana consolidada?", h: "Classificação do PDM ou da carta de qualificação do solo.", show: ["exterior","ampliacao","reconstrucao","nova"] },
-    { id: "cercea", q: "A cércea final fica igual ou abaixo da mais frequente na frente edificada da rua?", h: "", show: ["exterior","ampliacao","reconstrucao","nova"] },
-    { id: "fracao", q: "É uma fração em propriedade horizontal ou mexe em partes comuns?", h: "", show: ["conservacao","interior","exterior","escassa","ampliacao","uso"] },
-    { id: "viaPublica", q: "Vai precisar de ocupar a via pública (andaimes, contentor, grua)?", h: "", show: ["conservacao","interior","exterior","escassa","ampliacao","reconstrucao","nova","piscina","demolicao"] },
-    { id: "anterior1951", q: "O edifício é anterior a 1951 e não tem licença de utilização?", h: "Antes do RGEU não havia licença de utilização; a câmara emite certidão.", show: ["conservacao","interior","exterior","ampliacao","reconstrucao","uso"] },
+  // Tipos de intervenção: o que a pessoa escolhe (tipoSel) e o enquadramento-base usado na decisão (base).
+  const TIPOS = [
+    ["conservacao", "Conservação e reparação (pinturas, telhado, impermeabilização, canalizações)"],
+    ["interior", "Remodelação interior (cozinha, casas de banho, paredes interiores, pavimentos)"],
+    ["fachada", "Alteração da fachada (cor, revestimento, azulejos, varandas, marquises)"],
+    ["vaos", "Substituição ou alteração de janelas e portas exteriores"],
+    ["cobertura", "Alteração da cobertura (telhado, terraço, claraboias, mansardas)"],
+    ["equipamentos", "Painéis solares, ar condicionado, bomba de calor ou antenas"],
+    ["anexo", "Anexo, telheiro, pérgula, abrigo ou garagem"],
+    ["muro", "Muro, vedação ou portão"],
+    ["piscina", "Piscina"],
+    ["ampliacao", "Ampliação (mais área, mais pisos ou mais volume)"],
+    ["reconstrucao", "Reconstrução de um edifício existente"],
+    ["nova", "Construção nova (moradia ou edifício)"],
+    ["demolicao", "Demolição"],
+    ["uso", "Mudança de uso sem obras (ex.: habitação para alojamento local)"],
+    ["usoObras", "Mudança de uso com obras (ex.: loja para restaurante)"],
+    ["legalizacao", "Legalização de obras já feitas"],
+    ["terreno", "Movimentação de terras ou remodelação de terreno"],
+    ["destaque", "Destaque de parcela (dividir um terreno em dois)"],
+    ["loteamento", "Loteamento"],
+    ["urbanizacao", "Obras de urbanização (arruamentos, redes, espaços verdes)"],
+    ["ph", "Constituição de propriedade horizontal"],
   ];
+  const USOS = [["habitacao", "Habitação"], ["comercio", "Comércio"], ["servicos", "Serviços ou escritório"], ["restauracao", "Restauração e bebidas"], ["al", "Alojamento local"], ["turismo", "Empreendimento turístico (hotel, turismo rural…)"], ["industria", "Indústria ou armazém"], ["agricola", "Agrícola"], ["equipamento", "Equipamento (escola, saúde, desporto, culto)"], ["devoluto", "Sem uso"]];
+  const SNS = [["sim", "Sim"], ["nao", "Não"], ["ns", "Não sei"]];
+  const EXIST = ["conservacao", "interior", "fachada", "vaos", "cobertura", "equipamentos", "anexo", "muro", "piscina", "ampliacao", "reconstrucao", "demolicao", "uso", "usoObras", "legalizacao", "ph"];
+  const TERRENO = ["fachada", "anexo", "muro", "piscina", "ampliacao", "reconstrucao", "nova", "demolicao", "legalizacao", "terreno", "destaque", "loteamento", "urbanizacao"];
+  const TIPOS_OBRA = TIPOS.map(([v]) => v).filter((v) => !["uso", "ph", "destaque"].includes(v));
+  const menos = (lista, ...x) => lista.filter((v) => !x.includes(v));
+  const q_ = (s) => s.q || {};
+  const rural = (s) => ["moradia", "rural", "terreno"].includes(q_(s).predio) || ["nova", "terreno", "loteamento", "urbanizacao", "destaque"].includes(s.tipoSel);
+  const escassaAnexo = (s) => q_(s).anexoArea === "ate10";
+  const escassaMuro = (s) => q_(s).muroVia === "nao" && q_(s).muroAlt === "ate";
+  // Perguntas: step 2 = sobre a obra, step 3 = sobre o local (podem acrescentar condicionantes).
+  // show = tipos (tipoSel) em que aparece; when = condição extra; opts = respostas (por omissão Sim/Não/Não sei).
+  const QUESTIONS = [
+    { id: "predio", step: 2, q: "Que tipo de imóvel é?", show: menos(TIPOS.map(([v]) => v), "loteamento", "urbanizacao", "destaque", "terreno", "nova"), opts: [["apartamento", "Apartamento (fração)"], ["moradia", "Moradia"], ["edificio", "Edifício inteiro"], ["loja", "Loja, escritório ou outra fração"], ["armazem", "Armazém ou pavilhão"], ["rural", "Construção rural ou agrícola"], ["terreno", "Terreno sem construção"]] },
+    { id: "onde", step: 2, q: "Onde é a obra de conservação?", show: ["conservacao"], opts: [["interior", "Só no interior"], ["fachada", "Fachada"], ["cobertura", "Cobertura"], ["varios", "Interior e exterior"]] },
+    { id: "azulejos", step: 2, q: "Vai remover ou substituir azulejos da fachada?", show: ["conservacao", "fachada"], when: (s) => s.tipoSel !== "conservacao" || ["fachada", "varios"].includes(q_(s).onde) },
+    { id: "estrutura", step: 2, q: "Mexe na estrutura (paredes resistentes, lajes, vigas, pilares)?", h: "Na dúvida, um técnico confirma se a parede é resistente.", show: ["interior", "usoObras"] },
+    { id: "fachada", step: 2, q: "A remodelação também altera a fachada, a cobertura ou a altura do edifício?", show: ["interior", "usoObras"] },
+    { id: "comuns", step: 2, q: "A obra mexe em partes comuns do prédio (fachada, telhado, escadas, estrutura, colunas de água ou gás)?", show: menos(EXIST, "uso", "ph"), when: (s) => ["apartamento", "loja"].includes(q_(s).predio) },
+    { id: "vaosIgual", step: 2, q: "As novas janelas ou portas mantêm o desenho, a cor e o material exterior?", show: ["vaos"], opts: [["sim", "Sim, acabamento exterior idêntico"], ["nao", "Não, muda o aspeto exterior"], ["ns", "Não sei"]] },
+    { id: "equip", step: 2, q: "O que vai instalar?", show: ["equipamentos"], opts: [["solar", "Painéis solares ou fotovoltaicos na cobertura"], ["solarSolo", "Painéis solares no terreno"], ["ac", "Ar condicionado ou bomba de calor"], ["antena", "Antena ou parabólica"]] },
+    { id: "anexoArea", step: 2, q: "Qual a dimensão?", show: ["anexo"], opts: [["ate10", "Até 10 m² e 2,2 m de altura"], ["maior", "Maior do que isso"]] },
+    { id: "muroVia", step: 2, q: "O muro confina com a via pública?", show: ["muro"] },
+    { id: "muroAlt", step: 2, q: "Que altura terá?", show: ["muro"], opts: [["ate", "Até 1,8 m"], ["mais", "Mais de 1,8 m"]] },
+    { id: "legalTipo", step: 2, q: "O que quer legalizar?", show: ["legalizacao"], opts: [["alteracao", "Alterações interiores ou de fachada"], ["ampliacao", "Ampliação ou anexo"], ["construcao", "Construção inteira sem licença"], ["uso", "Uso diferente do licenciado"]] },
+    { id: "altura", step: 2, q: "Aumenta a altura da fachada?", h: "Mais pisos ou mais área sem subir a fachada não conta como aumento.", show: ["ampliacao", "reconstrucao"] },
+    { id: "demoTipo", step: 2, q: "A demolição faz parte de uma obra de reconstrução ou construção nova?", show: ["demolicao"] },
+    { id: "usoAtual", step: 2, q: "Qual é o uso atual?", show: ["uso", "usoObras", "ampliacao", "reconstrucao", "legalizacao"], opts: USOS },
+    { id: "usoNovo", step: 2, q: "Qual será o uso?", show: ["uso", "usoObras", "nova", "ampliacao", "reconstrucao"], opts: USOS },
+    { id: "pisos", step: 2, q: "Quantos pisos acima do solo terá o edifício no fim?", show: ["nova", "ampliacao", "reconstrucao", "uso", "usoObras", "legalizacao"], opts: [["1", "1"], ["2", "2"], ["3", "3"], ["5", "4 a 6"], ["8", "7 a 9"], ["10", "10 ou mais"]] },
+    { id: "abc", step: 2, q: "Qual a área bruta de construção total?", show: ["nova", "ampliacao", "reconstrucao", "legalizacao"], opts: [["200", "Até 300 m²"], ["1000", "De 300 a 2200 m²"], ["3000", "Mais de 2200 m²"]] },
+    { id: "pip", step: 2, q: "Já tem um PIP (informação prévia) favorável e válido para esta obra?", h: "Emitido nos termos do art. 14.º, n.os 2 e 3, há menos de 2 anos.", show: ["fachada", "cobertura", "vaos", "anexo", "muro", "piscina", "ampliacao", "reconstrucao", "nova", "demolicao", "terreno", "loteamento", "urbanizacao"], when: (s) => !(s.tipoSel === "anexo" && escassaAnexo(s)) && !(s.tipoSel === "muro" && escassaMuro(s)) && !(s.tipoSel === "vaos" && q_(s).vaosIgual === "sim") },
+    { id: "loteamento", step: 2, q: "O terreno está num loteamento, plano de pormenor ou unidade de execução com parâmetros definidos?", h: "Por exemplo, um lote com alvará de loteamento.", show: ["fachada", "cobertura", "vaos", "anexo", "muro", "ampliacao", "reconstrucao", "nova", "terreno", "loteamento", "urbanizacao"], when: (s) => !(s.tipoSel === "anexo" && escassaAnexo(s)) && !(s.tipoSel === "muro" && escassaMuro(s)) && !(s.tipoSel === "vaos" && q_(s).vaosIgual === "sim") },
+    { id: "zuc", step: 2, q: "Fica em zona urbana consolidada?", h: "Classificação do PDM: zona já urbanizada, com edifícios alinhados ao longo da rua.", show: ["fachada", "cobertura", "vaos", "anexo", "muro", "ampliacao", "reconstrucao", "nova"], when: (s) => q_(s).loteamento !== "sim" && !(s.tipoSel === "anexo" && escassaAnexo(s)) && !(s.tipoSel === "muro" && escassaMuro(s)) && !(s.tipoSel === "vaos" && q_(s).vaosIgual === "sim") },
+    { id: "cercea", step: 2, q: "A altura final fica igual ou abaixo da mais frequente na frente de rua?", show: ["fachada", "cobertura", "vaos", "anexo", "muro", "ampliacao", "reconstrucao", "nova"], when: (s) => q_(s).zuc === "sim" && q_(s).loteamento !== "sim" },
+    { id: "viaPublica", step: 2, q: "Vai precisar de ocupar a via pública (andaimes, contentor, grua)?", show: menos(TIPOS_OBRA, "loteamento", "urbanizacao", "terreno") },
+    { id: "anterior1951", step: 2, q: "O edifício tem licença de utilização?", show: menos(EXIST, "anexo", "muro", "piscina"), when: (s) => q_(s).predio !== "terreno", opts: [["nao", "Sim, tem licença de utilização"], ["sim", "Não: é anterior a 1951"], ["ns", "Não sei"]] },
+    // Sobre o local
+    { id: "classificado", step: 3, q: "O imóvel tem proteção patrimonial (classificado, em vias de classificação ou junto a um monumento)?", h: "O mapa não encontrou proteção nas cartas nacionais. Responda se souber de alguma; na dúvida, veja a planta de condicionantes do PDM.", show: "*", when: (s) => (s.doMapa || !window.pesquisarNoMapa) && !(s.condMapa || []).includes("pat") },
+    { id: "perto", step: 3, q: "Há a menos de 50 m algum destes equipamentos?", show: menos(TIPOS_OBRA, "interior", "conservacao"), opts: [["nenhum", "Nenhum"], ["escola", "Escola"], ["saude", "Hospital ou centro de saúde"], ["cemiterio", "Cemitério"], ["prisao", "Estabelecimento prisional"], ["quartel", "Quartel ou instalação militar"], ["ns", "Não sei"]] },
+    { id: "vias", step: 3, q: "O terreno confina com alguma destas vias?", show: TERRENO, opts: [["nenhuma", "Só com ruas urbanas"], ["municipal", "Estrada ou caminho municipal"], ["nacional", "Estrada nacional ou regional"], ["autoestrada", "Autoestrada, IP ou IC"], ["ferrovia", "Linha de comboio"], ["metro", "Linha de metro"], ["ns", "Não sei"]] },
+    { id: "redes", step: 3, q: "Passa junto ao terreno alguma destas redes?", show: TERRENO, opts: [["nenhuma", "Nenhuma"], ["eletrica", "Linha elétrica de média ou alta tensão"], ["gas", "Gasoduto ou oleoduto"], ["agua", "Conduta de água ou aqueduto"], ["esgoto", "Coletor ou emissário de esgotos"], ["ns", "Não sei"]] },
+    { id: "arvores", step: 3, q: "Há no terreno árvores protegidas?", show: ["anexo", "muro", "piscina", "ampliacao", "nova", "terreno", "loteamento", "urbanizacao", "demolicao"], when: rural, opts: [["nao", "Não"], ["sobreiro", "Sobreiros ou azinheiras"], ["oliveira", "Oliveiras"], ["classificada", "Árvore classificada de interesse público"], ["ns", "Não sei"]] },
+    { id: "ardido", step: 3, q: "O terreno ardeu nos últimos 10 anos?", show: ["ampliacao", "reconstrucao", "nova", "terreno", "loteamento", "urbanizacao", "anexo"], when: rural },
+  ];
+  const VISIVEL = (qq, s) => (qq.show === "*" || qq.show.includes(s.tipoSel)) && (!qq.when || qq.when(s));
+  // Respostas que acrescentam condicionantes (o utilizador não as escolhe: deduzimos).
+  const RESP_COND = {
+    perto: { escola: "edificios_escolares", saude: "estabelecimentos_saude", cemiterio: "cemiterios", prisao: "estabelecimentos_prisionais", quartel: "militar" },
+    vias: { municipal: "estradas_municipais", nacional: "estradas", autoestrada: "estradas", ferrovia: "estradas", metro: "metro_ligeiro" },
+    redes: { eletrica: "eletrica", gas: "gas", agua: "aqueduto", esgoto: "drenagem_saneamento" },
+    arvores: { sobreiro: "sobreiro_azinheira", oliveira: "oliveiras", classificada: "arvoredo_interesse_publico" },
+    ardido: { sim: "incendio" },
+    usoNovo: { turismo: "turismo", restauracao: "saude_publica", industria: "industria_sir" },
+  };
+  // Enquadramento-base a partir do tipo escolhido e das respostas.
+  function tipoBase(s) {
+    const t = s.tipoSel, q = q_(s);
+    if (t === "fachada" || t === "cobertura") return "exterior";
+    if (t === "vaos") return q.vaosIgual === "sim" ? "escassa" : "exterior";
+    if (t === "equipamentos") return "escassa";
+    if (t === "anexo") return escassaAnexo(s) ? "escassa" : "nova";
+    if (t === "muro") return escassaMuro(s) ? "escassa" : "exterior";
+    if (t === "usoObras") return "uso";
+    if (t === "urbanizacao") return "loteamento";
+    return t || "conservacao";
+  }
+  const nomeDe = (lista, v) => (lista.find(([k]) => k === v) || [, ""])[1];
+  // Campos usados pelo resto da app, calculados a partir das respostas.
+  function sync(s) {
+    if (!s.tipoSel) s.tipoSel = ({ exterior: "fachada", escassa: "equipamentos" })[s.tipo] || (TIPOS.some(([v]) => v === s.tipo) ? s.tipo : "conservacao");
+    s.q = s.q || {};
+    s.tipo = tipoBase(s);
+    s.usoAtual = nomeDe(USOS, s.q.usoAtual); s.usoNovo = nomeDe(USOS, s.q.usoNovo);
+    s.pisos = s.q.pisos || ""; s.abc = s.q.abc || "";
+  }
 
   // Condicionantes do local: cada uma implica ouvir uma entidade. serv = servidão ou restrição de utilidade pública.
   const COND = [
@@ -423,43 +487,43 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     const pm = txt.match(PATRIMONIO_RE), pf = txt.match(PATRIMONIO_FRACO_RE);
     return { cond: out, patrimonio: pm ? `menciona "${pm[0].trim()}"` : "", patrimonioFraco: !pm && pf ? `menciona "${pf[0].trim()}"` : "" };
   }
-  // Condicionantes efetivas = assinaladas + detetadas, menos as que o utilizador desmarcou.
-  function effCond(s) {
-    const d = detectar(s).cond, off = s.condOff || {}, c = Object.assign({}, s.cond || {});
-    Object.keys(d).forEach((k) => { if (!off[k]) c[k] = true; });
-    return c;
+  // Condicionantes efetivas = encontradas no mapa + deduzidas das respostas. O utilizador não as escolhe.
+  function condOrigem(s) {
+    const o = {}, q = q_(s);
+    (s.condMapa || []).forEach((k) => { if (k !== "pat") o[k] = "mapa"; });
+    QUESTIONS.forEach((qq) => { const m = RESP_COND[qq.id]; if (m && VISIVEL(qq, s) && m[q[qq.id]]) o[m[q[qq.id]]] = o[m[q[qq.id]]] || "resposta"; });
+    if (RESP_COND.usoNovo[q.usoNovo] && ["uso", "usoObras", "nova", "ampliacao", "reconstrucao"].includes(s.tipoSel)) o[RESP_COND.usoNovo[q.usoNovo]] = o[RESP_COND.usoNovo[q.usoNovo]] || "resposta";
+    if (parseInt(s.pisos, 10) >= 10) o.scie34 = "resposta";
+    return o;
   }
+  function effCond(s) { const c = {}; Object.keys(condOrigem(s)).forEach((k) => { c[k] = true; }); return c; }
   function effQ(s) {
     const c = effCond(s), q = Object.assign({}, s.q || {});
-    q.servidao = COND.some((x) => x.serv && c[x.k]) ? "sim" : c.ns ? "ns" : "nao";
-    if (!q.classificado && detectar(s).patrimonio) q.classificado = "sim";
+    q.servidao = COND.some((x) => x.serv && c[x.k]) ? "sim" : "nao";
+    if ((s.condMapa || []).includes("pat")) q.classificado = "sim";
+    if (!VISIVEL(QUESTIONS.find((x) => x.id === "fachada"), s)) delete q.fachada;
+    if (!VISIVEL(QUESTIONS.find((x) => x.id === "azulejos"), s)) delete q.azulejos;
+    // Fração: apartamento ou loja; numa mudança de uso conta sempre, nas obras só se mexer em partes comuns.
+    const fr = ["apartamento", "loja"].includes(q.predio);
+    q.fracao = !fr ? "nao" : s.tipoSel === "uso" || s.tipoSel === "usoObras" ? "sim" : (q.comuns || "ns");
     return q;
   }
   function renderCond() {
-    const c = effCond(state), d = detectar(state).cond, off = state.condOff || {};
-    const ord = [...COND].sort((a, b) => (d[b.k] ? 1 : 0) - (d[a.k] ? 1 : 0));
-    const item = (x) => `<label><input type="checkbox" name="cond" value="${x.k}" ${c[x.k] ? "checked" : ""}>${esc(x.l)}${d[x.k] ? ` <span class="tag ${off[x.k] ? "" : "ok"}">${off[x.k] ? "detetado, desmarcado" : "detetado: " + esc(d[x.k])}</span>` : ""}</label>`;
-    const outras = ord.filter((x) => x.mais), nOn = outras.filter((x) => c[x.k]).length;
-    $("condBox").innerHTML = ord.filter((x) => !x.mais && x.k !== "ns").map(item).join("") +
-      `<details class="mais"${nOn ? " open" : ""}><summary>Outras servidões e restrições (${outras.length}${nOn ? ", " + nOn + " assinaladas" : ""})</summary><div style="display:grid;gap:6px;margin-top:6px">${outras.map(item).join("")}</div></details>` +
-      ord.filter((x) => x.k === "ns").map(item).join("");
-    const dt = detectar(state), qc = (state.q || {}).classificado;
-    const hint = $("patHint");
-    if (hint) {
-      const msg = !qc && dt.patrimonio ? `Assumido "sim" porque a informação ${dt.patrimonio}. Confirme e responda acima.`
-        : !qc && dt.patrimonioFraco ? `A informação ${dt.patrimonioFraco}: se for um imóvel classificado a menos de 50 m, responda "sim".` : "";
-      hint.hidden = !msg; hint.textContent = msg;
-    }
+    const o = condOrigem(state), q = effQ(state);
+    const itens = COND.filter((x) => o[x.k]).map((x) => ({ l: x.l, ent: x.ent, o: o[x.k] }));
+    if (q.classificado === "sim") itens.unshift({ l: "Imóvel classificado, em vias de classificação ou em zona de proteção", ent: "Património Cultural, I.P. (ou a CCDR)", o: (state.condMapa || []).includes("pat") ? "mapa" : "resposta" });
+    const tag = { mapa: "encontrada no mapa", resposta: "pela sua resposta" };
+    $("condBox").innerHTML = itens.length ? itens.map((x) => `<div class="cond-item"><b>${esc(x.l)}</b><span class="tag ok">${tag[x.o]}</span><span class="note">Entidade a consultar: ${esc(x.ent || "câmara municipal")}</span></div>`).join("")
+      : `<p class="note">${state.doMapa ? "O mapa não encontrou condicionantes neste local. Responda às perguntas abaixo." : "Escreva a morada e carregue em “Pesquisar no mapa”. As condicionantes do local aparecem aqui."}</p>`;
   }
 
   const SAMPLE = {
-    tipo: "interior", descricao: "Remodelação da cozinha e de uma casa de banho, com demolição de uma parede divisória não resistente.",
-    usoAtual: "Habitação", usoNovo: "Habitação",
+    tipoSel: "interior", descricao: "Remodelação da cozinha e de uma casa de banho, com demolição de uma parede divisória não resistente.",
     morada: "Rua de Exemplo, 12, 2.º Esq.", freguesia: "Arroios", concelho: "Lisboa",
     artigo: "U-0000", descPredial: "0000/20000101", codCertidao: "",
     nome: "Nome do Requerente", nif: "000000000", moradaReq: "Rua de Exemplo, 12, 2.º Esq., 1000-000 Lisboa", email: "", qualidade: "proprietário",
     tecnico: "", ordem: "",
-    q: { classificado: "nao", fachada: "nao", estrutura: "nao", fracao: "sim", viaPublica: "sim", anterior1951: "nao" }, cond: {}
+    q: { predio: "apartamento", classificado: "nao", fachada: "nao", estrutura: "nao", comuns: "nao", viaPublica: "sim", anterior1951: "nao" }, cond: {}
   };
 
   let state = load() || structuredClone(SAMPLE);
@@ -471,51 +535,66 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   function save() { try { state.checks = checks; localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
   // ---------- Formulário ----------
-  const FIELDS = ["tipo","descricao","usoAtual","usoNovo","pisos","abc","morada","freguesia","concelho","artigo","descPredial","codCertidao","nome","nif","moradaReq","email","qualidade","tecnico","ordem"];
+  const FIELDS = ["tipoSel","descricao","morada","freguesia","concelho","artigo","descPredial","codCertidao","nome","nif","moradaReq","email","qualidade","tecnico","ordem"];
 
-  function renderQuestions() {
+  function htmlPergunta(qq) {
+    const v = state.q[qq.id] || "", opts = qq.opts || SNS;
+    const campo = opts.length <= 3 && opts.every(([, l]) => l.length < 14)
+      ? `<div class="seg" role="radiogroup" aria-label="${esc(qq.q)}">${opts.map(([val, lab]) => `<input type="radio" id="q-${qq.id}-${val}" name="q-${qq.id}" value="${val}" ${v === val ? "checked" : ""}><label for="q-${qq.id}-${val}">${esc(lab)}</label>`).join("")}</div>`
+      : `<select class="qsel" name="q-${qq.id}" aria-label="${esc(qq.q)}"><option value="">Escolha…</option>${opts.map(([val, lab]) => `<option value="${val}" ${v === val ? "selected" : ""}>${esc(lab)}</option>`).join("")}</select>`;
+    return `<div class="q"><p>${esc(qq.q)}${qq.h ? `<small>${esc(qq.h)}</small>` : ""}</p>${campo}</div>`;
+  }
+  // Redesenha só se o conjunto de perguntas visíveis mudar (para não perder o foco).
+  let qsVis = "";
+  function renderQuestions(force) {
+    sync(state);
+    const vis = QUESTIONS.filter((qq) => VISIVEL(qq, state));
+    const chave = vis.map((qq) => qq.id).join(",");
+    if (!force && chave === qsVis) return;
+    qsVis = chave;
     const box = $("qs");
-    box.querySelectorAll(".q").forEach((n) => n.remove());
-    QUESTIONS.forEach((qq) => {
-      if (qq.show !== "*" && !qq.show.includes(state.tipo)) return;
-      const v = state.q[qq.id] || "";
-      const d = document.createElement("div");
-      d.className = "q";
-      d.innerHTML = `<p>${qq.q}${qq.h ? `<small>${qq.h}</small>` : ""}</p>
-        <div class="seg" role="radiogroup" aria-label="${qq.q}">
-          ${[["sim","Sim"],["nao","Não"],["ns","Não sei"]].map(([val, lab]) =>
-            `<input type="radio" id="q-${qq.id}-${val}" name="q-${qq.id}" value="${val}" ${v === val ? "checked" : ""}><label for="q-${qq.id}-${val}">${lab}</label>`).join("")}
-        </div>`;
-      box.appendChild(d);
-    });
-    const cq = box.querySelector(".q");
-    if (cq) { const h = document.createElement("p"); h.id = "patHint"; h.className = "note"; h.style.color = "var(--ochre)"; h.hidden = true; cq.appendChild(h); }
+    box.querySelectorAll(".q, .note").forEach((n) => n.remove());
+    box.insertAdjacentHTML("beforeend", vis.filter((qq) => qq.step === 2).map(htmlPergunta).join("") || `<p class="note">Escolha o tipo de intervenção.</p>`);
+    const q3 = vis.filter((qq) => qq.step === 3);
+    $("qs3").innerHTML = q3.length ? `<p class="sub">Para confirmar outras condicionantes</p>` + q3.map(htmlPergunta).join("") : "";
   }
 
   function fillForm() {
+    sync(state);
+    $("tipoSel").innerHTML = TIPOS.map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("");
     FIELDS.forEach((k) => { const el = $(k); if (el) el.value = state[k] || ""; });
-    if (!state.tipo) $("tipo").selectedIndex = 0, state.tipo = $("tipo").value;
-    renderQuestions();
+    renderQuestions(true);
   }
 
+  function respostaQ(t) {
+    state.q[t.name.slice(2)] = t.value;
+    if (!t.value) delete state.q[t.name.slice(2)];
+  }
   $("f").addEventListener("input", (e) => {
     const t = e.target;
-    if (t.name === "cond") {
-      state.cond = state.cond || {}; state.condOff = state.condOff || {};
-      if (t.checked) { state.cond[t.value] = true; delete state.condOff[t.value]; }
-      else { delete state.cond[t.value]; if (detectar(state).cond[t.value]) state.condOff[t.value] = true; }
-    }
-    else if (t.name && t.name.startsWith("q-")) state.q[t.name.slice(2)] = t.value;
+    if (t.name && t.name.startsWith("q-")) respostaQ(t);
     else if (FIELDS.includes(t.id)) state[t.id] = t.value;
-    if (t.id === "tipo") { renderQuestions(); minuta = null; }
-    save(); render();
+    if (t.id === "tipoSel") minuta = null;
+    sync(state); save(); renderQuestions(); render();
   });
-  $("f").addEventListener("change", (e) => { if (e.target.name && e.target.name.startsWith("q-")) { state.q[e.target.name.slice(2)] = e.target.value; save(); render(); } });
+  $("f").addEventListener("change", (e) => { if (e.target.name && e.target.name.startsWith("q-")) { respostaQ(e.target); sync(state); save(); renderQuestions(); render(); } });
   $("f").addEventListener("submit", (e) => e.preventDefault());
+
+  // Página inicial (questionário) e página do resumo.
+  function vista(v) { document.body.dataset.vista = v; if (v === "resumo") { render(); scrollTo(0, 0); } }
+  $("btnResumo").addEventListener("click", () => { if (location.hash !== "#resumo") location.hash = "resumo"; else vista("resumo"); });
+  $("btnVoltar").addEventListener("click", () => { if (location.hash === "#resumo") history.back(); else vista("form"); });
+  window.addEventListener("hashchange", () => vista(location.hash === "#resumo" ? "resumo" : "form"));
+  // Sem mapa integrado (versão claude.ai), o botão abre o mapa noutro separador.
+  $("btnMapa").addEventListener("click", () => {
+    const q = [state.morada, state.freguesia, state.concelho].filter(Boolean).join(", ");
+    if (!q) { $("morada").focus(); return; }
+    if (window.pesquisarNoMapa) window.pesquisarNoMapa(q); else window.open(MAPA_URL + "?q=" + encodeURIComponent(q), "_blank", "noopener");
+  });
 
   $("btnSample").addEventListener("click", () => { state = structuredClone(SAMPLE); checks = {}; minuta = null; save(); fillForm(); render(); $("sampleBar").firstElementChild.textContent = "Preenchido com um exemplo fictício."; });
   $("btnClear").addEventListener("click", () => {
-    state = { tipo: "conservacao", q: {}, cond: {} }; checks = {}; minuta = null; save(); fillForm(); render();
+    state = { tipoSel: "conservacao", q: {}, cond: {} }; checks = {}; minuta = null; save(); fillForm(); render();
     $("sampleBar").firstElementChild.textContent = "Formulário vazio. Preencha os dados do seu caso.";
   });
 
@@ -613,6 +692,28 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
           if (yes("fracao")) alerts.push({ t: "Numa fração em propriedade horizontal, se o título constitutivo não fixar o fim da fração, a mudança de uso precisa de autorização da assembleia de condóminos por 2/3 do valor do prédio. A mudança para habitação dispensa essa autorização." });
           alerts.push({ i: 1, t: "Se o uso pretendido for comércio, restauração ou alojamento local, há registos próprios (Balcão do Empreendedor / RNAL) a juntar a este passo." });
           break;
+        case "terreno":
+          if (yes("pip")) { p = "isento"; refs = ["art. 6.º RJUE", "art. 14.º"]; motivo = "Um PIP favorável isenta a obra de controlo prévio."; break; }
+          if (yes("loteamento")) { p = "cp"; refs = ["art. 4.º, n.º 4 RJUE"]; motivo = "Trabalhos de remodelação de terrenos em área de loteamento ou plano de pormenor com parâmetros definidos estão sujeitos a comunicação prévia."; }
+          else { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Trabalhos de remodelação de terrenos (aterros, escavações, alteração do relevo) estão sujeitos a licença."; }
+          alerts.push({ i: 1, t: "Mobilizações de solo para agricultura ou floresta não contam como remodelação de terreno; nesses casos fale com a câmara e a DRAP." });
+          break;
+        case "destaque":
+          p = "isento"; refs = ["art. 6.º, n.os 4 a 9 RJUE"];
+          motivo = "O destaque de uma parcela está isento de licença, se cumprir as condições do art. 6.º. Pede-se à câmara a certidão de destaque, que serve para o registo predial.";
+          alerts.push({ t: "Dentro do perímetro urbano, as duas parcelas têm de confrontar com arruamentos públicos. Fora dele, a parcela destacada tem de ter a área mínima de unidade de cultura e só pode levar uma habitação de dois pisos. Não se pode destacar de novo a mesma área durante 10 anos." });
+          break;
+        case "legalizacao":
+          p = "lic"; refs = ["art. 102.º-A RJUE"];
+          motivo = "Obras feitas sem controlo prévio legalizam-se pelo procedimento de legalização (art. 102.º-A), com as regras da licença ou da comunicação prévia que se aplicariam à obra.";
+          alerts.push({ t: "A câmara pode dispensar projetos de especialidades se a obra estiver feita e for comprovada por técnico, e aplica as normas em vigor à data da construção quando seja impossível ou desproporcionado cumprir as atuais. Pode haver contraordenação; confirme o regulamento municipal de legalizações." });
+          if (q.legalTipo === "uso") alerts.push({ i: 1, t: "Para legalizar só o uso, sem obras, basta normalmente a comunicação prévia com prazo de alteração de utilização." });
+          break;
+        case "ph":
+          p = "isento"; refs = ["art. 66.º RJUE", "art. 1415.º Código Civil"];
+          motivo = "Não é uma obra: pede-se à câmara a certidão de que o edifício reúne os requisitos legais da propriedade horizontal, para a escritura e o registo.";
+          alerts.push({ i: 1, t: "Cada fração tem de ser independente, distinta e isolada, com saída própria para uma parte comum ou para a via pública. Junte as plantas com a divisão das frações e a memória descritiva com as permilagens." });
+          break;
         case "loteamento":
           if (yes("loteamento")) { p = "cp"; refs = ["art. 4.º, n.º 4 RJUE"]; motivo = "Loteamento ou urbanização em área de plano de pormenor ou unidade de execução com conteúdo definido está sujeito a comunicação prévia."; }
           else { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Loteamentos e obras de urbanização fora de plano de pormenor ou unidade de execução estão sujeitos a licença."; }
@@ -623,6 +724,13 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     }
 
     if (yes("fracao") && s.tipo !== "uso") alerts.push({ t: "Obras em partes comuns, ou que alterem a linha arquitetónica ou o arranjo estético do edifício, precisam de aprovação da assembleia de condóminos (art. 1422.º do Código Civil). Junte a ata." });
+    if (s.tipoSel === "usoObras") alerts.push({ i: 1, t: "As obras associadas seguem o seu próprio enquadramento: interiores sem mexer na estrutura estão isentas; fachada, estrutura ou ampliação podem pedir comunicação prévia ou licença, no mesmo processo." });
+    if (s.tipoSel === "equipamentos") {
+      if (q.equip === "ac") alerts.push({ t: "Aparelhos de ar condicionado visíveis da via pública costumam ser proibidos ou limitados pelo regulamento municipal, sobretudo em centros históricos. Veja o separador Regras da câmara. Num prédio em propriedade horizontal, na fachada, precisa da autorização do condomínio." });
+      if (q.equip === "solar" || q.equip === "solarSolo") alerts.push({ i: 1, t: "Painéis solares estão isentos se não excederem a área da cobertura nem a altura do edifício em mais de 1 m (no solo, se não ocuparem mais área do que a edificação). Acima de certas potências há registo na DGEG." });
+      if (q.equip === "antena") alerts.push({ i: 1, t: "Antenas de telecomunicações de operadores seguem regime próprio (DL 11/2003). Antenas domésticas estão isentas, mas o regulamento municipal pode impor localização na cobertura." });
+    }
+    if (s.tipoSel === "demolicao" && yes("demoTipo")) alerts.push({ t: "Como a demolição faz parte de uma obra de reconstrução ou construção nova, entra no processo dessa obra. Escolha antes esse tipo de intervenção." });
     if (yes("viaPublica")) alerts.push({ t: "Peça a licença de ocupação da via pública. No licenciamento pode ir no mesmo pedido; nos outros casos é um pedido à parte." });
     if (yes("anterior1951")) alerts.push({ i: 1, t: "Peça à câmara a certidão de que o edifício é anterior a 1951. Substitui a licença de utilização na prova do uso existente." });
     if (p !== "lic" && p !== "cpPrazo") alerts.push({ i: 1, t: "Informe a câmara do início dos trabalhos pelo menos 5 dias antes (art. 80.º-A), indicando quem os executa." });
@@ -1006,7 +1114,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   let papel = "cliente", editPerfil = false;
   const M = { pedidos: {}, tecnicos: {}, propostas: {}, taxaPct: 10, aprov: {}, cobr: {}, ready: false, erro: "" };
   const eur = (n) => (Number(n) || 0).toLocaleString("pt-PT", { style: "currency", currency: "EUR" });
-  const TIPO_NOME = () => { const o = $("tipo").selectedOptions[0]; return o ? o.textContent : state.tipo; };
+  const TIPO_NOME = () => nomeDe(TIPOS, state.tipoSel) || state.tipo;
 
   async function initMercado() {
     try {
@@ -1240,8 +1348,9 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   const esc =(t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
   function render() {
+    sync(state);
     renderCond();
-    const qMapa = [state.morada, state.freguesia, state.concelho].filter(Boolean).join(", ");
+    $("resLocal").textContent = [nomeDe(TIPOS, state.tipoSel), [state.morada, state.concelho].filter(Boolean).join(", ")].filter(Boolean).join(" · ");
     const r = decide(state);
     const P = PROC[r.p];
     $("verdict").style.setProperty("--v", P.cor);
@@ -1320,55 +1429,54 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   function toast(m) { const t = $("toast"); t.textContent = m; t.hidden = false; clearTimeout(tt); tt = setTimeout(() => (t.hidden = true), 2200); }
 
   if (!state.q) state.q = {};
-  // Resultado do mapa: troca as condicionantes que vieram do mapa anterior pelas novas, sem mexer nas que o utilizador marcou.
-  let pedidoApp = 0;
+  // Mapa integrado: troca as condicionantes vindas do mapa anterior pelas novas.
+  let pedidoApp = 0, pinAtivo = false;
   function aplicarMapa(d, moradaDoMapa) {
     if (moradaDoMapa) { if (d.m) state.morada = d.m; if (d.f) state.freguesia = d.f; if (d.c) state.concelho = d.c; }
     else { if (d.m && !state.morada) state.morada = d.m; if (d.f && !state.freguesia) state.freguesia = d.f; if (d.c && !state.concelho) state.concelho = d.c; }
-    state.cond = state.cond || {}; state.condOff = state.condOff || {};
-    (state.condMapa || []).forEach((k) => { if (k === "pat") { if (state.q.classificado === "sim") delete state.q.classificado; } else delete state.cond[k]; });
-    const ks = (d.k || []).filter((k) => k === "pat" || COND.some((x) => x.k === k));
-    ks.forEach((k) => { if (k === "pat") state.q.classificado = "sim"; else { state.cond[k] = true; delete state.condOff[k]; } });
-    state.condMapa = ks; state.doMapa = true; save();
+    state.condMapa = (d.k || []).filter((k) => k === "pat" || COND.some((x) => x.k === k));
+    state.doMapa = !!(d.k && !d.limpo); save();
   }
   const frame = $("mapaFrame");
   const qMapa = () => [state.morada, state.freguesia, state.concelho].filter(Boolean).join(", ");
-  frame.src = "mapa/?embed=1" + (qMapa() ? "&q=" + encodeURIComponent(qMapa()) : "");
-  if (qMapa()) pedidoApp = Date.now();
+  frame.src = "mapa/?embed=1" + (state.doMapa && qMapa() ? "&q=" + encodeURIComponent(qMapa()) : "");
+  if (state.doMapa && qMapa()) { pedidoApp = Date.now(); pinAtivo = true; }
+  window.pesquisarNoMapa = (q) => {
+    pedidoApp = Date.now(); pinAtivo = true;
+    frame.contentWindow.postMessage({ tipo: "pesquisar", q }, location.origin);
+    frame.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
   window.addEventListener("message", (e) => {
     if (e.origin !== location.origin || e.source !== frame.contentWindow || !e.data || e.data.tipo !== "licenciamento-mapa") return;
+    if (e.data.limpo) { state.condMapa = []; state.doMapa = false; save(); render(); return; }
     aplicarMapa(e.data.dados || {}, Date.now() - pedidoApp > 15000);
-    if (e.data.limpo) { state.doMapa = false; save(); render(); return; }
     pinAtivo = true;
     fillForm(); render();
-    toast("Condicionantes do mapa passadas para o questionário");
+    toast("Local identificado: veja as condicionantes abaixo do mapa");
   });
-  // Mudar ou apagar a morada tira o pin do mapa (e as condicionantes que vieram dele); ao sair do campo, volta a procurar.
-  let pinAtivo = !!qMapa();
+  // Mudar ou apagar a morada tira o pin e as condicionantes que vieram do mapa; Enter pesquisa.
   $("f").addEventListener("input", (e) => {
     if (!["morada", "freguesia", "concelho"].includes(e.target.id) || !pinAtivo) return;
     pinAtivo = false;
     frame.contentWindow.postMessage({ tipo: "limpar" }, location.origin);
-    aplicarMapa({ k: [] }, false); state.doMapa = false; save(); render();
+    state.condMapa = []; state.doMapa = false; save(); render();
   });
-  $("f").addEventListener("change", (e) => {
-    if (!["morada", "freguesia", "concelho"].includes(e.target.id) || !qMapa()) return;
-    pedidoApp = Date.now(); pinAtivo = true;
-    frame.contentWindow.postMessage({ tipo: "pesquisar", q: qMapa() }, location.origin);
-  });
+  ["morada", "freguesia", "concelho"].forEach((id) => $(id).addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); $("btnMapa").click(); } }));
   // Dados vindos do Mapa de Condicionantes: #mapa.<base64url de {m, f, c, k}>
   try {
     const h = location.hash || "";
     if (h.startsWith("#mapa.")) {
       const b = h.slice(6).replace(/-/g, "+").replace(/_/g, "/");
       const d = JSON.parse(decodeURIComponent(escape(atob(b + "===".slice((b.length + 3) % 4)))));
-      state.cond = {}; state.condOff = {}; state.condMapa = [];
-      aplicarMapa(d, true);
+      if (d.m) state.morada = d.m; if (d.f) state.freguesia = d.f; if (d.c) state.concelho = d.c;
+      state.condMapa = (d.k || []).filter((k) => k === "pat" || COND.some((x) => x.k === k));
+      state.doMapa = true; save();
       history.replaceState(null, "", location.pathname);
     }
   } catch (e) {}
   fillForm();
   render();
+  vista(location.hash === "#resumo" ? "resumo" : "form");
   initMercado();
 })();
 </script>
