@@ -180,7 +180,7 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
   function nomesDe(url) {
     if (!capCache[url]) capCache[url] = (async () => {
       try {
-        const doc = new DOMParser().parseFromString(await pedir(url + "?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0", 20000), "text/xml");
+        const doc = new DOMParser().parseFromString(await pedir(url + "?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0", 65000), "text/xml");
         const camadas = [...doc.getElementsByTagName("Layer")].filter((n) => ![...n.children].some((c) => c.localName === "Layer"));
         const nomes = camadas.map((n) => [...n.children].find((c) => c.localName === "Name")).filter(Boolean).map((n) => n.textContent.trim());
         return nomes.join(",");
@@ -229,10 +229,11 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
       try { const r = await fetch(u, { signal: ctl.signal }); if (!r.ok) throw new Error(r.status); return await r.text(); } finally { clearTimeout(t); }
     };
     const peloProxy = async () => {
-      const fim = await vez(host, host.includes("dgterritorio") ? 4 : 8);
+      const fim = await vez(host + (/GetCapabilities/i.test(url) ? ":caps" : ""), host.includes("dgterritorio") ? 4 : 8);
       try {
         const u = PROXY + "?url=" + encodeURIComponent(url);
-        try { return await tentar(u, 25000); } catch (e) { if (!/^50[234]$/.test(e.message)) throw e; await new Promise((r) => setTimeout(r, 1500)); return await tentar(u, 25000); }
+        const lim = Math.max(ms || 0, 30000);
+        try { return await tentar(u, lim); } catch (e) { if (!/^50[234]$/.test(e.message)) throw e; await new Promise((r) => setTimeout(r, 1500)); return await tentar(u, lim); }
       } finally { fim(); }
     };
     if (PROXY && viaProxy[host]) return peloProxy();
