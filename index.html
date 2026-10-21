@@ -3,213 +3,1271 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Mapa de Condicionantes</title>
-<meta name="description" content="Escreva a morada e veja as servidões e restrições de utilidade pública que se aplicam ao local: REN, RAN, domínio hídrico, património classificado, áreas protegidas, Rede Natura 2000 e outras.">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<meta name="description" content="Enquadramento de obras no RJUE: procedimento, condicionantes do local no mapa, entidades, documentos, passos e minutas.">
+<title>Licenciamento de Obras</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: painel lateral (pesquisa, resultado, camadas) + mapa; em telemóvel o painel fica por baixo do mapa. Mesmas cores da app Licenciamento de Obras. */
+/* Layout: questionário à esquerda, resultado em separadores à direita; em telemóvel empilha. Cores tiradas da convenção dos projetos: vermelho = a construir, amarelo = a demolir. */
 :root {
-  --bg: #f3f4f1; --panel: #ffffff; --ink: #1d2422; --muted: #5c6764; --line: #d6dbd7;
-  --red: #b3261e; --ochre: #b98a12; --green: #2f6b4f; --blue: #2c5b86; --chip: #eceee9;
+  --bg: #f3f4f1;
+  --panel: #ffffff;
+  --ink: #1d2422;
+  --muted: #5c6764;
+  --line: #d6dbd7;
+  --red: #b3261e;      /* vermelhos: a construir */
+  --ochre: #b98a12;    /* amarelos: a demolir */
+  --green: #2f6b4f;
+  --blue: #2c5b86;
+  --chip-bg: #eceee9;
+  --focus: #2c5b86;
   --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --f-body: "Source Sans 3", "Segoe UI", Roboto, sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) {
-  :root { --bg: #151a19; --panel: #1d2423; --ink: #e7ebe8; --muted: #9aa5a1; --line: #323b39; --red: #ef7a70; --ochre: #e0b54a; --green: #6cc29a; --blue: #85b4e0; --chip: #263030; color-scheme: dark; }
+  :root:not([data-theme="light"]) {
+    --bg: #151a19; --panel: #1d2423; --ink: #e7ebe8; --muted: #9aa5a1; --line: #323b39;
+    --red: #ef7a70; --ochre: #e0b54a; --green: #6cc29a; --blue: #85b4e0; --chip-bg: #263030; --focus: #85b4e0;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151a19; --panel: #1d2423; --ink: #e7ebe8; --muted: #9aa5a1; --line: #323b39;
+  --red: #ef7a70; --ochre: #e0b54a; --green: #6cc29a; --blue: #85b4e0; --chip-bg: #263030; --focus: #85b4e0;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
-body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-body); display: grid; grid-template-columns: minmax(320px, 400px) 1fr; }
-aside { background: var(--panel); border-right: 1px solid var(--line); overflow-y: auto; padding: 18px max(16px, env(safe-area-inset-left)) 24px 16px; display: grid; gap: 18px; align-content: start; }
-#map { height: 100%; min-height: 300px; }
-@media (max-width: 760px) {
-  body { grid-template-columns: 1fr; grid-template-rows: 55vh auto; height: auto; }
-  #map { grid-row: 1; height: 55vh; }
-  aside { grid-row: 2; border-right: 0; border-top: 1px solid var(--line); padding-right: max(16px, env(safe-area-inset-right)); }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px 48px;
 }
-h1 { font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; }
-h2 { font-family: var(--f-display); font-weight: 600; font-size: 1rem; margin: 0 0 6px; }
-.eyebrow { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-p { margin: 0; }
-.note { color: var(--muted); font-size: 0.86rem; }
-form { display: flex; gap: 6px; }
-input[type=search] { flex: 1; min-width: 0; font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--ink); }
-button, .btn { font: inherit; font-weight: 600; font-size: 0.88rem; border: 1px solid var(--ink); background: var(--ink); color: var(--panel); border-radius: 4px; padding: 7px 12px; cursor: pointer; text-decoration: none; display: inline-block; }
-.btn.sec { background: transparent; color: var(--ink); }
-:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-.res { display: grid; gap: 0; }
-.row { display: grid; grid-template-columns: 14px 1fr auto; gap: 10px; align-items: start; padding: 8px 0; border-bottom: 1px solid var(--line); }
-.row .sw { width: 14px; height: 14px; border-radius: 2px; margin-top: 4px; border: 1px solid var(--line); }
-.row b { display: block; font-size: 0.93rem; }
-.row span.d { color: var(--muted); font-size: 0.83rem; }
-.tag { font-family: var(--f-mono); font-size: 0.7rem; padding: 2px 7px; border-radius: 3px; background: var(--chip); white-space: nowrap; }
-.tag.sim { color: var(--red); font-weight: 500; } .tag.nao { color: var(--green); } .tag.err { color: var(--ochre); } .tag.wait { color: var(--muted); }
-.layers label { display: grid; grid-template-columns: auto 1fr; gap: 8px; padding: 4px 0; font-size: 0.9rem; cursor: pointer; }
-.where { font-size: 0.9rem; }
-.where b { display: block; }
-.cta { display: grid; gap: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 6px; }
-.foot { font-size: 0.78rem; color: var(--muted); }
-.leaflet-container { font-family: var(--f-body); }
+.wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 20px; }
+header.top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; border-bottom: 2px solid var(--ink); padding-bottom: 12px; }
+h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.legend { display: flex; gap: 14px; font-size: 0.82rem; color: var(--muted); font-family: var(--f-mono); }
+.legend span::before { content: ""; display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 6px; }
+.legend .r::before { background: var(--red); } .legend .y::before { background: var(--ochre); }
+.lede { margin: 6px 0 0; color: var(--muted); max-width: 65ch; }
+.grid { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+.mapa iframe { width: 100%; height: 540px; border: 1px solid var(--line); border-radius: 6px; display: block; background: var(--bg); }
+.mapa .mhd { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 8px 16px; margin-bottom: 12px; }
+.mapa .mhd h2 { margin: 0; font: 700 1.15rem/1.2 var(--f-display, inherit); }
+@media (max-width: 760px) { .mapa iframe { height: 720px; } }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 18px; min-width: 0; }
+h2 { font-family: var(--f-display); font-size: 1.05rem; font-weight: 700; margin: 0 0 4px; }
+.eyebrow { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+form { display: grid; gap: 22px; }
+fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 12px; min-width: 0; }
+legend.sec { font-family: var(--f-display); font-weight: 700; font-size: 0.95rem; padding: 0 0 6px; border-bottom: 1px solid var(--line); width: 100%; margin-bottom: 4px; }
+label.f { display: grid; gap: 4px; font-size: 0.88rem; font-weight: 600; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 420px) { .row2 { grid-template-columns: 1fr; } }
+input[type=text], select, textarea {
+  font: inherit; font-weight: 400; font-size: 0.95rem; color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 4px; padding: 8px 10px; width: 100%; min-width: 0;
+}
+textarea { resize: vertical; min-height: 64px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.q { display: grid; gap: 6px; padding: 10px 0; border-top: 1px dashed var(--line); }
+.q:first-of-type { border-top: 0; }
+.q p { margin: 0; font-size: 0.92rem; font-weight: 600; }
+.q small { color: var(--muted); font-weight: 400; display: block; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; width: fit-content; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg label { padding: 5px 14px; font-size: 0.85rem; cursor: pointer; border-left: 1px solid var(--line); user-select: none; }
+.seg label:first-of-type { border-left: 0; }
+.seg input:checked + label { background: var(--ink); color: var(--panel); }
+.seg input:focus-visible + label { outline: 2px solid var(--focus); outline-offset: -2px; }
+.sample { font-size: 0.8rem; color: var(--muted); background: var(--chip-bg); padding: 6px 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+button { font: inherit; cursor: pointer; }
+.btn { border: 1px solid var(--ink); background: transparent; color: var(--ink); border-radius: 4px; padding: 5px 12px; font-size: 0.85rem; font-weight: 600; }
+.btn:hover { background: var(--chip-bg); }
+.btn.primary { background: var(--ink); color: var(--panel); }
+
+/* Resultado */
+.verdict { display: grid; gap: 10px; border-left: 6px solid var(--v, var(--blue)); padding: 4px 0 4px 16px; }
+.verdict .proc { font-family: var(--f-display); font-weight: 800; font-size: clamp(1.4rem, 2.6vw, 1.9rem); margin: 0; line-height: 1.15; text-wrap: balance; }
+.verdict p { margin: 0; max-width: 70ch; }
+.refs { display: flex; flex-wrap: wrap; gap: 6px; }
+.ref { font-family: var(--f-mono); font-size: 0.78rem; background: var(--chip-bg); padding: 2px 8px; border-radius: 3px; }
+.alerts { display: grid; gap: 8px; margin-top: 14px; padding: 0; list-style: none; }
+.alerts li { font-size: 0.92rem; padding: 8px 12px; border: 1px solid var(--line); border-radius: 4px; display: grid; grid-template-columns: auto 1fr; gap: 10px; }
+.alerts li::before { content: "!"; font-family: var(--f-mono); font-weight: 500; color: var(--ochre); }
+.alerts li.info::before { content: "i"; color: var(--blue); }
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--line); margin: 22px 0 16px; }
+.tabs button { background: none; border: 0; border-bottom: 3px solid transparent; padding: 8px 12px; font-weight: 600; color: var(--muted); font-size: 0.92rem; margin-bottom: -1px; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-color: var(--red); }
+.count { font-family: var(--f-mono); font-size: 0.75rem; font-weight: 400; }
+.docs { list-style: none; padding: 0; margin: 0; display: grid; gap: 2px; }
+.docs h3 { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 14px 0 4px; font-weight: 500; }
+.docs label { display: grid; grid-template-columns: auto 1fr; gap: 10px; padding: 7px 4px; border-bottom: 1px solid var(--line); cursor: pointer; }
+.docs input { margin-top: 4px; accent-color: var(--green); }
+.docs .t { font-weight: 600; }
+.docs .d { color: var(--muted); font-size: 0.86rem; display: block; font-weight: 400; }
+.docs input:checked ~ span .t { text-decoration: line-through; color: var(--muted); }
+.progress { font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 0; }
+ol.steps li { counter-increment: s; display: grid; grid-template-columns: 2.2rem 1fr; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+ol.steps li::before { content: counter(s); font-family: var(--f-mono); font-size: 0.85rem; width: 1.8rem; height: 1.8rem; border: 1.5px solid var(--red); color: var(--red); border-radius: 50%; display: grid; place-items: center; }
+ol.steps b { display: block; }
+ol.steps span { color: var(--muted); font-size: 0.92rem; }
+.minutas { display: grid; gap: 12px; }
+.mbar { display: flex; flex-wrap: wrap; gap: 6px; }
+.mbar button { border: 1px solid var(--line); background: var(--bg); color: var(--ink); border-radius: 4px; padding: 5px 10px; font-size: 0.85rem; }
+.mbar button.on { border-color: var(--ink); background: var(--ink); color: var(--panel); }
+.mbar button .rec { color: var(--red); font-weight: 700; }
+.mbar button.on .rec { color: inherit; }
+pre.doc { font-family: var(--f-body); white-space: pre-wrap; word-wrap: break-word; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 18px; margin: 0; font-size: 0.93rem; line-height: 1.6; max-height: 560px; overflow: auto; }
+pre.doc mark { background: transparent; color: var(--red); font-weight: 600; }
+.mhead { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.mhead p { margin: 0; color: var(--muted); font-size: 0.88rem; max-width: 60ch; }
+.links { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+.links a { display: block; padding: 10px 12px; border: 1px solid var(--line); border-radius: 4px; color: var(--ink); text-decoration: none; min-width: 0; }
+.links a:hover { border-color: var(--ink); }
+.links a b { display: block; font-size: 0.92rem; }
+.links a span { color: var(--muted); font-size: 0.82rem; }
+.foot { font-size: 0.82rem; color: var(--muted); max-width: 90ch; }
+.team { display: grid; gap: 0; }
+.team h3 { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 14px 0 4px; font-weight: 500; }
+.team .m { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.team .m b { display: block; }
+.team .m span { color: var(--muted); font-size: 0.88rem; }
+.tag { font-family: var(--f-mono); font-size: 0.72rem; background: var(--chip-bg); padding: 2px 7px; border-radius: 3px; white-space: nowrap; align-self: start; }
+.tag.ok { color: var(--green); } .tag.warn { color: var(--ochre); } .tag.red { color: var(--red); }
+.mk { display: grid; gap: 14px; }
+.card { border: 1px solid var(--line); border-radius: 6px; padding: 14px; display: grid; gap: 8px; min-width: 0; }
+.card.on { border-color: var(--green); }
+.card .hd { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; align-items: baseline; }
+.card .hd b { font-size: 1rem; }
+.card p { margin: 0; }
+.money { font-family: var(--f-mono); font-variant-numeric: tabular-nums; font-weight: 500; }
+.note { font-size: 0.85rem; color: var(--muted); margin: 0; }
+.chk { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.88rem; }
+.chk label { display: inline-flex; gap: 6px; align-items: center; }
+.tbl { overflow-x: auto; }
+.tbl table { border-collapse: collapse; width: 100%; font-size: 0.88rem; }
+.tbl th, .tbl td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.tbl th { font-family: var(--f-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 500; }
+.tbl td.n { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+details.gd { border-bottom: 1px solid var(--line); padding: 8px 0; }
+details.gd summary { cursor: pointer; padding: 6px 0; font-family: var(--f-display); }
+details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color: var(--muted); margin-left: 6px; }
+.toast { position: fixed; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--panel); padding: 8px 16px; border-radius: 4px; font-size: 0.88rem; }
+@media (prefers-reduced-motion: no-preference) { .tabpanel { animation: fade .18s ease-out; } @keyframes fade { from { opacity: .6; } to { opacity: 1; } } }
 </style>
 </head>
 <body>
-<aside>
-  <div>
-    <div class="eyebrow">Servidões e restrições de utilidade pública</div>
-    <h1>Mapa de Condicionantes</h1>
-    <p class="note" style="margin-top:4px">Escreva a morada ou clique no mapa. A página consulta as cartas oficiais nesse ponto e diz que condicionantes se aplicam.</p>
-  </div>
-  <form id="f" role="search">
-    <input type="search" id="q" placeholder="Rua, número, concelho" aria-label="Morada" autocomplete="street-address">
-    <button type="submit">Procurar</button>
-  </form>
-  <div id="where" class="where" hidden></div>
-  <section>
-    <h2>Neste local</h2>
-    <div id="res" class="res"><p class="note">Ainda não escolheu um local.</p></div>
-  </section>
-  <div id="cta" class="cta" hidden>
-    <p><b>Levar para o enquadramento</b></p>
-    <p class="note">Abre a app Licenciamento de Obras com a morada e as condicionantes já assinaladas.</p>
-    <div><a id="toApp" class="btn" href="#" target="_blank" rel="noopener">Abrir na app</a></div>
-  </div>
-  <section>
-    <h2>Camadas no mapa</h2>
-    <div id="layers" class="layers"></div>
-  </section>
-  <p class="foot">Dados: Direção-Geral do Território (SNIT, servidões e restrições de utilidade pública) e ICNF. Mapa base © colaboradores do OpenStreetMap; pesquisa de moradas Nominatim. A informação é indicativa: a referência legal é a planta de condicionantes do PDM em vigor, disponível na câmara municipal. Algumas cartas nacionais podem estar desatualizadas ou incompletas para o seu concelho.</p>
-</aside>
-<div id="map" role="application" aria-label="Mapa"></div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">RJUE · DL 555/99 na redação do DL 10/2024 (Simplex Urbanístico)</div>
+      <h1>Licenciamento de Obras</h1>
+      <p class="lede">Responda às perguntas sobre o imóvel e a obra. O enquadramento, a lista de documentos, os passos e as minutas atualizam-se à medida que preenche.</p>
+    </div>
+    <div class="legend" aria-hidden="true"><span class="r">a construir</span><span class="y">a demolir</span></div>
+  </header>
+
+  <section class="panel mapa" id="mapaSec" aria-label="Mapa de condicionantes">
+    <div class="mhd">
+      <div>
+        <h2>Onde fica a obra?</h2>
+        <p class="note" style="margin:4px 0 0">Pesquise a morada ou clique no local. O mapa consulta as cartas oficiais e as condicionantes encontradas passam para o questionário (secção 3).</p>
+      </div>
+      <a class="btn" style="text-decoration:none" href="mapa/" target="_blank" rel="noopener">Abrir o mapa em página própria</a>
+    </div>
+    <iframe id="mapaFrame" title="Mapa de condicionantes"></iframe>
+  </section>
+
+  <div class="grid">
+    <!-- QUESTIONÁRIO -->
+    <section class="panel" aria-label="Questionário">
+      <div class="sample" id="sampleBar"><span>Preenchido com um exemplo fictício.</span><span style="display:flex;gap:6px"><button class="btn" type="button" id="btnClear">Limpar tudo</button><button class="btn" type="button" id="btnSample">Repor exemplo</button></span></div>
+      <form id="f" autocomplete="off" style="margin-top:16px">
+        <fieldset>
+          <legend class="sec">1 · A obra</legend>
+          <label class="f">Tipo de intervenção
+            <select id="tipo" name="tipo">
+              <option value="conservacao">Conservação (pinturas, reparações, impermeabilização)</option>
+              <option value="interior">Alteração no interior (paredes, cozinha, casas de banho)</option>
+              <option value="exterior">Alteração exterior (fachada, vãos, cobertura)</option>
+              <option value="escassa">Pequena obra (anexo, muro, painéis solares, janelas)</option>
+              <option value="ampliacao">Ampliação</option>
+              <option value="reconstrucao">Reconstrução</option>
+              <option value="nova">Construção nova</option>
+              <option value="piscina">Piscina</option>
+              <option value="demolicao">Demolição</option>
+              <option value="uso">Mudança de uso sem obras</option>
+              <option value="loteamento">Loteamento ou obras de urbanização</option>
+            </select>
+          </label>
+          <label class="f">Descrição curta
+            <textarea id="descricao" name="descricao" rows="2"></textarea>
+          </label>
+          <div class="row2">
+            <label class="f">Uso atual<input type="text" id="usoAtual" name="usoAtual"></label>
+            <label class="f">Uso pretendido<input type="text" id="usoNovo" name="usoNovo"></label>
+          </div>
+          <div class="row2">
+            <label class="f">Pisos acima do solo (final)<input type="text" inputmode="numeric" id="pisos" name="pisos"></label>
+            <label class="f">Área bruta de construção (m²)<input type="text" inputmode="decimal" id="abc" name="abc"></label>
+          </div>
+        </fieldset>
+
+        <fieldset id="qs">
+          <legend class="sec">2 · O que decide o procedimento</legend>
+        </fieldset>
+
+        <fieldset id="cs">
+          <legend class="sec">3 · Condicionantes do local</legend>
+          <p class="note" style="margin:0">Assinale o que aparece na planta de condicionantes do PDM ou no geoportal do município. Cada uma destas situações obriga a ouvir uma entidade.</p>
+          <p style="margin:4px 0"><a class="btn primary" style="text-decoration:none" href="#mapaSec">Ver as condicionantes da morada no mapa</a></p>
+          <div class="chk" id="condBox" style="display:grid;gap:6px"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend class="sec">4 · O imóvel</legend>
+          <label class="f">Morada<input type="text" id="morada" name="morada"></label>
+          <p style="margin:0"><a class="btn" style="text-decoration:none" href="#mapaSec">Ver esta morada no mapa</a></p>
+          <div class="row2">
+            <label class="f">Freguesia<input type="text" id="freguesia" name="freguesia"></label>
+            <label class="f">Concelho<input type="text" id="concelho" name="concelho"></label>
+          </div>
+          <div class="row2">
+            <label class="f">Artigo matricial<input type="text" id="artigo" name="artigo"></label>
+            <label class="f">Descrição predial n.º<input type="text" id="descPredial" name="descPredial"></label>
+          </div>
+          <label class="f">Código da certidão permanente<input type="text" id="codCertidao" name="codCertidao" placeholder="0000-0000-0000"></label>
+        </fieldset>
+
+        <fieldset>
+          <legend class="sec">5 · O requerente</legend>
+          <div class="row2">
+            <label class="f">Nome<input type="text" id="nome" name="nome"></label>
+            <label class="f">NIF<input type="text" id="nif" name="nif"></label>
+          </div>
+          <label class="f">Morada do requerente<input type="text" id="moradaReq" name="moradaReq"></label>
+          <div class="row2">
+            <label class="f">Email<input type="text" id="email" name="email"></label>
+            <label class="f">Qualidade
+              <select id="qualidade" name="qualidade">
+                <option value="proprietário">Proprietário</option>
+                <option value="comproprietário">Comproprietário</option>
+                <option value="arrendatário">Arrendatário</option>
+                <option value="administrador do condomínio">Administrador do condomínio</option>
+                <option value="mandatário do proprietário">Mandatário</option>
+              </select>
+            </label>
+          </div>
+          <div class="row2">
+            <label class="f">Técnico responsável<input type="text" id="tecnico" name="tecnico"></label>
+            <label class="f">Inscrição na ordem<input type="text" id="ordem" name="ordem" placeholder="OA n.º / OE n.º"></label>
+          </div>
+        </fieldset>
+      </form>
+    </section>
+
+    <!-- RESULTADO -->
+    <section class="panel" aria-live="polite" aria-label="Resultado">
+      <div class="eyebrow">Enquadramento provável</div>
+      <div class="verdict" id="verdict"></div>
+      <ul class="alerts" id="alerts"></ul>
+
+      <div class="tabs" role="tablist" id="tabs">
+        <button role="tab" id="tab-docs" aria-selected="true" data-tab="docs">Documentos <span class="count" id="docCount"></span></button>
+        <button role="tab" id="tab-entidades" aria-selected="false" data-tab="entidades">Entidades <span class="count" id="entCount"></span></button>
+        <button role="tab" id="tab-equipa" aria-selected="false" data-tab="equipa">Equipa técnica</button>
+        <button role="tab" id="tab-passos" aria-selected="false" data-tab="passos">Passo a passo</button>
+        <button role="tab" id="tab-guia" aria-selected="false" data-tab="guia">Guia completo</button>
+        <button role="tab" id="tab-minutas" aria-selected="false" data-tab="minutas">Minutas</button>
+        <button role="tab" id="tab-mercado" aria-selected="false" data-tab="mercado">Propostas</button>
+        <button role="tab" id="tab-consultar" aria-selected="false" data-tab="consultar">Mapa e consultas</button>
+      </div>
+      <div class="tabpanel" id="panel"></div>
+    </section>
+  </div>
+
+  <p class="foot">Ferramenta de apoio, não é parecer jurídico. A decisão final é da câmara municipal, e os regulamentos municipais (RMUE) podem acrescentar regras, como a definição de obras de escassa relevância ou os elementos a entregar. Base: RJUE na redação do DL 10/2024 e Portaria 71-A/2024 (elementos instrutórios). Confirme sempre a redação em vigor no Diário da República antes de submeter.</p>
+</div>
+<div class="toast" id="toast" hidden></div>
+
 <script>
 (function () {
-  const APP_URL = "https://claude.ai/artifact/QXFLw3B5ynwi32p4aDzd1k";
-  const DGT = (c) => `https://servicos.dgterritorio.pt/SDISNITWMSSRUP_${c}_PT1/WMService.aspx`;
-  // app: chave da condicionante na app ("pat" = imóvel classificado ou zona de proteção).
-  const LAYERS = [
-    { id: "ic", nome: "Imóveis classificados e zonas de proteção", ent: "Património Cultural, I.P.", url: DGT("IC"), layers: "Imóveis_Classificados_com_Zona_de_Proteção,Imóveis_Classificados", app: "pat", cor: "#8e3b8e", on: true },
-    { id: "eip", nome: "Edifícios de interesse público", ent: "Entidade que tutela o edifício", url: DGT("EIP"), layers: "Edifícios_de_Interesse_Público", app: "pat", cor: "#a05a2c" },
-    { id: "ren", nome: "Reserva Ecológica Nacional (REN)", ent: "CCDR", url: DGT("REN"), layers: "REN_em_Vigor", app: "ren", cor: "#2f7d4a", on: true },
-    { id: "ran", nome: "Reserva Agrícola Nacional (RAN)", ent: "Entidade Regional da RAN", url: DGT("RAN"), layers: "Reserva_Agricola_Nacional", app: "ran", cor: "#9a8a1a", on: true },
-    { id: "dph", nome: "Domínio público hídrico", ent: "APA, I.P.", url: DGT("DPH"), layers: "Domínio_Público_Hídrico", app: "hidrico", cor: "#2c6fb0", on: true },
-    { id: "cheias", nome: "Zonas de cheia (ocupação condicionada ou proibida)", ent: "APA, I.P.", url: DGT("DPH"), layers: "Zona_de_Ocupação_Condicionada,Zona_de_Ocupação_Proibida", app: "hidrico", cor: "#4aa3d8" },
-    { id: "ap", nome: "Áreas protegidas", ent: "ICNF, I.P.", url: DGT("AP"), layers: "Áreas_Protegidas", app: "natura", cor: "#3d8c6e" },
-    { id: "zpe", nome: "Rede Natura 2000: Zonas de Proteção Especial", ent: "ICNF, I.P.", url: DGT("ZPE"), layers: "Zonas_de_Protecao_Especial_-_ZPE", app: "natura", cor: "#6aa84f" },
-    { id: "sic", nome: "Rede Natura 2000: Sítios de Importância Comunitária", ent: "ICNF, I.P.", url: "https://si.icnf.pt/geoserver/INSPIRE/wms", layers: "sic_INSPIREcompliant", app: "natura", cor: "#93c47d", json: true },
-    { id: "rf", nome: "Regime florestal", ent: "ICNF, I.P.", url: DGT("RF"), layers: "Regime_Florestal", app: "", cor: "#5b7f3a" },
-    { id: "dn", nome: "Servidões militares", ent: "Ministério da Defesa Nacional", url: DGT("DN"), layers: "Áreas_Abrangidas_pela_Servidão,Zonas_da_Servidão", app: "militar", cor: "#6b6b6b" },
-  ];
+  const KEY = "licenciamento-obras-v1";
   const $ = (id) => document.getElementById(id);
-  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-  const map = L.map("map", { zoomControl: true }).setView([39.6, -8.0], 7);
-  const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(map);
-  const sat = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, attribution: "Imagem © Esri" });
-  L.control.layers({ "Mapa": osm, "Satélite": sat }, null, { position: "topright" }).addTo(map);
+  // Perguntas que decidem o enquadramento. "show" indica os tipos em que a pergunta aparece.
+  const QUESTIONS = [
+    { id: "classificado", q: "O imóvel é classificado, está em vias de classificação ou fica numa zona de proteção?", h: "Por exemplo, junto a um castelo, aqueduto, igreja ou outro monumento. Sem zona especial fixada, a zona geral de proteção vai até 50 m do monumento.", show: "*" },
+    { id: "pip", q: "Existe um PIP (informação prévia) favorável, ainda válido, para esta obra?", h: "Emitido nos termos do art. 14.º, n.os 2 e 3, há menos de 2 anos.", show: ["exterior","ampliacao","reconstrucao","nova","piscina","demolicao","loteamento"] },
+    { id: "fachada", q: "A obra mexe também na fachada, na cobertura ou na cércea?", h: "", show: ["conservacao","interior"] },
+    { id: "estrutura", q: "Mexe na estrutura (paredes resistentes, lajes, vigas, pilares)?", h: "", show: ["conservacao","interior"] },
+    { id: "azulejos", q: "Implica remover azulejos da fachada?", h: "", show: ["conservacao","exterior","reconstrucao"] },
+    { id: "altura", q: "Aumenta a altura da fachada?", h: "Mais pisos ou área sem subir a fachada não conta como aumento.", show: ["ampliacao","reconstrucao"] },
+    { id: "loteamento", q: "O terreno está em loteamento, plano de pormenor ou unidade de execução com parâmetros definidos?", h: "Por exemplo, um lote com alvará de loteamento.", show: ["exterior","ampliacao","reconstrucao","nova","loteamento"] },
+    { id: "zuc", q: "Fica em zona urbana consolidada?", h: "Classificação do PDM ou da carta de qualificação do solo.", show: ["exterior","ampliacao","reconstrucao","nova"] },
+    { id: "cercea", q: "A cércea final fica igual ou abaixo da mais frequente na frente edificada da rua?", h: "", show: ["exterior","ampliacao","reconstrucao","nova"] },
+    { id: "fracao", q: "É uma fração em propriedade horizontal ou mexe em partes comuns?", h: "", show: ["conservacao","interior","exterior","escassa","ampliacao","uso"] },
+    { id: "viaPublica", q: "Vai precisar de ocupar a via pública (andaimes, contentor, grua)?", h: "", show: ["conservacao","interior","exterior","escassa","ampliacao","reconstrucao","nova","piscina","demolicao"] },
+    { id: "anterior1951", q: "O edifício é anterior a 1951 e não tem licença de utilização?", h: "Antes do RGEU não havia licença de utilização; a câmara emite certidão.", show: ["conservacao","interior","exterior","ampliacao","reconstrucao","uso"] },
+  ];
 
-  const wms = {};
-  LAYERS.forEach((l) => {
-    wms[l.id] = L.tileLayer.wms(l.url, { layers: l.layers, format: "image/png", transparent: true, version: "1.3.0", opacity: 0.55, attribution: l.id === "sic" ? "ICNF" : "DGT" });
-    if (l.on) wms[l.id].addTo(map);
-  });
-  $("layers").innerHTML = LAYERS.map((l) => `<label><input type="checkbox" data-l="${l.id}" ${l.on ? "checked" : ""}><span><span class="sw" style="display:inline-block;width:10px;height:10px;background:${l.cor};margin-right:6px;border-radius:2px"></span>${esc(l.nome)}</span></label>`).join("");
-  $("layers").addEventListener("change", (e) => { const id = e.target.dataset.l; if (!id) return; e.target.checked ? wms[id].addTo(map) : map.removeLayer(wms[id]); });
+  // Condicionantes do local: cada uma implica ouvir uma entidade. serv = servidão ou restrição de utilidade pública.
+  const COND = [
+    { k: "ren", l: "Reserva Ecológica Nacional (REN)", ent: "CCDR da região", av: "Compatibilidade da obra com a REN. Algumas ações exigem comunicação prévia ou autorização da CCDR.", base: "DL 166/2008 (regime da REN)", serv: true },
+    { k: "ran", l: "Reserva Agrícola Nacional (RAN)", ent: "Entidade Regional da Reserva Agrícola Nacional", av: "Utilização não agrícola de solos da RAN.", base: "DL 73/2009 (regime da RAN)", serv: true },
+    { k: "hidrico", l: "Linha de água, margem, zona inundável ou orla costeira", ent: "APA, I.P. (Administração da Região Hidrográfica)", av: "Título de utilização dos recursos hídricos e risco de cheia ou de erosão costeira.", base: "Lei 54/2005 e Lei 58/2005", serv: true },
+    { k: "natura", l: "Rede Natura 2000 ou área protegida", ent: "ICNF, I.P.", av: "Efeitos sobre habitats e espécies, e regulamento da área protegida.", base: "DL 140/99 e DL 142/2008", serv: true },
+    { k: "incendio", l: "Perigosidade de incêndio rural alta ou muito alta", ent: "Câmara municipal (comissão de gestão de fogos) e ICNF", av: "Condições para edificar fora de aglomerados e faixas de gestão de combustível.", base: "DL 82/2021 (sistema de gestão integrada de fogos rurais)", serv: true },
+    { k: "estradas", l: "Junto a estrada nacional ou a linha de caminho de ferro", ent: "Infraestruturas de Portugal, S.A.", av: "Zonas non aedificandi, afastamentos e acessos.", base: "Lei 34/2015 (Estatuto das Estradas) e DL 276/2003 (ferrovia)", serv: true },
+    { k: "aqueduto", l: "Aqueduto, conduta adutora ou reservatório de água", ent: "Entidade gestora do abastecimento (por exemplo EPAL ou serviços municipalizados)", av: "Faixa de proteção da servidão de aqueduto público. Se o aqueduto for monumento, junta-se o parecer do património.", base: "Servidão administrativa de aqueduto público", serv: true },
+    { k: "eletrica", l: "Linha elétrica de alta ou média tensão", ent: "REN ou E-REDES", av: "Distâncias de segurança da construção às linhas.", base: "Decreto Regulamentar 1/92 (linhas de alta tensão)", serv: true },
+    { k: "gas", l: "Gasoduto ou oleoduto", ent: "Operador da rede (REN Gasodutos ou distribuidora)", av: "Faixa de servidão da conduta.", base: "Servidão de gás natural", serv: true },
+    { k: "aero", l: "Perto de aeroporto, aeródromo ou heliporto", ent: "ANAC", av: "Alturas máximas e obstáculos à navegação aérea.", base: "Servidões aeronáuticas", serv: true },
+    { k: "militar", l: "Perto de instalação militar", ent: "Ministério da Defesa Nacional", av: "Servidão militar da instalação.", base: "Lei 2078 (servidões militares)", serv: true },
+    { k: "porto", l: "Em área de jurisdição portuária", ent: "Administração portuária", av: "Compatibilidade com o uso portuário.", base: "Regime da área de jurisdição portuária", serv: true },
+    { k: "scie34", l: "Edifício de 3.ª ou 4.ª categoria de risco de incêndio", ent: "ANEPC", av: "Parecer sobre o projeto de segurança contra incêndio.", base: "DL 220/2008 (segurança contra incêndio em edifícios)", serv: false },
+    { k: "turismo", l: "Empreendimento turístico (hotel, aldeamento, turismo rural)", ent: "Turismo de Portugal, I.P.", av: "Parecer sobre a arquitetura e a classificação pretendida.", base: "DL 39/2008 (empreendimentos turísticos)", serv: false },
+    { k: "ns", l: "Ainda não sei: falta ver a planta de condicionantes", serv: false },
+  ];
 
-  let marker = null, local = { morada: "", concelho: "", freguesia: "" }, achados = {};
+  // Deteção automática: condicionantes que se deduzem do que o utilizador escreveu.
+  const norm = (t) => String(t || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const DETECT = [
+    { k: "hidrico", re: /\b(rio|ribeira|ribeiro|praia|beira[- ]mar|beira[- ]rio|marginal|margem|lagoa|barragem|estuario|ria de|ria formosa|costa d|arriba|duna|levada)\b/ },
+    { k: "estradas", re: /\b(estrada nacional|e\.?n\.? ?\d{1,3}|i[cp] ?\d{1,2}|a\d{1,2}|autoestrada|auto-estrada|itinerario|variante|linha do|linha de (cascais|sintra|azambuja|sado|minho|norte|beira|oeste|douro|algarve)|comboio|ferrovia|caminho de ferro|estacao de|passagem de nivel)\b/ },
+    { k: "aqueduto", re: /\b(aqueduto|conduta|reservatorio|mae d.agua|adutor)\b/ },
+    { k: "eletrica", re: /\b(alta tensao|media tensao|linha eletrica|poste de alta|subestacao)\b/ },
+    { k: "gas", re: /\b(gasoduto|oleoduto)\b/ },
+    { k: "aero", re: /\b(aeroporto|aerodromo|heliporto|base aerea)\b/ },
+    { k: "militar", re: /\b(quartel|base aerea|base naval|militar|paiol|carreira de tiro|regimento)\b/ },
+    { k: "porto", re: /\b(doca|cais|marina|porto de pesca|zona portuaria|terminal portuario)\b/ },
+    { k: "natura", re: /\b(parque natural|reserva natural|paisagem protegida|rede natura|parque nacional|mata nacional|serra d[aeo]s?|sitio de interesse)\b/ },
+    { k: "ran", re: /\b(quinta|herdade|terreno agricola|rustico|vinha|olival|pomar|horta|leziria|varzea|monte alentejano)\b/ },
+    { k: "incendio", re: /\b(pinhal|eucaliptal|floresta|florestal|mata|rustico|serra d[aeo]s?|monte alentejano)\b/ },
+    { k: "turismo", re: /\b(hotel|hostel|pousada|aldeamento|apartamento turistico|empreendimento turistico|agroturismo|turismo rural|turismo de habitacao|turismo no espaco rural|parque de campismo)\b/ },
+  ];
+  const PATRIMONIO_RE = /\b(castelo|muralhas?|aqueduto|se catedral|catedral|mosteiro|convento|palacio|pelourinho|torre de menagem|centro historico|zona historica|monumento|patrimonio mundial)\b/;
+  const PATRIMONIO_FRACO_RE = /\b(igreja|capela|ermida|forte|fortaleza|solar d[aeo]s?|casa nobre|chafariz)\b/;
+  function detectar(s) {
+    const txt = " " + norm([s.morada, s.freguesia, s.descricao, s.usoNovo].join(" | ")) + " ";
+    const out = {};
+    DETECT.forEach((d) => { const m = txt.match(d.re); if (m && !out[d.k]) out[d.k] = `menciona "${m[0].trim()}"`; });
+    const pisos = parseInt(s.pisos, 10);
+    if (pisos >= 10) out.scie34 = `${pisos} pisos (altura provável acima de 28 m)`;
+    if (/^(nova|ampliacao|reconstrucao|loteamento)$/.test(s.tipo) && out.incendio && !/\b(rua|avenida|praca|largo|travessa)\b/.test(txt)) out.incendio += ", fora de malha urbana";
+    else if (out.incendio && /\b(rua|avenida|praca|largo|travessa)\b/.test(txt) && !/\b(rustico|pinhal|eucaliptal|floresta)\b/.test(txt)) delete out.incendio;
+    const pm = txt.match(PATRIMONIO_RE), pf = txt.match(PATRIMONIO_FRACO_RE);
+    return { cond: out, patrimonio: pm ? `menciona "${pm[0].trim()}"` : "", patrimonioFraco: !pm && pf ? `menciona "${pf[0].trim()}"` : "" };
+  }
+  // Condicionantes efetivas = assinaladas + detetadas, menos as que o utilizador desmarcou.
+  function effCond(s) {
+    const d = detectar(s).cond, off = s.condOff || {}, c = Object.assign({}, s.cond || {});
+    Object.keys(d).forEach((k) => { if (!off[k]) c[k] = true; });
+    return c;
+  }
+  function effQ(s) {
+    const c = effCond(s), q = Object.assign({}, s.q || {});
+    q.servidao = COND.some((x) => x.serv && c[x.k]) ? "sim" : c.ns ? "ns" : "nao";
+    if (!q.classificado && detectar(s).patrimonio) q.classificado = "sim";
+    return q;
+  }
+  function renderCond() {
+    const c = effCond(state), d = detectar(state).cond, off = state.condOff || {};
+    const ord = [...COND].sort((a, b) => (d[b.k] ? 1 : 0) - (d[a.k] ? 1 : 0));
+    $("condBox").innerHTML = ord.map((x) => `<label><input type="checkbox" name="cond" value="${x.k}" ${c[x.k] ? "checked" : ""}>${x.l}${d[x.k] ? ` <span class="tag ${off[x.k] ? "" : "ok"}">${off[x.k] ? "detetado, desmarcado" : "detetado: " + esc(d[x.k])}</span>` : ""}</label>`).join("");
+    const dt = detectar(state), qc = (state.q || {}).classificado;
+    const hint = $("patHint");
+    if (hint) {
+      const msg = !qc && dt.patrimonio ? `Assumido "sim" porque a informação ${dt.patrimonio}. Confirme e responda acima.`
+        : !qc && dt.patrimonioFraco ? `A informação ${dt.patrimonioFraco}: se for um imóvel classificado a menos de 50 m, responda "sim".` : "";
+      hint.hidden = !msg; hint.textContent = msg;
+    }
+  }
 
-  // Consulta um serviço WMS no ponto (GetFeatureInfo). Resolve "sim", "nao" ou "erro".
-  async function consultar(l, lat, lng) {
-    const d = 0.0004;
-    const p = new URLSearchParams({
-      SERVICE: "WMS", VERSION: "1.3.0", REQUEST: "GetFeatureInfo", LAYERS: l.layers, QUERY_LAYERS: l.layers, STYLES: "",
-      CRS: "EPSG:4326", BBOX: [lat - d, lng - d, lat + d, lng + d].join(","), WIDTH: "101", HEIGHT: "101", I: "50", J: "50",
-      INFO_FORMAT: l.json ? "application/json" : "text/xml", FEATURE_COUNT: "5",
+  const SAMPLE = {
+    tipo: "interior", descricao: "Remodelação da cozinha e de uma casa de banho, com demolição de uma parede divisória não resistente.",
+    usoAtual: "Habitação", usoNovo: "Habitação",
+    morada: "Rua de Exemplo, 12, 2.º Esq.", freguesia: "Arroios", concelho: "Lisboa",
+    artigo: "U-0000", descPredial: "0000/20000101", codCertidao: "",
+    nome: "Nome do Requerente", nif: "000000000", moradaReq: "Rua de Exemplo, 12, 2.º Esq., 1000-000 Lisboa", email: "", qualidade: "proprietário",
+    tecnico: "", ordem: "",
+    q: { classificado: "nao", fachada: "nao", estrutura: "nao", fracao: "sim", viaPublica: "sim", anterior1951: "nao" }, cond: {}
+  };
+
+  let state = load() || structuredClone(SAMPLE);
+  let tab = "docs";
+  let minuta = null;
+  let checks = (state.checks || {});
+
+  function load() { try { const s = localStorage.getItem(KEY); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
+  function save() { try { state.checks = checks; localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+  // ---------- Formulário ----------
+  const FIELDS = ["tipo","descricao","usoAtual","usoNovo","pisos","abc","morada","freguesia","concelho","artigo","descPredial","codCertidao","nome","nif","moradaReq","email","qualidade","tecnico","ordem"];
+
+  function renderQuestions() {
+    const box = $("qs");
+    box.querySelectorAll(".q").forEach((n) => n.remove());
+    QUESTIONS.forEach((qq) => {
+      if (qq.show !== "*" && !qq.show.includes(state.tipo)) return;
+      const v = state.q[qq.id] || "";
+      const d = document.createElement("div");
+      d.className = "q";
+      d.innerHTML = `<p>${qq.q}${qq.h ? `<small>${qq.h}</small>` : ""}</p>
+        <div class="seg" role="radiogroup" aria-label="${qq.q}">
+          ${[["sim","Sim"],["nao","Não"],["ns","Não sei"]].map(([val, lab]) =>
+            `<input type="radio" id="q-${qq.id}-${val}" name="q-${qq.id}" value="${val}" ${v === val ? "checked" : ""}><label for="q-${qq.id}-${val}">${lab}</label>`).join("")}
+        </div>`;
+      box.appendChild(d);
     });
-    try {
-      const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 15000);
-      const r = await fetch(l.url + "?" + p.toString(), { signal: ctl.signal });
-      clearTimeout(t);
-      if (!r.ok) return { s: "erro" };
-      const txt = await r.text();
-      if (l.json) { const j = JSON.parse(txt); return { s: (j.features || []).length ? "sim" : "nao" }; }
-      if (/ServiceException|ExceptionReport/i.test(txt)) return { s: "erro" };
-      const doc = new DOMParser().parseFromString(txt, "text/xml");
-      const all = [...doc.getElementsByTagName("*")];
-      const hits = all.filter((n) => /^(featureMember|member|FIELDS|Feature|FeatureInfo|Row)$/i.test(n.localName) || /featureMember$/i.test(n.localName));
-      // Alguns servidores devolvem um contentor vazio quando não há nada no ponto.
-      const temDados = hits.length > 0 && hits.some((n) => n.textContent.trim().length > 0 || n.attributes.length > 0);
-      return { s: temDados ? "sim" : "nao" };
-    } catch (e) { return { s: "erro" }; }
+    const cq = box.querySelector(".q");
+    if (cq) { const h = document.createElement("p"); h.id = "patHint"; h.className = "note"; h.style.color = "var(--ochre)"; h.hidden = true; cq.appendChild(h); }
   }
 
-  function renderRes(estado) {
-    $("res").innerHTML = LAYERS.map((l) => {
-      const s = estado[l.id] || "wait";
-      const lab = { wait: "a consultar…", sim: "abrangido", nao: "não abrangido", erro: "ver no mapa" }[s];
-      return `<div class="row"><span class="sw" style="background:${l.cor}"></span><div><b>${esc(l.nome)}</b><span class="d">${s === "sim" ? "Parecer ou autorização: " + esc(l.ent) : s === "erro" ? "O serviço não respondeu. Ative a camada e veja se o ponto está dentro da mancha." : ""}</span></div><span class="tag ${s}">${lab}</span></div>`;
-    }).join("");
+  function fillForm() {
+    FIELDS.forEach((k) => { const el = $(k); if (el) el.value = state[k] || ""; });
+    if (!state.tipo) $("tipo").selectedIndex = 0, state.tipo = $("tipo").value;
+    renderQuestions();
   }
 
-  async function analisar(lat, lng) {
-    if (marker) marker.setLatLng([lat, lng]); else marker = L.marker([lat, lng]).addTo(map);
-    achados = {};
-    const estado = {}; renderRes(estado);
-    await Promise.all(LAYERS.map(async (l) => { const r = await consultar(l, lat, lng); estado[l.id] = r.s; if (r.s === "sim" && l.app) achados[l.app] = true; renderRes(estado); }));
-    atualizarCTA();
-  }
-
-  // Passa a morada e as condicionantes à app num token seguro para o #anchor (base64url, sem "=").
-  function atualizarCTA() {
-    const dados = { m: local.morada, f: local.freguesia, c: local.concelho, k: Object.keys(achados) };
-    const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(dados)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-    $("toApp").href = APP_URL + "#mapa." + b64;
-    $("cta").hidden = false;
-  }
-
-  function mostrarLocal() {
-    $("where").hidden = !local.morada;
-    $("where").innerHTML = `<b>${esc(local.morada || "Ponto escolhido no mapa")}</b><span class="note">${esc([local.freguesia, local.concelho].filter(Boolean).join(", "))}</span>`;
-  }
-
-  async function reverse(lat, lng) {
-    try {
-      const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&accept-language=pt&lat=${lat}&lon=${lng}`);
-      const j = await r.json(); aplicarMorada(j);
-    } catch (e) { local = { morada: "", concelho: "", freguesia: "" }; }
-    mostrarLocal(); atualizarCTA();
-  }
-  function aplicarMorada(j) {
-    const a = j.address || {};
-    const rua = [a.road || a.pedestrian || a.hamlet || a.village || "", a.house_number || ""].filter(Boolean).join(", ");
-    local = {
-      morada: rua || (j.display_name || "").split(",").slice(0, 2).join(","),
-      freguesia: a.suburb || a.city_district || a.quarter || a.village || "",
-      concelho: a.municipality || a.city || a.town || a.county || "",
-    };
-  }
-
-  $("f").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const q = $("q").value.trim(); if (!q) return;
-    $("res").innerHTML = `<p class="note">A procurar a morada…</p>`;
-    try {
-      const r = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=1&countrycodes=pt&accept-language=pt&q=${encodeURIComponent(q)}`);
-      const j = await r.json();
-      if (!j.length) { $("res").innerHTML = `<p class="note">Não encontrei essa morada. Experimente indicar o concelho, ou clique no mapa.</p>`; return; }
-      const lat = +j[0].lat, lng = +j[0].lon;
-      aplicarMorada(j[0]); mostrarLocal();
-      map.setView([lat, lng], 17);
-      analisar(lat, lng);
-    } catch (err) { $("res").innerHTML = `<p class="note">A pesquisa de moradas não respondeu. Clique diretamente no mapa.</p>`; }
+  $("f").addEventListener("input", (e) => {
+    const t = e.target;
+    if (t.name === "cond") {
+      state.cond = state.cond || {}; state.condOff = state.condOff || {};
+      if (t.checked) { state.cond[t.value] = true; delete state.condOff[t.value]; }
+      else { delete state.cond[t.value]; if (detectar(state).cond[t.value]) state.condOff[t.value] = true; }
+    }
+    else if (t.name && t.name.startsWith("q-")) state.q[t.name.slice(2)] = t.value;
+    else if (FIELDS.includes(t.id)) state[t.id] = t.value;
+    if (t.id === "tipo") { renderQuestions(); minuta = null; }
+    save(); render();
   });
-  map.on("click", (e) => { analisar(e.latlng.lat, e.latlng.lng); reverse(e.latlng.lat, e.latlng.lng); });
-  // Morada vinda da app (?q=...): pesquisa logo ao abrir.
-  const q0 = new URLSearchParams(location.search).get("q");
-  if (q0) { $("q").value = q0; $("f").requestSubmit(); }
+  $("f").addEventListener("change", (e) => { if (e.target.name && e.target.name.startsWith("q-")) { state.q[e.target.name.slice(2)] = e.target.value; save(); render(); } });
+  $("f").addEventListener("submit", (e) => e.preventDefault());
+
+  $("btnSample").addEventListener("click", () => { state = structuredClone(SAMPLE); checks = {}; minuta = null; save(); fillForm(); render(); $("sampleBar").firstElementChild.textContent = "Preenchido com um exemplo fictício."; });
+  $("btnClear").addEventListener("click", () => {
+    state = { tipo: "conservacao", q: {}, cond: {} }; checks = {}; minuta = null; save(); fillForm(); render();
+    $("sampleBar").firstElementChild.textContent = "Formulário vazio. Preencha os dados do seu caso.";
+  });
+
+  // ---------- Lógica de enquadramento ----------
+  const PROC = {
+    isento: { nome: "Isenta de controlo prévio", cor: "var(--green)", resumo: "Não precisa de licença nem de comunicação prévia. Tem de cumprir as normas técnicas e o PDM, e a câmara continua a poder fiscalizar." },
+    isentoTermo: { nome: "Isenta, com termo de responsabilidade", cor: "var(--green)", resumo: "Não precisa de licença nem de comunicação prévia, mas como mexe na estrutura um técnico habilitado tem de assinar um termo a atestar que a obra não prejudica a estabilidade do edifício." },
+    cp: { nome: "Comunicação prévia", cor: "var(--blue)", resumo: "Submete o processo completo na câmara, paga as taxas por autoliquidação e pode começar a obra. Não há decisão expressa; a câmara pode fiscalizar e, se o processo estiver incompleto, notifica uma única vez nos primeiros 15 dias úteis." },
+    cpPrazo: { nome: "Comunicação prévia com prazo", cor: "var(--blue)", resumo: "Para mudar o uso sem obras. A câmara tem 20 dias para decidir se faz vistoria; se não a marcar, pode usar o imóvel com o novo uso." },
+    lic: { nome: "Licenciamento", cor: "var(--red)", resumo: "Precisa de aprovação expressa da câmara antes de começar. Se a câmara não decidir dentro do prazo legal, há deferimento tácito. O comprovativo de pagamento das taxas substitui o antigo alvará." },
+  };
+
+  function decide(s) {
+    const q = effQ(s);
+    const yes = (k) => q[k] === "sim", no = (k) => q[k] === "nao", ns = (k) => q[k] === "ns" || !q[k];
+    const alerts = [];
+    let p, refs = [], motivo = "";
+
+    // Enquadramento geral para obras que não estão isentas
+    function generic(base) {
+      if (yes("loteamento")) return { p: "cp", refs: ["art. 4.º, n.º 4 RJUE"], motivo: `${base} em área de loteamento, plano de pormenor ou unidade de execução com parâmetros definidos.` };
+      if (yes("zuc") && yes("cercea")) return { p: "cp", refs: ["art. 4.º, n.º 4 RJUE"], motivo: `${base} em zona urbana consolidada, a respeitar os planos e sem cércea acima da dominante na frente edificada.` };
+      if (ns("loteamento") || ns("zuc") || (yes("zuc") && ns("cercea")))
+        alerts.push({ t: "Se o terreno estiver em loteamento ou plano de pormenor, ou em zona urbana consolidada com cércea igual ou abaixo da dominante, o procedimento desce para comunicação prévia. Confirme no PDM." });
+      return { p: "lic", refs: ["art. 4.º, n.º 2 RJUE"], motivo: `${base} fora dos casos de comunicação prévia.` };
+    }
+
+    if (yes("classificado")) {
+      p = "lic"; refs = ["art. 4.º, n.º 2 RJUE", "art. 6.º (exceções)", "Lei 107/2001 (património)"];
+      motivo = "As isenções e a comunicação prévia não se aplicam a imóveis classificados, em vias de classificação ou em zona de proteção.";
+      alerts.push({ t: "Há parecer obrigatório do Património Cultural, I.P. (ou da entidade regional). Junte fotografias e um relatório prévio sobre o valor patrimonial." });
+      if (s.tipo === "escassa") alerts.push({ t: "Nas obras de escassa relevância a exceção depende do tipo de classificação. Confirme com a câmara se esta obra fica mesmo sujeita a licença." });
+    } else {
+      if (ns("classificado")) alerts.push({ t: "Falta confirmar se o imóvel é classificado ou está numa zona de proteção. Se estiver, passa a licenciamento." });
+      let tipo = s.tipo;
+      if ((tipo === "conservacao" || tipo === "interior") && yes("fachada")) {
+        alerts.push({ i: 1, t: "Como a obra também mexe na fachada, na cobertura ou na cércea, foi tratada como alteração exterior." });
+        tipo = "exterior";
+      }
+      switch (tipo) {
+        case "conservacao":
+          if (yes("azulejos")) { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "A remoção de azulejos de fachada está sujeita a licença."; }
+          else { p = "isento"; refs = ["art. 6.º, n.º 1 RJUE"]; motivo = "Obras de conservação estão isentas de controlo prévio."; }
+          break;
+        case "interior":
+          if (yes("estrutura")) { p = "isentoTermo"; refs = ["art. 6.º RJUE"]; motivo = "Alterações no interior estão isentas; se afetarem a estrutura, é preciso o termo de responsabilidade de um técnico habilitado."; }
+          else { p = "isento"; refs = ["art. 6.º, n.º 1 RJUE"]; motivo = "Alterações no interior que não mexem na estrutura, cércea, fachadas nem cobertura estão isentas."; }
+          if (ns("estrutura")) alerts.push({ t: "Confirme com um técnico se a parede a demolir é resistente. Se for, é preciso termo de responsabilidade." });
+          break;
+        case "exterior":
+          if (yes("pip")) { p = "isento"; refs = ["art. 6.º RJUE", "art. 14.º, n.os 2 e 3"]; motivo = "Um PIP favorável com as menções do art. 14.º, n.º 2, isenta a obra de controlo prévio."; break; }
+          if (yes("azulejos")) { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "A remoção de azulejos de fachada está sujeita a licença."; break; }
+          if (yes("servidao")) { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Obras em área com servidão ou restrição de utilidade pública estão sujeitas a licença."; break; }
+          ({ p, refs, motivo } = generic("Alteração exterior"));
+          alerts.push({ i: 1, t: "Substituir janelas ou portas por outras com acabamento exterior idêntico, que melhorem a eficiência energética, é obra de escassa relevância e fica isenta." });
+          break;
+        case "escassa":
+          p = "isento"; refs = ["art. 6.º-A RJUE"]; motivo = "Obras de escassa relevância urbanística estão isentas de controlo prévio.";
+          alerts.push({ t: "Limites habituais: anexo até 10 m² e 2,2 m de altura, muro até 1,8 m que não confine com a via pública, painéis solares sem exceder a cobertura. O regulamento municipal pode alterar estes limites." });
+          if (yes("servidao")) alerts.push({ t: "Em área com servidão (REN, RAN, domínio hídrico) pode ser preciso parecer ou autorização da entidade que a gere, mesmo sem procedimento camarário." });
+          break;
+        case "ampliacao":
+        case "reconstrucao": {
+          const nomeT = tipo === "ampliacao" ? "Ampliação" : "Reconstrução";
+          if (yes("pip")) { p = "isento"; refs = ["art. 6.º RJUE", "art. 14.º, n.os 2 e 3"]; motivo = "Um PIP favorável com as menções do art. 14.º, n.º 2, isenta a obra de controlo prévio."; break; }
+          if (no("altura")) {
+            p = "isento"; refs = ["art. 6.º, n.º 1 RJUE"];
+            motivo = `${nomeT} sem aumento da altura da fachada está isenta, mesmo com mais pisos ou mais área, incluindo em área com servidão.`;
+            alerts.push({ t: "Esta isenção é recente e algumas câmaras interpretam-na de forma restritiva. Confirme por escrito, através de um pedido de informação simples, antes de avançar. A obra tem de cumprir o PDM (índices, afastamentos)." });
+            break;
+          }
+          if (ns("altura")) alerts.push({ t: "Se a altura da fachada não aumentar, esta obra fica isenta. Confirme com o projeto." });
+          if (tipo === "reconstrucao" && !yes("loteamento")) { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Reconstrução com aumento da altura da fachada está sujeita a licença."; break; }
+          if (yes("servidao")) { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Obras em área com servidão ou restrição de utilidade pública estão sujeitas a licença."; break; }
+          ({ p, refs, motivo } = generic(`${nomeT} com aumento da altura da fachada`));
+          break;
+        }
+        case "nova":
+          if (yes("pip")) { p = "isento"; refs = ["art. 6.º RJUE", "art. 14.º, n.os 2 e 3"]; motivo = "Um PIP favorável com as menções do art. 14.º, n.º 2, isenta a obra de controlo prévio."; break; }
+          if (yes("servidao")) { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Obras em área com servidão ou restrição de utilidade pública estão sujeitas a licença."; break; }
+          ({ p, refs, motivo } = generic("Construção nova"));
+          break;
+        case "piscina":
+          if (yes("pip")) { p = "isento"; refs = ["art. 6.º RJUE", "art. 14.º"]; motivo = "Um PIP favorável isenta a obra de controlo prévio."; break; }
+          p = "cp"; refs = ["art. 4.º, n.º 4 RJUE"]; motivo = "Piscinas associadas à edificação principal estão sujeitas a comunicação prévia.";
+          alerts.push({ t: "Se a piscina não estiver associada a uma habitação ou edifício principal, aplica-se o enquadramento geral da construção nova." });
+          if (yes("servidao")) alerts.push({ t: "Com servidão no local, confirme se a câmara exige licenciamento e que pareceres externos são precisos." });
+          break;
+        case "demolicao":
+          p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Demolições que não estão previstas numa licença ou comunicação prévia de reconstrução ou construção estão sujeitas a licença.";
+          alerts.push({ i: 1, t: "Se a demolição fizer parte de uma obra de reconstrução ou construção nova, entra no mesmo procedimento dessa obra." });
+          break;
+        case "uso":
+          p = "cpPrazo"; refs = ["arts. 62.º e segs. RJUE"]; motivo = "Mudar o uso de um edifício ou fração sem obras sujeitas a controlo prévio exige comunicação prévia com prazo.";
+          if (yes("fracao")) alerts.push({ t: "Numa fração em propriedade horizontal, se o título constitutivo não fixar o fim da fração, a mudança de uso precisa de autorização da assembleia de condóminos por 2/3 do valor do prédio. A mudança para habitação dispensa essa autorização." });
+          alerts.push({ i: 1, t: "Se o uso pretendido for comércio, restauração ou alojamento local, há registos próprios (Balcão do Empreendedor / RNAL) a juntar a este passo." });
+          break;
+        case "loteamento":
+          if (yes("loteamento")) { p = "cp"; refs = ["art. 4.º, n.º 4 RJUE"]; motivo = "Loteamento ou urbanização em área de plano de pormenor ou unidade de execução com conteúdo definido está sujeito a comunicação prévia."; }
+          else { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Loteamentos e obras de urbanização fora de plano de pormenor ou unidade de execução estão sujeitos a licença."; }
+          alerts.push({ i: 1, t: "Neste tipo de operação um PIP prévio costuma compensar: fixa os parâmetros e, em certos casos, isenta de controlo prévio." });
+          break;
+      }
+      if (yes("servidao") && (p === "lic" || p === "cp")) alerts.push({ t: "As condicionantes do local obrigam a pareceres de entidades externas. Veja quais no separador Entidades." });
+    }
+
+    if (yes("fracao") && s.tipo !== "uso") alerts.push({ t: "Obras em partes comuns, ou que alterem a linha arquitetónica ou o arranjo estético do edifício, precisam de aprovação da assembleia de condóminos (art. 1422.º do Código Civil). Junte a ata." });
+    if (yes("viaPublica")) alerts.push({ t: "Peça a licença de ocupação da via pública. No licenciamento pode ir no mesmo pedido; nos outros casos é um pedido à parte." });
+    if (yes("anterior1951")) alerts.push({ i: 1, t: "Peça à câmara a certidão de que o edifício é anterior a 1951. Substitui a licença de utilização na prova do uso existente." });
+    if (p !== "lic" && p !== "cpPrazo") alerts.push({ i: 1, t: "Informe a câmara do início dos trabalhos pelo menos 5 dias antes (art. 80.º-A), indicando quem os executa." });
+    return { p, refs, motivo, alerts };
+  }
+
+  // ---------- Documentos ----------
+  function docs(s, r) {
+    const q = effQ(s), yes = (k) => q[k] === "sim";
+    const g = [];
+    const add = (grupo, t, d) => { let G = g.find((x) => x.grupo === grupo); if (!G) g.push(G = { grupo, itens: [] }); G.itens.push({ t, d }); };
+    const P = "Pedir já";
+    add(P, "Certidão permanente do registo predial", "Código de acesso em predialonline.pt. Prova a titularidade e a legitimidade.");
+    if (s.qualidade && s.qualidade !== "proprietário") add(P, "Autorização do proprietário ou procuração", "Para quem não é o único proprietário.");
+    if (yes("fracao")) add(P, "Ata da assembleia de condóminos", "Para obras em partes comuns ou que mexam no aspeto exterior do edifício.");
+    if (yes("anterior1951")) add(P, "Certidão camarária de construção anterior a 1951", "Ver minuta.");
+    else add(P, "Licença ou autorização de utilização existente", "Ou plantas do último processo aprovado, pedidas ao arquivo da câmara.");
+    add(P, "Caderneta predial (opcional)", "Deixou de ser exigida, mas ajuda a confirmar áreas e uso.");
+    const ext = entidades(s, r).filter((e) => e.k !== "camara");
+    if (ext.length) add(P, "Pareceres prévios das entidades (opcional, recomendado)", ext.map((e) => e.ent.split(" (")[0]).join(", ") + ". Ver minuta de pedido de parecer.");
+
+    if (r.p === "isento" || r.p === "isentoTermo") {
+      const O = "Para a obra";
+      if (r.p === "isentoTermo") add(O, "Termo de responsabilidade de técnico habilitado", "A atestar que a obra não prejudica a estrutura de estabilidade. Ver minuta.");
+      add(O, "Comunicação de início dos trabalhos", "À câmara, pelo menos 5 dias antes (art. 80.º-A). Ver minuta.");
+      add(O, "Empreiteiro com alvará ou certificado IMPIC adequado ao valor da obra", "Peça o número e confirme no portal do IMPIC.");
+      add(O, "Seguro de acidentes de trabalho", "Do empreiteiro.");
+      add(O, "Registo de resíduos de construção e demolição (RCD)", "Guias e-GAR dos resíduos encaminhados.");
+      add(O, "Fotografias do antes e do depois", "Úteis numa eventual fiscalização.");
+      if (yes("viaPublica")) add(O, "Licença de ocupação da via pública", "Pedido à câmara com planta do estaleiro e prazo.");
+      return g;
+    }
+
+    if (r.p === "cpPrazo") {
+      const C = "Comunicação com prazo";
+      add(C, "Comunicação prévia com prazo", "Ver minuta.");
+      add(C, "Planta de localização e extratos do PDM", "Ordenamento e condicionantes.");
+      add(C, "Plantas do imóvel com o uso pretendido", "Escala 1:100.");
+      add(C, "Termo de responsabilidade de técnico habilitado", "A atestar que o imóvel cumpre as normas aplicáveis ao novo uso.");
+      add(C, "Certificado energético", "Emitido por perito qualificado (SCE).");
+      add(C, "Ficha de segurança contra incêndio (SCIE)", "Ou projeto, conforme a categoria de risco.");
+      add(C, "Comprovativo de acessibilidades", "Se o novo uso for aberto ao público.");
+      return g;
+    }
+
+    const A = "Projeto de arquitetura";
+    add(A, r.p === "lic" ? "Requerimento de licenciamento" : "Comunicação prévia", "Ver minuta.");
+    add(A, "Planta de localização e extratos do PDM", "Ordenamento e condicionantes, com o local assinalado.");
+    if (["nova","ampliacao","reconstrucao","piscina","loteamento"].includes(s.tipo)) add(A, "Levantamento topográfico", "Georreferenciado, com a implantação proposta.");
+    add(A, "Memória descritiva e justificativa", "Inclui enquadramento no PDM, áreas, cércea e índices.");
+    add(A, "Peças desenhadas do existente e do proposto", "Plantas, alçados e cortes. Alterações a vermelho (a construir) e amarelo (a demolir).");
+    add(A, "Fotografias do local", "");
+    add(A, "Termos de responsabilidade do autor e do coordenador", "Com prova de inscrição na ordem e seguro de responsabilidade civil.");
+    add(A, "Ficha estatística (INE)", "");
+    add(A, "Estimativa do custo e calendarização da obra", "");
+    const E = "Especialidades";
+    add(E, "Estabilidade", "Se mexer na estrutura ou for construção nova.");
+    add(E, "Redes de águas e esgotos e águas pluviais", "");
+    add(E, "Instalações elétricas (ficha ou projeto)", "");
+    add(E, "Infraestruturas de telecomunicações (ITED)", "");
+    add(E, "Comportamento térmico e pré-certificado energético", "");
+    add(E, "Condicionamento acústico", "");
+    add(E, "Segurança contra incêndio (ficha ou projeto)", "");
+    add(E, "Plano de acessibilidades", "Se aplicável.");
+    if (r.p === "lic") add(E, "Nota", "A câmara já não aprecia as especialidades. Podem ser entregues com o pedido ou depois da aprovação da arquitetura.");
+    const I = r.p === "lic" ? "Antes de começar a obra" : "Com a comunicação prévia";
+    add(I, "Título do empreiteiro (IMPIC) adequado ao valor da obra", "");
+    add(I, "Apólice de seguro de acidentes de trabalho", "");
+    add(I, "Termos do diretor de obra e do diretor de fiscalização", "");
+    add(I, "Plano de segurança e saúde", "");
+    add(I, "Plano de prevenção e gestão de RCD", "");
+    add(I, "Livro de obra eletrónico", "");
+    add(I, "Comprovativo de pagamento das taxas", "Autoliquidação. No licenciamento, substitui o alvará.");
+    if (yes("viaPublica")) add(I, "Licença de ocupação da via pública", r.p === "lic" ? "Pode ser pedida no mesmo pedido de licenciamento." : "");
+    if (yes("classificado")) add(A, "Relatório prévio de obra em património", "Exigido para imóveis classificados.");
+    return g;
+  }
+
+  // ---------- Passo a passo ----------
+  function prazoDecisao(s) {
+    const a = parseFloat(String(s.abc || "").replace(",", ".")), cl = effQ(s).classificado === "sim";
+    if (s.tipo === "loteamento") return "No seu caso, 200 dias (loteamento ou urbanização).";
+    if (a > 2200) return "No seu caso, 200 dias (mais de 2200 m² de área bruta).";
+    if (a > 300 || cl) return `No seu caso, 150 dias (${cl ? "imóvel classificado ou em zona de proteção" : "entre 300 e 2200 m² de área bruta"}).`;
+    if (a > 0) return "No seu caso, 120 dias (até 300 m² de área bruta).";
+    return "120 dias até 300 m² de área bruta, 150 dias até 2200 m² ou imóvel classificado, 200 dias acima disso ou loteamentos. Indique a área para saber o seu.";
+  }
+
+  function passos(r, s) {
+    const camara = s.concelho ? `Câmara Municipal de ${s.concelho}` : "câmara municipal";
+    const comuns = [
+      ["Reunir os dados do imóvel", "Certidão permanente, licença de utilização ou certidão anterior a 1951, e plantas do último processo aprovado."],
+      ["Confirmar condicionantes", "Consultar o PDM (ordenamento e condicionantes) e o património classificado. Em caso de dúvida, fazer um pedido de informação simples."],
+    ];
+    const P = {
+      isento: [...comuns,
+        ["Obter aprovação do condomínio, se necessário", "Ata da assembleia para partes comuns ou aspeto exterior."],
+        ["Contratar o empreiteiro", "Com alvará ou certificado IMPIC adequado ao valor. Pedir seguro de acidentes de trabalho."],
+        ["Pedir ocupação da via pública, se precisar", "Andaimes, contentor ou grua."],
+        ["Comunicar o início dos trabalhos", `À ${camara}, pelo menos 5 dias antes (art. 80.º-A).`],
+        ["Executar a obra e guardar comprovativos", "Guias de resíduos, fotografias e faturas."],
+      ],
+      cp: [...comuns,
+        ["Contratar o técnico autor do projeto", "Arquiteto ou engenheiro com inscrição na ordem e seguro."],
+        ["Preparar o projeto completo", "Arquitetura e especialidades, com os termos de responsabilidade."],
+        ["Submeter a comunicação prévia", "Na Plataforma Eletrónica dos Procedimentos Urbanísticos ou no portal da câmara."],
+        ["Aguardar 15 dias úteis", "A câmara só pode pedir correções uma vez neste prazo. Sem notificação, o processo considera-se bem instruído."],
+        ["Pagar as taxas por autoliquidação", "O prazo da obra conta a partir do pagamento."],
+        ["Comunicar o início dos trabalhos", "Pelo menos 5 dias antes, com o empreiteiro e os diretores de obra e de fiscalização."],
+        ["Concluir a obra e entregar os elementos finais", "Termo de responsabilidade do diretor de obra e telas finais, se houve alterações. Não é emitida autorização de utilização."],
+      ],
+      lic: [...comuns,
+        ["Ponderar um PIP", "Se houver dúvidas sobre o que o PDM permite, um PIP favorável fixa os parâmetros e pode até isentar."],
+        ["Contratar o técnico autor do projeto", "Arquiteto ou engenheiro com inscrição na ordem e seguro."],
+        ["Submeter o pedido de licenciamento", "Com o projeto de arquitetura. As especialidades podem seguir com o pedido ou depois."],
+        ["Responder ao pedido de correções", "A câmara só o pode fazer uma vez, até 15 dias úteis após a submissão; há 15 dias úteis para responder."],
+        ["Aguardar a decisão", prazoDecisao(s) + " Sem decisão no prazo, há deferimento tácito."],
+        ["Pagar as taxas", "O comprovativo de pagamento é o título da obra (já não há alvará)."],
+        ["Comunicar o início dos trabalhos", "Pelo menos 5 dias antes, com o empreiteiro e os diretores de obra e de fiscalização."],
+        ["Concluir a obra e entregar os elementos finais", "Termo de responsabilidade do diretor de obra e telas finais, se houve alterações."],
+      ],
+      cpPrazo: [...comuns,
+        ["Obter autorização do condomínio, se necessário", "Quando o título constitutivo não fixa o fim da fração (exceto mudança para habitação)."],
+        ["Pedir o termo de responsabilidade e o certificado energético", "A um técnico habilitado e a um perito SCE."],
+        ["Submeter a comunicação prévia com prazo", `À ${camara}.`],
+        ["Aguardar 20 dias", "Se a câmara não determinar vistoria, pode usar o imóvel com o novo uso."],
+        ["Se houver vistoria", "Realiza-se em 15 dias. Se exigir obras, faça-as e peça nova vistoria; se não ocorrer em 10 dias, conta como não oposição."],
+      ],
+    };
+    P.isentoTermo = [...P.isento];
+    P.isentoTermo.splice(3, 0, ["Pedir o termo de responsabilidade", "A um engenheiro ou arquiteto, a atestar que a obra não prejudica a estrutura."]);
+    return P[r.p];
+  }
+
+  // ---------- Minutas ----------
+  const v = (x, ph) => (x && String(x).trim()) ? x : `<mark>[${ph}]</mark>`;
+  function minutas(s, r) {
+    const hoje = new Date().toLocaleDateString("pt-PT", { day: "numeric", month: "long", year: "numeric" });
+    const conc = v(s.concelho, "concelho");
+    const req = `${v(s.nome, "nome do requerente")}, contribuinte n.º ${v(s.nif, "NIF")}, residente em ${v(s.moradaReq, "morada do requerente")}${s.email ? `, email ${s.email}` : ""}, na qualidade de ${v(s.qualidade, "qualidade")}`;
+    const imovel = `prédio sito em ${v(s.morada, "morada do imóvel")}, freguesia de ${v(s.freguesia, "freguesia")}, concelho de ${conc}, inscrito na matriz predial sob o artigo ${v(s.artigo, "artigo matricial")} e descrito na Conservatória do Registo Predial sob o n.º ${v(s.descPredial, "n.º da descrição")}`;
+    const cert = s.codCertidao ? `certidão permanente com o código de acesso ${s.codCertidao}` : `certidão permanente com o código de acesso <mark>[código]</mark>`;
+    const obra = v(s.descricao, "descrição da obra");
+    const head = `Exmo. Senhor Presidente da Câmara Municipal de ${conc}\n\n`;
+    const fecho = `\n\nPede deferimento.\n\n${v(s.concelho, "local")}, ${hoje}\n\nO requerente,\n\n_______________________________\n${v(s.nome, "nome")}`;
+    const M = {};
+    M.lic = { nome: "Requerimento de licenciamento", desc: "Pedido de licença para obras sujeitas a licenciamento.",
+      txt: head + `${req}, vem, ao abrigo do disposto no n.º 2 do artigo 4.º e no artigo 9.º do Regime Jurídico da Urbanização e da Edificação (RJUE), aprovado pelo Decreto-Lei n.º 555/99, de 16 de dezembro, na sua redação atual, requerer a V. Exa. o licenciamento da seguinte operação urbanística, a realizar no ${imovel}:\n\n${obra}\n\nPara o efeito, junta os elementos instrutórios previstos na Portaria n.º 71-A/2024, de 27 de fevereiro, e a ${cert}.${yes(s,"viaPublica") ? "\n\nRequer ainda, ao abrigo do RJUE, a licença de ocupação da via pública necessária à execução da obra, conforme planta de estaleiro anexa." : ""}\n\nIndica como técnico responsável ${v(s.tecnico, "nome do técnico")}, ${v(s.ordem, "n.º de inscrição na ordem")}.` + fecho };
+    M.cp = { nome: "Comunicação prévia", desc: "Para obras sujeitas a comunicação prévia.",
+      txt: head + `${req}, vem, ao abrigo do disposto no n.º 4 do artigo 4.º e nos artigos 34.º e seguintes do Regime Jurídico da Urbanização e da Edificação (RJUE), aprovado pelo Decreto-Lei n.º 555/99, de 16 de dezembro, na sua redação atual, apresentar comunicação prévia da seguinte operação urbanística, a realizar no ${imovel}:\n\n${obra}\n\nA operação enquadra-se em comunicação prévia por: ${r.motivo.toLowerCase()}\n\nJunta os elementos instrutórios previstos na Portaria n.º 71-A/2024, de 27 de fevereiro, incluindo os termos de responsabilidade dos técnicos, e a ${cert}.\n\nProcederá à autoliquidação das taxas devidas e informará a câmara municipal do início dos trabalhos nos termos do artigo 80.º-A do RJUE.` + fecho.replace("Pede deferimento.", "Com os melhores cumprimentos,") };
+    M.cpPrazo = { nome: "Comunicação prévia com prazo (mudança de uso)", desc: "Para mudar o uso sem obras sujeitas a controlo prévio.",
+      txt: head + `${req}, vem, ao abrigo dos artigos 62.º e seguintes do Regime Jurídico da Urbanização e da Edificação (RJUE), na sua redação atual, apresentar comunicação prévia com prazo para alteração da utilização do ${imovel}, de ${v(s.usoAtual, "uso atual")} para ${v(s.usoNovo, "uso pretendido")}.\n\nA alteração não é precedida de operação urbanística sujeita a controlo prévio.\n\nJunta: ${cert}; planta de localização; plantas do imóvel com o uso pretendido; termo de responsabilidade subscrito por técnico habilitado, atestando a conformidade com as normas legais e regulamentares aplicáveis ao novo uso; certificado energético; ficha de segurança contra incêndio${yes(s,"fracao") ? "; ata da assembleia de condóminos" : ""}.\n\nNa ausência de determinação de vistoria no prazo legal, a utilização pretendida será iniciada.` + fecho.replace("Pede deferimento.", "Com os melhores cumprimentos,") };
+    M.inicio = { nome: "Comunicação de início dos trabalhos", desc: "Obrigatória pelo menos 5 dias antes de começar (art. 80.º-A), incluindo em obras isentas.",
+      txt: head + `${req}, vem, nos termos do artigo 80.º-A do Regime Jurídico da Urbanização e da Edificação (RJUE), informar V. Exa. de que os trabalhos de:\n\n${obra}\n\nno ${imovel}, terão início no dia <mark>[data de início]</mark>, com duração prevista de <mark>[n.º]</mark> dias.\n\nEnquadramento: ${PROC[r.p].nome.toLowerCase()} (${r.refs.join("; ")}).\n\nA execução dos trabalhos está a cargo de <mark>[nome do empreiteiro]</mark>, NIF <mark>[NIF]</mark>, titular do alvará/certificado IMPIC n.º <mark>[n.º]</mark>.` + fecho.replace("Pede deferimento.", "Com os melhores cumprimentos,") };
+    M.termo = { nome: "Termo de responsabilidade (estrutura)", desc: "Para obras isentas que mexem na estrutura. A assinar pelo técnico.",
+      txt: `TERMO DE RESPONSABILIDADE\n\n${v(s.tecnico, "nome do técnico")}, ${v(s.ordem, "inscrito na Ordem dos ... sob o n.º ...")}, declara, para efeitos do artigo 6.º do Regime Jurídico da Urbanização e da Edificação (RJUE), na sua redação atual, que as obras de:\n\n${obra}\n\na realizar no ${imovel}, de que é requerente ${v(s.nome, "nome do requerente")}, não prejudicam a estrutura de estabilidade do edifício face ao seu estado anterior, e que foram concebidas e serão executadas em conformidade com as normas legais e regulamentares aplicáveis.\n\n${v(s.concelho, "local")}, ${hoje}\n\nO técnico,\n\n_______________________________` };
+    const ents = entidades(s, r).filter((e) => e.k !== "camara");
+    const umParecer = (e) => `Exmo(a). Senhor(a) Presidente do(a) ${e ? e.ent.split(" (")[0] : "<mark>[entidade]</mark>"}\n\n${req}, vem, ao abrigo do artigo 13.º-B do Regime Jurídico da Urbanização e da Edificação (RJUE), na sua redação atual, requerer a emissão de parecer sobre a seguinte operação urbanística, a realizar no ${imovel}:\n\n${obra}\n\nO local está abrangido por: ${e ? e.porque : "<mark>[servidão ou restrição]</mark>"} (${e ? e.base : "<mark>[base legal]</mark>"}).\n\nO parecer destina-se a instruir o procedimento de ${PROC[r.p].nome.toLowerCase()} junto da Câmara Municipal de ${conc}.\n\nJunta: planta de localização com o local assinalado, extrato da planta de condicionantes, memória descritiva, peças desenhadas e fotografias do local.` + fecho;
+    M.parecer = { nome: "Pedido de parecer a entidade externa", desc: `Para pedir o parecer antes de submeter o processo e juntá-lo (art. 13.º-B). ${ents.length > 1 ? `Tem ${ents.length} pedidos, um por entidade.` : ""}`,
+      txt: (ents.length ? ents : [null]).map(umParecer).join("\n\n\n— — — — — — — — — —\n\n\n") };
+    M.info = { nome: "Pedido de informação simples", desc: "Para a câmara confirmar por escrito o que se aplica ao local (art. 110.º).",
+      txt: head + `${req}, vem, ao abrigo do artigo 110.º do Regime Jurídico da Urbanização e da Edificação (RJUE), requerer a V. Exa. informação sobre os instrumentos de gestão territorial, servidões administrativas e restrições de utilidade pública aplicáveis ao ${imovel}, bem como sobre o enquadramento procedimental da seguinte operação pretendida:\n\n${obra}\n\nEm particular, solicita confirmação de que a operação se enquadra em ${PROC[r.p].nome.toLowerCase()} (${r.refs.join("; ")}).\n\nJunta ${cert} e planta de localização.` + fecho };
+    M.pip = { nome: "Pedido de informação prévia (PIP)", desc: "Para fixar o que o PDM permite antes de fazer o projeto (art. 14.º).",
+      txt: head + `${req}, vem, ao abrigo do artigo 14.º, n.os 1 e 2, do Regime Jurídico da Urbanização e da Edificação (RJUE), na sua redação atual, requerer informação prévia sobre a viabilidade da seguinte operação urbanística, a realizar no ${imovel}:\n\n${obra}\n\nRequer que a informação se pronuncie sobre os aspetos previstos nas alíneas a) a f) do n.º 2 do artigo 14.º, designadamente implantação, cércea, número de pisos, área de construção, uso e infraestruturas.\n\nJunta os elementos previstos na Portaria n.º 71-A/2024, de 27 de fevereiro, e a ${cert}.` + fecho };
+    M.cert1951 = { nome: "Certidão de construção anterior a 1951", desc: "Comprova o uso de edifícios sem licença de utilização.",
+      txt: head + `${req}, vem requerer a V. Exa. a emissão de certidão comprovativa de que o edifício existente no ${imovel} foi construído em data anterior à entrada em vigor do Regulamento Geral das Edificações Urbanas (Decreto-Lei n.º 38 382, de 7 de agosto de 1951), não estando por isso a sua utilização sujeita a licença.\n\nJunta ${cert}, planta de localização e fotografias do edifício.` + fecho };
+    M.via = { nome: "Licença de ocupação da via pública", desc: "Para andaimes, contentor ou grua.",
+      txt: head + `${req}, vem requerer a V. Exa. licença para ocupação da via pública junto ao ${imovel}, para execução da obra de:\n\n${obra}\n\nOcupação pretendida: <mark>[andaime / contentor / grua]</mark>, numa área de <mark>[m²]</mark>, pelo período de <mark>[n.º]</mark> dias, a partir de <mark>[data]</mark>, conforme planta anexa.` + fecho };
+    return M;
+  }
+  const yes = (s, k) => (s.q || {})[k] === "sim";
+
+  function recomendadas(r, s) {
+    const out = [];
+    if (r.p === "lic") out.push("lic");
+    if (r.p === "cp") out.push("cp");
+    if (r.p === "cpPrazo") out.push("cpPrazo");
+    if (r.p === "isentoTermo") out.push("termo");
+    if (r.p !== "cpPrazo") out.push("inicio");
+    if (yes(s, "viaPublica") && r.p !== "lic") out.push("via");
+    if (yes(s, "anterior1951")) out.push("cert1951");
+    if (entidades(s, r).some((e) => e.k !== "camara")) out.push("parecer");
+    if (r.alerts.some((a) => /Confirme|confirmar|Falta/.test(a.t)) || effCond(s).ns) out.push("info");
+    return out;
+  }
+
+
+  // ---------- Guia: situações, ferramentas, direitos, obrigações, custos ----------
+  // a: procedimentos a que o item se aplica (vazio = todos). Valores de custos são indicativos.
+  const CP_LIC = ["cp", "lic"], OBRA = ["isento", "isentoTermo", "cp", "lic"];
+  const GUIA = [
+    { id: "situacoes", t: "Situações que podem acontecer", itens: [
+      { t: "A câmara pede correções ou documentos", d: "Só o pode fazer uma vez, até 15 dias úteis depois da submissão. Tem 15 dias úteis para responder, senão o pedido é rejeitado. Se não houver notificação nesse prazo, o processo considera-se bem instruído.", b: "art. 11.º RJUE", a: CP_LIC },
+      { t: "Parecer desfavorável de uma entidade", d: "Se o parecer for vinculativo, a câmara tem de indeferir. Pode alterar o projeto e pedir novo parecer, ou contestar o parecer.", b: "arts. 13.º e 24.º RJUE", a: CP_LIC },
+      { t: "A câmara pretende indeferir", d: "Antes de decidir, tem de lhe comunicar o projeto de decisão e os motivos. Tem 10 dias úteis para responder por escrito ou corrigir o projeto (audiência prévia).", b: "arts. 121.º e 122.º CPA", a: ["lic"] },
+      { t: "Indeferimento", d: "Só é possível pelos motivos da lei: violação de planos ou servidões, parecer negativo vinculativo, falta de infraestruturas ou má inserção urbana. A câmara não pode apreciar o interior do edifício nem os projetos de especialidades.", b: "art. 24.º RJUE", a: ["lic"] },
+      { t: "A câmara não decide no prazo", d: "Há deferimento tácito: pode pagar as taxas e avançar. Peça a certidão gratuita no ePortugal. O deferimento é nulo se violar planos ou pareceres obrigatórios.", b: "art. 23.º e 113.º RJUE (DL 10/2024)", a: ["lic"] },
+      { t: "Fiscalização durante a comunicação prévia", d: "A câmara não aprova, mas pode fiscalizar a qualquer momento. Se a obra não cumprir as normas, pode ordenar a correção, o embargo ou a reposição.", b: "arts. 35.º e 93.º RJUE", a: ["cp"] },
+      { t: "Alterações durante a obra", d: "Podem ser comunicadas e entram nas telas finais. Ampliações e mudanças de implantação precisam de novo procedimento.", b: "art. 83.º RJUE", a: CP_LIC },
+      { t: "A obra atrasa", d: "Peça a prorrogação do prazo antes de terminar. Depois do Simplex não há limite ao número de prorrogações.", b: "arts. 53.º e 58.º RJUE", a: CP_LIC },
+      { t: "Caducidade", d: "O título caduca se não pagar as taxas ou não começar a obra nos prazos, ou se a obra ficar parada demasiado tempo. Pode pedir a renovação aproveitando o processo anterior.", b: "arts. 71.º e 72.º RJUE", a: CP_LIC },
+      { t: "Mudança de técnico, empreiteiro ou proprietário", d: "Comunique à câmara a substituição, com os novos termos de responsabilidade ou a prova da nova titularidade. O processo continua.", b: "RJUE", a: OBRA },
+      { t: "Vistoria no fim ou na mudança de uso", d: "A câmara só a pode fazer pelos motivos da lei. Se exigir correções, faça-as e peça nova vistoria; se não a fizer no prazo, conta como não oposição.", b: "arts. 62.º e segs. RJUE", a: ["cpPrazo", "cp", "lic"] },
+      { t: "Embargo ou obra feita sem título", d: "A câmara pode embargar. Pode pedir a legalização se a obra cumprir as normas atuais. Se não cumprir, pode ser obrigado a demolir ou repor.", b: "arts. 102.º, 102.º-A, 102.º-B e 106.º RJUE", a: [] },
+      { t: "Queixa ou conflito com vizinhos", d: "Janelas, varandas e terraços sobre o vizinho exigem 1,5 m de distância à estrema. A água do telhado não pode cair no prédio vizinho. Estas regras do Código Civil aplicam-se mesmo a obras isentas.", b: "arts. 1360.º e 1365.º Código Civil", a: [] },
+    ]},
+    { id: "ferramentas", t: "Ferramentas ao seu dispor", itens: [
+      { t: "Pedido de informação simples", d: "A câmara diz por escrito que planos, servidões e procedimento se aplicam ao local. É útil quando há dúvidas.", b: "art. 110.º RJUE", a: [] },
+      { t: "Pedido de informação prévia (PIP)", d: "Fixa o que pode construir antes de fazer o projeto completo. É válido 2 anos e, em certos casos, isenta a obra de controlo prévio.", b: "art. 14.º RJUE", a: [] },
+      { t: "Pareceres prévios das entidades", d: "Pode pedir os pareceres antes de submeter e juntá-los ao processo. Assim a câmara não tem de os pedir e o prazo encurta.", b: "art. 13.º-B RJUE", a: CP_LIC },
+      { t: "Consulta do processo", d: "Tem direito a consultar o processo, saber em que fase está e pedir certidões ou cópias.", b: "arts. 82.º e segs. CPA; art. 110.º RJUE", a: [] },
+      { t: "Certidão de deferimento tácito", d: "Gratuita, pedida no ePortugal à AMA. Serve de título perante terceiros.", b: "DL 10/2024", a: ["lic"] },
+      { t: "Reclamação para a câmara", d: "Pede ao próprio órgão que reveja a decisão. Prazo de 15 dias úteis.", b: "art. 191.º CPA", a: [] },
+      { t: "Queixa ao Provedor de Justiça", d: "Gratuita, por atrasos ou ilegalidades da câmara. Não suspende prazos judiciais.", b: "Lei 9/91 (Estatuto do Provedor)", a: [] },
+      { t: "Intimação judicial para a prática de ato devido", d: "Quando a câmara não pratica um ato a que está obrigada, o tribunal administrativo pode intimá-la a fazê-lo.", b: "art. 112.º RJUE", a: CP_LIC },
+      { t: "Ação no tribunal administrativo", d: "Para anular um indeferimento ou outra decisão ilegal. Prazo de 3 meses. Pode pedir uma providência cautelar se houver urgência.", b: "arts. 58.º e 112.º e segs. CPTA", a: [] },
+      { t: "Plataforma Eletrónica dos Procedimentos Urbanísticos", d: "Plataforma nacional única para submeter e acompanhar licenciamentos e comunicações prévias, obrigatória para os municípios desde 5 de janeiro de 2026.", b: "DL 10/2024", a: CP_LIC },
+      { t: "Pesquisas públicas", d: "Inscrição dos técnicos nas ordens (OA, OE, OET), alvarás no IMPIC, peritos e certificados na ADENE, cadastro no BUPI, PDM no SNIT e no geoportal do município.", b: "", a: [] },
+    ]},
+    { id: "direitos", t: "Os seus direitos", itens: [
+      { t: "Só uma notificação de correções", d: "A câmara não pode fazer vários pedidos sucessivos, nem pedir documentos fora da lista legal ou que já tem.", b: "art. 11.º RJUE; Portaria 71-A/2024", a: CP_LIC },
+      { t: "Decisão no prazo legal", d: "120 dias até 300 m², 150 dias até 2200 m² ou em imóvel classificado, 200 dias acima disso ou em loteamentos. Sem decisão, há deferimento tácito.", b: "art. 23.º RJUE", a: ["lic"] },
+      { t: "Começar a obra sem esperar por aprovação", d: "Na comunicação prévia, basta submeter o processo completo e pagar as taxas.", b: "art. 34.º RJUE", a: ["cp"] },
+      { t: "Ser ouvido antes de uma decisão desfavorável", d: "Audiência prévia, com 10 dias úteis para responder.", b: "art. 121.º CPA", a: CP_LIC },
+      { t: "Decisões fundamentadas", d: "Qualquer indeferimento ou exigência tem de indicar os motivos de facto e de direito.", b: "art. 152.º CPA", a: [] },
+      { t: "Prorrogações sem limite", d: "Pode pedir mais tempo para a obra as vezes que precisar, desde que o faça a tempo.", b: "DL 10/2024", a: CP_LIC },
+      { t: "Garantia da obra", d: "O empreiteiro responde por defeitos graves durante 5 anos após a entrega.", b: "art. 1225.º Código Civil", a: OBRA },
+      { t: "Escolher livremente os técnicos e o empreiteiro", d: "Não há tabela oficial de honorários. Peça várias propostas e faça contrato escrito.", b: "", a: [] },
+    ]},
+    { id: "obrigacoes", t: "As suas obrigações", itens: [
+      { t: "Comunicar o início dos trabalhos", d: "À câmara, pelo menos 5 dias antes, com a identificação de quem os executa. Aplica-se também às obras isentas.", b: "art. 80.º-A RJUE", a: OBRA },
+      { t: "Aviso no local da obra", d: "Afixar, de forma visível da via pública, o aviso com os dados do título da obra.", b: "art. 78.º RJUE", a: CP_LIC },
+      { t: "Livro de obra eletrónico", d: "Registo das ocorrências da obra, mantido pelo diretor de obra.", b: "art. 97.º RJUE", a: CP_LIC },
+      { t: "Empreiteiro habilitado e diretores", d: "Empreiteiro com alvará ou certificado IMPIC para a classe do valor. Nomear diretor de obra e diretor de fiscalização.", b: "Lei 41/2015; Lei 31/2009", a: OBRA },
+      { t: "Contrato de empreitada escrito", d: "Obrigatório quando o valor passa 10% do limite da classe 1 de alvará (cerca de 16 600 €).", b: "Lei 41/2015", a: OBRA },
+      { t: "Segurança em obra", d: "Plano de segurança e saúde. Se a obra durar mais de 30 dias com mais de 20 trabalhadores em simultâneo, ou passar 500 dias de trabalho, comunicar à ACT.", b: "DL 273/2003", a: OBRA },
+      { t: "Resíduos de construção (RCD)", d: "Separar e encaminhar os resíduos para operador licenciado, com guias e-GAR.", b: "DL 102-D/2020", a: OBRA },
+      { t: "Licença de ocupação da via pública", d: "Para andaimes, contentores ou gruas.", b: "Regulamento municipal", a: OBRA },
+      { t: "Pagar as taxas", d: "Por autoliquidação, antes de começar. O prazo da obra conta a partir do pagamento.", b: "arts. 116.º e 117.º RJUE", a: CP_LIC },
+      { t: "Entregar os elementos de fim de obra", d: "Termo de responsabilidade do diretor de obra e telas finais, se houve alterações. Certificado energético do edifício.", b: "arts. 62.º e segs. RJUE; DL 101-D/2020", a: CP_LIC },
+      { t: "Dever de conservação", d: "Fazer obras de conservação pelo menos uma vez em cada 8 anos.", b: "art. 89.º RJUE", a: [] },
+    ]},
+    { id: "custos", t: "Custos", itens: [
+      { t: "Certidão permanente do registo predial", d: "15 € online (válida 6 meses), 20 € ao balcão.", b: "Tabela de emolumentos dos registos", a: [] },
+      { t: "Caderneta predial", d: "Gratuita no Portal das Finanças.", b: "", a: [] },
+      { t: "Informação simples, PIP e certidões camarárias", d: "Taxa fixada pelo município. Consulte o regulamento de taxas do concelho.", b: "Regulamento municipal de taxas", a: [] },
+      { t: "Taxas urbanísticas", d: "Apreciação do pedido, taxa de infraestruturas urbanísticas (TRIU) e compensações por cedências não feitas. Dependem da área de construção e do concelho, e podem ir de algumas centenas a vários milhares de euros.", b: "arts. 44.º e 116.º RJUE", a: CP_LIC },
+      { t: "Pareceres de entidades externas", d: "Algumas entidades cobram taxa pelo parecer (por exemplo APA ou Infraestruturas de Portugal).", b: "Tabelas de cada entidade", a: CP_LIC },
+      { t: "Ocupação da via pública", d: "Taxa por m² e por período, fixada pelo município.", b: "Regulamento municipal", a: OBRA },
+      { t: "Honorários dos técnicos", d: "Livres. Dependem da complexidade e do número de especialidades. Compare propostas no separador Propostas.", b: "", a: [] },
+      { t: "Certificado energético", d: "Honorários do perito mais a taxa de registo na ADENE, que varia com a tipologia.", b: "DL 101-D/2020", a: ["cpPrazo", "cp", "lic"] },
+      { t: "IVA a 6% na obra", d: "Aplica-se a empreitadas de reabilitação em Área de Reabilitação Urbana e à mão de obra de obras de conservação ou remodelação em habitação. Confirme as condições com o contabilista.", b: "Lista I do CIVA, verbas 2.23 e 2.27", a: OBRA },
+      { t: "Benefícios em Área de Reabilitação Urbana", d: "Possível isenção ou redução de IMI e IMT após reabilitação. Peça à câmara a certificação do estado de conservação.", b: "art. 45.º e 71.º EBF", a: OBRA },
+      { t: "Coimas por obra sem título", d: "Podem chegar a 200 000 €, conforme a infração e se o infrator é pessoa singular ou coletiva, além dos custos de legalização ou demolição.", b: "art. 98.º RJUE", a: [] },
+    ]},
+  ];
+  let guiaAbertos = { situacoes: true };
+  function renderGuia(r) {
+    return `<p class="note">Tudo o que pode acontecer num processo de obra. Os itens marcados aplicam-se ao seu caso (${esc(PROC[r.p].nome.toLowerCase())}). Os custos são indicativos e as taxas variam por concelho.</p>` +
+      GUIA.map((g) => {
+        const it = [...g.itens].sort((x, y) => (aplica(y, r) ? 1 : 0) - (aplica(x, r) ? 1 : 0));
+        const n = g.itens.filter((x) => aplica(x, r)).length;
+        return `<details class="gd" data-g="${g.id}" ${guiaAbertos[g.id] ? "open" : ""}><summary><b>${g.t}</b> <span class="count">${n} de ${g.itens.length} no seu caso</span></summary><div class="team">` +
+          it.map((x) => `<div class="m"><div><b>${esc(x.t)}</b><span>${esc(x.d)}</span>${x.b ? `<span class="ref" style="display:inline-block;margin-top:4px">${esc(x.b)}</span>` : ""}</div>${aplica(x, r) ? `<span class="tag ok">o seu caso</span>` : ""}</div>`).join("") + `</div></details>`;
+      }).join("");
+  }
+  const aplica = (x, r) => !x.a.length || x.a.includes(r.p);
+
+  // Onde confirmar cada condicionante num mapa oficial (os visualizadores não aceitam a morada no link).
+  const MAPA_URL = "mapa/";
+  const VIEW = {
+    ren: { n: "SNIT", u: "https://snit.dgterritorio.gov.pt", d: "Planta de condicionantes do PDM do concelho, camada REN." },
+    ran: { n: "SNIT", u: "https://snit.dgterritorio.gov.pt", d: "Planta de condicionantes do PDM do concelho, camada RAN." },
+    hidrico: { n: "SNIAmb (APA)", u: "https://sniamb.apambiente.pt", d: "Domínio hídrico, zonas inundáveis e orla costeira." },
+    natura: { n: "Geocatálogo ICNF", u: "https://geocatalogo.icnf.pt", d: "Rede Natura 2000 e áreas protegidas." },
+    incendio: { n: "Geocatálogo ICNF", u: "https://geocatalogo.icnf.pt", d: "Carta de perigosidade de incêndio rural." },
+    estradas: { n: "SNIG", u: "https://snig.dgterritorio.gov.pt", d: "Rede rodoviária e ferroviária nacional; confirme a zona de servidão com a Infraestruturas de Portugal." },
+    aqueduto: { n: "Geoportal municipal", u: "https://snig.dgterritorio.gov.pt", d: "Servidões de abastecimento de água na planta de condicionantes do PDM." },
+    eletrica: { n: "SNIG", u: "https://snig.dgterritorio.gov.pt", d: "Rede elétrica nacional, também na planta de condicionantes do PDM." },
+    gas: { n: "SNIG", u: "https://snig.dgterritorio.gov.pt", d: "Gasodutos, também na planta de condicionantes do PDM." },
+    aero: { n: "SNIT", u: "https://snit.dgterritorio.gov.pt", d: "Servidões aeronáuticas na planta de condicionantes do PDM." },
+    militar: { n: "SNIT", u: "https://snit.dgterritorio.gov.pt", d: "Servidões militares na planta de condicionantes do PDM." },
+    porto: { n: "SNIT", u: "https://snit.dgterritorio.gov.pt", d: "Área de jurisdição portuária na planta de condicionantes." },
+  };
+
+  // ---------- Entidades a consultar ----------
+  function entidades(s, r) {
+    const out = [{ k: "camara", ent: `Câmara Municipal${s.concelho ? " de " + s.concelho : ""}`, porque: "Decide o procedimento", av: r.p === "isento" || r.p === "isentoTermo" ? "Recebe a comunicação de início dos trabalhos e pode fiscalizar." : "Aprecia o pedido e pede os pareceres às outras entidades.", base: "RJUE", vinc: false }];
+    if (effQ(s).classificado === "sim") out.push({ k: "patrimonio", ent: "Património Cultural, I.P. (ou a CCDR, conforme a classificação)", porque: "Imóvel classificado ou em zona de proteção", av: "Intervenções em monumentos e nas zonas de proteção, incluindo cor, materiais e volumetria. O parecer é vinculativo.", base: "Lei 107/2001 e DL 309/2009", vinc: true });
+    const c = effCond(s);
+    COND.forEach((x) => { if (c[x.k] && x.ent) out.push({ k: x.k, ent: x.ent, porque: x.l, av: x.av, base: x.base, vinc: x.serv }); });
+    return out;
+  }
+  function renderEntidades(r) {
+    const E = entidades(state, r), ext = E.filter((e) => e.k !== "camara");
+    const isento = r.p === "isento" || r.p === "isentoTermo";
+    let h = `<p class="note">${ext.length
+      ? (isento ? "A obra está isenta na câmara, mas isso não dispensa as autorizações destas entidades. Peça-as diretamente antes de começar." : "A câmara pede estes pareceres pelo sistema eletrónico de pareceres. Pode também pedi-los antes e juntá-los ao processo (art. 13.º-B do RJUE), o que costuma encurtar o prazo. Em regra as entidades têm 20 dias e, se não responderem, considera-se que nada têm a opor.")
+      : "Com as respostas dadas, só a câmara intervém. Confirme as condicionantes na planta do PDM."}</p><div class="team">`;
+    h += E.map((e) => `<div class="m"><div><b>${esc(e.ent)}</b><span>${esc(e.porque)}. ${esc(e.av)}</span><span class="ref" style="display:inline-block;margin-top:4px">${esc(e.base)}</span></div>${e.k === "camara" ? `<span class="tag">decide</span>` : e.vinc ? `<span class="tag red">parecer vinculativo</span>` : `<span class="tag warn">parecer</span>`}</div>`).join("") + `</div>`;
+    if (effCond(state).ns) h += `<p class="note" style="margin-top:12px;color:var(--ochre)">Ainda falta ver a planta de condicionantes. A lista pode crescer. Um pedido de informação simples à câmara confirma tudo por escrito.</p>`;
+    return h;
+  }
+
+  // ---------- Equipa técnica ----------
+  const ESP = {
+    coordenacao: "Coordenação de projeto", arquitetura: "Arquitetura", patrimonio: "Património (relatório prévio)",
+    paisagismo: "Arquitetura paisagista", estabilidade: "Estabilidade (estruturas)", hidraulica: "Águas, esgotos e pluviais",
+    eletrica: "Instalações elétricas", ited: "Telecomunicações (ITED)", termica: "Térmica e acústica",
+    sce: "Certificação energética (SCE)", scie: "Segurança contra incêndio", gas: "Gás", topografia: "Topografia",
+    termo: "Termo de responsabilidade", fiscalizacao: "Direção de fiscalização", seguranca: "Coordenação de segurança em obra",
+    empreitada: "Empreitada (construtor)",
+  };
+  const PROFISSOES = ["Arquiteto", "Arquiteto paisagista", "Engenheiro civil", "Engenheiro eletrotécnico", "Engenheiro mecânico", "Engenheiro técnico", "Topógrafo", "Perito qualificado SCE", "Projetista ITED", "Técnico de segurança", "Empreiteiro", "Outro"];
+
+  function equipa(s, r) {
+    const t = s.tipo, q = effQ(s), out = [];
+    const add = (k, quem, porque, fase = "Projeto") => out.push({ k, quem, porque, fase });
+    if (r.p === "isento" || r.p === "isentoTermo") {
+      if (r.p === "isentoTermo") add("termo", "Engenheiro civil (OE/OET) ou arquiteto (OA)", "Assina o termo a atestar que a obra não prejudica a estrutura.");
+      add("empreitada", "Empreiteiro com alvará ou certificado IMPIC", "Executa a obra, com classe adequada ao valor.", "Obra");
+      return out;
+    }
+    if (r.p === "cpPrazo") {
+      add("termo", "Arquiteto (OA) ou engenheiro (OE/OET)", "Termo de responsabilidade sobre a conformidade com o novo uso.");
+      add("sce", "Perito qualificado SCE (ADENE)", "Certificado energético.");
+      add("scie", "Técnico de SCIE (OA, OE ou OET)", "Ficha ou projeto de segurança contra incêndio.");
+      return out;
+    }
+    const obraNova = ["nova", "ampliacao", "reconstrucao", "loteamento", "piscina"].includes(t);
+    add("coordenacao", "Arquiteto ou engenheiro", "Coordena os projetos e assina o termo de coordenação (Lei 31/2009).");
+    if (t !== "demolicao") add("arquitetura", "Arquiteto inscrito na Ordem dos Arquitetos", "Projeto de arquitetura.");
+    if (q.classificado === "sim") add("patrimonio", "Arquiteto com experiência em património", "Relatório prévio de obra em bem classificado (DL 140/2009).");
+    if (t === "loteamento") add("paisagismo", "Arquiteto paisagista", "Espaços verdes e de utilização coletiva.");
+    if (obraNova || t === "exterior" || t === "demolicao" || q.estrutura === "sim") add("estabilidade", "Engenheiro civil (OE/OET)", "Projeto de estabilidade e contenções.");
+    if (t !== "demolicao") {
+      add("hidraulica", "Engenheiro civil (OE/OET)", "Redes de águas, esgotos e pluviais.");
+      add("eletrica", "Engenheiro eletrotécnico (OE/OET)", "Projeto ou ficha de instalações elétricas.");
+      add("ited", "Projetista ITED inscrito na ANACOM", "Infraestruturas de telecomunicações.");
+      add("termica", "Engenheiro mecânico ou civil", "Comportamento térmico e condicionamento acústico.");
+      add("sce", "Perito qualificado SCE (ADENE)", "Pré-certificado energético.");
+      add("scie", "Técnico de SCIE (OA, OE ou OET)", "Ficha ou projeto de SCIE. Nas 3.ª e 4.ª categorias de risco é preciso registo na ANEPC.");
+      if (obraNova) add("gas", "Engenheiro mecânico ou entidade instaladora", "Projeto de gás, se houver.");
+    }
+    if (obraNova) add("topografia", "Topógrafo", "Levantamento topográfico georreferenciado.");
+    add("fiscalizacao", "Arquiteto ou engenheiro", "Diretor de fiscalização, em nome do dono de obra.", "Obra");
+    add("seguranca", "Técnico de segurança", "Coordenação de segurança e plano de segurança e saúde.", "Obra");
+    add("empreitada", "Empreiteiro com alvará IMPIC", "Executa a obra e nomeia o diretor de obra.", "Obra");
+    return out;
+  }
+
+  // ---------- Mercado: pedidos, técnicos inscritos, propostas, taxa ----------
+  // Dados partilhados (capability db): pedidos/<uid>, tecnicos/<uid>, propostas/<uid> (cada pessoa escreve o seu), config/plataforma (só o dono).
+  let DB = null, USER = null, UID = null, IS_OWNER = false, dbTried = false, pending = false;
+  let papel = "cliente", editPerfil = false;
+  const M = { pedidos: {}, tecnicos: {}, propostas: {}, taxaPct: 10, aprov: {}, cobr: {}, ready: false, erro: "" };
+  const eur = (n) => (Number(n) || 0).toLocaleString("pt-PT", { style: "currency", currency: "EUR" });
+  const TIPO_NOME = () => { const o = $("tipo").selectedOptions[0]; return o ? o.textContent : state.tipo; };
+
+  async function initMercado() {
+    try {
+      if (!window.claude || !window.claude.use) { dbTried = true; return softRender(); }
+      [DB, USER] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+      dbTried = true;
+      if (!DB || !USER) { DB = null; return softRender(); }
+      UID = await USER.id();
+      IS_OWNER = !!(await USER.isOwner());
+      if (!UID) { DB = null; return softRender(); }
+      const onErr = (e) => { M.erro = "Não foi possível ler os dados partilhados (" + (e && e.code) + ")."; softRender(); };
+      const sub = (name) => DB.collection(name).onSnapshot((s) => { const o = {}; s.docs.forEach((d) => (o[d.id] = d.data())); M[name] = o; M.ready = true; softRender(); }, onErr);
+      sub("pedidos"); sub("tecnicos"); sub("propostas");
+      DB.doc("config/plataforma").onSnapshot((d) => { const x = d.data() || {}; M.taxaPct = x.taxaPct ?? 10; M.aprov = x.aprovados || {}; M.cobr = x.cobrancas || {}; softRender(); }, onErr);
+    } catch (e) { dbTried = true; DB = null; softRender(); }
+  }
+  function softRender() {
+    const a = document.activeElement;
+    if ((tab === "mercado" || tab === "equipa") && a && $("panel").contains(a) && /INPUT|TEXTAREA|SELECT/.test(a.tagName)) { pending = true; return; }
+    render();
+  }
+  $("panel").addEventListener("focusout", () => setTimeout(() => {
+    const a = document.activeElement;
+    if (pending && !(a && $("panel").contains(a) && /INPUT|TEXTAREA|SELECT/.test(a.tagName))) { pending = false; render(); }
+  }, 250));
+
+  const aprovados = () => Object.keys(M.tecnicos).filter((id) => M.aprov[id]);
+  const inscritosPara = (k) => aprovados().filter((id) => (M.tecnicos[id].especialidades || []).includes(k)).length;
+  const taxaDe = (v) => Math.round((Number(v) || 0) * M.taxaPct) / 100;
+
+  function propostasPara(pid) {
+    return Object.entries(M.propostas).map(([tid, d]) => ({ tid, p: (d.lista || {})[pid] })).filter((x) => x.p && M.tecnicos[x.tid]);
+  }
+
+  function renderEquipa(r) {
+    const E = equipa(state, r);
+    if (!E.length) return `<p class="note">Sem equipa técnica obrigatória.</p>`;
+    const fases = [...new Set(E.map((e) => e.fase))];
+    return `<p class="note">Quem tem de assinar ou executar cada parte, segundo o enquadramento acima. A qualificação de cada técnico segue a Lei 31/2009 (na redação da Lei 40/2015).</p><div class="team">` +
+      fases.map((f) => `<h3>${f === "Obra" ? "Fase de obra" : "Fase de projeto"}</h3>` + E.filter((e) => e.fase === f).map((e) => {
+        const n = DB ? inscritosPara(e.k) : null;
+        return `<div class="m"><div><b>${esc(ESP[e.k])}</b><span>${esc(e.quem)}. ${esc(e.porque)}</span></div>${n === null ? "" : `<span class="tag ${n ? "ok" : ""}">${n} inscrito${n === 1 ? "" : "s"}</span>`}</div>`;
+      }).join("")).join("") + `</div>` +
+      (DB ? `<p class="note" style="margin-top:12px">Para receber propostas destes técnicos, publique o pedido no separador Propostas.</p>` : "");
+  }
+
+  function renderMercado(r) {
+    if (!dbTried) return `<p class="note">A ligar…</p>`;
+    if (!DB) return `<p class="note">A publicação de pedidos e a receção de propostas de técnicos estão em preparação. Por agora, veja no separador Equipa técnica quem precisa de contratar.</p>`;
+    const papeis = [["cliente", "Dono de obra"], ["tecnico", "Técnico"]].concat(IS_OWNER ? [["gestao", "Gestão da plataforma"]] : []);
+    let h = `<div class="mk"><div class="mbar">${papeis.map(([k, l]) => `<button type="button" data-papel="${k}" class="${papel === k ? "on" : ""}">${l}</button>`).join("")}</div>`;
+    if (M.erro) h += `<p class="note" style="color:var(--red)">${esc(M.erro)}</p>`;
+    if (papel === "cliente") h += mercadoCliente(r);
+    else if (papel === "tecnico") h += mercadoTecnico();
+    else if (IS_OWNER) h += mercadoGestao();
+    return h + `</div>`;
+  }
+
+  function mercadoCliente(r) {
+    const meu = M.pedidos[UID];
+    const E = equipa(state, r).map((e) => e.k);
+    let h = "";
+    if (!meu) {
+      h += `<div class="card"><div class="hd"><b>Publicar pedido de propostas</b><span class="tag">${esc(PROC[r.p].nome)}</span></div>
+        <p>${esc(state.descricao || "Sem descrição")}</p>
+        <p class="note">${esc(TIPO_NOME())} · ${esc(state.freguesia || "")}${state.freguesia ? ", " : ""}${esc(state.concelho || "concelho por indicar")} · ${E.length} especialidade${E.length === 1 ? "" : "s"}</p>
+        <p class="note">Só ficam visíveis o tipo de obra, o concelho, a freguesia, a descrição e a equipa necessária. A morada, o NIF e o seu nome não são publicados.</p>
+        <div><button class="btn primary" type="button" data-act="publicar" ${E.length && state.concelho ? "" : "disabled"}>Publicar pedido</button></div>
+        ${!state.concelho ? `<p class="note" style="color:var(--ochre)">Indique o concelho no questionário antes de publicar.</p>` : ""}
+        ${!E.length ? `<p class="note">Esta obra não precisa de equipa técnica de projeto.</p>` : ""}</div>`;
+      return h;
+    }
+    const props = propostasPara(UID).sort((a, b) => (a.p.honorarios || 0) - (b.p.honorarios || 0));
+    const esc_ = meu.escolhas || {};
+    h += `<div class="card"><div class="hd"><b>O seu pedido</b><span class="tag ${meu.estado === "aberto" ? "ok" : ""}">${meu.estado === "aberto" ? "a receber propostas" : "fechado"}</span></div>
+      <p>${esc(meu.descricao)}</p>
+      <p class="note">${esc(meu.tipoNome)} · ${esc(meu.procNome)} · ${esc(meu.concelho)} · publicado em ${new Date(meu.criadoEm).toLocaleDateString("pt-PT")}</p>
+      <div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" type="button" data-act="atualizar">Atualizar com os dados atuais</button>
+      <button class="btn" type="button" data-act="${meu.estado === "aberto" ? "fechar" : "reabrir"}">${meu.estado === "aberto" ? "Deixar de receber propostas" : "Reabrir"}</button>
+      <button class="btn" type="button" data-act="apagar">Apagar pedido</button></div></div>`;
+    h += `<h2 style="margin-top:6px">Propostas recebidas <span class="count">${props.length}</span></h2>`;
+    if (!props.length) h += `<p class="note">Ainda não há propostas. Os técnicos aprovados que trabalham em ${esc(meu.concelho)} veem o seu pedido.</p>`;
+    props.forEach(({ tid, p }) => {
+      const t = M.tecnicos[tid], esc1 = esc_[tid];
+      h += `<div class="card ${esc1 ? "on" : ""}"><div class="hd"><b>${esc(t.nome)}</b><span class="money">${eur(p.honorarios)}</span></div>
+        <p class="note">${esc(t.profissao)} · ${esc(t.ordem)} n.º ${esc(t.numero)} ${M.aprov[tid] ? `<span class="tag ok">inscrição verificada</span>` : `<span class="tag warn">por verificar</span>`}</p>
+        <p>${esc(p.mensagem || "")}</p>
+        <p class="note">Cobre: ${(p.cobre || []).map((k) => esc(ESP[k] || k)).join(", ") || "por indicar"} · prazo ${esc(p.prazoDias || "?")} dias</p>
+        ${esc1 ? `<p><b>Escolhido.</b> Contacto: ${esc(t.email || "")}${t.telefone ? " · " + esc(t.telefone) : ""}</p>` : `<div><button class="btn primary" type="button" data-act="escolher" data-tid="${esc(tid)}">Escolher esta proposta</button></div>`}</div>`;
+    });
+    return h;
+  }
+
+  function mercadoTecnico() {
+    const eu = M.tecnicos[UID];
+    if (!eu || editPerfil) {
+      const v = eu || {};
+      return `<div class="card"><b>${eu ? "Editar inscrição" : "Inscrever-me como técnico"}</b>
+        <p class="note">A inscrição é verificada pela gestão da plataforma antes de poder enviar propostas.</p>
+        <form id="tf" class="mk" style="gap:10px">
+          <div class="row2"><label class="f">Nome profissional<input type="text" id="tf-nome" value="${esc(v.nome || "")}"></label>
+          <label class="f">Profissão<select id="tf-prof">${PROFISSOES.map((p) => `<option ${v.profissao === p ? "selected" : ""}>${p}</option>`).join("")}</select></label></div>
+          <div class="row2"><label class="f">Ordem ou entidade<input type="text" id="tf-ordem" placeholder="OA, OE, OET, ADENE, ANACOM, IMPIC" value="${esc(v.ordem || "")}"></label>
+          <label class="f">N.º de inscrição<input type="text" id="tf-num" value="${esc(v.numero || "")}"></label></div>
+          <label class="f">Concelhos onde trabalha<input type="text" id="tf-conc" placeholder="Lisboa, Oeiras, Sintra" value="${esc((v.concelhos || []).join(", "))}"></label>
+          <div class="row2"><label class="f">Email<input type="text" id="tf-email" value="${esc(v.email || "")}"></label>
+          <label class="f">Telefone<input type="text" id="tf-tel" value="${esc(v.telefone || "")}"></label></div>
+          <div><p class="note" style="margin-bottom:6px">Especialidades</p><div class="chk">${Object.entries(ESP).map(([k, l]) => `<label><input type="checkbox" name="tf-esp" value="${k}" ${(v.especialidades || []).includes(k) ? "checked" : ""}>${l}</label>`).join("")}</div></div>
+          <p class="note">O email e o telefone aparecem ao dono de obra quando ele escolhe a sua proposta.</p>
+          <div style="display:flex;gap:6px"><button class="btn primary" type="submit">Guardar inscrição</button>${eu ? `<button class="btn" type="button" data-act="cancelarPerfil">Cancelar</button>` : ""}</div>
+        </form></div>`;
+    }
+    const ok = !!M.aprov[UID];
+    let h = `<div class="card"><div class="hd"><b>${esc(eu.nome)}</b>${ok ? `<span class="tag ok">aprovado</span>` : `<span class="tag warn">a aguardar verificação</span>`}</div>
+      <p class="note">${esc(eu.profissao)} · ${esc(eu.ordem)} n.º ${esc(eu.numero)} · ${esc((eu.concelhos || []).join(", "))}</p>
+      <div><button class="btn" type="button" data-act="editarPerfil">Editar inscrição</button></div></div>`;
+    if (!ok) return h + `<p class="note">Depois de aprovado, vê aqui os pedidos dos concelhos onde trabalha.</p>`;
+    const minhas = (M.propostas[UID] || {}).lista || {};
+    const conc = (eu.concelhos || []).map((c) => c.toLowerCase());
+    const pedidos = Object.entries(M.pedidos).filter(([pid, p]) => pid !== UID && (minhas[pid] || (p.estado === "aberto" &&
+      (!conc.length || conc.includes(String(p.concelho || "").toLowerCase())) &&
+      (p.equipa || []).some((k) => (eu.especialidades || []).includes(k)))));
+    h += `<h2 style="margin-top:6px">Pedidos para si <span class="count">${pedidos.length}</span></h2>
+      <p class="note">A plataforma cobra ${M.taxaPct}% dos honorários ao técnico escolhido. Enviar propostas é gratuito.</p>`;
+    if (!pedidos.length) h += `<p class="note">Não há pedidos abertos que correspondam às suas especialidades e concelhos.</p>`;
+    pedidos.forEach(([pid, p]) => {
+      const mp = minhas[pid], escolhido = (p.escolhas || {})[UID];
+      const cobre = (p.equipa || []).filter((k) => (eu.especialidades || []).includes(k));
+      h += `<div class="card ${escolhido ? "on" : ""}"><div class="hd"><b>${esc(p.tipoNome)} em ${esc(p.concelho)}</b><span class="tag">${esc(p.procNome)}</span></div>
+        <p>${esc(p.descricao)}</p>
+        <p class="note">Equipa pedida: ${(p.equipa || []).map((k) => esc(ESP[k] || k)).join(", ")}</p>`;
+      if (escolhido) h += `<p><b>Foi escolhido.</b> Honorários ${eur(escolhido.valor)}; taxa da plataforma ${eur(escolhido.taxa)}. O dono de obra recebeu o seu contacto.</p></div>`;
+      else h += `<form class="mk pf" data-pid="${esc(pid)}" style="gap:8px">
+          <div class="row2"><label class="f">Honorários (€, sem IVA)<input type="text" inputmode="decimal" name="hon" value="${esc(mp ? mp.honorarios : "")}"></label>
+          <label class="f">Prazo (dias)<input type="text" inputmode="numeric" name="prazo" value="${esc(mp ? mp.prazoDias : "")}"></label></div>
+          <div class="chk">${cobre.map((k) => `<label><input type="checkbox" name="cobre" value="${k}" ${!mp || (mp.cobre || []).includes(k) ? "checked" : ""}>${ESP[k]}</label>`).join("")}</div>
+          <label class="f">Mensagem ao dono de obra<textarea name="msg" rows="2">${esc(mp ? mp.mensagem : "")}</textarea></label>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><button class="btn primary" type="submit">${mp ? "Atualizar proposta" : "Enviar proposta"}</button>${mp ? `<button class="btn" type="button" data-act="retirar" data-pid="${esc(pid)}">Retirar</button><span class="tag ok">enviada</span>` : ""}</div>
+        </form></div>`;
+    });
+    return h;
+  }
+
+  function mercadoGestao() {
+    const tecs = Object.entries(M.tecnicos);
+    const adj = [];
+    Object.entries(M.pedidos).forEach(([pid, p]) => Object.entries(p.escolhas || {}).forEach(([tid, e]) => adj.push({ pid, tid, p, e, key: pid + "__" + tid })));
+    const porCobrar = adj.filter((a) => !M.cobr[a.key]).reduce((s, a) => s + (a.e.taxa || 0), 0);
+    const cobrado = adj.filter((a) => M.cobr[a.key]).reduce((s, a) => s + (a.e.taxa || 0), 0);
+    let h = `<div class="card"><b>Taxa da plataforma</b>
+      <form id="gf" style="display:flex;gap:8px;align-items:end;flex-wrap:wrap"><label class="f">Percentagem sobre os honorários<input type="text" inputmode="decimal" id="gf-taxa" value="${M.taxaPct}" style="width:120px"></label><button class="btn primary" type="submit">Guardar</button></form>
+      <p class="note">Cobrada ao técnico quando a sua proposta é escolhida. Por cobrar: <span class="money">${eur(porCobrar)}</span> · Cobrado: <span class="money">${eur(cobrado)}</span></p></div>`;
+    h += `<h2>Técnicos inscritos <span class="count">${tecs.length}</span></h2>`;
+    h += tecs.length ? `<div class="tbl"><table><thead><tr><th>Técnico</th><th>Inscrição</th><th>Especialidades</th><th>Estado</th></tr></thead><tbody>` +
+      tecs.map(([id, t]) => `<tr><td>${esc(t.nome)}<br><span class="note">${esc(t.email || "")}</span></td><td>${esc(t.profissao)}<br>${esc(t.ordem)} n.º ${esc(t.numero)}</td><td>${(t.especialidades || []).map((k) => esc(ESP[k] || k)).join(", ")}</td>
+        <td><button class="btn" type="button" data-act="aprovar" data-tid="${esc(id)}">${M.aprov[id] ? "Suspender" : "Aprovar"}</button><br><span class="tag ${M.aprov[id] ? "ok" : "warn"}">${M.aprov[id] ? "aprovado" : "pendente"}</span></td></tr>`).join("") + `</tbody></table></div>` : `<p class="note">Ainda não há técnicos inscritos.</p>`;
+    h += `<p class="note">Confirme o número de inscrição no site da ordem ou entidade antes de aprovar.</p>`;
+    h += `<h2>Adjudicações e taxas <span class="count">${adj.length}</span></h2>`;
+    h += adj.length ? `<div class="tbl"><table><thead><tr><th>Pedido</th><th>Técnico</th><th>Honorários</th><th>Taxa</th><th>Cobrança</th></tr></thead><tbody>` +
+      adj.map((a) => `<tr><td>${esc(a.p.tipoNome)}, ${esc(a.p.concelho)}</td><td>${esc((M.tecnicos[a.tid] || {}).nome || "?")}</td><td class="n">${eur(a.e.valor)}</td><td class="n">${eur(a.e.taxa)}</td>
+        <td><button class="btn" type="button" data-act="cobrar" data-key="${esc(a.key)}">${M.cobr[a.key] ? "Marcar por cobrar" : "Marcar cobrada"}</button><br><span class="tag ${M.cobr[a.key] ? "ok" : "red"}">${M.cobr[a.key] ? "cobrada" : "por cobrar"}</span></td></tr>`).join("") + `</tbody></table></div>` : `<p class="note">Ainda não há propostas escolhidas.</p>`;
+    return h;
+  }
+
+  async function guardar(fn, okMsg) {
+    try { await fn(); if (okMsg) toast(okMsg); }
+    catch (e) { toast(e && e.code === "invalid_argument" ? "Sem permissão para gravar. Peça acesso de Colaborador." : "Não foi possível gravar. Tente de novo."); }
+  }
+  const configDoc = (patch) => DB.doc("config/plataforma").set(Object.assign({ taxaPct: M.taxaPct, aprovados: M.aprov, cobrancas: M.cobr }, patch));
+  function pedidoAtual(r, base) {
+    return Object.assign({}, base || {}, {
+      tipo: state.tipo, tipoNome: TIPO_NOME(), proc: r.p, procNome: PROC[r.p].nome,
+      concelho: (state.concelho || "").trim(), freguesia: (state.freguesia || "").trim(), descricao: (state.descricao || "").trim(),
+      equipa: equipa(state, r).map((e) => e.k), atualizadoEm: new Date().toISOString(),
+    });
+  }
+
+  async function acaoMercado(el) {
+    const act = el.dataset.act, r = decide(state), meuRef = () => DB.doc("pedidos/" + UID);
+    if (act === "publicar") return guardar(() => meuRef().set(pedidoAtual(r, { estado: "aberto", criadoEm: new Date().toISOString(), escolhas: {} })), "Pedido publicado.");
+    if (act === "atualizar") return guardar(() => meuRef().set(pedidoAtual(r, M.pedidos[UID])), "Pedido atualizado.");
+    if (act === "fechar" || act === "reabrir") return guardar(() => meuRef().update({ estado: act === "fechar" ? "fechado" : "aberto" }));
+    if (act === "apagar") {
+      if (el.dataset.confirm !== "1") { el.dataset.confirm = "1"; el.textContent = "Confirmar: apagar"; return; }
+      return guardar(() => meuRef().delete(), "Pedido apagado.");
+    }
+    if (act === "escolher") {
+      const tid = el.dataset.tid, p = (M.propostas[tid].lista || {})[UID];
+      return guardar(() => meuRef().update({ escolhas: { [tid]: { valor: Number(p.honorarios) || 0, taxa: taxaDe(p.honorarios), taxaPct: M.taxaPct, em: new Date().toISOString() } } }), "Proposta escolhida.");
+    }
+    if (act === "editarPerfil") { editPerfil = true; return render(); }
+    if (act === "cancelarPerfil") { editPerfil = false; return render(); }
+    if (act === "retirar") {
+      const lista = Object.assign({}, (M.propostas[UID] || {}).lista); delete lista[el.dataset.pid];
+      return guardar(() => DB.doc("propostas/" + UID).set({ lista }), "Proposta retirada.");
+    }
+    if (act === "aprovar" && IS_OWNER) { const a = Object.assign({}, M.aprov); if (a[el.dataset.tid]) delete a[el.dataset.tid]; else a[el.dataset.tid] = true; return guardar(() => configDoc({ aprovados: a })); }
+    if (act === "cobrar" && IS_OWNER) { const c = Object.assign({}, M.cobr); if (c[el.dataset.key]) delete c[el.dataset.key]; else c[el.dataset.key] = true; return guardar(() => configDoc({ cobrancas: c })); }
+  }
+
+  $("panel").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const f = e.target;
+    if (f.id === "tf") {
+      const g = (id) => $(id).value.trim();
+      const doc = { nome: g("tf-nome"), profissao: $("tf-prof").value, ordem: g("tf-ordem"), numero: g("tf-num"),
+        concelhos: g("tf-conc").split(",").map((s) => s.trim()).filter(Boolean), email: g("tf-email"), telefone: g("tf-tel"),
+        especialidades: [...f.querySelectorAll("input[name=tf-esp]:checked")].map((i) => i.value), atualizadoEm: new Date().toISOString() };
+      if (!doc.nome || !doc.ordem || !doc.numero || !doc.email || !doc.especialidades.length) return toast("Preencha nome, ordem, n.º de inscrição, email e pelo menos uma especialidade.");
+      editPerfil = false; pending = false;
+      return guardar(() => DB.doc("tecnicos/" + UID).set(doc), "Inscrição guardada.");
+    }
+    if (f.classList.contains("pf")) {
+      const hon = Number(String(f.hon.value).replace(/\s/g, "").replace(",", "."));
+      if (!(hon > 0)) return toast("Indique os honorários em euros.");
+      const lista = Object.assign({}, (M.propostas[UID] || {}).lista);
+      lista[f.dataset.pid] = { honorarios: hon, prazoDias: parseInt(f.prazo.value, 10) || null, mensagem: f.msg.value.trim().slice(0, 1500),
+        cobre: [...f.querySelectorAll("input[name=cobre]:checked")].map((i) => i.value), em: new Date().toISOString() };
+      pending = false;
+      return guardar(() => DB.doc("propostas/" + UID).set({ lista }), "Proposta enviada.");
+    }
+    if (f.id === "gf" && IS_OWNER) {
+      const t = Number(String($("gf-taxa").value).replace(",", "."));
+      if (!(t >= 0 && t <= 100)) return toast("A taxa tem de estar entre 0 e 100%.");
+      pending = false;
+      return guardar(() => configDoc({ taxaPct: t }), "Taxa guardada.");
+    }
+  });
+
+  // ---------- Render ----------
+  const esc =(t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  function render() {
+    renderCond();
+    const qMapa = [state.morada, state.freguesia, state.concelho].filter(Boolean).join(", ");
+    const r = decide(state);
+    const P = PROC[r.p];
+    $("verdict").style.setProperty("--v", P.cor);
+    $("verdict").innerHTML = `<p class="proc">${P.nome}</p><p>${esc(r.motivo)}</p><p style="color:var(--muted)">${P.resumo}</p><div class="refs">${r.refs.map((x) => `<span class="ref">${esc(x)}</span>`).join("")}</div>`;
+    $("alerts").innerHTML = r.alerts.map((a) => `<li class="${a.i ? "info" : ""}">${esc(a.t)}</li>`).join("");
+
+    const D = docs(state, r);
+    const keys = D.flatMap((g) => g.itens.map((i) => i.t));
+    const done = keys.filter((k) => checks[k]).length;
+    $("docCount").textContent = `${done}/${keys.length}`;
+    $("entCount").textContent = String(entidades(state, r).length);
+
+    document.querySelectorAll("#tabs button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
+    const panel = $("panel");
+    if (tab === "docs") {
+      panel.innerHTML = `<div class="progress">${done} de ${keys.length} reunidos. A marcação fica guardada neste navegador.</div><ul class="docs">` +
+        D.map((G) => `<li><h3>${esc(G.grupo)}</h3></li>` + G.itens.map((it, i) => {
+          const id = "d-" + btoa(unescape(encodeURIComponent(it.t))).replace(/[^a-z0-9]/gi, "").slice(0, 24);
+          return `<li><label for="${id}"><input type="checkbox" id="${id}" data-k="${esc(it.t)}" ${checks[it.t] ? "checked" : ""}><span><span class="t">${esc(it.t)}</span>${it.d ? `<span class="d">${esc(it.d)}</span>` : ""}</span></label></li>`;
+        }).join("")).join("") + `</ul>`;
+    } else if (tab === "guia") {
+      panel.innerHTML = renderGuia(r);
+      panel.querySelectorAll("details.gd").forEach((d) => d.addEventListener("toggle", () => { guiaAbertos[d.dataset.g] = d.open; }));
+    } else if (tab === "entidades") {
+      panel.innerHTML = renderEntidades(r);
+    } else if (tab === "equipa") {
+      panel.innerHTML = renderEquipa(r);
+    } else if (tab === "mercado") {
+      panel.innerHTML = renderMercado(r);
+    } else if (tab === "passos") {
+      panel.innerHTML = `<ol class="steps">${passos(r, state).map(([t, d]) => `<li><div><b>${esc(t)}</b><span>${esc(d)}</span></div></li>`).join("")}</ol>`;
+    } else if (tab === "minutas") {
+      const M = minutas(state, r), rec = recomendadas(r, state);
+      if (!minuta || !M[minuta]) minuta = rec[0] || "info";
+      const order = [...rec, ...Object.keys(M).filter((k) => !rec.includes(k))];
+      panel.innerHTML = `<div class="minutas">
+        <div class="mbar">${order.map((k) => `<button type="button" data-m="${k}" class="${k === minuta ? "on" : ""}">${rec.includes(k) ? '<span class="rec">●</span> ' : ""}${esc(M[k].nome)}</button>`).join("")}</div>
+        <div class="mhead"><p>${esc(M[minuta].desc)} ${rec.includes(minuta) ? "Recomendada para o seu caso." : ""} Os campos a vermelho faltam preencher.</p><button class="btn primary" type="button" id="copy">Copiar texto</button></div>
+        <pre class="doc" id="doc">${M[minuta].txt}</pre></div>`;
+    } else {
+      const end = [state.morada, state.freguesia, state.concelho, "Portugal"].filter(Boolean).join(", ");
+      const ativos = COND.filter((x) => effCond(state)[x.k] && VIEW[x.k]);
+      const temMorada = !!(state.morada || state.concelho);
+      panel.innerHTML = (MAPA_URL ? `<div class="card" style="margin-bottom:14px"><div class="hd"><b>Mapa de Condicionantes</b><a class="btn primary" style="text-decoration:none" href="${MAPA_URL}${[state.morada, state.freguesia, state.concelho].some(Boolean) ? "?q=" + encodeURIComponent([state.morada, state.freguesia, state.concelho].filter(Boolean).join(", ")) : ""}" target="_blank" rel="noopener">Abrir o mapa</a></div><p class="note">Escreva a morada no mapa: ele consulta as cartas oficiais (REN, RAN, domínio hídrico, património, áreas protegidas, Rede Natura, servidões militares) e traz o resultado de volta para aqui.</p>${state.doMapa ? `<p class="note" style="color:var(--green)">As condicionantes atuais vieram do mapa.</p>` : ""}</div>` : "") + `<div class="card" style="margin-bottom:14px"><div class="hd"><b>Ver o local no mapa</b>${temMorada ? `<a class="btn primary" style="text-decoration:none" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(end)}" target="_blank" rel="noopener">Abrir no Google Maps</a>` : ""}</div>
+        <p class="note">${temMorada ? esc(end) : "Indique a morada no questionário."}</p>
+        ${ativos.length ? `<p class="note">Confirme no mapa oficial as condicionantes assinaladas:</p><div class="team">${ativos.map((x) => `<div class="m"><div><b>${esc(x.l)}</b><span>${esc(VIEW[x.k].d)}</span></div><a class="tag" href="${VIEW[x.k].u}" target="_blank" rel="noopener">${esc(VIEW[x.k].n)}</a></div>`).join("")}</div>` : ""}
+      </div>
+      <div class="links">
+        <a href="https://www.predialonline.pt" target="_blank" rel="noopener"><b>Predial Online</b><span>Certidão permanente do registo predial</span></a>
+        <a href="https://www.portaldasfinancas.gov.pt" target="_blank" rel="noopener"><b>Portal das Finanças</b><span>Caderneta predial e artigo matricial</span></a>
+        <a href="https://snit.dgterritorio.gov.pt" target="_blank" rel="noopener"><b>SNIT (DGT)</b><span>PDM em vigor: ordenamento e condicionantes</span></a>
+        <a href="https://www.patrimoniocultural.gov.pt" target="_blank" rel="noopener"><b>Património Cultural, I.P.</b><span>Imóveis classificados e zonas de proteção</span></a>
+        <a href="https://www.impic.pt" target="_blank" rel="noopener"><b>IMPIC</b><span>Confirmar alvará ou certificado do empreiteiro</span></a>
+        <a href="https://diariodarepublica.pt" target="_blank" rel="noopener"><b>Diário da República</b><span>RJUE consolidado e regulamento municipal</span></a>
+      </div>
+      <p class="foot" style="margin-top:14px">Procure também o geoportal do seu município${state.concelho ? ` (${esc(state.concelho)})` : ""}: costuma ter o PDM interativo, a carta de património e o arquivo de processos de obra.</p>`;
+    }
+  }
+
+  $("tabs").addEventListener("click", (e) => { const b = e.target.closest("button[data-tab]"); if (b) { tab = b.dataset.tab; render(); } });
+  $("panel").addEventListener("change", (e) => { if (e.target.dataset.k) { checks[e.target.dataset.k] = e.target.checked; save(); render(); } });
+  $("panel").addEventListener("click", (e) => {
+    const m = e.target.closest("button[data-m]"); if (m) { minuta = m.dataset.m; render(); return; }
+    const pp = e.target.closest("button[data-papel]"); if (pp) { papel = pp.dataset.papel; editPerfil = false; render(); return; }
+    const a = e.target.closest("button[data-act]"); if (a && DB) { acaoMercado(a); return; }
+    if (e.target.id === "copy") {
+      const txt = $("doc").innerText;
+      const ok = () => toast("Texto copiado.");
+      const fallback = () => { const sel = window.getSelection(), rg = document.createRange(); rg.selectNodeContents($("doc")); sel.removeAllRanges(); sel.addRange(rg); toast("Texto selecionado. Use Ctrl+C para copiar."); };
+      try { navigator.clipboard.writeText(txt).then(ok, fallback); } catch (err) { fallback(); }
+    }
+  });
+  let tt;
+  function toast(m) { const t = $("toast"); t.textContent = m; t.hidden = false; clearTimeout(tt); tt = setTimeout(() => (t.hidden = true), 2200); }
+
+  if (!state.q) state.q = {};
+  // Resultado do mapa: troca as condicionantes que vieram do mapa anterior pelas novas, sem mexer nas que o utilizador marcou.
+  let pedidoApp = 0;
+  function aplicarMapa(d, moradaDoMapa) {
+    if (moradaDoMapa) { if (d.m) state.morada = d.m; if (d.f) state.freguesia = d.f; if (d.c) state.concelho = d.c; }
+    else { if (d.m && !state.morada) state.morada = d.m; if (d.f && !state.freguesia) state.freguesia = d.f; if (d.c && !state.concelho) state.concelho = d.c; }
+    state.cond = state.cond || {}; state.condOff = state.condOff || {};
+    (state.condMapa || []).forEach((k) => { if (k === "pat") { if (state.q.classificado === "sim") delete state.q.classificado; } else delete state.cond[k]; });
+    const ks = (d.k || []).filter((k) => k === "pat" || COND.some((x) => x.k === k));
+    ks.forEach((k) => { if (k === "pat") state.q.classificado = "sim"; else { state.cond[k] = true; delete state.condOff[k]; } });
+    state.condMapa = ks; state.doMapa = true; save();
+  }
+  const frame = $("mapaFrame");
+  const qMapa = () => [state.morada, state.freguesia, state.concelho].filter(Boolean).join(", ");
+  frame.src = "mapa/?embed=1" + (qMapa() ? "&q=" + encodeURIComponent(qMapa()) : "");
+  if (qMapa()) pedidoApp = Date.now();
+  window.addEventListener("message", (e) => {
+    if (e.origin !== location.origin || e.source !== frame.contentWindow || !e.data || e.data.tipo !== "licenciamento-mapa") return;
+    aplicarMapa(e.data.dados || {}, Date.now() - pedidoApp > 15000);
+    fillForm(); render();
+    toast("Condicionantes do mapa passadas para o questionário");
+  });
+  $("f").addEventListener("change", (e) => {
+    if (!["morada", "freguesia", "concelho"].includes(e.target.id) || !qMapa()) return;
+    pedidoApp = Date.now();
+    frame.contentWindow.postMessage({ tipo: "pesquisar", q: qMapa() }, location.origin);
+  });
+  // Dados vindos do Mapa de Condicionantes: #mapa.<base64url de {m, f, c, k}>
+  try {
+    const h = location.hash || "";
+    if (h.startsWith("#mapa.")) {
+      const b = h.slice(6).replace(/-/g, "+").replace(/_/g, "/");
+      const d = JSON.parse(decodeURIComponent(escape(atob(b + "===".slice((b.length + 3) % 4)))));
+      state.cond = {}; state.condOff = {}; state.condMapa = [];
+      aplicarMapa(d, true);
+      history.replaceState(null, "", location.pathname);
+    }
+  } catch (e) {}
+  fillForm();
+  render();
+  initMercado();
 })();
 </script>
 </body>

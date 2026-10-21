@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mapa de Condicionantes</title>
+<meta name="description" content="Escreva a morada e veja as servidões e restrições de utilidade pública que se aplicam ao local: REN, RAN, domínio hídrico, património classificado, áreas protegidas, Rede Natura 2000 e outras.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: painel lateral (pesquisa, resultado, camadas) + mapa; em telemóvel o painel fica por baixo do mapa. Mesmas cores da app Licenciamento de Obras. */
+:root {
+  --bg: #f3f4f1; --panel: #ffffff; --ink: #1d2422; --muted: #5c6764; --line: #d6dbd7;
+  --red: #b3261e; --ochre: #b98a12; --green: #2f6b4f; --blue: #2c5b86; --chip: #eceee9;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Source Sans 3", "Segoe UI", Roboto, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #151a19; --panel: #1d2423; --ink: #e7ebe8; --muted: #9aa5a1; --line: #323b39; --red: #ef7a70; --ochre: #e0b54a; --green: #6cc29a; --blue: #85b4e0; --chip: #263030; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--f-body); display: grid; grid-template-columns: minmax(320px, 400px) 1fr; }
+aside { background: var(--panel); border-right: 1px solid var(--line); overflow-y: auto; padding: 18px max(16px, env(safe-area-inset-left)) 24px 16px; display: grid; gap: 18px; align-content: start; }
+#map { height: 100%; min-height: 300px; }
+@media (max-width: 760px) {
+  body { grid-template-columns: 1fr; grid-template-rows: 55vh auto; height: auto; }
+  #map { grid-row: 1; height: 55vh; }
+  aside { grid-row: 2; border-right: 0; border-top: 1px solid var(--line); padding-right: max(16px, env(safe-area-inset-right)); }
+}
+h1 { font-family: var(--f-display); font-weight: 800; font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; }
+h2 { font-family: var(--f-display); font-weight: 600; font-size: 1rem; margin: 0 0 6px; }
+.eyebrow { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+p { margin: 0; }
+.note { color: var(--muted); font-size: 0.86rem; }
+form { display: flex; gap: 6px; }
+input[type=search] { flex: 1; min-width: 0; font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--bg); color: var(--ink); }
+button, .btn { font: inherit; font-weight: 600; font-size: 0.88rem; border: 1px solid var(--ink); background: var(--ink); color: var(--panel); border-radius: 4px; padding: 7px 12px; cursor: pointer; text-decoration: none; display: inline-block; }
+.btn.sec { background: transparent; color: var(--ink); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.res { display: grid; gap: 0; }
+.row { display: grid; grid-template-columns: 14px 1fr auto; gap: 10px; align-items: start; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.row .sw { width: 14px; height: 14px; border-radius: 2px; margin-top: 4px; border: 1px solid var(--line); }
+.row b { display: block; font-size: 0.93rem; }
+.row span.d { color: var(--muted); font-size: 0.83rem; }
+.tag { font-family: var(--f-mono); font-size: 0.7rem; padding: 2px 7px; border-radius: 3px; background: var(--chip); white-space: nowrap; }
+.tag.sim { color: var(--red); font-weight: 500; } .tag.nao { color: var(--green); } .tag.err { color: var(--ochre); } .tag.wait { color: var(--muted); }
+.layers label { display: grid; grid-template-columns: auto 1fr; gap: 8px; padding: 4px 0; font-size: 0.9rem; cursor: pointer; }
+.where { font-size: 0.9rem; }
+.where b { display: block; }
+.cta { display: grid; gap: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 6px; }
+.foot { font-size: 0.78rem; color: var(--muted); }
+.leaflet-container { font-family: var(--f-body); }
+/* Dentro da app (?embed=1): sem título nem rodapé, painel mais estreito. */
+.embed .eyebrow, .embed h1, .embed .intro, .embed #cta, .embed .foot { display: none; }
+.embed body { grid-template-columns: minmax(340px, 400px) 1fr; }
+.embed aside { gap: 12px; padding-top: 12px; }
+@media (max-width: 760px) { .embed body { grid-template-columns: 1fr; grid-template-rows: 320px auto; } .embed #map { height: 320px; } }
+</style>
+</head>
+<body>
+<aside>
+  <div>
+    <div class="eyebrow">Servidões e restrições de utilidade pública</div>
+    <h1>Mapa de Condicionantes</h1>
+    <p class="note intro" style="margin-top:4px">Escreva a morada ou clique no mapa. A página consulta as cartas oficiais nesse ponto e diz que condicionantes se aplicam.</p>
+  </div>
+  <form id="f" role="search">
+    <input type="search" id="q" placeholder="Rua, número, concelho" aria-label="Morada" autocomplete="street-address">
+    <button type="submit">Procurar</button>
+  </form>
+  <div id="where" class="where" hidden></div>
+  <section>
+    <h2>Neste local</h2>
+    <div id="res" class="res"><p class="note">Ainda não escolheu um local.</p></div>
+  </section>
+  <div id="cta" class="cta" hidden>
+    <p><b>Levar para o enquadramento</b></p>
+    <p class="note">Abre a app Licenciamento de Obras com a morada e as condicionantes já assinaladas.</p>
+    <div><a id="toApp" class="btn" href="#">Abrir na app</a></div>
+  </div>
+  <section>
+    <h2>Camadas no mapa</h2>
+    <div id="layers" class="layers"></div>
+  </section>
+  <p class="foot">Dados: Direção-Geral do Território (SNIT, servidões e restrições de utilidade pública) e ICNF. Mapa base © colaboradores do OpenStreetMap; pesquisa de moradas Nominatim. A informação é indicativa: a referência legal é a planta de condicionantes do PDM em vigor, disponível na câmara municipal. Algumas cartas nacionais podem estar desatualizadas ou incompletas para o seu concelho.</p>
+</aside>
+<div id="map" role="application" aria-label="Mapa"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(function () {
+  const APP_URL = "../";
+  const EMBED = new URLSearchParams(location.search).has("embed") && window.parent !== window;
+  if (EMBED) document.documentElement.classList.add("embed");
+  const DGT = (c) => `https://servicos.dgterritorio.pt/SDISNITWMSSRUP_${c}_PT1/WMService.aspx`;
+  // app: chave da condicionante na app ("pat" = imóvel classificado ou zona de proteção).
+  const LAYERS = [
+    { id: "ic", nome: "Imóveis classificados e zonas de proteção", ent: "Património Cultural, I.P.", url: DGT("IC"), layers: "Imóveis_Classificados_com_Zona_de_Proteção,Imóveis_Classificados", app: "pat", cor: "#8e3b8e", on: true },
+    { id: "eip", nome: "Edifícios de interesse público", ent: "Entidade que tutela o edifício", url: DGT("EIP"), layers: "Edifícios_de_Interesse_Público", app: "pat", cor: "#a05a2c" },
+    { id: "ren", nome: "Reserva Ecológica Nacional (REN)", ent: "CCDR", url: DGT("REN"), layers: "REN_em_Vigor", app: "ren", cor: "#2f7d4a", on: true },
+    { id: "ran", nome: "Reserva Agrícola Nacional (RAN)", ent: "Entidade Regional da RAN", url: DGT("RAN"), layers: "Reserva_Agricola_Nacional", app: "ran", cor: "#9a8a1a", on: true },
+    { id: "dph", nome: "Domínio público hídrico", ent: "APA, I.P.", url: DGT("DPH"), layers: "Domínio_Público_Hídrico", app: "hidrico", cor: "#2c6fb0", on: true },
+    { id: "cheias", nome: "Zonas de cheia (ocupação condicionada ou proibida)", ent: "APA, I.P.", url: DGT("DPH"), layers: "Zona_de_Ocupação_Condicionada,Zona_de_Ocupação_Proibida", app: "hidrico", cor: "#4aa3d8" },
+    { id: "ap", nome: "Áreas protegidas", ent: "ICNF, I.P.", url: DGT("AP"), layers: "Áreas_Protegidas", app: "natura", cor: "#3d8c6e" },
+    { id: "zpe", nome: "Rede Natura 2000: Zonas de Proteção Especial", ent: "ICNF, I.P.", url: DGT("ZPE"), layers: "Zonas_de_Protecao_Especial_-_ZPE", app: "natura", cor: "#6aa84f" },
+    { id: "sic", nome: "Rede Natura 2000: Sítios de Importância Comunitária", ent: "ICNF, I.P.", url: "https://si.icnf.pt/geoserver/INSPIRE/wms", layers: "sic_INSPIREcompliant", app: "natura", cor: "#93c47d", json: true },
+    { id: "rf", nome: "Regime florestal", ent: "ICNF, I.P.", url: DGT("RF"), layers: "Regime_Florestal", app: "", cor: "#5b7f3a" },
+    { id: "dn", nome: "Servidões militares", ent: "Ministério da Defesa Nacional", url: DGT("DN"), layers: "Áreas_Abrangidas_pela_Servidão,Zonas_da_Servidão", app: "militar", cor: "#6b6b6b" },
+  ];
+  const $ = (id) => document.getElementById(id);
+  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  const map = L.map("map", { zoomControl: true }).setView([39.6, -8.0], 7);
+  const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(map);
+  const sat = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, attribution: "Imagem © Esri" });
+  L.control.layers({ "Mapa": osm, "Satélite": sat }, null, { position: "topright" }).addTo(map);
+
+  const wms = {};
+  LAYERS.forEach((l) => {
+    wms[l.id] = L.tileLayer.wms(l.url, { layers: l.layers, format: "image/png", transparent: true, version: "1.3.0", opacity: 0.55, attribution: l.id === "sic" ? "ICNF" : "DGT" });
+    if (l.on) wms[l.id].addTo(map);
+  });
+  $("layers").innerHTML = LAYERS.map((l) => `<label><input type="checkbox" data-l="${l.id}" ${l.on ? "checked" : ""}><span><span class="sw" style="display:inline-block;width:10px;height:10px;background:${l.cor};margin-right:6px;border-radius:2px"></span>${esc(l.nome)}</span></label>`).join("");
+  $("layers").addEventListener("change", (e) => { const id = e.target.dataset.l; if (!id) return; e.target.checked ? wms[id].addTo(map) : map.removeLayer(wms[id]); });
+
+  let marker = null, local = { morada: "", concelho: "", freguesia: "" }, achados = {};
+
+  // Consulta um serviço WMS no ponto (GetFeatureInfo). Resolve "sim", "nao" ou "erro".
+  async function consultar(l, lat, lng) {
+    const d = 0.0004;
+    const p = new URLSearchParams({
+      SERVICE: "WMS", VERSION: "1.3.0", REQUEST: "GetFeatureInfo", LAYERS: l.layers, QUERY_LAYERS: l.layers, STYLES: "",
+      CRS: "EPSG:4326", BBOX: [lat - d, lng - d, lat + d, lng + d].join(","), WIDTH: "101", HEIGHT: "101", I: "50", J: "50",
+      INFO_FORMAT: l.json ? "application/json" : "text/xml", FEATURE_COUNT: "5",
+    });
+    try {
+      const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 15000);
+      const r = await fetch(l.url + "?" + p.toString(), { signal: ctl.signal });
+      clearTimeout(t);
+      if (!r.ok) return { s: "erro" };
+      const txt = await r.text();
+      if (l.json) { const j = JSON.parse(txt); return { s: (j.features || []).length ? "sim" : "nao" }; }
+      if (/ServiceException|ExceptionReport/i.test(txt)) return { s: "erro" };
+      const doc = new DOMParser().parseFromString(txt, "text/xml");
+      const all = [...doc.getElementsByTagName("*")];
+      const hits = all.filter((n) => /^(featureMember|member|FIELDS|Feature|FeatureInfo|Row)$/i.test(n.localName) || /featureMember$/i.test(n.localName));
+      // Alguns servidores devolvem um contentor vazio quando não há nada no ponto.
+      const temDados = hits.length > 0 && hits.some((n) => n.textContent.trim().length > 0 || n.attributes.length > 0);
+      return { s: temDados ? "sim" : "nao" };
+    } catch (e) { return { s: "erro" }; }
+  }
+
+  function renderRes(estado) {
+    $("res").innerHTML = LAYERS.map((l) => {
+      const s = estado[l.id] || "wait";
+      const lab = { wait: "a consultar…", sim: "abrangido", nao: "não abrangido", erro: "ver no mapa" }[s];
+      return `<div class="row"><span class="sw" style="background:${l.cor}"></span><div><b>${esc(l.nome)}</b><span class="d">${s === "sim" ? "Parecer ou autorização: " + esc(l.ent) : s === "erro" ? "O serviço não respondeu. Ative a camada e veja se o ponto está dentro da mancha." : ""}</span></div><span class="tag ${s}">${lab}</span></div>`;
+    }).join("");
+  }
+
+  async function analisar(lat, lng) {
+    if (marker) marker.setLatLng([lat, lng]); else marker = L.marker([lat, lng]).addTo(map);
+    achados = {};
+    const estado = {}; renderRes(estado);
+    await Promise.all(LAYERS.map(async (l) => { const r = await consultar(l, lat, lng); estado[l.id] = r.s; if (r.s === "sim" && l.app) achados[l.app] = true; renderRes(estado); }));
+    atualizarCTA();
+  }
+
+  // Passa a morada e as condicionantes à app num token seguro para o #anchor (base64url, sem "=").
+  function atualizarCTA() {
+    const dados = { m: local.morada, f: local.freguesia, c: local.concelho, k: Object.keys(achados) };
+    const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(dados)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    $("toApp").href = APP_URL + "#mapa." + b64;
+    if (EMBED) window.parent.postMessage({ tipo: "licenciamento-mapa", dados }, location.origin);
+    $("cta").hidden = false;
+  }
+
+  function mostrarLocal() {
+    $("where").hidden = !local.morada;
+    $("where").innerHTML = `<b>${esc(local.morada || "Ponto escolhido no mapa")}</b><span class="note">${esc([local.freguesia, local.concelho].filter(Boolean).join(", "))}</span>`;
+  }
+
+  async function reverse(lat, lng) {
+    try {
+      const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&accept-language=pt&lat=${lat}&lon=${lng}`);
+      const j = await r.json(); aplicarMorada(j);
+    } catch (e) { local = { morada: "", concelho: "", freguesia: "" }; }
+    mostrarLocal(); atualizarCTA();
+  }
+  function aplicarMorada(j) {
+    const a = j.address || {};
+    const rua = [a.road || a.pedestrian || a.hamlet || a.village || "", a.house_number || ""].filter(Boolean).join(", ");
+    local = {
+      morada: rua || (j.display_name || "").split(",").slice(0, 2).join(","),
+      freguesia: a.suburb || a.city_district || a.quarter || a.village || "",
+      concelho: a.municipality || a.city || a.town || a.county || "",
+    };
+  }
+
+  $("f").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const q = $("q").value.trim(); if (!q) return;
+    $("res").innerHTML = `<p class="note">A procurar a morada…</p>`;
+    try {
+      const r = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=1&countrycodes=pt&accept-language=pt&q=${encodeURIComponent(q)}`);
+      const j = await r.json();
+      if (!j.length) { $("res").innerHTML = `<p class="note">Não encontrei essa morada. Experimente indicar o concelho, ou clique no mapa.</p>`; return; }
+      const lat = +j[0].lat, lng = +j[0].lon;
+      aplicarMorada(j[0]); mostrarLocal();
+      map.setView([lat, lng], 17);
+      analisar(lat, lng);
+    } catch (err) { $("res").innerHTML = `<p class="note">A pesquisa de moradas não respondeu. Clique diretamente no mapa.</p>`; }
+  });
+  map.on("click", (e) => { analisar(e.latlng.lat, e.latlng.lng); reverse(e.latlng.lat, e.latlng.lng); });
+  // Morada vinda da app (?q=...): pesquisa logo ao abrir.
+  const q0 = new URLSearchParams(location.search).get("q");
+  if (q0) { $("q").value = q0; $("f").requestSubmit(); }
+  // A app pede uma pesquisa quando o utilizador escreve a morada no questionário.
+  window.addEventListener("message", (e) => {
+    if (e.origin !== location.origin || !e.data || e.data.tipo !== "pesquisar" || !e.data.q) return;
+    if ($("q").value.trim() === e.data.q) return;
+    $("q").value = e.data.q; $("f").requestSubmit();
+  });
+})();
+</script>
+</body>
+</html>
