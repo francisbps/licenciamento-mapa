@@ -53,6 +53,13 @@ button, .btn { font: inherit; font-weight: 600; font-size: 0.88rem; border: 1px 
 .cta { display: grid; gap: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 6px; }
 .foot { font-size: 0.78rem; color: var(--muted); }
 .leaflet-container { font-family: var(--f-body); }
+h3.sub { font-family: var(--f-display); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 14px 0 2px; }
+h3.sub:first-child { margin-top: 0; }
+details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; color: var(--muted); padding: 6px 0; }
+.layers details { border-bottom: 1px solid var(--line); }
+.layers summary { color: var(--ink); font-weight: 600; }
+.links { font-size: 0.86rem; margin-top: 6px; }
+.links a { color: var(--blue); }
 .pin { background: none; border: 0; filter: drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
 /* Dentro da app (?embed=1): sem título nem rodapé, painel mais estreito. */
 .embed .eyebrow, .embed h1, .embed .intro, .embed #cta, .embed .foot { display: none; }
@@ -97,88 +104,215 @@ button, .btn { font: inherit; font-weight: 600; font-size: 0.88rem; border: 1px 
   const EMBED = new URLSearchParams(location.search).has("embed") && window.parent !== window;
   if (EMBED) document.documentElement.classList.add("embed");
   const DGT = (c) => `https://servicos.dgterritorio.pt/SDISNITWMSSRUP_${c}_PT1/WMService.aspx`;
-  // app: chave da condicionante na app ("pat" = imóvel classificado ou zona de proteção).
+  const DGTX = (c) => `https://servicos.dgterritorio.pt/SDISNITWMSSRUP_${c}/WMService.aspx`;
+  const APA = (s) => `https://inspire.apambiente.pt/getogc/services/INSPIRE/${s}/MapServer/WMSServer`;
+  // Camadas nacionais. app: chave da condicionante na app ("pat" = imóvel classificado ou zona de proteção).
+  // layers vazio = descobre os nomes no GetCapabilities do serviço. classe: só conta se a resposta tiver essa classe.
+  const G = { pat: "Património", nat: "Natureza e água", solo: "Solo, floresta e incêndio", inf: "Infraestruturas", def: "Defesa e segurança", urb: "Urbanismo" };
   const LAYERS = [
-    { id: "ic", nome: "Imóveis classificados e zonas de proteção", ent: "Património Cultural, I.P.", url: DGT("IC"), layers: "Imóveis_Classificados_com_Zona_de_Proteção,Imóveis_Classificados", app: "pat", cor: "#8e3b8e", on: true },
-    { id: "eip", nome: "Edifícios de interesse público", ent: "Entidade que tutela o edifício", url: DGT("EIP"), layers: "Edifícios_de_Interesse_Público", app: "pat", cor: "#a05a2c" },
-    { id: "ren", nome: "Reserva Ecológica Nacional (REN)", ent: "CCDR", url: DGT("REN"), layers: "REN_em_Vigor", app: "ren", cor: "#2f7d4a", on: true },
-    { id: "ran", nome: "Reserva Agrícola Nacional (RAN)", ent: "Entidade Regional da RAN", url: DGT("RAN"), layers: "Reserva_Agricola_Nacional", app: "ran", cor: "#9a8a1a", on: true },
-    { id: "dph", nome: "Domínio público hídrico", ent: "APA, I.P.", url: DGT("DPH"), layers: "Domínio_Público_Hídrico", app: "hidrico", cor: "#2c6fb0", on: true },
-    { id: "cheias", nome: "Zonas de cheia (ocupação condicionada ou proibida)", ent: "APA, I.P.", url: DGT("DPH"), layers: "Zona_de_Ocupação_Condicionada,Zona_de_Ocupação_Proibida", app: "hidrico", cor: "#4aa3d8" },
-    { id: "ap", nome: "Áreas protegidas", ent: "ICNF, I.P.", url: DGT("AP"), layers: "Áreas_Protegidas", app: "natura", cor: "#3d8c6e" },
-    { id: "zpe", nome: "Rede Natura 2000: Zonas de Proteção Especial", ent: "ICNF, I.P.", url: DGT("ZPE"), layers: "Zonas_de_Protecao_Especial_-_ZPE", app: "natura", cor: "#6aa84f" },
-    { id: "sic", nome: "Rede Natura 2000: Sítios de Importância Comunitária", ent: "ICNF, I.P.", url: "https://si.icnf.pt/geoserver/INSPIRE/wms", layers: "sic_INSPIREcompliant", app: "natura", cor: "#93c47d", json: true },
-    { id: "rf", nome: "Regime florestal", ent: "ICNF, I.P.", url: DGT("RF"), layers: "Regime_Florestal", app: "", cor: "#5b7f3a" },
-    { id: "dn", nome: "Servidões militares", ent: "Ministério da Defesa Nacional", url: DGT("DN"), layers: "Áreas_Abrangidas_pela_Servidão,Zonas_da_Servidão", app: "militar", cor: "#6b6b6b" },
+    { id: "pc", g: "pat", nome: "Património cultural (classificado, em vias, ZEP e ZGP)", ent: "Património Cultural, I.P.", url: "https://geo.patrimoniocultural.gov.pt/arcgis/services/PatrimonioClassificadoEmViasClassificacao/Atlas_Patrimonio_Servicos/MapServer/WMSServer", layers: "0,1,2", app: "pat", cor: "#8e3b8e", on: true },
+    { id: "pcr", g: "pat", nome: "Áreas com restrições patrimoniais (sensibilidade arqueológica, non aedificandi)", ent: "Património Cultural, I.P.", url: "https://geo.patrimoniocultural.gov.pt/arcgis/services/PatrimonioClassificadoEmViasClassificacao/Atlas_Patrimonio_Servicos/MapServer/WMSServer", layers: "3", app: "arqueologia", cor: "#b07cb0" },
+    { id: "ic", g: "pat", nome: "Imóveis classificados e zonas de proteção (carta SRUP)", ent: "Património Cultural, I.P.", url: DGT("IC"), layers: "Imóveis_Classificados_com_Zona_de_Proteção,Imóveis_Classificados", app: "pat", cor: "#6d2f6d" },
+    { id: "eip", g: "pat", nome: "Edifícios de interesse público", ent: "Entidade que tutela o edifício", url: DGT("EIP"), layers: "Edifícios_de_Interesse_Público", app: "edificios_publicos_valor", cor: "#a05a2c" },
+    { id: "arq", g: "pat", nome: "Sítios arqueológicos (até 100 m)", ent: "Património Cultural, I.P.", tipo: "ags", url: "https://geo.patrimoniocultural.gov.pt/arcgis/rest/services/PatrimonioArqueologico/Sitios_Arqueologicos/MapServer/0", dist: 100, app: "arqueologia", cor: "#c9a0c9" },
+    { id: "ren", g: "nat", nome: "Reserva Ecológica Nacional (REN)", ent: "CCDR", url: DGT("REN"), layers: "REN_em_Vigor", app: "ren", cor: "#2f7d4a", on: true },
+    { id: "dph", g: "nat", nome: "Domínio público hídrico", ent: "APA, I.P.", url: DGT("DPH"), layers: "Domínio_Público_Hídrico", app: "hidrico", cor: "#2c6fb0", on: true },
+    { id: "cheias", g: "nat", nome: "Zonas adjacentes (ocupação condicionada ou proibida)", ent: "APA, I.P.", url: DGT("DPH"), layers: "Zona_de_Ocupação_Condicionada,Zona_de_Ocupação_Proibida", app: "hidrico", cor: "#4aa3d8" },
+    { id: "inund", g: "nat", nome: "Zonas inundáveis (áreas de risco, cheia de 20 anos)", ent: "APA, I.P.", url: APA("NZ_Diretiva200760CE_ptcont_20"), layers: "NZ.FloodedArea", app: "hidrico", cor: "#5fb4e6" },
+    { id: "poc", g: "nat", nome: "Orla costeira: faixas de salvaguarda (galgamento, erosão)", ent: "APA, I.P.", url: "https://inspire.apambiente.pt/arcgis/services/INSPIRE/NZ_RiskZone_POC/MapServer/WMSServer", layers: "", app: "hidrico", cor: "#1f5f8f" },
+    { id: "aapc", g: "nat", nome: "Albufeiras de águas públicas (zonas de proteção)", ent: "APA, I.P.", url: DGT("AAPC"), layers: "", app: "albufeiras_aguas_publicas", cor: "#3b7fc4" },
+    { id: "casap", g: "nat", nome: "Captações de água para abastecimento (perímetros de proteção)", ent: "APA, I.P. e entidade gestora", url: DGT("CASAP"), layers: "", app: "captacoes_agua_subterranea", cor: "#6fa8dc" },
+    { id: "ap", g: "nat", nome: "Áreas protegidas", ent: "ICNF, I.P.", url: DGT("AP"), layers: "Áreas_Protegidas", app: "natura", cor: "#3d8c6e" },
+    { id: "zpe", g: "nat", nome: "Rede Natura 2000: Zonas de Proteção Especial", ent: "ICNF, I.P.", url: DGT("ZPE"), layers: "Zonas_de_Protecao_Especial_-_ZPE", app: "natura", cor: "#6aa84f" },
+    { id: "zec", g: "nat", nome: "Rede Natura 2000: Zonas Especiais de Conservação", ent: "ICNF, I.P.", url: DGT("ZEC"), layers: "", app: "natura", cor: "#93c47d" },
+    { id: "sic", g: "nat", nome: "Rede Natura 2000: Sítios de Importância Comunitária (ICNF)", ent: "ICNF, I.P.", url: "https://si.icnf.pt/geoserver/INSPIRE/wms", layers: "sic_INSPIREcompliant", app: "natura", cor: "#b6d7a8", json: true },
+    { id: "ran", g: "solo", nome: "Reserva Agrícola Nacional (RAN)", ent: "Entidade Regional da RAN", url: DGT("RAN"), layers: "Reserva_Agricola_Nacional", app: "ran", cor: "#9a8a1a", on: true },
+    { id: "oah", g: "solo", nome: "Aproveitamentos hidroagrícolas (perímetros de rega)", ent: "DGADR e associação de regantes", url: DGT("OAH"), layers: "", app: "aproveitamentos_hidroagricolas", cor: "#c2b13b" },
+    { id: "rf", g: "solo", nome: "Regime florestal (matas nacionais, perímetros florestais)", ent: "ICNF, I.P.", url: "https://si.icnf.pt/wms/refloa_rf", layers: "refloa_rf", app: "regime_florestal", cor: "#5b7f3a", json: true },
+    { id: "eaf", g: "solo", nome: "Espécies protegidas (sobreiro, azinheira, oliveira)", ent: "ICNF, I.P. / DRAP", url: DGT("EAF"), layers: "", app: "sobreiro_azinheira", cor: "#8a9a5b" },
+    { id: "aip", g: "solo", nome: "Árvores de interesse público", ent: "ICNF, I.P.", url: DGT("AIP"), layers: "", app: "arvoredo_interesse_publico", cor: "#38761d" },
+    { id: "cpir", g: "solo", nome: "Perigosidade de incêndio rural alta ou muito alta", ent: "ICNF, I.P. e câmara (CMGIFR)", url: DGT("CPIR"), layers: "Carta_de_Perigosidade_de_Incendio_Rural", classe: /muito\s*alta|\balta\b/i, app: "incendio", cor: "#e06c2f" },
+    { id: "fgc", g: "solo", nome: "Rede primária de faixas de gestão de combustível", ent: "ICNF, I.P.", urls: ["PRAN_RP", "PRAC_RP", "PRALVT_RP", "PRAALT_RP", "PSA_AMP", "PSA_OESTE", "PSA_MT", "PSA_AML", "PSA_TS"].map((c) => DGTX("SGIFR_" + c)), layers: "", app: "incendio", cor: "#cc4125" },
+    { id: "rg", g: "solo", nome: "Recursos geológicos (pedreiras, minas, águas minerais)", ent: "DGEG", url: DGT("RG"), layers: "", app: "", cor: "#7f6000" },
+    { id: "aa", g: "inf", nome: "Servidões aeronáuticas (aeroportos e aeródromos)", ent: "ANAC", url: DGT("AA"), layers: "", app: "aero", cor: "#0b5394", on: true },
+    { id: "go", g: "inf", nome: "Gasodutos e oleodutos", ent: "Operador da rede (REN Gasodutos) e DGEG", url: DGT("GO"), layers: "", app: "gas", cor: "#bf9000" },
+    { id: "tc", g: "inf", nome: "Telecomunicações (feixes hertzianos, centros radioelétricos)", ent: "ANACOM", url: DGT("TC"), layers: "", app: "telecomunicacoes_radioeletricas", cor: "#674ea7" },
+    { id: "mg", g: "inf", nome: "Marcos geodésicos (zona de proteção)", ent: "Direção-Geral do Território", url: DGT("MG"), layers: "", app: "marcos_geodesicos", cor: "#999999" },
+    { id: "dn", g: "def", nome: "Servidões militares", ent: "Ministério da Defesa Nacional", url: DGT("DN"), layers: "Áreas_Abrangidas_pela_Servidão,Zonas_da_Servidão", app: "militar", cor: "#6b6b6b" },
+    { id: "ipe", g: "def", nome: "Instalações com produtos explosivos", ent: "PSP / Defesa Nacional", url: DGT("IPE"), layers: "", app: "militar", cor: "#990000" },
+    { id: "eptm", g: "def", nome: "Estabelecimentos prisionais e tutelares de menores", ent: "DGRSP", url: DGT("EPTM"), layers: "", app: "estabelecimentos_prisionais", cor: "#434343" },
+    { id: "ia", g: "def", nome: "Instalações aduaneiras", ent: "Autoridade Tributária e Aduaneira", url: DGT("IA"), layers: "", app: "instalacoes_aduaneiras", cor: "#783f04" },
+    { id: "aru", g: "urb", nome: "Área de Reabilitação Urbana (ARU)", ent: "Câmara municipal", url: "https://servicos.dgterritorio.pt/SDISNITWMSARU/WMService.aspx", layers: "", app: "aru", cor: "#d5a6bd" },
   ];
+  // Nomes das camadas do PDM municipal → chave da app.
+  const PALAVRAS = [
+    [/aeroport|aeron[aá]ut|aer[oó]dromo|heliport/i, "aero"], [/aqueduto|abastecimento de [aá]gua|adutor|reservat[oó]rio/i, "aqueduto"],
+    [/g[aá]s|gasoduto|oleoduto/i, "gas"], [/tens[aã]o|el[eé]tric|subesta/i, "eletrica"], [/ferrovi|caminho de ferro|rodovi|estrada|itiner[aá]rio|autoestrada|\bEN\b|\bIC\b|\bIP\b/i, "estradas"],
+    [/militar|defesa/i, "militar"], [/portu[aá]ri|jurisdi[cç][aã]o do porto|porto de/i, "porto"], [/cemit[eé]rio/i, "cemiterios"],
+    [/hertzian|radioel[eé]tric|telecomunica/i, "telecomunicacoes_radioeletricas"], [/geod[eé]sic/i, "marcos_geodesicos"],
+    [/hospita|sa[uú]de/i, "estabelecimentos_saude"], [/prisi|prisional|tutelar/i, "estabelecimentos_prisionais"], [/escola|escolar|ensino/i, "edificios_escolares"],
+    [/arvoredo|[aá]rvore/i, "arvoredo_interesse_publico"], [/arqueol/i, "arqueologia"], [/\bREN\b|ecol[oó]gica/i, "ren"], [/\bRAN\b|agr[ií]cola nacional/i, "ran"],
+    [/h[ií]dric|linha[s]? de [aá]gua|margem|leito|cheia|inund/i, "hidrico"], [/florestal/i, "regime_florestal"], [/natura|protegida|\bZEC\b|\bZPE\b|\bSIC\b/i, "natura"],
+    [/inc[eê]ndio|perigosidade|combust[ií]vel/i, "incendio"], [/classificad|monumento|interesse p[uú]blico|zona especial de prote|zona geral de prote|unesco|patrim[oó]nio mundial/i, "pat"],
+  ];
+  const chaveDe = (nome) => (PALAVRAS.find(([re]) => re.test(nome)) || [, ""])[1];
   const $ = (id) => document.getElementById(id);
   const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const norm = (t) => String(t || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
 
   const map = L.map("map", { zoomControl: true }).setView([39.6, -8.0], 7);
   const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(map);
   const sat = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, attribution: "Imagem © Esri" });
   L.control.layers({ "Mapa": osm, "Satélite": sat }, null, { position: "topright" }).addTo(map);
 
-  const wms = {};
-  LAYERS.forEach((l) => {
-    wms[l.id] = L.tileLayer.wms(l.url, { layers: l.layers, format: "image/png", transparent: true, version: "1.3.0", opacity: 0.55, attribution: l.id === "sic" ? "ICNF" : "DGT" });
-    if (l.on) wms[l.id].addTo(map);
-  });
-  $("layers").innerHTML = LAYERS.map((l) => `<label><input type="checkbox" data-l="${l.id}" ${l.on ? "checked" : ""}><span><span class="sw" style="display:inline-block;width:10px;height:10px;background:${l.cor};margin-right:6px;border-radius:2px"></span>${esc(l.nome)}</span></label>`).join("");
-  $("layers").addEventListener("change", (e) => { const id = e.target.dataset.l; if (!id) return; e.target.checked ? wms[id].addTo(map) : map.removeLayer(wms[id]); });
+  // Nomes das camadas: os conhecidos vêm na lista; os outros lêem-se uma vez do GetCapabilities.
+  const capCache = {};
+  function nomesDe(url) {
+    if (!capCache[url]) capCache[url] = (async () => {
+      const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 15000);
+      try {
+        const r = await fetch(url + "?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0", { signal: ctl.signal });
+        const doc = new DOMParser().parseFromString(await r.text(), "text/xml");
+        const camadas = [...doc.getElementsByTagName("Layer")].filter((n) => ![...n.children].some((c) => c.localName === "Layer"));
+        const nomes = camadas.map((n) => [...n.children].find((c) => c.localName === "Name")).filter(Boolean).map((n) => n.textContent.trim());
+        return nomes.join(",");
+      } catch (e) { return ""; } finally { clearTimeout(t); }
+    })();
+    return capCache[url];
+  }
+  const urlsDe = (l) => l.urls || [l.url];
+  async function camadasDe(l, url) { return l.layers || (await nomesDe(url)); }
 
-  let marker = null, local = { morada: "", concelho: "", freguesia: "" }, achados = {}, ger = 0, ultimaQ = "";
+  // Camadas visíveis no mapa (criadas só quando se ligam).
+  const vis = {};
+  async function mostrarCamada(l, on) {
+    if (!vis[l.id]) {
+      if (l.tipo === "ags") { vis[l.id] = L.layerGroup(); }
+      else {
+        const grupos = await Promise.all(urlsDe(l).map(async (u) => { const n = await camadasDe(l, u); return n ? L.tileLayer.wms(u, { layers: n, format: "image/png", transparent: true, version: "1.3.0", opacity: 0.55 }) : null; }));
+        vis[l.id] = L.layerGroup(grupos.filter(Boolean));
+      }
+    }
+    on ? vis[l.id].addTo(map) : map.removeLayer(vis[l.id]);
+  }
+  $("layers").innerHTML = Object.entries(G).map(([g, gn]) => `<details${g === "pat" ? " open" : ""}><summary>${esc(gn)}</summary>` +
+    LAYERS.filter((l) => l.g === g).map((l) => `<label><input type="checkbox" data-l="${l.id}" ${l.on ? "checked" : ""}><span><span class="sw" style="display:inline-block;width:10px;height:10px;background:${l.cor};margin-right:6px;border-radius:2px"></span>${esc(l.nome)}</span></label>`).join("") + `</details>`).join("");
+  $("layers").addEventListener("change", (e) => { const l = LAYERS.find((x) => x.id === e.target.dataset.l); if (l) mostrarCamada(l, e.target.checked); });
+  LAYERS.filter((l) => l.on).forEach((l) => mostrarCamada(l, true));
+
+  let marker = null, local = { morada: "", concelho: "", freguesia: "" }, achados = {}, ger = 0, ultimaQ = "", estado = {}, muni = null;
   const PIN = L.divIcon({ className: "pin", iconSize: [28, 40], iconAnchor: [14, 40],
     html: '<svg viewBox="0 0 28 40" width="28" height="40" aria-hidden="true"><path d="M14 1C7 1 1.5 6.4 1.5 13.3 1.5 22.5 14 39 14 39s12.5-16.5 12.5-25.7C26.5 6.4 21 1 14 1z" fill="#b3261e" stroke="#fff" stroke-width="2"/><circle cx="14" cy="13.5" r="4.6" fill="#fff"/></svg>' });
   // Tira o pin e o resultado (morada apagada ou alterada) e avisa a app.
   function limpar() {
     ger++; ultimaQ = "";
     if (marker) { map.removeLayer(marker); marker = null; }
-    achados = {}; local = { morada: "", concelho: "", freguesia: "" };
+    achados = {}; estado = {}; muni = null; local = { morada: "", concelho: "", freguesia: "" };
     $("where").hidden = true; $("cta").hidden = true;
     $("res").innerHTML = `<p class="note">Ainda não escolheu um local.</p>`;
     if (EMBED) window.parent.postMessage({ tipo: "licenciamento-mapa", dados: { k: [] }, limpo: true }, location.origin);
   }
 
-  // Consulta um serviço WMS no ponto (GetFeatureInfo). Resolve "sim", "nao" ou "erro".
-  async function consultar(l, lat, lng) {
+  async function pedir(url, ms) {
+    const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), ms || 15000);
+    try { const r = await fetch(url, { signal: ctl.signal }); if (!r.ok) throw new Error(r.status); return await r.text(); } finally { clearTimeout(t); }
+  }
+  // Pergunta a um WMS se há algo no ponto (GetFeatureInfo). Devolve "sim", "nao" ou "erro".
+  async function gfi(l, url, lat, lng) {
+    const camadas = await camadasDe(l, url);
+    if (!camadas) return "erro";
     const d = 0.0004;
     const p = new URLSearchParams({
-      SERVICE: "WMS", VERSION: "1.3.0", REQUEST: "GetFeatureInfo", LAYERS: l.layers, QUERY_LAYERS: l.layers, STYLES: "",
+      SERVICE: "WMS", VERSION: "1.3.0", REQUEST: "GetFeatureInfo", LAYERS: camadas, QUERY_LAYERS: camadas, STYLES: "",
       CRS: "EPSG:4326", BBOX: [lat - d, lng - d, lat + d, lng + d].join(","), WIDTH: "101", HEIGHT: "101", I: "50", J: "50",
       INFO_FORMAT: l.json ? "application/json" : "text/xml", FEATURE_COUNT: "5",
     });
+    const txt = await pedir(url + "?" + p.toString());
+    if (l.json) { const j = JSON.parse(txt); return (j.features || []).length ? (l.classe && !l.classe.test(JSON.stringify(j.features)) ? "nao" : "sim") : "nao"; }
+    if (/ServiceException|ExceptionReport/i.test(txt)) return "erro";
+    const doc = new DOMParser().parseFromString(txt, "text/xml");
+    const all = [...doc.getElementsByTagName("*")];
+    const hits = all.filter((n) => /^(featureMember|member|FIELDS|Feature|FeatureInfo|Row)$/i.test(n.localName) || /featureMember$/i.test(n.localName));
+    // Alguns servidores devolvem um contentor vazio quando não há nada no ponto.
+    const temDados = hits.length > 0 && hits.some((n) => n.textContent.trim().length > 0 || n.attributes.length > 0);
+    if (!temDados) return "nao";
+    if (l.classe) { const t = hits.map((n) => n.textContent + " " + [...n.attributes].map((a) => a.value).join(" ")).join(" "); return l.classe.test(t) ? "sim" : "nao"; }
+    return "sim";
+  }
+  // ArcGIS REST: há elementos a menos de "dist" metros do ponto?
+  async function agsConta(base, lat, lng, dist) {
+    const p = new URLSearchParams({ geometry: `${lng},${lat}`, geometryType: "esriGeometryPoint", inSR: "4326", spatialRel: "esriSpatialRelIntersects", returnGeometry: "false", outFields: "*", f: "json" });
+    if (dist) { p.set("distance", dist); p.set("units", "esriSRUnit_Meter"); }
+    const j = JSON.parse(await pedir(base + "/query?" + p.toString()));
+    if (j.error) throw new Error("ags");
+    return j.features || [];
+  }
+  async function consultar(l, lat, lng) {
     try {
-      const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 15000);
-      const r = await fetch(l.url + "?" + p.toString(), { signal: ctl.signal });
-      clearTimeout(t);
-      if (!r.ok) return { s: "erro" };
-      const txt = await r.text();
-      if (l.json) { const j = JSON.parse(txt); return { s: (j.features || []).length ? "sim" : "nao" }; }
-      if (/ServiceException|ExceptionReport/i.test(txt)) return { s: "erro" };
-      const doc = new DOMParser().parseFromString(txt, "text/xml");
-      const all = [...doc.getElementsByTagName("*")];
-      const hits = all.filter((n) => /^(featureMember|member|FIELDS|Feature|FeatureInfo|Row)$/i.test(n.localName) || /featureMember$/i.test(n.localName));
-      // Alguns servidores devolvem um contentor vazio quando não há nada no ponto.
-      const temDados = hits.length > 0 && hits.some((n) => n.textContent.trim().length > 0 || n.attributes.length > 0);
-      return { s: temDados ? "sim" : "nao" };
-    } catch (e) { return { s: "erro" }; }
+      if (l.tipo === "ags") return (await agsConta(l.url, lat, lng, l.dist)).length ? "sim" : "nao";
+      const rs = await Promise.all(urlsDe(l).map((u) => gfi(l, u, lat, lng).catch(() => "erro")));
+      return rs.includes("sim") ? "sim" : rs.every((r) => r === "erro") ? "erro" : "nao";
+    } catch (e) { return "erro"; }
   }
 
-  function renderRes(estado) {
-    $("res").innerHTML = LAYERS.map((l) => {
-      const s = estado[l.id] || "wait";
-      const lab = { wait: "a consultar…", sim: "abrangido", nao: "não abrangido", erro: "ver no mapa" }[s];
-      return `<div class="row"><span class="sw" style="background:${l.cor}"></span><div><b>${esc(l.nome)}</b><span class="d">${s === "sim" ? "Parecer ou autorização: " + esc(l.ent) : s === "erro" ? "O serviço não respondeu. Ative a camada e veja se o ponto está dentro da mancha." : ""}</span></div><span class="tag ${s}">${lab}</span></div>`;
-    }).join("");
+  // Planta de condicionantes do PDM: serviços municipais conhecidos (dados/municipios.json).
+  let MUNI = null;
+  const municipios = () => MUNI || (MUNI = fetch("../dados/municipios.json").then((r) => r.json()).catch(() => ({})));
+  async function consultarMunicipio(concelho, lat, lng) {
+    const todos = await municipios(), reg = /a[cç]ores/i.test(local.regiao || "") ? "acores" : /madeira/i.test(local.regiao || "") ? "madeira" : "";
+    const m = todos[norm(concelho) + "|" + reg] || todos[norm(concelho)];
+    if (!m) return { m: null, hits: [], estado: "sem" };
+    const hits = []; let erro = false, feitos = 0;
+    for (const s of m.servicos || []) {
+      try {
+        if (s.tipo === "ags-query") {
+          const rs = await Promise.all(s.camadas.map((c) => agsConta(s.url + "/" + c.id, lat, lng, c.dist).then((f) => f.length, () => -1)));
+          if (rs.every((n) => n < 0)) throw new Error("ags");
+          s.camadas.forEach((c, i) => { if (rs[i] > 0) hits.push({ nome: c.nome, k: c.k ?? chaveDe(c.nome) }); });
+        } else if (s.tipo === "ags-identify") {
+          const d = 0.003, p = new URLSearchParams({ geometry: `${lng},${lat}`, geometryType: "esriGeometryPoint", sr: "4326", layers: "all", tolerance: "2", mapExtent: [lng - d, lat - d, lng + d, lat + d].join(","), imageDisplay: "600,600,96", returnGeometry: "false", f: "json" });
+          const j = JSON.parse(await pedir(s.url + "/identify?" + p.toString()));
+          if (j.error) throw new Error("ags");
+          [...new Set((j.results || []).map((r) => r.layerName))].forEach((n) => hits.push({ nome: n, k: chaveDe(n) }));
+        } else if (s.tipo === "wms") {
+          const d = 0.0004, p = new URLSearchParams({ SERVICE: "WMS", VERSION: "1.3.0", REQUEST: "GetFeatureInfo", LAYERS: s.layers, QUERY_LAYERS: s.layers, STYLES: "", CRS: "EPSG:4326", BBOX: [lat - d, lng - d, lat + d, lng + d].join(","), WIDTH: "101", HEIGHT: "101", I: "50", J: "50", INFO_FORMAT: "application/json", FEATURE_COUNT: "20" });
+          const j = JSON.parse(await pedir(s.url + "?" + p.toString()));
+          [...new Set((j.features || []).map((f) => (f.id || "").split(".")[0] || s.nome))].forEach((n) => hits.push({ nome: n, k: chaveDe(n) }));
+        }
+        feitos++;
+      } catch (e) { erro = true; }
+    }
+    return { m, hits, estado: (m.servicos || []).length === 0 ? "sem" : feitos === 0 ? "erro" : "ok" };
   }
 
-  async function analisar(lat, lng) {
+  function renderRes() {
+    const linha = (l) => { const s = estado[l.id] || "wait"; const lab = { wait: "a consultar…", sim: "abrangido", nao: "não abrangido", erro: "sem resposta" }[s];
+      return `<div class="row"><span class="sw" style="background:${l.cor}"></span><div><b>${esc(l.nome)}</b><span class="d">${s === "sim" ? "Parecer ou autorização: " + esc(l.ent) : s === "erro" ? "O serviço não respondeu. Ligue a camada no mapa e veja se o ponto fica dentro da mancha." : ""}</span></div><span class="tag ${s}">${lab}</span></div>`; };
+    const sim = LAYERS.filter((l) => estado[l.id] === "sim"), espera = LAYERS.filter((l) => !estado[l.id]);
+    const nao = LAYERS.filter((l) => estado[l.id] === "nao"), erro = LAYERS.filter((l) => estado[l.id] === "erro");
+    let h = `<h3 class="sub">Cartas nacionais</h3>` + (sim.length ? sim.map(linha).join("") : espera.length ? "" : `<p class="note">Nenhuma servidão nacional neste ponto.</p>`) + espera.map(linha).join("");
+    if (erro.length) h += `<details class="grp"><summary>Sem resposta do serviço (${erro.length})</summary>${erro.map(linha).join("")}</details>`;
+    if (nao.length) h += `<details class="grp"><summary>Não abrangido (${nao.length})</summary>${nao.map(linha).join("")}</details>`;
+    h += `<h3 class="sub">Planta de condicionantes do PDM${local.concelho ? " de " + esc(local.concelho) : ""}</h3>`;
+    if (!muni) h += `<p class="note">A consultar a câmara…</p>`;
+    else {
+      const m = muni.m;
+      if (muni.estado === "ok") h += muni.hits.length ? muni.hits.map((x) => `<div class="row"><span class="sw" style="background:var(--red)"></span><div><b>${esc(x.nome)}</b></div><span class="tag sim">abrangido</span></div>`).join("") : `<p class="note">O serviço da câmara não mostra condicionantes neste ponto.</p>`;
+      else if (muni.estado === "erro") h += `<p class="note">O serviço da câmara não respondeu.</p>`;
+      else h += `<p class="note">${m ? "A câmara não tem um serviço que se possa consultar automaticamente." : "Ainda não temos os dados desta câmara."} Servidões como aeroportos, aquedutos, estradas, linhas elétricas ou cemitérios só aparecem na planta de condicionantes do PDM: confirme lá.</p>`;
+      const links = [m && m.condicionantes && `<a href="${esc(m.condicionantes)}" target="_blank" rel="noopener">Planta de condicionantes</a>`, m && m.geoportal && `<a href="${esc(m.geoportal)}" target="_blank" rel="noopener">Geoportal da câmara</a>`, `<a href="https://snit-mais.dgterritorio.gov.pt/portalsnit/" target="_blank" rel="noopener">PDM no SNIT (DGT)</a>`].filter(Boolean);
+      h += `<p class="links">${links.join(" · ")}</p>`;
+    }
+    $("res").innerHTML = h;
+  }
+
+  async function analisar(lat, lng, concelhoP) {
     const g = ++ger;
     if (marker) marker.setLatLng([lat, lng]); else marker = L.marker([lat, lng], { icon: PIN, keyboard: false }).addTo(map);
-    achados = {};
-    const estado = {}; renderRes(estado);
-    await Promise.all(LAYERS.map(async (l) => { const r = await consultar(l, lat, lng); if (g !== ger) return; estado[l.id] = r.s; if (r.s === "sim" && l.app) achados[l.app] = true; renderRes(estado); }));
+    achados = {}; estado = {}; muni = null; renderRes();
+    const nac = Promise.all(LAYERS.map(async (l) => { const s = await consultar(l, lat, lng); if (g !== ger) return; estado[l.id] = s; if (s === "sim" && l.app) achados[l.app] = true; renderRes(); }));
+    const mun = (async () => { const c = await concelhoP; if (g !== ger) return; const r = await consultarMunicipio(c || local.concelho, lat, lng); if (g !== ger) return; muni = r; r.hits.forEach((x) => { if (x.k) achados[x.k] = true; }); renderRes(); })();
+    await Promise.all([nac, mun]);
     if (g === ger) atualizarCTA();
   }
 
@@ -201,7 +335,8 @@ button, .btn { font: inherit; font-weight: 600; font-size: 0.88rem; border: 1px 
       const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&accept-language=pt&lat=${lat}&lon=${lng}`);
       const j = await r.json(); aplicarMorada(j);
     } catch (e) { local = { morada: "", concelho: "", freguesia: "" }; }
-    mostrarLocal(); atualizarCTA();
+    mostrarLocal();
+    return local.concelho;
   }
   function aplicarMorada(j) {
     const a = j.address || {};
@@ -210,6 +345,7 @@ button, .btn { font: inherit; font-weight: 600; font-size: 0.88rem; border: 1px 
       morada: rua || (j.display_name || "").split(",").slice(0, 2).join(","),
       freguesia: a.suburb || a.city_district || a.quarter || a.village || "",
       concelho: a.municipality || a.city || a.town || a.county || "",
+      regiao: a.state || a.archipelago || "",
     };
   }
 
@@ -227,10 +363,10 @@ button, .btn { font: inherit; font-weight: 600; font-size: 0.88rem; border: 1px 
       ultimaQ = q;
       aplicarMorada(j[0]); mostrarLocal();
       map.setView([lat, lng], 17);
-      analisar(lat, lng);
+      analisar(lat, lng, Promise.resolve(local.concelho));
     } catch (err) { $("res").innerHTML = `<p class="note">A pesquisa de moradas não respondeu. Clique diretamente no mapa.</p>`; }
   });
-  map.on("click", (e) => { analisar(e.latlng.lat, e.latlng.lng); reverse(e.latlng.lat, e.latlng.lng); });
+  map.on("click", (e) => { analisar(e.latlng.lat, e.latlng.lng, reverse(e.latlng.lat, e.latlng.lng)); });
   // Morada vinda da app (?q=...): pesquisa logo ao abrir.
   const q0 = new URLSearchParams(location.search).get("q");
   if (q0) { $("q").value = q0; $("f").requestSubmit(); }

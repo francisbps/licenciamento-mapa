@@ -52,6 +52,11 @@ h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(1.6rem, 3
 .lede { margin: 6px 0 0; color: var(--muted); max-width: 65ch; }
 .grid { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 20px; align-items: start; }
 @media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+details.mais summary, details.regra summary { cursor: pointer; font-weight: 600; padding: 6px 0; }
+details.regra { border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.rg { padding: 6px 0 6px 12px; border-left: 2px solid var(--line); margin: 4px 0; }
+.rg p { margin: 0; }
+ul.regs { margin: 0 0 12px; padding-left: 18px; }
 .mapa iframe { width: 100%; height: 540px; border: 1px solid var(--line); border-radius: 6px; display: block; background: var(--bg); }
 .mapa .mhd { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 8px 16px; margin-bottom: 12px; }
 .mapa .mhd h2 { margin: 0; font: 700 1.15rem/1.2 var(--f-display, inherit); }
@@ -279,6 +284,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
       <div class="tabs" role="tablist" id="tabs">
         <button role="tab" id="tab-docs" aria-selected="true" data-tab="docs">Documentos <span class="count" id="docCount"></span></button>
         <button role="tab" id="tab-entidades" aria-selected="false" data-tab="entidades">Entidades <span class="count" id="entCount"></span></button>
+        <button role="tab" id="tab-camara" aria-selected="false" data-tab="camara">Regras da câmara</button>
         <button role="tab" id="tab-equipa" aria-selected="false" data-tab="equipa">Equipa técnica</button>
         <button role="tab" id="tab-passos" aria-selected="false" data-tab="passos">Passo a passo</button>
         <button role="tab" id="tab-guia" aria-selected="false" data-tab="guia">Guia completo</button>
@@ -331,6 +337,60 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     { k: "porto", l: "Em área de jurisdição portuária", ent: "Administração portuária", av: "Compatibilidade com o uso portuário.", base: "Regime da área de jurisdição portuária", serv: true },
     { k: "scie34", l: "Edifício de 3.ª ou 4.ª categoria de risco de incêndio", ent: "ANEPC", av: "Parecer sobre o projeto de segurança contra incêndio.", base: "DL 220/2008 (segurança contra incêndio em edifícios)", serv: false },
     { k: "turismo", l: "Empreendimento turístico (hotel, aldeamento, turismo rural)", ent: "Turismo de Portugal, I.P.", av: "Parecer sobre a arquitetura e a classificação pretendida.", base: "DL 39/2008 (empreendimentos turísticos)", serv: false },
+    // Restantes servidões e restrições de utilidade pública (catálogo DGT; ficam em "Outras servidões").
+    { k: "albufeiras_aguas_publicas", l: "Albufeiras de águas públicas de serviço público e respetiva zona terrestre de proteção", ent: "APA, I.P. (ARH)", av: "Zona terrestre de proteção até 500 m (até 1000 m em albufeiras de abastecimento) com zona reservada de 100 m onde a edificação é interdita ou muito limitada.", base: "DL 107/2009 (regime de proteção das albufeiras, lagoas e lagos); programas especiais de albufeiras (POAAP)", serv: true, mais: true },
+    { k: "lagoas_lagos", l: "Lagoas e lagos de águas públicas (zona de proteção)", ent: "APA, I.P. (ARH)", av: "Zona terrestre de proteção com regime idêntico às albufeiras.", base: "DL 107/2009", serv: true, mais: true },
+    { k: "captacoes_agua_subterranea", l: "Perímetros de proteção de captações de água subterrânea para abastecimento público", ent: "APA, I.P. (ARH); entidade gestora do abastecimento", av: "Zonas imediata, intermédia e alargada com interdição ou condicionamento de construções, fossas, armazenamento de combustíveis e atividades poluentes.", base: "DL 382/99; Portarias de delimitação; Lei 58/2005 art. 37.º", serv: true, mais: true },
+    { k: "captacoes_agua_superficial", l: "Zonas de proteção de captações de água superficial para consumo humano", ent: "APA, I.P. (ARH)", av: "Restrições a atividades e ocupações que possam afetar a qualidade da água captada.", base: "Lei 58/2005 art. 37.º; DL 107/2009", serv: true, mais: true },
+    { k: "estuarios_poe", l: "Programas de Ordenamento dos Estuários (POE)", ent: "APA, I.P.", av: "Faixa de proteção estuarina (até 500 m) com usos condicionados.", base: "DL 129/2008; RJIGT DL 80/2015", serv: true, mais: true },
+    { k: "obras_hidraulicas_barragens", l: "Barragens e obras hidráulicas – zonas de autossalvamento e servidão", ent: "APA, I.P. (Autoridade de Segurança de Barragens)", av: "Restrições à ocupação nas zonas de autossalvamento a jusante e servidão sobre a área da obra.", base: "DL 21/2018 (Regulamento de Segurança de Barragens); Lei 58/2005", serv: false, mais: true },
+    { k: "aguas_minerais_naturais", l: "Águas minerais naturais e de nascente – perímetros de proteção (recursos hidrominerais)", ent: "DGEG", av: "Zonas imediata, intermédia e alargada com interdição ou autorização prévia de construções, furos e escavações.", base: "Lei 54/2015 (bases dos recursos geológicos); DL 86/90; DL 84/90; DL 30/2021", serv: true, mais: true },
+    { k: "recursos_geotermicos", l: "Recursos geotérmicos – perímetros de proteção", ent: "DGEG", av: "Perímetros de proteção com restrição a escavações e captações.", base: "Lei 54/2015; DL 87/90; DL 30/2021", serv: true, mais: true },
+    { k: "depositos_minerais", l: "Depósitos minerais (minas) – áreas de concessão e de exploração", ent: "DGEG", av: "Condiciona edificação sobre áreas concessionadas e respetivas zonas de defesa.", base: "Lei 54/2015; DL 30/2021", serv: true, mais: true },
+    { k: "areas_cativas_reserva", l: "Áreas cativas e áreas de reserva de recursos geológicos", ent: "DGEG", av: "Áreas onde se interditam usos que inviabilizem o aproveitamento futuro dos recursos.", base: "Lei 54/2015; DL 30/2021", serv: true, mais: true },
+    { k: "pedreiras", l: "Pedreiras (massas minerais) – áreas licenciadas e zonas de defesa", ent: "DGEG / CCDR (entidade licenciadora conforme classe)", av: "Zonas de defesa recíprocas (ex.: 10 m a 50 m de edifícios, estradas, linhas elétricas, cursos de água).", base: "DL 270/2001 (alt. DL 340/2007), anexo II; Lei 54/2015", serv: true, mais: true },
+    { k: "areas_mineiras_abandonadas", l: "Áreas mineiras abandonadas / em recuperação", ent: "EDM – Empresa de Desenvolvimento Mineiro; DGEG", av: "Riscos de subsidência e contaminação podem condicionar a ocupação.", base: "DL 198-A/2001; Lei 54/2015", serv: false, mais: true },
+    { k: "aproveitamentos_hidroagricolas", l: "Obras de aproveitamento hidroagrícola (perímetros de rega)", ent: "DGADR; associação de regantes/entidade gestora", av: "Interdição de construções e utilizações não agrícolas na área beneficiada, salvo parecer favorável; servidões de canais e valas.", base: "DL 269/82 (alt. DL 86/2002, DL 169/2005)", serv: true, mais: true },
+    { k: "regime_florestal", l: "Regime florestal (perímetros florestais, matas nacionais)", ent: "ICNF, I.P.", av: "Condiciona construções e alterações de uso em terrenos submetidos a regime florestal total ou parcial.", base: "Decreto de 24-12-1901; Decreto de 24-12-1903; Lei 33/96", serv: true, mais: true },
+    { k: "sobreiro_azinheira", l: "Povoamentos de sobreiro e azinheira", ent: "ICNF, I.P.", av: "Corte ou arranque proibido sem autorização; conversão de povoamentos só para empreendimentos de imprescindível utilidade pública.", base: "DL 169/2001 (alt. DL 155/2004)", serv: true, mais: true },
+    { k: "azevinho", l: "Azevinho espontâneo", ent: "ICNF, I.P.", av: "Proíbe arranque, corte e transporte.", base: "DL 423/89", serv: false, mais: true },
+    { k: "oliveiras", l: "Proteção do olival (arranque de oliveiras)", ent: "DRAP", av: "Arranque de oliveiras sujeito a autorização prévia.", base: "DL 120/86", serv: true, mais: true },
+    { k: "arvoredo_interesse_publico", l: "Arvoredo de interesse público", ent: "ICNF, I.P.", av: "Zona geral de proteção de 50 m de raio a contar da base onde intervenções exigem autorização.", base: "Lei 53/2012; Portaria 124/2014", serv: true, mais: true },
+    { k: "zonas_vulneraveis_nitratos", l: "Zonas vulneráveis a nitratos de origem agrícola", ent: "DGADR / DRAP", av: "Condiciona explorações agropecuárias, não a edificação em geral.", base: "DL 235/97; Portaria 164/2010", serv: false, mais: true },
+    { k: "geoparques_reservas_biosfera", l: "Geoparques UNESCO e Reservas da Biosfera", ent: "Entidade gestora; ICNF quando sobreposto a AP", av: "Sem restrições próprias; relevante para enquadramento.", base: "Programas UNESCO (sem regime legal próprio de SRUP)", serv: false, mais: true },
+    { k: "patrimonio_mundial", l: "Bens Património Mundial e zonas tampão (ex.: Alto Douro Vinhateiro, centros históricos, Sintra, Côa)", ent: "Património Cultural, I.P.; CCDR-Norte (ADV); estrutura de gestão do bem", av: "Controlo de volumetria, implantação, materiais e impacte paisagístico na área classificada e zona tampão.", base: "Convenção UNESCO 1972; Lei 107/2001 art. 72.º; planos/regulamentos próprios (ex.: PIOT-ADV, RCM 150/2003)", serv: true, mais: true },
+    { k: "arqueologia", l: "Sítios arqueológicos e áreas de sensibilidade/potencial arqueológico", ent: "Património Cultural, I.P. / CCDR", av: "Pode exigir acompanhamento arqueológico, sondagens prévias ou alteração de projeto.", base: "Lei 107/2001; DL 164/2014 (Regulamento de Trabalhos Arqueológicos); regulamentos de PDM", serv: false, mais: true },
+    { k: "parque_arqueologico", l: "Parques arqueológicos (ex.: Vale do Côa) e respetivos planos", ent: "Património Cultural, I.P. / Fundação Côa Parque", av: "Regime de usos fixado no plano do parque arqueológico.", base: "Lei 107/2001 art. 75.º; DL 131/2002", serv: true, mais: true },
+    { k: "edificios_publicos_valor", l: "Edifícios públicos e outras construções de interesse público (zonas de proteção)", ent: "Entidade com tutela do edifício / Património Cultural, I.P.", av: "Zona de proteção fixada caso a caso (afastamentos e alturas).", base: "DL 40388/1955; Lei 2032/1949", serv: true, mais: true },
+    { k: "drenagem_saneamento", l: "Sistemas de drenagem e tratamento de águas residuais (emissários, coletores, ETAR)", ent: "Entidade gestora do sistema", av: "Faixa non aedificandi sobre emissários e zona de proteção de ETAR (frequentemente 50–200 m em PDM).", base: "DL 34021/1944; DL 194/2009", serv: false, mais: true },
+    { k: "centros_electroprodutores", l: "Centros electroprodutores (barragens, centrais, parques eólicos/solares) – servidões", ent: "DGEG; promotor/titular", av: "Servidões de passagem e zonas de proteção às infraestruturas.", base: "DL 15/2022; DL 43335/1960", serv: false, mais: true },
+    { k: "oleodutos", l: "Oleodutos e gasodutos de produtos petrolíferos (ex.: CLC Sines–Aveiras)", ent: "Operador (CLC); DGEG", av: "Faixa de servidão e faixa non aedificandi ao longo da conduta.", base: "DL 152/94; DL 11/94 (aplicável por remissão)", serv: true, mais: true },
+    { k: "armazenagem_combustiveis", l: "Instalações de armazenamento e postos de abastecimento de combustíveis – distâncias de segurança", ent: "Câmara municipal / DGEG / ANEPC", av: "Distâncias de segurança a edifícios e vias.", base: "DL 267/2002; Portaria 1188/2003; Portaria 131/2002", serv: false, mais: true },
+    { k: "estradas_municipais", l: "Estradas e caminhos municipais", ent: "Câmara municipal", av: "Faixa non aedificandi de 6 m (EM) e 4,5 m (CM) ao eixo, alargável por regulamento municipal.", base: "Lei 2110/1961 (Regulamento Geral das Estradas e Caminhos Municipais)", serv: true, mais: true },
+    { k: "metro_ligeiro", l: "Sistemas de metropolitano e metro ligeiro", ent: "Empresa concessionária/operadora (Metro de Lisboa, Metro do Porto, MST)", av: "Zonas de proteção às infraestruturas e restrições a fundações sobre túneis.", base: "Diplomas próprios de cada sistema (ex.: DL 394-A/98 Metro do Porto; DL 192/2008 MST)", serv: true, mais: true },
+    { k: "telecomunicacoes_radioeletricas", l: "Servidões radioelétricas (feixes hertzianos e estações de radiocomunicações)", ent: "ANACOM; entidade titular da estação", av: "Zonas de desobstrução com limitação de alturas ao longo dos feixes e em torno das estações.", base: "DL 597/73; Lei 16/2022 (LCE); decretos regulamentares de servidão", serv: true, mais: true },
+    { k: "radares_meteorologicos", l: "Estações e radares meteorológicos / sismológicos", ent: "IPMA, I.P.; ANACOM", av: "Limitação de alturas e de obstáculos na envolvente.", base: "DL 597/73 (servidões radioelétricas); diplomas próprios IPMA", serv: true, mais: true },
+    { k: "farois_sinais_maritimos", l: "Faróis e outros sinais marítimos", ent: "Direção de Faróis / DGAM (Autoridade Marítima Nacional)", av: "Limitação de alturas e de iluminação que prejudiquem a visibilidade dos sinais.", base: "DL 594/73 – regime de servidões de sinalização marítima", serv: true, mais: true },
+    { k: "marcos_geodesicos", l: "Marcos geodésicos e marcas de nivelamento", ent: "Direção-Geral do Território (DGT)", av: "Zona de proteção de raio mínimo de 15 m e manutenção da visibilidade entre vértices.", base: "DL 143/82", serv: true, mais: true },
+    { k: "estabelecimentos_prisionais", l: "Estabelecimentos prisionais e tutelares de menores – zonas de proteção", ent: "Direção-Geral de Reinserção e Serviços Prisionais (DGRSP)", av: "Zona de proteção onde construções exigem parecer (afastamento e altura).", base: "DL 265/71", serv: true, mais: true },
+    { k: "instalacoes_forcas_seguranca", l: "Instalações das forças e serviços de segurança", ent: "MAI (GNR/PSP)", av: "Restrições pontuais fixadas em diploma próprio.", base: "Decretos de servidão próprios (Lei 2078/1955 por analogia)", serv: false, mais: true },
+    { k: "instalacoes_aduaneiras", l: "Instalações aduaneiras e zona fiscal", ent: "Autoridade Tributária e Aduaneira", av: "Restrições a construções junto a postos e zona fiscal costeira/fronteiriça.", base: "DL 46311/1965; Código Aduaneiro", serv: false, mais: true },
+    { k: "edificios_escolares", l: "Edifícios escolares – zonas de proteção", ent: "Ministério da Educação (DGEstE) / município", av: "Afastamento mínimo de construções (em regra 12 m) e proibição de atividades insalubres ou ruidosas na envolvente.", base: "DL 37575/1949; DL 44220/1962", serv: false, mais: true },
+    { k: "cemiterios", l: "Cemitérios – zona de proteção", ent: "Câmara municipal; autoridade de saúde", av: "Faixa de proteção (em regra 10 m) sem construções e restrições a captações de água na envolvente.", base: "DL 44220/1962; DL 411/98", serv: false, mais: true },
+    { k: "estabelecimentos_saude", l: "Estabelecimentos hospitalares e de saúde – zonas de proteção", ent: "Ministério da Saúde / ULS", av: "Zona de proteção fixada caso a caso; zona sensível para ruído.", base: "DL 40388/1955 (edifícios públicos); normas de ruído (DL 9/2007)", serv: false, mais: true },
+    { k: "seveso", l: "Estabelecimentos com substâncias perigosas (Seveso) – zonas de perigosidade e distâncias de segurança", ent: "APA, I.P. (com ANEPC)", av: "Distâncias de segurança a zonas residenciais, equipamentos e vias; parecer em operações urbanísticas na zona de perigosidade.", base: "DL 150/2015 (Diretiva Seveso III)", serv: true, mais: true },
+    { k: "industria_sir", l: "Estabelecimentos industriais (SIR) – compatibilidade de usos", ent: "Entidade coordenadora (IAPMEI, DRAP, CCDR) / município", av: "Condiciona localização em função do tipo de estabelecimento.", base: "DL 169/2012 (SIR, alt. DL 73/2015)", serv: false, mais: true },
+    { k: "aterros_residuos", l: "Aterros e instalações de gestão de resíduos", ent: "CCDR / APA", av: "Distâncias a habitações fixadas em licença/PDM.", base: "DL 102-D/2020 (RGGR)", serv: false, mais: true },
+    { k: "aru", l: "Áreas de Reabilitação Urbana (ARU) / ORU", ent: "Câmara municipal / entidade gestora da ORU", av: "Regime especial de controlo prévio, benefícios fiscais e eventual dispensa de normas.", base: "DL 307/2009 (RJRU, alt. Lei 32/2012)", serv: false, mais: true },
+    { k: "zonamento_acustico", l: "Zonas sensíveis/mistas e zonas de conflito acústico (mapas de ruído)", ent: "Câmara municipal (APA para grandes infraestruturas)", av: "Em zonas de conflito interditam-se novos edifícios habitacionais, escolares ou hospitalares sem plano de redução.", base: "DL 9/2007 (Regulamento Geral do Ruído)", serv: false, mais: true },
+    { k: "pdm_planos_municipais", l: "Classificação e qualificação do solo em PDM, PU e PP", ent: "Câmara municipal", av: "Define usos, índices, cérceas e alinhamentos admissíveis.", base: "RJIGT DL 80/2015", serv: false, mais: true },
+    { k: "programas_especiais", l: "Programas especiais (áreas protegidas, albufeiras, orla costeira, estuários)", ent: "APA, I.P. / ICNF, I.P.", av: "Normas de salvaguarda vertidas nos PDM.", base: "RJIGT DL 80/2015; DL 159/2012; DL 107/2009", serv: true, mais: true },
+    { k: "saude_publica", l: "Estabelecimentos com requisitos sanitários (restauração, saúde, alojamento, piscinas)", ent: "Autoridade de saúde (ULS/ARS)", av: "Parecer sanitário em certas utilizações.", base: "DL 555/99 art. 13.º; legislação setorial", serv: false, mais: true },
+    { k: "estabelecimentos_comerciais", l: "Grandes estabelecimentos/conjuntos comerciais", ent: "DGAE / CCDR (comissão de autorização comercial)", av: "Autorização de instalação para áreas acima dos limiares legais.", base: "DL 10/2015 (RJACSR)", serv: true, mais: true },
+    { k: "avaliacao_impacte_ambiental", l: "Projetos sujeitos a Avaliação de Impacte Ambiental (AIA) / AincA", ent: "Autoridade de AIA (APA ou CCDR)", av: "DIA favorável ou condicionada é requisito prévio do licenciamento.", base: "DL 151-B/2013 (alt. DL 152-B/2017, DL 11/2023)", serv: true, mais: true },
+    { k: "ambito_estrategico_regional", l: "Programas Regionais de Ordenamento do Território (PROT) / PROF florestais", ent: "CCDR / ICNF", av: "Orientações transpostas para os PDM (ex.: corredores ecológicos, espaços florestais sensíveis).", base: "RJIGT DL 80/2015; DL 16/2009 (PROF)", serv: false, mais: true },
+    { k: "ra_acores_regimes", l: "Açores – regimes regionais equivalentes (RAN, REN/áreas de risco, Parques Naturais de Ilha, POOC, POBH lagoas)", ent: "Direções Regionais (Agricultura, Ambiente, Ordenamento do Território) do Governo Regional dos Açores", av: "Regimes próprios; a REN continental não se aplica (existe 'reserva ecológica' em planos especiais).", base: "DLR 32/2012/A (RAN); DLR 15/2007/A (Rede Regional de Áreas Protegidas); DLR 19/2010/A (Rede Natura); RJIGT regional DLR 35/2012/A", serv: true, mais: true },
+    { k: "ra_madeira_regimes", l: "Madeira – regimes regionais equivalentes (RAN, REN regional, Parque Natural da Madeira, POOC)", ent: "Secretarias Regionais (Agricultura, Ambiente) do Governo Regional da Madeira; IFCN, IP-RAM", av: "Regimes próprios aplicados por diplomas regionais.", base: "Diploma regional da RAN (a confirmar); DLR 43/2008/M (RJIGT regional); DLR 14/82/M (Parque Natural da Madeira)", serv: true, mais: true },
     { k: "ns", l: "Ainda não sei: falta ver a planta de condicionantes", serv: false },
   ];
 
@@ -378,7 +438,11 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   function renderCond() {
     const c = effCond(state), d = detectar(state).cond, off = state.condOff || {};
     const ord = [...COND].sort((a, b) => (d[b.k] ? 1 : 0) - (d[a.k] ? 1 : 0));
-    $("condBox").innerHTML = ord.map((x) => `<label><input type="checkbox" name="cond" value="${x.k}" ${c[x.k] ? "checked" : ""}>${x.l}${d[x.k] ? ` <span class="tag ${off[x.k] ? "" : "ok"}">${off[x.k] ? "detetado, desmarcado" : "detetado: " + esc(d[x.k])}</span>` : ""}</label>`).join("");
+    const item = (x) => `<label><input type="checkbox" name="cond" value="${x.k}" ${c[x.k] ? "checked" : ""}>${esc(x.l)}${d[x.k] ? ` <span class="tag ${off[x.k] ? "" : "ok"}">${off[x.k] ? "detetado, desmarcado" : "detetado: " + esc(d[x.k])}</span>` : ""}</label>`;
+    const outras = ord.filter((x) => x.mais), nOn = outras.filter((x) => c[x.k]).length;
+    $("condBox").innerHTML = ord.filter((x) => !x.mais && x.k !== "ns").map(item).join("") +
+      `<details class="mais"${nOn ? " open" : ""}><summary>Outras servidões e restrições (${outras.length}${nOn ? ", " + nOn + " assinaladas" : ""})</summary><div style="display:grid;gap:6px;margin-top:6px">${outras.map(item).join("")}</div></details>` +
+      ord.filter((x) => x.k === "ns").map(item).join("");
     const dt = detectar(state), qc = (state.q || {}).classificado;
     const hint = $("patHint");
     if (hint) {
@@ -852,6 +916,32 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     COND.forEach((x) => { if (c[x.k] && x.ent) out.push({ k: x.k, ent: x.ent, porque: x.l, av: x.av, base: x.base, vinc: x.serv }); });
     return out;
   }
+  // Regras e plantas de cada câmara (dados/regras.json e dados/municipios.json, recolhidos dos regulamentos publicados).
+  const TEMA_NOME = { caixilharia: "Caixilharia (janelas e portas)", avac: "Ar condicionado, condutas, antenas e outros equipamentos", solar: "Painéis solares e fotovoltaicos", cores: "Cores e revestimentos da fachada", coberturas: "Coberturas e telhados", estores: "Estores, portadas e grades", varandas: "Varandas e marquises", toldos: "Toldos", estendais: "Estendais", publicidade: "Publicidade e reclamos", muros: "Muros e vedações", demolicoes: "Demolições", estacionamento: "Estacionamento", taxas: "Taxas, cedências e compensações", outros: "Outras regras" };
+  let DADOS = null;
+  function carregarDados() {
+    if (DADOS) return;
+    DADOS = { pronto: false };
+    Promise.all(["dados/municipios.json", "dados/regras.json"].map((u) => fetch(u).then((r) => r.ok ? r.json() : {})))
+      .then(([m, g]) => { DADOS = { pronto: true, muni: m, regras: g }; if (tab === "camara") render(); })
+      .catch(() => { DADOS = { pronto: true, muni: {}, regras: {} }; if (tab === "camara") render(); });
+  }
+  function renderCamara() {
+    carregarDados();
+    const conc = (state.concelho || "").trim();
+    if (!conc) return `<p class="note">Indique o concelho no questionário (secção 4) para ver as regras da câmara.</p>`;
+    if (!DADOS.pronto) return `<p class="note">A carregar…</p>`;
+    const k = norm(conc), m = DADOS.muni[k], g = DADOS.regras[k];
+    const links = [m && m.condicionantes && `<a href="${esc(m.condicionantes)}" target="_blank" rel="noopener">Planta de condicionantes do PDM</a>`, m && m.geoportal && `<a href="${esc(m.geoportal)}" target="_blank" rel="noopener">Geoportal da câmara</a>`, `<a href="https://snit-mais.dgterritorio.gov.pt/portalsnit/" target="_blank" rel="noopener">PDM no SNIT (DGT)</a>`].filter(Boolean);
+    let h = `<div class="card" style="margin-bottom:14px"><div class="hd"><b>Câmara Municipal de ${esc(m ? m.nome : conc)}</b>${m && m.pdm ? `<span class="note">${esc(m.pdm)}</span>` : ""}</div><p class="note">${links.join(" · ")}</p></div>`;
+    if (!g) return h + `<p class="note">Ainda não recolhemos as regras do regulamento municipal deste concelho. Antes do projeto, confirme no Regulamento Municipal de Urbanização e Edificação e, se o imóvel estiver num centro histórico, no respetivo plano ou regulamento: caixilharia (material e cor), ar condicionado e outros equipamentos na fachada, painéis solares, cores e revestimentos, coberturas, estores, marquises e estendais, muros, estacionamento e taxas.</p>`;
+    if (g.regulamentos.length) h += `<p class="sec" style="margin:0 0 6px">Regulamentos</p><ul class="regs">${g.regulamentos.map((r) => `<li>${r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.nome)}</a>` : esc(r.nome)}${r.ref ? ` <span class="note">(${esc(r.ref)})</span>` : ""}</li>`).join("")}</ul>`;
+    const temas = Object.keys(TEMA_NOME).filter((t) => g.regras.some((r) => r.tema === t));
+    h += temas.length ? temas.map((t) => `<details class="regra" open><summary>${esc(TEMA_NOME[t])}</summary>${g.regras.filter((r) => r.tema === t).map((r) => `<div class="rg"><p>${esc(r.regra)}</p><p class="note">${[r.zona && "Onde: " + esc(r.zona), r.artigo && (r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.artigo)}</a>` : esc(r.artigo))].filter(Boolean).join(" · ")}</p></div>`).join("")}</details>`).join("")
+      : `<p class="note">Temos os regulamentos, mas ainda não extraímos as regras: consulte-os nos links acima.</p>`;
+    return h + `<p class="note" style="margin-top:12px">Regras lidas nos regulamentos publicados. Confirme sempre a versão em vigor e a zona do imóvel; a câmara pode ter alterado o regulamento.</p>`;
+  }
+
   function renderEntidades(r) {
     const E = entidades(state, r), ext = E.filter((e) => e.k !== "camara");
     const isento = r.p === "isento" || r.p === "isentoTermo";
@@ -1177,6 +1267,8 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
       panel.querySelectorAll("details.gd").forEach((d) => d.addEventListener("toggle", () => { guiaAbertos[d.dataset.g] = d.open; }));
     } else if (tab === "entidades") {
       panel.innerHTML = renderEntidades(r);
+    } else if (tab === "camara") {
+      panel.innerHTML = renderCamara();
     } else if (tab === "equipa") {
       panel.innerHTML = renderEquipa(r);
     } else if (tab === "mercado") {
