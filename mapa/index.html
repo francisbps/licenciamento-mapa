@@ -281,7 +281,7 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
           if (rs.every((n) => n < 0)) throw new Error("ags");
           s.camadas.forEach((c, i) => { if (rs[i] > 0) hits.push({ nome: c.nome, k: c.k ?? chaveDe(c.nome) }); });
         } else if (s.tipo === "ags-identify") {
-          const d = 0.003, p = new URLSearchParams({ geometry: `${lng},${lat}`, geometryType: "esriGeometryPoint", sr: "4326", layers: "all", tolerance: "2", mapExtent: [lng - d, lat - d, lng + d, lat + d].join(","), imageDisplay: "600,600,96", returnGeometry: "false", f: "json" });
+          const d = 0.003, p = new URLSearchParams({ geometry: `${lng},${lat}`, geometryType: "esriGeometryPoint", sr: "4326", layers: s.ids ? "all:" + s.ids : "all", tolerance: "2", mapExtent: [lng - d, lat - d, lng + d, lat + d].join(","), imageDisplay: "600,600,96", returnGeometry: "false", f: "json" });
           const j = JSON.parse(await pedir(s.url + "/identify?" + p.toString()));
           if (j.error) throw new Error("ags");
           [...new Set((j.results || []).map((r) => r.layerName))].forEach((n) => hits.push({ nome: n, k: chaveDe(n) }));
