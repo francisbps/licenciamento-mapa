@@ -166,7 +166,7 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
   L.control.layers({ "Mapa": osm, "Satélite": sat }, null, { position: "topright" }).addTo(map);
 
   // Muitos serviços oficiais não deixam o browser ler as respostas (CORS): o pedir() passa então pelo intermediário.
-  const PROXY = "";
+  const PROXY = "https://iybqipmtpthdovykgoyl.supabase.co/functions/v1/mapa-proxy";
   const viaProxy = {};
   // Nomes das camadas: os conhecidos vêm na lista; os outros lêem-se uma vez do GetCapabilities.
   const capCache = {};
