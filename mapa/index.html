@@ -142,7 +142,7 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     { id: "ipe", g: "def", nome: "Instalações com produtos explosivos", ent: "PSP / Defesa Nacional", url: DGT("IPE"), layers: "Zona_de_Proteção_a_Fábricas,Zona_de_Proteção_a_Oficinas,Zona_de_Protecão_a_Paióis", app: "militar", cor: "#990000" },
     { id: "eptm", g: "def", nome: "Estabelecimentos prisionais e tutelares de menores", ent: "DGRSP", url: DGT("EPTM"), layers: "Edifícios_Prisionais_-_Zona_de_Proteção", app: "estabelecimentos_prisionais", cor: "#434343" },
     { id: "ia", g: "def", nome: "Instalações aduaneiras", ent: "Autoridade Tributária e Aduaneira", url: DGT("IA"), layers: "Delegações_e_Controlo_Aduaneiro,Alfândegas", app: "instalacoes_aduaneiras", cor: "#783f04" },
-    { id: "aru", g: "urb", nome: "Área de Reabilitação Urbana (ARU)", ent: "Câmara municipal", url: "https://servicos.dgterritorio.pt/SDISNITWMSARU/WMService.aspx", layers: "", app: "aru", cor: "#d5a6bd" },
+    { id: "aru", g: "urb", nome: "Área de Reabilitação Urbana (ARU)", ent: "Câmara municipal", url: "https://servicos.dgterritorio.pt/SDISNITWMSARU/WMService.aspx", layers: "ARU", app: "aru", cor: "#d5a6bd" },
   ];
   // Nomes das camadas do PDM municipal → chave da app.
   const PALAVRAS = [
@@ -232,7 +232,7 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
       const fim = await vez(host + (/GetCapabilities/i.test(url) ? ":caps" : ""), host.includes("dgterritorio") ? 4 : 8);
       try {
         const u = PROXY + "?url=" + encodeURIComponent(url);
-        const lim = Math.max(ms || 0, 30000);
+        const lim = Math.max(ms || 0, 55000);
         try { return await tentar(u, lim); } catch (e) { if (!/^50[234]$/.test(e.message)) throw e; await new Promise((r) => setTimeout(r, 1500)); return await tentar(u, lim); }
       } finally { fim(); }
     };

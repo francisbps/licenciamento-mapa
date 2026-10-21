@@ -23,9 +23,9 @@ Deno.serve(async (req) => {
     return new Response("Serviço não permitido", { status: 403, headers: h });
   }
   try {
-    // A DGT demora por vezes mais de 30 s a devolver o GetCapabilities.
+    // A DGT demora por vezes mais de 30 s a responder (sobretudo ao GetCapabilities).
     const lento = /getcapabilities/i.test(alvo.search);
-    const r = await fetch(alvo, { signal: AbortSignal.timeout(lento ? 60000 : 25000), headers: {
+    const r = await fetch(alvo, { signal: AbortSignal.timeout(lento ? 60000 : 50000), headers: {
       "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36",
       "Accept": "*/*", "Accept-Language": "pt-PT,pt;q=0.9", "Referer": "https://francisbps.github.io/",
     } });
