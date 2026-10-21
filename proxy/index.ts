@@ -23,8 +23,12 @@ Deno.serve(async (req) => {
     return new Response("Serviço não permitido", { status: 403, headers: h });
   }
   try {
-    const r = await fetch(alvo, { signal: AbortSignal.timeout(20000), headers: { "User-Agent": "licenciamento-mapa (francisbps.github.io)" } });
+    const r = await fetch(alvo, { signal: AbortSignal.timeout(20000), headers: {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36",
+      "Accept": "*/*", "Accept-Language": "pt-PT,pt;q=0.9", "Referer": "https://francisbps.github.io/",
+    } });
     const corpo = await r.arrayBuffer();
+    if (!r.ok) console.log("falhou", r.status, alvo.hostname, new TextDecoder().decode(corpo.slice(0, 300)));
     if (corpo.byteLength > 5_000_000) return new Response("Resposta grande demais", { status: 502, headers: h });
     return new Response(corpo, {
       status: r.status,

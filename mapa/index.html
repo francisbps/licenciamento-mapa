@@ -120,28 +120,28 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     { id: "cheias", g: "nat", nome: "Zonas adjacentes (ocupação condicionada ou proibida)", ent: "APA, I.P.", url: DGT("DPH"), layers: "Zona_de_Ocupação_Condicionada,Zona_de_Ocupação_Proibida", app: "hidrico", cor: "#4aa3d8" },
     { id: "inund", g: "nat", nome: "Zonas inundáveis (áreas de risco, cheia de 20 anos)", ent: "APA, I.P.", url: APA("NZ_Diretiva200760CE_ptcont_20"), layers: "NZ.FloodedArea", app: "hidrico", cor: "#5fb4e6" },
     { id: "poc", g: "nat", nome: "Orla costeira: faixas de salvaguarda (galgamento, erosão)", ent: "APA, I.P.", url: "https://inspire.apambiente.pt/arcgis/services/INSPIRE/NZ_RiskZone_POC/MapServer/WMSServer", layers: "", app: "hidrico", cor: "#1f5f8f" },
-    { id: "aapc", g: "nat", nome: "Albufeiras de águas públicas (zonas de proteção)", ent: "APA, I.P.", url: DGT("AAPC"), layers: "", app: "albufeiras_aguas_publicas", cor: "#3b7fc4" },
-    { id: "casap", g: "nat", nome: "Captações de água para abastecimento (perímetros de proteção)", ent: "APA, I.P. e entidade gestora", url: DGT("CASAP"), layers: "", app: "captacoes_agua_subterranea", cor: "#6fa8dc" },
+    { id: "aapc", g: "nat", nome: "Albufeiras de águas públicas (zonas de proteção)", ent: "APA, I.P.", url: DGT("AAPC"), layers: "Rios_1ª_Ordem,Albufeiras_de_Utilização_Protegida,Albufeiras_de_Utilização_Livre,Albufeiras_de_Utilização_Condicionada,Zona_Reservada_da_Zona_Terrestre_de_Proteção,Zona_Terrestre_de_Proteção", app: "albufeiras_aguas_publicas", cor: "#3b7fc4" },
+    { id: "casap", g: "nat", nome: "Captações de água para abastecimento (perímetros de proteção)", ent: "APA, I.P. e entidade gestora", url: DGT("CASAP"), layers: "Captacao_de_Aguas_Subterraneas", app: "captacoes_agua_subterranea", cor: "#6fa8dc" },
     { id: "ap", g: "nat", nome: "Áreas protegidas", ent: "ICNF, I.P.", url: DGT("AP"), layers: "Áreas_Protegidas", app: "natura", cor: "#3d8c6e" },
     { id: "zpe", g: "nat", nome: "Rede Natura 2000: Zonas de Proteção Especial", ent: "ICNF, I.P.", url: DGT("ZPE"), layers: "Zonas_de_Protecao_Especial_-_ZPE", app: "natura", cor: "#6aa84f" },
-    { id: "zec", g: "nat", nome: "Rede Natura 2000: Zonas Especiais de Conservação", ent: "ICNF, I.P.", url: DGT("ZEC"), layers: "", app: "natura", cor: "#93c47d" },
+    { id: "zec", g: "nat", nome: "Rede Natura 2000: Zonas Especiais de Conservação", ent: "ICNF, I.P.", url: DGT("ZEC"), layers: "Zonas_Especiais_de_Conservacao_-_ZEC", app: "natura", cor: "#93c47d" },
     { id: "sic", g: "nat", nome: "Rede Natura 2000: Sítios de Importância Comunitária (ICNF)", ent: "ICNF, I.P.", url: "https://si.icnf.pt/geoserver/INSPIRE/wms", layers: "sic_INSPIREcompliant", app: "natura", cor: "#b6d7a8", json: true },
     { id: "ran", g: "solo", nome: "Reserva Agrícola Nacional (RAN)", ent: "Entidade Regional da RAN", url: DGT("RAN"), layers: "Reserva_Agricola_Nacional", app: "ran", cor: "#9a8a1a", on: true },
-    { id: "oah", g: "solo", nome: "Aproveitamentos hidroagrícolas (perímetros de rega)", ent: "DGADR e associação de regantes", url: DGT("OAH"), layers: "", app: "aproveitamentos_hidroagricolas", cor: "#c2b13b" },
+    { id: "oah", g: "solo", nome: "Aproveitamentos hidroagrícolas (perímetros de rega)", ent: "DGADR e associação de regantes", url: DGT("OAH"), layers: "Perímetros_de_Rega", app: "aproveitamentos_hidroagricolas", cor: "#c2b13b" },
     { id: "rf", g: "solo", nome: "Regime florestal (matas nacionais, perímetros florestais)", ent: "ICNF, I.P.", url: "https://si.icnf.pt/wms/refloa_rf", layers: "refloa_rf", app: "regime_florestal", cor: "#5b7f3a", json: true },
-    { id: "eaf", g: "solo", nome: "Espécies protegidas (sobreiro, azinheira, oliveira)", ent: "ICNF, I.P. / DRAP", url: DGT("EAF"), layers: "", app: "sobreiro_azinheira", cor: "#8a9a5b" },
-    { id: "aip", g: "solo", nome: "Árvores de interesse público", ent: "ICNF, I.P.", url: DGT("AIP"), layers: "", app: "arvoredo_interesse_publico", cor: "#38761d" },
+    { id: "eaf", g: "solo", nome: "Espécies protegidas (sobreiro, azinheira, oliveira)", ent: "ICNF, I.P. / DRAP", url: DGT("EAF"), layers: "Sobreiro,Oliveiras,Azinheiras", app: "sobreiro_azinheira", cor: "#8a9a5b" },
+    { id: "aip", g: "solo", nome: "Árvores de interesse público", ent: "ICNF, I.P.", url: DGT("AIP"), layers: "Conjuntos_de_Arvores,Arvores_Isoladas,Arvores_de_Interesse_Publico", app: "arvoredo_interesse_publico", cor: "#38761d" },
     { id: "cpir", g: "solo", nome: "Perigosidade de incêndio rural alta ou muito alta", ent: "ICNF, I.P. e câmara (CMGIFR)", url: DGT("CPIR"), layers: "Carta_de_Perigosidade_de_Incendio_Rural", classe: /muito\s*alta|\balta\b/i, app: "incendio", cor: "#e06c2f" },
     { id: "fgc", g: "solo", nome: "Rede primária de faixas de gestão de combustível", ent: "ICNF, I.P.", urls: ["PRAN_RP", "PRAC_RP", "PRALVT_RP", "PRAALT_RP", "PSA_AMP", "PSA_OESTE", "PSA_MT", "PSA_AML", "PSA_TS"].map((c) => DGTX("SGIFR_" + c)), layers: "", app: "incendio", cor: "#cc4125" },
-    { id: "rg", g: "solo", nome: "Recursos geológicos (pedreiras, minas, águas minerais)", ent: "DGEG", url: DGT("RG"), layers: "", app: "", cor: "#7f6000" },
-    { id: "aa", g: "inf", nome: "Servidões aeronáuticas (aeroportos e aeródromos)", ent: "ANAC", url: DGT("AA"), layers: "", app: "aero", cor: "#0b5394", on: true },
-    { id: "go", g: "inf", nome: "Gasodutos e oleodutos", ent: "Operador da rede (REN Gasodutos) e DGEG", url: DGT("GO"), layers: "", app: "gas", cor: "#bf9000" },
-    { id: "tc", g: "inf", nome: "Telecomunicações (feixes hertzianos, centros radioelétricos)", ent: "ANACOM", url: DGT("TC"), layers: "", app: "telecomunicacoes_radioeletricas", cor: "#674ea7" },
-    { id: "mg", g: "inf", nome: "Marcos geodésicos (zona de proteção)", ent: "Direção-Geral do Território", url: DGT("MG"), layers: "", app: "marcos_geodesicos", cor: "#999999" },
+    { id: "rg", g: "solo", nome: "Recursos geológicos (pedreiras, minas, águas minerais)", ent: "DGEG", url: DGT("RG"), layers: "Pedreiras_-_Jazigo_de_Urânio,Pedreiras_-_Zona_de_Proteção_a_Jazigo_de_Urânio,Pedreiras_-_Concessão_Mineira,Pedreiras_-_Área_Cativa,Pedreiras_-_Área_de_Reserva,Águas_Minerais_Naturais_-_Perímetro_de_Proteção,Águas_Minerais_Naturais_-_Concessão_Hidromineral", app: "", cor: "#7f6000" },
+    { id: "aa", g: "inf", nome: "Servidões aeronáuticas (aeroportos e aeródromos)", ent: "ANAC", url: DGT("AA"), layers: "Aeroportos_de_Navegação_Aérea_-__Zona_de_Ocupação,Aeroportos_e_Aerodromos_-_Zonas_,Radiofarois_-_Zonas", app: "aero", cor: "#0b5394", on: true },
+    { id: "go", g: "inf", nome: "Gasodutos e oleodutos", ent: "Operador da rede (REN Gasodutos) e DGEG", url: DGT("GO"), layers: "Servidão_aos_Ramais,Concessionários", app: "gas", cor: "#bf9000" },
+    { id: "tc", g: "inf", nome: "Telecomunicações (feixes hertzianos, centros radioelétricos)", ent: "ANACOM", url: DGT("TC"), layers: "Radioelétrica_-_Zona_Desobstrução_aos_Feixes,Radioelétrica_-_Zona_de_Libertação_Secundária,Radioelétrica_-_Zona_de_Libertação_Primária", app: "telecomunicacoes_radioeletricas", cor: "#674ea7" },
+    { id: "mg", g: "inf", nome: "Marcos geodésicos (zona de proteção)", ent: "Direção-Geral do Território", url: DGT("MG"), layers: "Zona_de_Segurança_aos_Marcos_Geodésicos", app: "marcos_geodesicos", cor: "#999999" },
     { id: "dn", g: "def", nome: "Servidões militares", ent: "Ministério da Defesa Nacional", url: DGT("DN"), layers: "Áreas_Abrangidas_pela_Servidão,Zonas_da_Servidão", app: "militar", cor: "#6b6b6b" },
-    { id: "ipe", g: "def", nome: "Instalações com produtos explosivos", ent: "PSP / Defesa Nacional", url: DGT("IPE"), layers: "", app: "militar", cor: "#990000" },
-    { id: "eptm", g: "def", nome: "Estabelecimentos prisionais e tutelares de menores", ent: "DGRSP", url: DGT("EPTM"), layers: "", app: "estabelecimentos_prisionais", cor: "#434343" },
-    { id: "ia", g: "def", nome: "Instalações aduaneiras", ent: "Autoridade Tributária e Aduaneira", url: DGT("IA"), layers: "", app: "instalacoes_aduaneiras", cor: "#783f04" },
+    { id: "ipe", g: "def", nome: "Instalações com produtos explosivos", ent: "PSP / Defesa Nacional", url: DGT("IPE"), layers: "Zona_de_Proteção_a_Fábricas,Zona_de_Proteção_a_Oficinas,Zona_de_Protecão_a_Paióis", app: "militar", cor: "#990000" },
+    { id: "eptm", g: "def", nome: "Estabelecimentos prisionais e tutelares de menores", ent: "DGRSP", url: DGT("EPTM"), layers: "Edifícios_Prisionais_-_Zona_de_Proteção", app: "estabelecimentos_prisionais", cor: "#434343" },
+    { id: "ia", g: "def", nome: "Instalações aduaneiras", ent: "Autoridade Tributária e Aduaneira", url: DGT("IA"), layers: "Delegações_e_Controlo_Aduaneiro,Alfândegas", app: "instalacoes_aduaneiras", cor: "#783f04" },
     { id: "aru", g: "urb", nome: "Área de Reabilitação Urbana (ARU)", ent: "Câmara municipal", url: "https://servicos.dgterritorio.pt/SDISNITWMSARU/WMService.aspx", layers: "", app: "aru", cor: "#d5a6bd" },
   ];
   // Nomes das camadas do PDM municipal → chave da app.
@@ -168,6 +168,13 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
   // Muitos serviços oficiais não deixam o browser ler as respostas (CORS): o pedir() passa então pelo intermediário.
   const PROXY = "https://iybqipmtpthdovykgoyl.supabase.co/functions/v1/mapa-proxy";
   const viaProxy = {};
+  ["servicos.dgterritorio.pt", "websig.cm-lisboa.pt", "si.icnf.pt"].forEach((h) => (viaProxy[h] = true));
+  // A DGT deixa de responder (503) com muitos pedidos ao mesmo tempo: no máximo 4 em curso por servidor.
+  const filas = {};
+  function vez(host, max) {
+    const f = filas[host] || (filas[host] = { ativos: 0, espera: [] });
+    return new Promise((ok) => { const ir = () => { f.ativos++; ok(() => { f.ativos--; const n = f.espera.shift(); if (n) n(); }); }; f.ativos < max ? ir() : f.espera.push(ir); });
+  }
   // Nomes das camadas: os conhecidos vêm na lista; os outros lêem-se uma vez do GetCapabilities.
   const capCache = {};
   function nomesDe(url) {
@@ -214,18 +221,25 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     if (EMBED) window.parent.postMessage({ tipo: "licenciamento-mapa", dados: { k: [] }, limpo: true }, location.origin);
   }
 
-  // Tenta-se direto; se o browser bloquear, repete pelo intermediário.
+  // Tenta-se direto; se o browser bloquear, repete pelo intermediário. Os servidores que já se sabe que bloqueiam vão logo por ele.
   async function pedir(url, ms) {
     const host = new URL(url).host;
-    const tentar = async (u) => {
-      const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), ms || 15000);
+    const tentar = async (u, lim) => {
+      const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), lim || ms || 15000);
       try { const r = await fetch(u, { signal: ctl.signal }); if (!r.ok) throw new Error(r.status); return await r.text(); } finally { clearTimeout(t); }
     };
-    if (PROXY && viaProxy[host]) return tentar(PROXY + "?url=" + encodeURIComponent(url));
+    const peloProxy = async () => {
+      const fim = await vez(host, host.includes("dgterritorio") ? 4 : 8);
+      try {
+        const u = PROXY + "?url=" + encodeURIComponent(url);
+        try { return await tentar(u, 25000); } catch (e) { if (!/^50[234]$/.test(e.message)) throw e; await new Promise((r) => setTimeout(r, 1500)); return await tentar(u, 25000); }
+      } finally { fim(); }
+    };
+    if (PROXY && viaProxy[host]) return peloProxy();
     try { return await tentar(url); } catch (e) {
       if (!PROXY || !(e instanceof TypeError)) throw e;
       viaProxy[host] = true;
-      return tentar(PROXY + "?url=" + encodeURIComponent(url));
+      return peloProxy();
     }
   }
   // Pergunta a um WMS se há algo no ponto (GetFeatureInfo). Devolve "sim", "nao" ou "erro".
