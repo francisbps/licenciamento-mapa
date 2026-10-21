@@ -212,7 +212,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
             <label class="f">Concelho<input type="text" id="concelho" name="concelho"></label>
           </div>
           <div><button class="btn primary" type="button" id="btnMapa">Pesquisar no mapa</button></div>
-          <div id="mapaSlot" class="mapa"><iframe id="mapaFrame" title="Mapa de condicionantes"></iframe><p class="note"><a href="mapa/" target="_blank" rel="noopener">Abrir o mapa em página própria</a></p></div>
+          <div id="mapaSlot" class="mapa"><iframe id="mapaFrame" title="Mapa de condicionantes"></iframe></div>
           <div class="condres">
             <p class="sub">Condicionantes do local</p>
             <div id="condBox"></div>
@@ -1396,7 +1396,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
       const end = [state.morada, state.freguesia, state.concelho, "Portugal"].filter(Boolean).join(", ");
       const ativos = COND.filter((x) => effCond(state)[x.k] && VIEW[x.k]);
       const temMorada = !!(state.morada || state.concelho);
-      panel.innerHTML = (MAPA_URL ? `<div class="card" style="margin-bottom:14px"><div class="hd"><b>Mapa de Condicionantes</b><a class="btn primary" style="text-decoration:none" href="${MAPA_URL}${[state.morada, state.freguesia, state.concelho].some(Boolean) ? "?q=" + encodeURIComponent([state.morada, state.freguesia, state.concelho].filter(Boolean).join(", ")) : ""}" target="_blank" rel="noopener">Abrir o mapa</a></div><p class="note">Escreva a morada no mapa: ele consulta as cartas oficiais (REN, RAN, domínio hídrico, património, áreas protegidas, Rede Natura, servidões militares) e traz o resultado de volta para aqui.</p>${state.doMapa ? `<p class="note" style="color:var(--green)">As condicionantes atuais vieram do mapa.</p>` : ""}</div>` : "") + `<div class="card" style="margin-bottom:14px"><div class="hd"><b>Ver o local no mapa</b>${temMorada ? `<a class="btn primary" style="text-decoration:none" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(end)}" target="_blank" rel="noopener">Abrir no Google Maps</a>` : ""}</div>
+      panel.innerHTML = `<div class="card" style="margin-bottom:14px"><div class="hd"><b>Ver o local no mapa</b>${temMorada ? `<a class="btn primary" style="text-decoration:none" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(end)}" target="_blank" rel="noopener">Abrir no Google Maps</a>` : ""}</div>
         <p class="note">${temMorada ? esc(end) : "Indique a morada no questionário."}</p>
         ${ativos.length ? `<p class="note">Confirme no mapa oficial as condicionantes assinaladas:</p><div class="team">${ativos.map((x) => `<div class="m"><div><b>${esc(x.l)}</b><span>${esc(VIEW[x.k].d)}</span></div><a class="tag" href="${VIEW[x.k].u}" target="_blank" rel="noopener">${esc(VIEW[x.k].n)}</a></div>`).join("")}</div>` : ""}
       </div>
