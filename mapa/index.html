@@ -165,18 +165,19 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
   const sat = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, attribution: "Imagem © Esri" });
   L.control.layers({ "Mapa": osm, "Satélite": sat }, null, { position: "topright" }).addTo(map);
 
+  // Muitos serviços oficiais não deixam o browser ler as respostas (CORS): o pedir() passa então pelo intermediário.
+  const PROXY = "";
+  const viaProxy = {};
   // Nomes das camadas: os conhecidos vêm na lista; os outros lêem-se uma vez do GetCapabilities.
   const capCache = {};
   function nomesDe(url) {
     if (!capCache[url]) capCache[url] = (async () => {
-      const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 15000);
       try {
-        const r = await fetch(url + "?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0", { signal: ctl.signal });
-        const doc = new DOMParser().parseFromString(await r.text(), "text/xml");
+        const doc = new DOMParser().parseFromString(await pedir(url + "?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0", 20000), "text/xml");
         const camadas = [...doc.getElementsByTagName("Layer")].filter((n) => ![...n.children].some((c) => c.localName === "Layer"));
         const nomes = camadas.map((n) => [...n.children].find((c) => c.localName === "Name")).filter(Boolean).map((n) => n.textContent.trim());
         return nomes.join(",");
-      } catch (e) { return ""; } finally { clearTimeout(t); }
+      } catch (e) { return ""; }
     })();
     return capCache[url];
   }
@@ -213,9 +214,19 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     if (EMBED) window.parent.postMessage({ tipo: "licenciamento-mapa", dados: { k: [] }, limpo: true }, location.origin);
   }
 
+  // Tenta-se direto; se o browser bloquear, repete pelo intermediário.
   async function pedir(url, ms) {
-    const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), ms || 15000);
-    try { const r = await fetch(url, { signal: ctl.signal }); if (!r.ok) throw new Error(r.status); return await r.text(); } finally { clearTimeout(t); }
+    const host = new URL(url).host;
+    const tentar = async (u) => {
+      const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), ms || 15000);
+      try { const r = await fetch(u, { signal: ctl.signal }); if (!r.ok) throw new Error(r.status); return await r.text(); } finally { clearTimeout(t); }
+    };
+    if (PROXY && viaProxy[host]) return tentar(PROXY + "?url=" + encodeURIComponent(url));
+    try { return await tentar(url); } catch (e) {
+      if (!PROXY || !(e instanceof TypeError)) throw e;
+      viaProxy[host] = true;
+      return tentar(PROXY + "?url=" + encodeURIComponent(url));
+    }
   }
   // Pergunta a um WMS se há algo no ponto (GetFeatureInfo). Devolve "sim", "nao" ou "erro".
   async function gfi(l, url, lat, lng) {
