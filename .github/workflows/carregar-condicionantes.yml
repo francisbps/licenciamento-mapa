@@ -1,0 +1,25 @@
+name: Carregar condicionantes
+
+on:
+  schedule:
+    - cron: "0 3 * * 1"   # segundas-feiras às 3h (UTC)
+  workflow_dispatch:
+    inputs:
+      fontes:
+        description: "Fontes a carregar, separadas por espaço (vazio = todas)"
+        required: false
+
+jobs:
+  carregar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install "psycopg[binary]==3.2.3" requests==2.32.3
+      - run: python carregar/carregar.py $FONTES
+        env:
+          FONTES: ${{ github.event.inputs.fontes }}
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
