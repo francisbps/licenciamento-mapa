@@ -1,0 +1,25 @@
+{
+  "lisboa": {
+    "nome": "Lisboa",
+    "dico": "1106",
+    "camara": true,
+    "nacionais": [
+      {"fonte": "DGT_REN",  "codigo": "REN",  "app": "ren",                            "entidade": "CCDR LVT"},
+      {"fonte": "DGT_DPH",  "codigo": "DPH",  "app": "hidrico",                        "entidade": "APA, I.P."},
+      {"fonte": "DGT_IC",   "codigo": "IC",   "app": "pat",                            "entidade": "Património Cultural, I.P."},
+      {"fonte": "DGT_EIP",  "codigo": "EIP",  "app": "edificios_publicos_valor",       "entidade": "Entidade que tutela o edifício"},
+      {"fonte": "DGT_AA",   "codigo": "AA",   "app": "aero",                           "entidade": "ANAC"},
+      {"fonte": "DGT_GO",   "codigo": "GO",   "app": "gas",                            "entidade": "REN Gasodutos e DGEG"},
+      {"fonte": "DGT_TC",   "codigo": "TC",   "app": "telecomunicacoes_radioeletricas","entidade": "ANACOM"},
+      {"fonte": "DGT_MG",   "codigo": "MG",   "app": "marcos_geodesicos",              "entidade": "Direção-Geral do Território"},
+      {"fonte": "DGT_DN",   "codigo": "DN",   "app": "militar",                        "entidade": "Ministério da Defesa Nacional"},
+      {"fonte": "DGT_IPE",  "codigo": "IPE",  "app": "militar",                        "entidade": "PSP / Defesa Nacional"},
+      {"fonte": "DGT_EPTM", "codigo": "EPTM", "app": "estabelecimentos_prisionais",    "entidade": "DGRSP"},
+      {"fonte": "DGT_IA",   "codigo": "IA",   "app": "instalacoes_aduaneiras",         "entidade": "Autoridade Tributária e Aduaneira"},
+      {"fonte": "DGT_AIP",  "codigo": "AIP",  "app": "arvoredo_interesse_publico",     "entidade": "ICNF, I.P."},
+      {"fonte": "DGT_AP",   "codigo": "AP",   "app": "natura",                         "entidade": "ICNF, I.P."},
+      {"fonte": "DGT_ZPE",  "codigo": "ZPE",  "app": "natura",                         "entidade": "ICNF, I.P."},
+      {"fonte": "DGT_ZEC",  "codigo": "ZEC",  "app": "natura",                         "entidade": "ICNF, I.P."}
+    ]
+  }
+}
