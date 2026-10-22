@@ -1,29 +1,42 @@
-"""Descarrega as condicionantes dos serviços WFS oficiais e guarda-as no Supabase (PostGIS).
+"""Descarrega as condicionantes de um concelho e guarda-as como ficheiros GeoJSON no próprio site.
 
-Uso: SUPABASE_DB_URL=postgresql://... python carregar/carregar.py [FONTE ...]
-Cada fonte é substituída de uma vez: se o descarregamento falhar, fica a versão anterior.
+Uso: python carregar/carregar.py [concelho ...]       (sem argumentos: todos os de fontes.json)
+
+Para cada concelho junta três origens, todas recortadas pelo limite oficial do concelho (CAOP):
+- cartas nacionais da DGT (serviços WFS SRUP);
+- planta de condicionantes da câmara, quando tem serviço (camadas em dados/municipios.json);
+- ficheiros carregados à mão em dados/condicionantes/manual/<concelho>/ (respostas escritas de entidades).
+Se uma fonte falhar, fica o ficheiro da semana anterior e o erro fica registado no índice.
 """
 import json
-import os
 import sys
 import time
 import xml.etree.ElementTree as ET
+from datetime import datetime, timezone
 from pathlib import Path
 
-import psycopg
 import requests
+from pyproj import Transformer
+from shapely import make_valid
+from shapely.geometry import box, mapping, shape
+from shapely.ops import transform
 
-AQUI = Path(__file__).parent
+RAIZ = Path(__file__).resolve().parent.parent
+DADOS = RAIZ / "dados" / "condicionantes"
 WFS_DGT = "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_{}_PT1/WFService.aspx"
+CAOP = "https://ogcapi.dgterritorio.gov.pt/collections/municipios/items/{}?f=json"
 PAGINA = 1000
 ESPERA = 180  # segundos por pedido: a DGT é lenta
-CAMPOS_NOME = ("nome", "designa", "denomina", "name", "titulo")
+SIMPLIFICAR = 0.000005  # cerca de 0,5 m
+CAMPOS_NOME = ("nome", "designa", "denomina", "name", "titulo", "tipo")
 
 sessao = requests.Session()
 sessao.headers["User-Agent"] = "licenciamento-mapa (github.com/francisbps/licenciamento-mapa)"
+de_pttm = Transformer.from_crs(3763, 4326, always_xy=True).transform
+para_pttm = Transformer.from_crs(4326, 3763, always_xy=True).transform
 
 
-def pedir(url, params, tentativas=3):
+def pedir(url, params=None, tentativas=3):
     for i in range(tentativas):
         try:
             r = sessao.get(url, params=params, timeout=ESPERA)
@@ -35,87 +48,138 @@ def pedir(url, params, tentativas=3):
             time.sleep(10 * (i + 1))
 
 
-def camadas(url):
-    r = pedir(url, {"service": "WFS", "version": "2.0.0", "request": "GetCapabilities"})
-    raiz = ET.fromstring(r.content)
-    return [e.text for e in raiz.iter() if e.tag.endswith("}Name") and e.text and ":" in e.text]
-
-
-def elementos(url, camada):
-    inicio = 0
-    while True:
-        r = pedir(url, {
-            "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
-            "outputFormat": "application/vnd.geo+json", "count": PAGINA, "startIndex": inicio,
-        })
-        lote = r.json().get("features") or []
-        yield from lote
-        if len(lote) < PAGINA:
-            return
-        inicio += PAGINA
-
-
 def nome_de(props):
-    for k, v in props.items():
-        if v and any(c in k.lower() for c in CAMPOS_NOME):
-            return str(v)
+    for campo in CAMPOS_NOME:
+        for k, v in props.items():
+            if v and campo in k.lower():
+                return str(v)
     return None
 
 
-def carregar(con, f):
+def elemento(geom, limite, props, **extra):
+    """Recorta pelo concelho e devolve um elemento GeoJSON, ou None se ficar fora."""
+    g = make_valid(geom).intersection(limite)
+    if g.is_empty:
+        return None
+    g = g.simplify(SIMPLIFICAR, preserve_topology=True)
+    return {"type": "Feature", "geometry": mapping(g),
+            "properties": {**extra, "nome": nome_de(props) or extra.get("camada"), "atributos": props}}
+
+
+def wfs_dgt(f, limite):
     url = WFS_DGT.format(f["codigo"])
-    total = 0
-    with con.transaction():
-        con.execute("delete from condicionantes where fonte = %s", (f["fonte"],))
-        for camada in camadas(url):
-            for el in elementos(url, camada):
-                if not el.get("geometry"):
-                    continue
-                props = el.get("properties") or {}
-                # Os serviços da DGT devolvem PT-TM06 (EPSG:3763); simplifica a 1 m e passa a WGS84.
-                con.execute(
-                    """insert into condicionantes (fonte, camada, app, entidade, nome, atributos, geom)
-                       values (%s, %s, %s, %s, %s, %s,
-                         st_transform(st_simplifypreservetopology(st_makevalid(
-                           st_setsrid(st_geomfromgeojson(%s), 3763)), 1), 4326))""",
-                    (f["fonte"], camada.split(":")[-1].replace("_", " "), f["app"], f["entidade"],
-                     nome_de(props), json.dumps(props, ensure_ascii=False), json.dumps(el["geometry"])),
-                )
-                total += 1
-        if total == 0:
-            raise RuntimeError("serviço sem elementos")
-    return url, total
+    caps = ET.fromstring(pedir(url, {"service": "WFS", "version": "2.0.0", "request": "GetCapabilities"}).content)
+    nomes = [e.text for e in caps.iter() if e.tag.endswith("}Name") and e.text and ":" in e.text]
+    x0, y0, x1, y1 = transform(para_pttm, limite).bounds
+    for camada in nomes:
+        inicio = 0
+        while True:
+            lote = pedir(url, {
+                "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
+                "outputFormat": "application/vnd.geo+json", "count": PAGINA, "startIndex": inicio,
+                "bbox": f"{x0},{y0},{x1},{y1},urn:ogc:def:crs:EPSG::3763",
+            }).json().get("features") or []
+            for el in lote:
+                if el.get("geometry"):
+                    geom = transform(de_pttm, shape(el["geometry"]))  # a DGT responde em PT-TM06
+                    yield elemento(geom, limite, el.get("properties") or {},
+                                   camada=camada.split(":")[-1].replace("_", " "))
+            if not lote or len(lote) < PAGINA:
+                break
+            inicio += len(lote)
+
+
+def ags_camara(servico, camada, limite):
+    url = f"{servico['url']}/{camada['id']}/query"
+    x0, y0, x1, y1 = limite.bounds
+    inicio = 0
+    while True:
+        j = pedir(url, {
+            "where": "1=1", "geometry": f"{x0},{y0},{x1},{y1}", "geometryType": "esriGeometryEnvelope",
+            "inSR": 4326, "spatialRel": "esriSpatialRelIntersects", "outFields": "*", "outSR": 4326,
+            "f": "geojson", "resultOffset": inicio, "resultRecordCount": PAGINA,
+        }).json()
+        if "error" in j:
+            raise RuntimeError(j["error"].get("message", "erro do serviço"))
+        lote = j.get("features") or []
+        for el in lote:
+            if el.get("geometry"):
+                yield elemento(shape(el["geometry"]), limite, el.get("properties") or {}, camada=camada["nome"])
+        # O limite por pedido de cada servidor pode ser menor que PAGINA: segue enquanto houver mais.
+        mais = j.get("exceededTransferLimit") or (j.get("properties") or {}).get("exceededTransferLimit")
+        if not lote or not mais:
+            return
+        inicio += len(lote)
+
+
+def gravar(pasta, fonte, gerador, meta, indice):
+    """Grava só se correr bem; em caso de falha mantém o ficheiro anterior."""
+    t = time.time()
+    try:
+        els = [e for e in gerador if e]
+        for e in els:
+            e["properties"].update(fonte=fonte, app=meta.get("app"), entidade=meta.get("entidade"))
+        (pasta / f"{fonte}.geojson").write_text(
+            json.dumps({"type": "FeatureCollection", "features": els}, ensure_ascii=False, separators=(",", ":")))
+        indice[fonte] = {**meta, "ficheiro": f"{fonte}.geojson", "ok": True, "elementos": len(els),
+                         "atualizado": agora(), "erro": None}
+        print(f"OK    {fonte:28} {len(els):6} elementos  {time.time() - t:5.0f} s")
+    except Exception as e:  # uma fonte em baixo não pára as outras
+        anterior = indice.get(fonte, {})
+        indice[fonte] = {**anterior, **meta, "ok": False, "tentativa": agora(), "erro": str(e)[:300]}
+        print(f"FALHA {fonte:28} {e}")
+
+
+def agora():
+    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def carregar(chave, cfg, municipios):
+    pasta = DADOS / chave
+    pasta.mkdir(parents=True, exist_ok=True)
+    ficheiro_indice = pasta / "indice.json"
+    indice = json.loads(ficheiro_indice.read_text())["fontes"] if ficheiro_indice.exists() else {}
+
+    limite = shape(pedir(CAOP.format(cfg["dico"])).json()["geometry"])
+    folga = limite.buffer(0.002)  # cerca de 200 m, para servidões que entram a partir do concelho vizinho
+    (pasta / "limite.geojson").write_text(json.dumps({"type": "Feature", "geometry": mapping(
+        limite.simplify(0.0001)), "properties": {"nome": cfg["nome"], "dico": cfg["dico"]}}))
+
+    for f in cfg.get("nacionais", []):
+        gravar(pasta, f["fonte"], wfs_dgt(f, folga),
+               {"origem": "DGT (SNIT, SRUP)", "descricao": f["codigo"], "app": f["app"], "entidade": f["entidade"]}, indice)
+
+    if cfg.get("camara"):
+        for s in municipios[chave].get("servicos", []):
+            if s.get("tipo") != "ags-query":
+                continue
+            for c in s["camadas"]:
+                gravar(pasta, f"CM_{c['id']}", ags_camara(s, c, folga),
+                       {"origem": f"Câmara Municipal de {cfg['nome']} (planta de condicionantes)",
+                        "descricao": c["nome"], "app": c.get("k") or None, "entidade": "Câmara municipal"}, indice)
+
+    manual = DADOS / "manual" / chave
+    for fich in sorted(manual.glob("*.geojson")) if manual.exists() else []:
+        j = json.loads(fich.read_text())
+        meta = j.get("metadados", {})
+        gravar(pasta, f"MANUAL_{fich.stem}",
+               (elemento(shape(e["geometry"]), folga, e.get("properties") or {}, camada=meta.get("descricao", fich.stem))
+                for e in j.get("features", []) if e.get("geometry")),
+               {"origem": "Carregado à mão", **meta}, indice)
+
+    ficheiro_indice.write_text(json.dumps({"concelho": cfg["nome"], "gerado": agora(), "fontes": indice},
+                                          ensure_ascii=False, indent=1))
+    tam = sum(p.stat().st_size for p in pasta.glob("*.geojson"))
+    print(f"{cfg['nome']}: {sum(1 for v in indice.values() if v.get('ok'))}/{len(indice)} fontes, {tam / 1e6:.1f} MB")
+    return all(not v.get("ok") for v in indice.values())
 
 
 def main():
-    fontes = json.loads((AQUI / "fontes.json").read_text())
-    if len(sys.argv) > 1:
-        fontes = [f for f in fontes if f["fonte"] in sys.argv[1:]]
-    falhas = 0
-    with psycopg.connect(os.environ["SUPABASE_DB_URL"], autocommit=True) as con:
-        for f in fontes:
-            t = time.time()
-            try:
-                url, n = carregar(con, f)
-                con.execute(
-                    """insert into fontes (fonte, descricao, url, ok, elementos, ultima_tentativa, ultimo_sucesso, erro)
-                       values (%s, %s, %s, true, %s, now(), now(), null)
-                       on conflict (fonte) do update set ok = true, elementos = excluded.elementos,
-                         ultima_tentativa = now(), ultimo_sucesso = now(), erro = null""",
-                    (f["fonte"], f["descricao"], url, n))
-                print(f"OK    {f['fonte']:10} {n:7} elementos  {time.time() - t:5.0f} s")
-            except Exception as e:  # uma fonte em baixo não pára as outras
-                falhas += 1
-                con.execute(
-                    """insert into fontes (fonte, descricao, ok, ultima_tentativa, erro)
-                       values (%s, %s, false, now(), %s)
-                       on conflict (fonte) do update set ok = false, ultima_tentativa = now(), erro = excluded.erro""",
-                    (f["fonte"], f["descricao"], str(e)[:500]))
-                print(f"FALHA {f['fonte']:10} {e}")
-        tam = con.execute("select pg_size_pretty(pg_total_relation_size('condicionantes')), "
-                          "pg_size_pretty(pg_database_size(current_database()))").fetchone()
-        print(f"Espaço: tabela {tam[0]}, base de dados {tam[1]}")
-    sys.exit(1 if falhas == len(fontes) else 0)
+    cfgs = json.loads((RAIZ / "carregar" / "fontes.json").read_text())
+    municipios = json.loads((RAIZ / "dados" / "municipios.json").read_text())
+    escolhidos = sys.argv[1:] or list(cfgs)
+    tudo_falhou = [carregar(c, cfgs[c], municipios) for c in escolhidos]
+    sys.exit(1 if all(tudo_falhou) else 0)
 
 
 if __name__ == "__main__":
