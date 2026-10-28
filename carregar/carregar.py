@@ -26,7 +26,8 @@ DADOS = RAIZ / "dados" / "condicionantes"
 WFS_DGT = "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_{}_PT1/WFService.aspx"
 CAOP = "https://ogcapi.dgterritorio.gov.pt/collections/municipios/items/{}?f=json"
 PAGINA = 1000
-ESPERA = 180  # segundos por pedido: a DGT é lenta
+ESPERA = 90  # segundos por pedido: a DGT é lenta
+TEMPO_FONTE = 600  # uma fonte que passe disto é dada como falhada nesta semana
 SIMPLIFICAR = 0.000005  # cerca de 0,5 m
 CAMPOS_NOME = ("nome", "designa", "denomina", "name", "titulo", "tipo")
 
@@ -36,7 +37,7 @@ de_pttm = Transformer.from_crs(3763, 4326, always_xy=True).transform
 para_pttm = Transformer.from_crs(4326, 3763, always_xy=True).transform
 
 
-def pedir(url, params=None, tentativas=3):
+def pedir(url, params=None, tentativas=2):
     for i in range(tentativas):
         try:
             r = sessao.get(url, params=params, timeout=ESPERA)
@@ -116,7 +117,12 @@ def gravar(pasta, fonte, gerador, meta, indice):
     """Grava só se correr bem; em caso de falha mantém o ficheiro anterior."""
     t = time.time()
     try:
-        els = [e for e in gerador if e]
+        els = []
+        for e in gerador:
+            if time.time() - t > TEMPO_FONTE:
+                raise TimeoutError(f"mais de {TEMPO_FONTE // 60} min sem terminar")
+            if e:
+                els.append(e)
         for e in els:
             e["properties"].update(fonte=fonte, app=meta.get("app"), entidade=meta.get("entidade"))
         (pasta / f"{fonte}.geojson").write_text(
@@ -128,6 +134,13 @@ def gravar(pasta, fonte, gerador, meta, indice):
         anterior = indice.get(fonte, {})
         indice[fonte] = {**anterior, **meta, "ok": False, "tentativa": agora(), "erro": str(e)[:300]}
         print(f"FALHA {fonte:28} {e}")
+    gravar_indice(pasta, indice)
+
+
+def gravar_indice(pasta, indice):
+    # Gravado depois de cada fonte, para não se perder o trabalho se a execução for interrompida.
+    (pasta / "indice.json").write_text(json.dumps(
+        {"concelho": pasta.name, "gerado": agora(), "fontes": indice}, ensure_ascii=False, indent=1))
 
 
 def agora():
@@ -145,10 +158,6 @@ def carregar(chave, cfg, municipios):
     (pasta / "limite.geojson").write_text(json.dumps({"type": "Feature", "geometry": mapping(
         limite.simplify(0.0001)), "properties": {"nome": cfg["nome"], "dico": cfg["dico"]}}))
 
-    for f in cfg.get("nacionais", []):
-        gravar(pasta, f["fonte"], wfs_dgt(f, folga),
-               {"origem": "DGT (SNIT, SRUP)", "descricao": f["codigo"], "app": f["app"], "entidade": f["entidade"]}, indice)
-
     if cfg.get("camara"):
         for s in municipios[chave].get("servicos", []):
             if s.get("tipo") != "ags-query":
@@ -157,6 +166,10 @@ def carregar(chave, cfg, municipios):
                 gravar(pasta, f"CM_{c['id']}", ags_camara(s, c, folga),
                        {"origem": f"Câmara Municipal de {cfg['nome']} (planta de condicionantes)",
                         "descricao": c["nome"], "app": c.get("k") or None, "entidade": "Câmara municipal"}, indice)
+
+    for f in cfg.get("nacionais", []):
+        gravar(pasta, f["fonte"], wfs_dgt(f, folga),
+               {"origem": "DGT (SNIT, SRUP)", "descricao": f["codigo"], "app": f["app"], "entidade": f["entidade"]}, indice)
 
     manual = DADOS / "manual" / chave
     for fich in sorted(manual.glob("*.geojson")) if manual.exists() else []:
@@ -167,8 +180,7 @@ def carregar(chave, cfg, municipios):
                 for e in j.get("features", []) if e.get("geometry")),
                {"origem": "Carregado à mão", **meta}, indice)
 
-    ficheiro_indice.write_text(json.dumps({"concelho": cfg["nome"], "gerado": agora(), "fontes": indice},
-                                          ensure_ascii=False, indent=1))
+    gravar_indice(pasta, indice)
     tam = sum(p.stat().st_size for p in pasta.glob("*.geojson"))
     print(f"{cfg['nome']}: {sum(1 for v in indice.values() if v.get('ok'))}/{len(indice)} fontes, {tam / 1e6:.1f} MB")
     return all(not v.get("ok") for v in indice.values())
