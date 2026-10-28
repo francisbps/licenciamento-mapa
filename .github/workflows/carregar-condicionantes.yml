@@ -1,0 +1,36 @@
+name: Carregar condicionantes
+
+on:
+  schedule:
+    - cron: "0 3 * * 1"   # segundas-feiras às 3h (UTC)
+  workflow_dispatch:
+    inputs:
+      concelhos:
+        description: "Concelhos a carregar, separados por espaço (vazio = todos)"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency: carregar-condicionantes
+
+jobs:
+  carregar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests==2.32.3 shapely==2.0.6 pyproj==3.7.0
+      - run: python carregar/carregar.py $CONCELHOS
+        env:
+          CONCELHOS: ${{ github.event.inputs.concelhos }}
+      - name: Guardar no site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          git add dados/condicionantes
+          git diff --cached --quiet || git commit -m "Condicionantes atualizadas ($(date -u +%F))"
+          git pull --rebase origin "$GITHUB_REF_NAME" && git push
