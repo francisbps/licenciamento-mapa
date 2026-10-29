@@ -26,9 +26,10 @@ RAIZ = Path(__file__).resolve().parent.parent
 DADOS = RAIZ / "dados" / "condicionantes"
 WFS_DGT = "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_{}_PT1/WFService.aspx"
 CAOP = "https://ogcapi.dgterritorio.gov.pt/collections/municipios/items/{}?f=json"
-PAGINA = 1000
-ESPERA = 90  # segundos por pedido: a DGT é lenta
-TEMPO_FONTE = 600  # uma fonte que passe disto é dada como falhada nesta semana
+PAGINA_DGT = 200  # páginas pequenas: a REN e o domínio hídrico esgotavam o tempo com 1000
+LOTE_IDS = 200  # elementos por pedido à câmara (o servidor não pagina)
+ESPERA = 150  # segundos por pedido: a DGT é lenta
+TEMPO_FONTE = 1200  # uma fonte que passe disto é dada como falhada nesta semana
 SIMPLIFICAR = 0.000005  # cerca de 0,5 m
 CAMPOS_NOME = ("nome", "designa", "denomina", "name", "titulo", "tipo")
 
@@ -95,7 +96,7 @@ def wfs_dgt(f, limite):
                 try:
                     lote = json_ou_erro(pedir(url, {
                         "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
-                        "count": PAGINA, "startIndex": inicio, **v})).get("features") or []
+                        "count": PAGINA_DGT, "startIndex": inicio, **v})).get("features") or []
                     variantes.remove(v)
                     variantes.insert(0, v)
                     break
@@ -108,7 +109,7 @@ def wfs_dgt(f, limite):
                     geom = transform(de_pttm, shape(el["geometry"]))  # a DGT responde em PT-TM06
                     yield elemento(geom, limite, el.get("properties") or {},
                                    camada=camada.split(":")[-1].replace("_", " "))
-            if not lote or len(lote) < PAGINA:
+            if not lote or len(lote) < PAGINA_DGT:
                 break
             inicio += len(lote)
 
@@ -132,31 +133,24 @@ def esri_para_shape(g):
 
 
 def ags_camara(servico, camada, limite):
+    """O servidor da Câmara não pagina: pede primeiro os identificadores e depois os elementos em lotes."""
     url = f"{servico['url']}/{camada['id']}/query"
     x0, y0, x1, y1 = limite.bounds
-    inicio, vistos = 0, set()
-    while True:
-        j = json_ou_erro(pedir(url, {
-            "where": "1=1", "geometry": f"{x0},{y0},{x1},{y1}", "geometryType": "esriGeometryEnvelope",
-            "inSR": 4326, "spatialRel": "esriSpatialRelIntersects", "outFields": "*", "outSR": 4326,
-            "f": "json", "resultOffset": inicio, "resultRecordCount": PAGINA,
-        }))
+    zona = {"geometry": f"{x0},{y0},{x1},{y1}", "geometryType": "esriGeometryEnvelope", "inSR": 4326,
+            "spatialRel": "esriSpatialRelIntersects", "f": "json"}
+    j = json_ou_erro(pedir(url, {**zona, "where": "1=1", "returnIdsOnly": "true"}))
+    if "error" in j:
+        raise RuntimeError(j["error"].get("message", "erro do serviço"))
+    ids = sorted(j.get("objectIds") or [])
+    for i in range(0, len(ids), LOTE_IDS):
+        j = json_ou_erro(pedir(url, {"objectIds": ",".join(map(str, ids[i:i + LOTE_IDS])),
+                                     "outFields": "*", "outSR": 4326, "f": "json"}))
         if "error" in j:
             raise RuntimeError(j["error"].get("message", "erro do serviço"))
-        lote = j.get("features") or []
-        novos = 0
-        for el in lote:
-            chave = json.dumps(el.get("attributes"), sort_keys=True)
-            if chave in vistos:  # servidores antigos ignoram resultOffset e repetem a primeira página
-                continue
-            vistos.add(chave)
-            novos += 1
+        for el in j.get("features") or []:
             if el.get("geometry"):
                 yield elemento(esri_para_shape(el["geometry"]), limite, el.get("attributes") or {},
                                camada=camada["nome"])
-        if not novos or not j.get("exceededTransferLimit"):
-            return
-        inicio += len(lote)
 
 
 def gravar(pasta, fonte, gerador, meta, indice):
