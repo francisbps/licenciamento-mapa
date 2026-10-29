@@ -1,0 +1,586 @@
+{
+ "concelho": "lisboa",
+ "gerado": "2026-10-29T11:27:33+00:00",
+ "fontes": {
+  "CM_84": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Servidão aeronáutica do Aeroporto Humberto Delgado",
+   "app": "aero",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:14+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_259": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Zona de proteção dos sistemas de abastecimento de água (Aqueduto das Águas Livres, Tejo, Alviela)",
+   "app": "aqueduto",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:14+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_250": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Infraestruturas de abastecimento de água",
+   "app": "aqueduto",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:14+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_63": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Gasoduto",
+   "app": "gas",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:14+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_64": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Faixa de servidão do gasoduto",
+   "app": "gas",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:14+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_80": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Corredor de linha de alta tensão",
+   "app": "eletrica",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:15+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_81": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Zona de proteção de linha de alta tensão",
+   "app": "eletrica",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:15+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_215": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Subestação elétrica",
+   "app": "eletrica",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:15+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_83": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Área de jurisdição do Porto de Lisboa",
+   "app": "porto",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:15+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_87": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Cemitério",
+   "app": "cemiterios",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:16+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_88": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Zona de proteção de cemitério (non aedificandi 10 m)",
+   "app": "cemiterios",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:18+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_89": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Zona de proteção de cemitério (40 m)",
+   "app": "cemiterios",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:18+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_65": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Domínio hídrico",
+   "app": "hidrico",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:18+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_66": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Domínio hídrico (margens)",
+   "app": "hidrico",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:19+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_67": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Domínio hídrico (leitos)",
+   "app": "hidrico",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:19+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_224": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Zonas ameaçadas pelas cheias",
+   "app": "hidrico",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:19+00:00",
+   "erro": "Invalid or missing input parameters."
+  },
+  "CM_432": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Domínio hídrico",
+   "app": "hidrico",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:19+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_68": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Servidão militar",
+   "app": "militar",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:19+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_78": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Imóvel militar e zona de proteção",
+   "app": "militar",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:19+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_71": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Feixe hertziano",
+   "app": "telecomunicacoes_radioeletricas",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:20+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_72": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Zona de proteção de feixe hertziano",
+   "app": "telecomunicacoes_radioeletricas",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:20+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_76": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Centro radioelétrico",
+   "app": "telecomunicacoes_radioeletricas",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:20+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_77": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Zona de proteção de centro radioelétrico",
+   "app": "telecomunicacoes_radioeletricas",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:20+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_58": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Rede ferroviária",
+   "app": "estradas",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:20+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_70": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Rodovias (servidão rodoviária)",
+   "app": "estradas",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:21+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_110": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "REN",
+   "app": "ren",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:21+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_111": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "REN",
+   "app": "ren",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:21+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_86": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Regime florestal",
+   "app": "regime_florestal",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:21+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_207": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Arvoredo de interesse público",
+   "app": "arvoredo_interesse_publico",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:21+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_208": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Arvoredo de interesse público",
+   "app": "arvoredo_interesse_publico",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:22+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_209": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Arvoredo de interesse público (zona de proteção)",
+   "app": "arvoredo_interesse_publico",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:22+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_210": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Arvoredo de interesse municipal",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:22+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_211": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Arvoredo de interesse municipal (área de proteção)",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:22+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_73": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Vértice geodésico",
+   "app": "marcos_geodesicos",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:22+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_214": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Zona de proteção de vértice geodésico",
+   "app": "marcos_geodesicos",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:22+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_82": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Zona de proteção de hospital",
+   "app": "estabelecimentos_saude",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:23+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_74": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Estabelecimento tutelar de menores",
+   "app": "estabelecimentos_prisionais",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:23+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_75": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Estabelecimento prisional",
+   "app": "estabelecimentos_prisionais",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:23+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_231": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Património Mundial (UNESCO)",
+   "app": "pat",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:23+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_91": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Património classificado",
+   "app": "pat",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:24+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_92": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Imóvel em vias de classificação",
+   "app": "pat",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:24+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_93": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Zona de proteção de imóvel",
+   "app": "pat",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:24+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_94": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Zona especial de proteção",
+   "app": "pat",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:24+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_95": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Restrições do Património Cultural (sensibilidade arqueológica, non aedificandi)",
+   "app": "arqueologia",
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:24+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_253": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Património classificado municipal",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:24+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "CM_228": {
+   "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
+   "descricao": "Imóvel em vias de classificação municipal",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "ok": false,
+   "tentativa": "2026-10-29T11:05:25+00:00",
+   "erro": "Pagination is not supported."
+  },
+  "DGT_REN": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "REN",
+   "app": "ren",
+   "entidade": "CCDR LVT",
+   "ok": false,
+   "tentativa": "2026-10-29T11:08:44+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=90)"
+  },
+  "DGT_DPH": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "DPH",
+   "app": "hidrico",
+   "entidade": "APA, I.P.",
+   "ok": false,
+   "tentativa": "2026-10-29T11:11:56+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=90)"
+  },
+  "DGT_IC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IC",
+   "app": "pat",
+   "entidade": "Património Cultural, I.P.",
+   "ok": false,
+   "tentativa": "2026-10-29T11:15:07+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=90)"
+  },
+  "DGT_EIP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "EIP",
+   "app": "edificios_publicos_valor",
+   "entidade": "Entidade que tutela o edifício",
+   "ok": false,
+   "tentativa": "2026-10-29T11:18:19+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=90)"
+  },
+  "DGT_AA": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AA",
+   "app": "aero",
+   "entidade": "ANAC",
+   "ficheiro": "DGT_AA.geojson",
+   "ok": true,
+   "elementos": 3,
+   "atualizado": "2026-10-29T11:23:50+00:00",
+   "erro": null
+  },
+  "DGT_GO": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "GO",
+   "app": "gas",
+   "entidade": "REN Gasodutos e DGEG",
+   "ficheiro": "DGT_GO.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-10-29T11:24:07+00:00",
+   "erro": null
+  },
+  "DGT_TC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "TC",
+   "app": "telecomunicacoes_radioeletricas",
+   "entidade": "ANACOM",
+   "ficheiro": "DGT_TC.geojson",
+   "ok": true,
+   "elementos": 8,
+   "atualizado": "2026-10-29T11:24:44+00:00",
+   "erro": null
+  },
+  "DGT_MG": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "MG",
+   "app": "marcos_geodesicos",
+   "entidade": "Direção-Geral do Território",
+   "ok": false,
+   "tentativa": "2026-10-29T11:24:59+00:00",
+   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_MG_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_DN": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "DN",
+   "app": "militar",
+   "entidade": "Ministério da Defesa Nacional",
+   "ficheiro": "DGT_DN.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-10-29T11:25:45+00:00",
+   "erro": null
+  },
+  "DGT_IPE": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IPE",
+   "app": "militar",
+   "entidade": "PSP / Defesa Nacional",
+   "ficheiro": "DGT_IPE.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-10-29T11:26:09+00:00",
+   "erro": null
+  },
+  "DGT_EPTM": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "EPTM",
+   "app": "estabelecimentos_prisionais",
+   "entidade": "DGRSP",
+   "ficheiro": "DGT_EPTM.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-10-29T11:26:19+00:00",
+   "erro": null
+  },
+  "DGT_IA": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IA",
+   "app": "instalacoes_aduaneiras",
+   "entidade": "Autoridade Tributária e Aduaneira",
+   "ficheiro": "DGT_IA.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-10-29T11:26:41+00:00",
+   "erro": null
+  },
+  "DGT_AIP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AIP",
+   "app": "arvoredo_interesse_publico",
+   "entidade": "ICNF, I.P.",
+   "ficheiro": "DGT_AIP.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-10-29T11:26:56+00:00",
+   "erro": null
+  },
+  "DGT_AP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AP",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ficheiro": "DGT_AP.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-10-29T11:27:06+00:00",
+   "erro": null
+  },
+  "DGT_ZPE": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "ZPE",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ficheiro": "DGT_ZPE.geojson",
+   "ok": true,
+   "elementos": 1,
+   "atualizado": "2026-10-29T11:27:19+00:00",
+   "erro": null
+  },
+  "DGT_ZEC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "ZEC",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ficheiro": "DGT_ZEC.geojson",
+   "ok": true,
+   "elementos": 1,
+   "atualizado": "2026-10-29T11:27:33+00:00",
+   "erro": null
+  }
+ }
+}
