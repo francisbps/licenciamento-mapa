@@ -18,7 +18,8 @@ from pathlib import Path
 import requests
 from pyproj import Transformer
 from shapely import make_valid
-from shapely.geometry import box, mapping, shape
+from shapely.geometry import (LinearRing, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon,
+                              mapping, shape)
 from shapely.ops import transform
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -67,19 +68,41 @@ def elemento(geom, limite, props, **extra):
             "properties": {**extra, "nome": nome_de(props) or extra.get("camada"), "atributos": props}}
 
 
+def json_ou_erro(r):
+    """Devolve o JSON da resposta; se o serviço respondeu outra coisa, o erro mostra o início da resposta."""
+    try:
+        return r.json()
+    except ValueError:
+        texto = " ".join(r.text.split())[:200]
+        raise RuntimeError(f"resposta não é JSON ({r.headers.get('content-type', '?')}): {texto}") from None
+
+
 def wfs_dgt(f, limite):
-    url = WFS_DGT.format(f["codigo"])
+    url = f.get("url") or WFS_DGT.format(f["codigo"])
     caps = ET.fromstring(pedir(url, {"service": "WFS", "version": "2.0.0", "request": "GetCapabilities"}).content)
     nomes = [e.text for e in caps.iter() if e.tag.endswith("}Name") and e.text and ":" in e.text]
     x0, y0, x1, y1 = transform(para_pttm, limite).bounds
+    # Nem todos os serviços aceitam o mesmo pedido: experimenta variantes e fica com a primeira que der JSON.
+    variantes = [
+        {"outputFormat": "application/vnd.geo+json", "bbox": f"{x0},{y0},{x1},{y1},urn:ogc:def:crs:EPSG::3763"},
+        {"outputFormat": "application/vnd.geo+json", "bbox": f"{x0},{y0},{x1},{y1}"},
+        {"outputFormat": "application/json", "bbox": f"{x0},{y0},{x1},{y1}"},
+    ]
     for camada in nomes:
-        inicio = 0
+        inicio, erro = 0, None
         while True:
-            lote = pedir(url, {
-                "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
-                "outputFormat": "application/vnd.geo+json", "count": PAGINA, "startIndex": inicio,
-                "bbox": f"{x0},{y0},{x1},{y1},urn:ogc:def:crs:EPSG::3763",
-            }).json().get("features") or []
+            for v in list(variantes):
+                try:
+                    lote = json_ou_erro(pedir(url, {
+                        "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
+                        "count": PAGINA, "startIndex": inicio, **v})).get("features") or []
+                    variantes.remove(v)
+                    variantes.insert(0, v)
+                    break
+                except RuntimeError as e:
+                    erro = e
+            else:
+                raise erro
             for el in lote:
                 if el.get("geometry"):
                     geom = transform(de_pttm, shape(el["geometry"]))  # a DGT responde em PT-TM06
@@ -90,25 +113,48 @@ def wfs_dgt(f, limite):
             inicio += len(lote)
 
 
+def esri_para_shape(g):
+    """Converte uma geometria Esri JSON (pontos, linhas ou polígonos) numa geometria shapely."""
+    if "x" in g:
+        return Point(g["x"], g["y"])
+    if "points" in g:
+        return MultiPoint(g["points"])
+    if "paths" in g:
+        return MultiLineString(g["paths"])
+    # Nos polígonos Esri os anéis exteriores andam no sentido dos ponteiros do relógio e os buracos ao contrário.
+    exteriores, buracos = [], []
+    for anel in g.get("rings", []):
+        if len(anel) < 4:
+            continue
+        (buracos if LinearRing(anel).is_ccw else exteriores).append(anel)
+    polis = [Polygon(e, [b for b in buracos if Polygon(e).contains(Point(b[0]))]) for e in exteriores]
+    return MultiPolygon(polis) if len(polis) > 1 else polis[0]
+
+
 def ags_camara(servico, camada, limite):
     url = f"{servico['url']}/{camada['id']}/query"
     x0, y0, x1, y1 = limite.bounds
-    inicio = 0
+    inicio, vistos = 0, set()
     while True:
-        j = pedir(url, {
+        j = json_ou_erro(pedir(url, {
             "where": "1=1", "geometry": f"{x0},{y0},{x1},{y1}", "geometryType": "esriGeometryEnvelope",
             "inSR": 4326, "spatialRel": "esriSpatialRelIntersects", "outFields": "*", "outSR": 4326,
-            "f": "geojson", "resultOffset": inicio, "resultRecordCount": PAGINA,
-        }).json()
+            "f": "json", "resultOffset": inicio, "resultRecordCount": PAGINA,
+        }))
         if "error" in j:
             raise RuntimeError(j["error"].get("message", "erro do serviço"))
         lote = j.get("features") or []
+        novos = 0
         for el in lote:
+            chave = json.dumps(el.get("attributes"), sort_keys=True)
+            if chave in vistos:  # servidores antigos ignoram resultOffset e repetem a primeira página
+                continue
+            vistos.add(chave)
+            novos += 1
             if el.get("geometry"):
-                yield elemento(shape(el["geometry"]), limite, el.get("properties") or {}, camada=camada["nome"])
-        # O limite por pedido de cada servidor pode ser menor que PAGINA: segue enquanto houver mais.
-        mais = j.get("exceededTransferLimit") or (j.get("properties") or {}).get("exceededTransferLimit")
-        if not lote or not mais:
+                yield elemento(esri_para_shape(el["geometry"]), limite, el.get("attributes") or {},
+                               camada=camada["nome"])
+        if not novos or not j.get("exceededTransferLimit"):
             return
         inicio += len(lote)
 
