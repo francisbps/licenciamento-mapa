@@ -18,15 +18,18 @@ from pathlib import Path
 import requests
 from pyproj import Transformer
 from shapely import make_valid
-from shapely.geometry import box, mapping, shape
+from shapely.geometry import (LinearRing, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon,
+                              mapping, shape)
 from shapely.ops import transform
 
 RAIZ = Path(__file__).resolve().parent.parent
 DADOS = RAIZ / "dados" / "condicionantes"
 WFS_DGT = "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_{}_PT1/WFService.aspx"
 CAOP = "https://ogcapi.dgterritorio.gov.pt/collections/municipios/items/{}?f=json"
-PAGINA = 1000
-ESPERA = 180  # segundos por pedido: a DGT é lenta
+PAGINA_DGT = 200  # páginas pequenas: a REN e o domínio hídrico esgotavam o tempo com 1000
+LOTE_IDS = 200  # elementos por pedido à câmara (o servidor não pagina)
+ESPERA = 150  # segundos por pedido: a DGT é lenta
+TEMPO_FONTE = 1200  # uma fonte que passe disto é dada como falhada nesta semana
 SIMPLIFICAR = 0.000005  # cerca de 0,5 m
 CAMPOS_NOME = ("nome", "designa", "denomina", "name", "titulo", "tipo")
 
@@ -36,7 +39,7 @@ de_pttm = Transformer.from_crs(3763, 4326, always_xy=True).transform
 para_pttm = Transformer.from_crs(4326, 3763, always_xy=True).transform
 
 
-def pedir(url, params=None, tentativas=3):
+def pedir(url, params=None, tentativas=2):
     for i in range(tentativas):
         try:
             r = sessao.get(url, params=params, timeout=ESPERA)
@@ -66,57 +69,100 @@ def elemento(geom, limite, props, **extra):
             "properties": {**extra, "nome": nome_de(props) or extra.get("camada"), "atributos": props}}
 
 
+def json_ou_erro(r):
+    """Devolve o JSON da resposta; se o serviço respondeu outra coisa, o erro mostra o início da resposta."""
+    try:
+        return r.json()
+    except ValueError:
+        texto = " ".join(r.text.split())[:200]
+        raise RuntimeError(f"resposta não é JSON ({r.headers.get('content-type', '?')}): {texto}") from None
+
+
 def wfs_dgt(f, limite):
-    url = WFS_DGT.format(f["codigo"])
+    url = f.get("url") or WFS_DGT.format(f["codigo"])
     caps = ET.fromstring(pedir(url, {"service": "WFS", "version": "2.0.0", "request": "GetCapabilities"}).content)
     nomes = [e.text for e in caps.iter() if e.tag.endswith("}Name") and e.text and ":" in e.text]
     x0, y0, x1, y1 = transform(para_pttm, limite).bounds
+    # Nem todos os serviços aceitam o mesmo pedido: experimenta variantes e fica com a primeira que der JSON.
+    variantes = [
+        {"outputFormat": "application/vnd.geo+json", "bbox": f"{x0},{y0},{x1},{y1},urn:ogc:def:crs:EPSG::3763"},
+        {"outputFormat": "application/vnd.geo+json", "bbox": f"{x0},{y0},{x1},{y1}"},
+        {"outputFormat": "application/json", "bbox": f"{x0},{y0},{x1},{y1}"},
+    ]
     for camada in nomes:
-        inicio = 0
+        inicio, erro = 0, None
         while True:
-            lote = pedir(url, {
-                "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
-                "outputFormat": "application/vnd.geo+json", "count": PAGINA, "startIndex": inicio,
-                "bbox": f"{x0},{y0},{x1},{y1},urn:ogc:def:crs:EPSG::3763",
-            }).json().get("features") or []
+            for v in list(variantes):
+                try:
+                    lote = json_ou_erro(pedir(url, {
+                        "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
+                        "count": PAGINA_DGT, "startIndex": inicio, **v})).get("features") or []
+                    variantes.remove(v)
+                    variantes.insert(0, v)
+                    break
+                except RuntimeError as e:
+                    erro = e
+            else:
+                raise erro
             for el in lote:
                 if el.get("geometry"):
                     geom = transform(de_pttm, shape(el["geometry"]))  # a DGT responde em PT-TM06
                     yield elemento(geom, limite, el.get("properties") or {},
                                    camada=camada.split(":")[-1].replace("_", " "))
-            if not lote or len(lote) < PAGINA:
+            if not lote or len(lote) < PAGINA_DGT:
                 break
             inicio += len(lote)
 
 
+def esri_para_shape(g):
+    """Converte uma geometria Esri JSON (pontos, linhas ou polígonos) numa geometria shapely."""
+    if "x" in g:
+        return Point(g["x"], g["y"])
+    if "points" in g:
+        return MultiPoint(g["points"])
+    if "paths" in g:
+        return MultiLineString(g["paths"])
+    # Nos polígonos Esri os anéis exteriores andam no sentido dos ponteiros do relógio e os buracos ao contrário.
+    exteriores, buracos = [], []
+    for anel in g.get("rings", []):
+        if len(anel) < 4:
+            continue
+        (buracos if LinearRing(anel).is_ccw else exteriores).append(anel)
+    polis = [Polygon(e, [b for b in buracos if Polygon(e).contains(Point(b[0]))]) for e in exteriores]
+    return MultiPolygon(polis) if len(polis) > 1 else polis[0]
+
+
 def ags_camara(servico, camada, limite):
+    """O servidor da Câmara não pagina: pede primeiro os identificadores e depois os elementos em lotes."""
     url = f"{servico['url']}/{camada['id']}/query"
     x0, y0, x1, y1 = limite.bounds
-    inicio = 0
-    while True:
-        j = pedir(url, {
-            "where": "1=1", "geometry": f"{x0},{y0},{x1},{y1}", "geometryType": "esriGeometryEnvelope",
-            "inSR": 4326, "spatialRel": "esriSpatialRelIntersects", "outFields": "*", "outSR": 4326,
-            "f": "geojson", "resultOffset": inicio, "resultRecordCount": PAGINA,
-        }).json()
+    zona = {"geometry": f"{x0},{y0},{x1},{y1}", "geometryType": "esriGeometryEnvelope", "inSR": 4326,
+            "spatialRel": "esriSpatialRelIntersects", "f": "json"}
+    j = json_ou_erro(pedir(url, {**zona, "where": "1=1", "returnIdsOnly": "true"}))
+    if "error" in j:
+        raise RuntimeError(j["error"].get("message", "erro do serviço"))
+    ids = sorted(j.get("objectIds") or [])
+    for i in range(0, len(ids), LOTE_IDS):
+        j = json_ou_erro(pedir(url, {"objectIds": ",".join(map(str, ids[i:i + LOTE_IDS])),
+                                     "outFields": "*", "outSR": 4326, "f": "json"}))
         if "error" in j:
             raise RuntimeError(j["error"].get("message", "erro do serviço"))
-        lote = j.get("features") or []
-        for el in lote:
+        for el in j.get("features") or []:
             if el.get("geometry"):
-                yield elemento(shape(el["geometry"]), limite, el.get("properties") or {}, camada=camada["nome"])
-        # O limite por pedido de cada servidor pode ser menor que PAGINA: segue enquanto houver mais.
-        mais = j.get("exceededTransferLimit") or (j.get("properties") or {}).get("exceededTransferLimit")
-        if not lote or not mais:
-            return
-        inicio += len(lote)
+                yield elemento(esri_para_shape(el["geometry"]), limite, el.get("attributes") or {},
+                               camada=camada["nome"])
 
 
 def gravar(pasta, fonte, gerador, meta, indice):
     """Grava só se correr bem; em caso de falha mantém o ficheiro anterior."""
     t = time.time()
     try:
-        els = [e for e in gerador if e]
+        els = []
+        for e in gerador:
+            if time.time() - t > TEMPO_FONTE:
+                raise TimeoutError(f"mais de {TEMPO_FONTE // 60} min sem terminar")
+            if e:
+                els.append(e)
         for e in els:
             e["properties"].update(fonte=fonte, app=meta.get("app"), entidade=meta.get("entidade"))
         (pasta / f"{fonte}.geojson").write_text(
@@ -128,6 +174,13 @@ def gravar(pasta, fonte, gerador, meta, indice):
         anterior = indice.get(fonte, {})
         indice[fonte] = {**anterior, **meta, "ok": False, "tentativa": agora(), "erro": str(e)[:300]}
         print(f"FALHA {fonte:28} {e}")
+    gravar_indice(pasta, indice)
+
+
+def gravar_indice(pasta, indice):
+    # Gravado depois de cada fonte, para não se perder o trabalho se a execução for interrompida.
+    (pasta / "indice.json").write_text(json.dumps(
+        {"concelho": pasta.name, "gerado": agora(), "fontes": indice}, ensure_ascii=False, indent=1))
 
 
 def agora():
@@ -145,10 +198,6 @@ def carregar(chave, cfg, municipios):
     (pasta / "limite.geojson").write_text(json.dumps({"type": "Feature", "geometry": mapping(
         limite.simplify(0.0001)), "properties": {"nome": cfg["nome"], "dico": cfg["dico"]}}))
 
-    for f in cfg.get("nacionais", []):
-        gravar(pasta, f["fonte"], wfs_dgt(f, folga),
-               {"origem": "DGT (SNIT, SRUP)", "descricao": f["codigo"], "app": f["app"], "entidade": f["entidade"]}, indice)
-
     if cfg.get("camara"):
         for s in municipios[chave].get("servicos", []):
             if s.get("tipo") != "ags-query":
@@ -157,6 +206,10 @@ def carregar(chave, cfg, municipios):
                 gravar(pasta, f"CM_{c['id']}", ags_camara(s, c, folga),
                        {"origem": f"Câmara Municipal de {cfg['nome']} (planta de condicionantes)",
                         "descricao": c["nome"], "app": c.get("k") or None, "entidade": "Câmara municipal"}, indice)
+
+    for f in cfg.get("nacionais", []):
+        gravar(pasta, f["fonte"], wfs_dgt(f, folga),
+               {"origem": "DGT (SNIT, SRUP)", "descricao": f["codigo"], "app": f["app"], "entidade": f["entidade"]}, indice)
 
     manual = DADOS / "manual" / chave
     for fich in sorted(manual.glob("*.geojson")) if manual.exists() else []:
@@ -167,8 +220,7 @@ def carregar(chave, cfg, municipios):
                 for e in j.get("features", []) if e.get("geometry")),
                {"origem": "Carregado à mão", **meta}, indice)
 
-    ficheiro_indice.write_text(json.dumps({"concelho": cfg["nome"], "gerado": agora(), "fontes": indice},
-                                          ensure_ascii=False, indent=1))
+    gravar_indice(pasta, indice)
     tam = sum(p.stat().st_size for p in pasta.glob("*.geojson"))
     print(f"{cfg['nome']}: {sum(1 for v in indice.values() if v.get('ok'))}/{len(indice)} fontes, {tam / 1e6:.1f} MB")
     return all(not v.get("ok") for v in indice.values())

@@ -17,17 +17,18 @@ concurrency: carregar-condicionantes
 jobs:
   carregar:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install requests==2.32.3 shapely==2.0.6 pyproj==3.7.0
-      - run: python carregar/carregar.py $CONCELHOS
+      - run: python -u carregar/carregar.py $CONCELHOS
         env:
           CONCELHOS: ${{ github.event.inputs.concelhos }}
       - name: Guardar no site
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
