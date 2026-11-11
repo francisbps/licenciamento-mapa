@@ -1,13 +1,13 @@
 {
  "concelho": "belmonte",
- "gerado": "2026-11-11T17:49:17+00:00",
+ "gerado": "2026-11-11T20:08:42+00:00",
  "fontes": {
   "CM_servico": {
    "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
    "descricao": "https://sig.amcb.pt/geoserver/cm_belmonte/ows",
    "ok": false,
-   "tentativa": "2026-11-11T17:40:02+00:00",
-   "erro": "camada PDM0501_Co_2_m_b não existe no WFS (há: cm_belmonte:0501_AHCB, cm_belmonte:0501_CALM_Leitos, cm_belmonte:0501_CALM_LinhAg, cm_belmonte:0501_CartoGener, cm_belmonte:0501_CurNivel, cm_belmonte:0501_DesdrobFls, cm_belmonte:0501_Edificado, cm_belmonte:0501_HidrDrenag, cm_belmonte:0501_HidrGener, "
+   "tentativa": "2026-11-11T18:27:37+00:00",
+   "erro": "camada PDM0501_Co_2_m_b não existe no WFS (há: 0501_AHCB, 0501_CALM_Leitos, 0501_CALM_LinhAg, 0501_CartoGener, 0501_CurNivel, 0501_DesdrobFls, 0501_Edificado, 0501_HidrDrenag, 0501_HidrGener, 0501_RAN, 0501_REN_TIP_P, 0501_linhas_CARIA_toponimia, 0501_linhas_inguias_toponimia, 0501_n_policia_CARIA_toponimia, 0501_n_policia_inguias_toponimia, 0501_uopg, CAOP2019, Calsssificação e Qualificação do Solo, Captação de água, Concessões Geológicas, Corredor Ecológico, Cursos de água e respetivos leitos e margens, Estação Esgoto, Estação Água, Geositios, Infraestruturas verdes, Jazigos de Urânio, Limite Freguesia 2019, Linha da Beira Baixa, Oleoes_Belmonte2025, Patrimonio Classificado, Património Zona Proteção, Percursos Pedestres, Perigosidade de Incêndio Rural, RNT, Rede Eletrica, Rede Esgoto Baixa, Rede Rodoviária, Rede de pontos de vigia, Rede de pontos de água, Rede de rega primária, Rede de rega secundária, Rede rodoviária existente, Rede Água Baixa, Reserva Agricola Nacional, Servidão Ro"
   },
   "DGT_REN": {
    "origem": "DGT (SNIT, SRUP)",
@@ -15,7 +15,7 @@
    "app": "ren",
    "entidade": "CCDR Centro",
    "ok": false,
-   "tentativa": "2026-11-11T17:46:16+00:00",
+   "tentativa": "2026-11-11T18:33:04+00:00",
    "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
   },
   "DGT_DPH": {
@@ -26,8 +26,39 @@
    "ficheiro": "DGT_DPH.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T17:49:17+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:34:31+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_IC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IC",
+   "app": "pat",
+   "entidade": "Património Cultural, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-11T19:44:02+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_EIP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "EIP",
+   "app": "edificios_publicos_valor",
+   "entidade": "Entidade que tutela o edifício",
+   "ok": false,
+   "tentativa": "2026-11-11T19:49:13+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_AA": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AA",
+   "app": "aero",
+   "entidade": "ANAC",
+   "ficheiro": "DGT_AA.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-11T20:08:42+00:00",
+   "erro": null,
+   "ladrilhos": null
   }
  }
 }
