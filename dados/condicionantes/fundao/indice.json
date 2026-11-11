@@ -1,0 +1,33 @@
+{
+ "concelho": "fundao",
+ "gerado": "2026-11-11T17:57:38+00:00",
+ "fontes": {
+  "CM_servico": {
+   "origem": "Câmara Municipal de Fundão (planta de condicionantes)",
+   "descricao": "https://sig.amcb.pt/geoserver/cm_fundao/ows",
+   "ok": false,
+   "tentativa": "2026-11-11T17:46:57+00:00",
+   "erro": "camada cond_fundao_site não existe no WFS (há: cm_fundao:Espanha, cm_fundao:Habitats Naturais e Semi-Naturais PSRN2000, cm_fundao:OcupSolo_Sophia_V14_Habitats_FOTOVOLT, cm_fundao:Oleoes_fundao2025, cm_fundao:RAN_sem_exclusões_feveriro2023_validada_FOTOVOLT, cm_fundao:REN Fundão, cm_fundao:dormitorio"
+  },
+  "DGT_REN": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "REN",
+   "app": "ren",
+   "entidade": "CCDR Centro",
+   "ok": false,
+   "tentativa": "2026-11-11T17:53:54+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_DPH": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "DPH",
+   "app": "hidrico",
+   "entidade": "APA, I.P.",
+   "ficheiro": "DGT_DPH.geojson",
+   "ok": true,
+   "elementos": 1,
+   "atualizado": "2026-11-11T17:57:38+00:00",
+   "erro": null
+  }
+ }
+}
