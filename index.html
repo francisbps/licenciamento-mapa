@@ -94,6 +94,9 @@ textarea { resize: vertical; min-height: 64px; }
 .seg label { padding: 5px 14px; font-size: 0.85rem; cursor: pointer; border-left: 1px solid var(--line); user-select: none; }
 .seg label:first-of-type { border-left: 0; }
 .seg input:checked + label { background: var(--ink); color: var(--panel); }
+.multi { display: grid; gap: 4px; }
+.multi label { display: flex; gap: 8px; align-items: baseline; font-size: 0.9rem; cursor: pointer; }
+.multi input { accent-color: var(--ink); }
 .seg input:focus-visible + label { outline: 2px solid var(--focus); outline-offset: -2px; }
 .sample { font-size: 0.8rem; color: var(--muted); background: var(--chip-bg); padding: 6px 10px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
 button { font: inherit; cursor: pointer; }
@@ -178,7 +181,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
 <div class="wrap">
   <header class="top">
     <div>
-      <div class="eyebrow">RJUE · DL 555/99 na redação do DL 10/2024 (Simplex Urbanístico)</div>
+      <div class="eyebrow">RJUE · DL 555/99 na redação do DL 108/2026 (em vigor desde 1 de outubro de 2026)</div>
       <h1>Licenciamento de Obras</h1>
       <p class="lede">Diga que obra quer fazer e onde. Fazemos as perguntas que importam para esse caso, identificamos as condicionantes do local e, no fim, mostramos o enquadramento, os documentos, as entidades, os passos e as minutas.</p>
     </div>
@@ -275,7 +278,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     </section>
   </div>
 
-  <p class="foot">Ferramenta de apoio, não é parecer jurídico. A decisão final é da câmara municipal, e os regulamentos municipais (RMUE) podem acrescentar regras, como a definição de obras de escassa relevância ou os elementos a entregar. Base: RJUE na redação do DL 10/2024 e Portaria 71-A/2024 (elementos instrutórios). Confirme sempre a redação em vigor no Diário da República antes de submeter.</p>
+  <p class="foot">Ferramenta de apoio, não é parecer jurídico. A decisão final é da câmara municipal, e os regulamentos municipais (RMUE) podem acrescentar regras, como a definição de obras de escassa relevância ou os elementos a entregar. Base: RJUE na redação do DL 108/2026, com a Declaração de Retificação 29-A/2026 e o DL 155-B/2026, aplicável aos processos iniciados desde 1 de outubro de 2026 e aos que nessa data ainda estavam em saneamento. A portaria dos elementos instrutórios ainda não está confirmada nesta app. Confirme sempre a redação em vigor no Diário da República antes de submeter.</p>
 </div>
 <div class="toast" id="toast" hidden></div>
 
@@ -284,74 +287,96 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   const KEY = "licenciamento-obras-v1";
   const $ = (id) => document.getElementById(id);
 
-  // Tipos de intervenção: o que a pessoa escolhe (tipoSel) e o enquadramento-base usado na decisão (base).
+  // Tipos de intervenção: [valor, texto, grupo]. O grupo organiza a lista de escolha.
+  const G_EXIST = "Obras num edifício existente", G_NOVA = "Construção nova e espaço exterior", G_USO = "Uso e utilização", G_TERR = "Terrenos e loteamentos", G_CURSO = "Processo em curso ou obra já feita";
   const TIPOS = [
-    ["conservacao", "Conservação e reparação (pinturas, telhado, impermeabilização, canalizações)"],
-    ["interior", "Remodelação interior (cozinha, casas de banho, paredes interiores, pavimentos)"],
-    ["fachada", "Alteração da fachada (cor, revestimento, azulejos, varandas, marquises)"],
-    ["vaos", "Substituição ou alteração de janelas e portas exteriores"],
-    ["cobertura", "Alteração da cobertura (telhado, terraço, claraboias, mansardas)"],
-    ["equipamentos", "Painéis solares, ar condicionado, bomba de calor ou antenas"],
-    ["anexo", "Anexo, telheiro, pérgula, abrigo ou garagem"],
-    ["muro", "Muro, vedação ou portão"],
-    ["piscina", "Piscina"],
-    ["ampliacao", "Ampliação (mais área, mais pisos ou mais volume)"],
-    ["reconstrucao", "Reconstrução de um edifício existente"],
-    ["nova", "Construção nova (moradia ou edifício)"],
-    ["demolicao", "Demolição"],
-    ["uso", "Mudança de uso sem obras (ex.: habitação para alojamento local)"],
-    ["usoObras", "Mudança de uso com obras (ex.: loja para restaurante)"],
-    ["legalizacao", "Legalização de obras já feitas"],
-    ["terreno", "Movimentação de terras ou remodelação de terreno"],
-    ["destaque", "Destaque de parcela (dividir um terreno em dois)"],
-    ["loteamento", "Loteamento"],
-    ["urbanizacao", "Obras de urbanização (arruamentos, redes, espaços verdes)"],
-    ["ph", "Constituição de propriedade horizontal"],
+    ["conservacao", "Conservação e reparação (pinturas, telhado, impermeabilização, canalizações)", G_EXIST],
+    ["interior", "Remodelação interior (cozinha, casas de banho, paredes interiores, pavimentos)", G_EXIST],
+    ["fracoes", "Dividir ou juntar frações, ou mudar o número de fogos", G_EXIST],
+    ["acess", "Acessibilidade (elevador, plataforma elevatória, rampa)", G_EXIST],
+    ["fachada", "Alteração da fachada (cor, revestimento, azulejos, varandas, marquises)", G_EXIST],
+    ["vaos", "Substituição ou alteração de janelas e portas exteriores", G_EXIST],
+    ["cobertura", "Alteração da cobertura (telhado, terraço, claraboias, mansardas)", G_EXIST],
+    ["equipamentos", "Equipamentos (painéis solares, ar condicionado, antenas, carregador, chaminé, toldo)", G_EXIST],
+    ["ampliacao", "Ampliação (mais área, mais pisos ou mais volume)", G_EXIST],
+    ["reconstrucao", "Reconstrução de um edifício existente", G_EXIST],
+    ["demolicao", "Demolição", G_EXIST],
+    ["nova", "Construção nova (moradia ou edifício)", G_NOVA],
+    ["modular", "Casa modular, pré-fabricada, de madeira ou contentor", G_NOVA],
+    ["agricola", "Construção agrícola (armazém, estábulo, estufa)", G_NOVA],
+    ["anexo", "Anexo, telheiro, pérgula, garagem, estufa de jardim ou parque infantil", G_NOVA],
+    ["muro", "Muro, vedação, portão ou muro de suporte", G_NOVA],
+    ["piscina", "Piscina", G_NOVA],
+    ["uso", "Mudança de uso sem obras (ex.: habitação para alojamento local)", G_USO],
+    ["usoObras", "Mudança de uso com obras (ex.: loja para restaurante)", G_USO],
+    ["utilizacao", "Título de utilização (obra acabada, ou edifício sem licença de utilização)", G_USO],
+    ["ph", "Constituição de propriedade horizontal", G_USO],
+    ["terreno", "Movimentação de terras ou remodelação de terreno", G_TERR],
+    ["destaque", "Destaque de parcela (dividir um terreno em dois)", G_TERR],
+    ["loteamento", "Loteamento", G_TERR],
+    ["altLoteamento", "Alteração de um loteamento já aprovado", G_TERR],
+    ["urbanizacao", "Obras de urbanização (arruamentos, redes, espaços verdes)", G_TERR],
+    ["legalizacao", "Legalização de obras já feitas", G_CURSO],
+    ["alteracoesObra", "Alterações ao projeto durante a obra", G_CURSO],
+    ["prazoObra", "Obra atrasada ou licença caducada (prorrogar, renovar, concluir)", G_CURSO],
+    ["escavacao", "Demolir, escavar ou fazer a contenção antes da licença final", G_CURSO],
   ];
   const USOS = [["habitacao", "Habitação"], ["comercio", "Comércio"], ["servicos", "Serviços ou escritório"], ["restauracao", "Restauração e bebidas"], ["al", "Alojamento local"], ["turismo", "Empreendimento turístico (hotel, turismo rural…)"], ["industria", "Indústria ou armazém"], ["agricola", "Agrícola"], ["equipamento", "Equipamento (escola, saúde, desporto, culto)"], ["devoluto", "Sem uso"]];
   const SNS = [["sim", "Sim"], ["nao", "Não"], ["ns", "Não sei"]];
-  const EXIST = ["conservacao", "interior", "fachada", "vaos", "cobertura", "equipamentos", "anexo", "muro", "piscina", "ampliacao", "reconstrucao", "demolicao", "uso", "usoObras", "legalizacao", "ph"];
-  const TERRENO = ["fachada", "anexo", "muro", "piscina", "ampliacao", "reconstrucao", "nova", "demolicao", "legalizacao", "terreno", "destaque", "loteamento", "urbanizacao"];
-  const TIPOS_OBRA = TIPOS.map(([v]) => v).filter((v) => !["uso", "ph", "destaque"].includes(v));
+  const EXIST = ["conservacao", "interior", "fracoes", "acess", "fachada", "vaos", "cobertura", "equipamentos", "anexo", "muro", "piscina", "ampliacao", "reconstrucao", "demolicao", "uso", "usoObras", "legalizacao", "ph"];
+  const TERRENO = ["fachada", "anexo", "muro", "piscina", "ampliacao", "reconstrucao", "nova", "modular", "agricola", "demolicao", "legalizacao", "terreno", "destaque", "loteamento", "altLoteamento", "urbanizacao"];
+  const TIPOS_OBRA = TIPOS.map(([v]) => v).filter((v) => !["uso", "ph", "destaque", "utilizacao", "prazoObra", "altLoteamento"].includes(v));
+  const NOVAS = ["nova", "modular", "agricola"];
   const menos = (lista, ...x) => lista.filter((v) => !x.includes(v));
   const q_ = (s) => s.q || {};
-  const rural = (s) => ["moradia", "rural", "terreno"].includes(q_(s).predio) || ["nova", "terreno", "loteamento", "urbanizacao", "destaque"].includes(s.tipoSel);
-  const escassaAnexo = (s) => q_(s).anexoArea === "ate10";
-  const escassaMuro = (s) => q_(s).muroVia === "nao" && q_(s).muroAlt === "ate";
+  const tem = (v, x) => [].concat(v || []).includes(x);
+  const rural = (s) => ["moradia", "rural", "terreno"].includes(q_(s).predio) || ["nova", "modular", "agricola", "terreno", "loteamento", "urbanizacao", "destaque"].includes(s.tipoSel);
+  const escassaAnexo = (s) => ["ate10", "estufa", "ludico"].includes(q_(s).anexoArea);
+  const escassaMuro = (s) => q_(s).muroAlt === "suporte" || (q_(s).muroVia === "nao" && q_(s).muroAlt === "ate");
+  // Obras sem procedimento próprio: não fazem sentido as perguntas de PIP, loteamento e zona consolidada.
+  const semControlo = (s) => (s.tipoSel === "anexo" && escassaAnexo(s)) || (s.tipoSel === "muro" && escassaMuro(s)) || (s.tipoSel === "vaos" && q_(s).vaosIgual === "sim") || (s.tipoSel === "acess" && q_(s).acessOnde !== "exterior") || (s.tipoSel === "agricola" && q_(s).agrTipo === "amovivel");
+  const COM_PLANO = ["fachada", "cobertura", "vaos", "anexo", "muro", "ampliacao", "reconstrucao", "nova", "modular", "agricola", "acess", "usoObras"];
   // Perguntas: step 2 = sobre a obra, step 3 = sobre o local (podem acrescentar condicionantes).
-  // show = tipos (tipoSel) em que aparece; when = condição extra; opts = respostas (por omissão Sim/Não/Não sei).
+  // show = tipos (tipoSel) em que aparece; when = condição extra; opts = respostas (por omissão Sim/Não/Não sei); multi = pode escolher várias.
   const QUESTIONS = [
-    { id: "predio", step: 2, q: "Que tipo de imóvel é?", show: menos(TIPOS.map(([v]) => v), "loteamento", "urbanizacao", "destaque", "terreno", "nova"), opts: [["apartamento", "Apartamento (fração)"], ["moradia", "Moradia"], ["edificio", "Edifício inteiro"], ["loja", "Loja, escritório ou outra fração"], ["armazem", "Armazém ou pavilhão"], ["rural", "Construção rural ou agrícola"], ["terreno", "Terreno sem construção"]] },
+    { id: "predio", step: 2, q: "Que tipo de imóvel é?", show: menos(TIPOS.map(([v]) => v), "loteamento", "altLoteamento", "urbanizacao", "destaque", "terreno", "nova", "modular", "agricola", "prazoObra", "alteracoesObra", "escavacao"), opts: [["apartamento", "Apartamento (fração)"], ["moradia", "Moradia"], ["edificio", "Edifício inteiro"], ["loja", "Loja, escritório ou outra fração"], ["armazem", "Armazém ou pavilhão"], ["rural", "Construção rural ou agrícola"], ["terreno", "Terreno sem construção"]] },
     { id: "onde", step: 2, q: "Onde é a obra de conservação?", show: ["conservacao"], opts: [["interior", "Só no interior"], ["fachada", "Fachada"], ["cobertura", "Cobertura"], ["varios", "Interior e exterior"]] },
     { id: "azulejos", step: 2, q: "Vai remover ou substituir azulejos da fachada?", show: ["conservacao", "fachada"], when: (s) => s.tipoSel !== "conservacao" || ["fachada", "varios"].includes(q_(s).onde) },
-    { id: "estrutura", step: 2, q: "Mexe na estrutura (paredes resistentes, lajes, vigas, pilares)?", h: "Na dúvida, um técnico confirma se a parede é resistente.", show: ["interior", "usoObras"] },
-    { id: "fachada", step: 2, q: "A remodelação também altera a fachada, a cobertura ou a altura do edifício?", show: ["interior", "usoObras"] },
+    { id: "acessOnde", step: 2, q: "Onde fica o elevador, a plataforma ou a rampa?", show: ["acess"], opts: [["interior", "Dentro do edifício (caixa de escada, interior da fração)"], ["exterior", "No exterior do edifício (fachada, logradouro, entrada)"], ["via", "Na via pública (passeio)"]] },
+    { id: "estrutura", step: 2, q: "Mexe na estrutura (paredes resistentes, lajes, vigas, pilares)?", h: "Na dúvida, um técnico confirma se a parede é resistente.", show: ["interior", "usoObras", "fracoes", "acess"], when: (s) => s.tipoSel !== "acess" || q_(s).acessOnde === "interior" },
+    { id: "fachada", step: 2, q: "A obra também altera a fachada, a cobertura ou a altura do edifício?", show: ["interior", "usoObras", "fracoes"] },
     { id: "comuns", step: 2, q: "A obra mexe em partes comuns do prédio (fachada, telhado, escadas, estrutura, colunas de água ou gás)?", show: menos(EXIST, "uso", "ph"), when: (s) => ["apartamento", "loja"].includes(q_(s).predio) },
-    { id: "vaosIgual", step: 2, q: "As novas janelas ou portas mantêm o desenho, a cor e o material exterior?", show: ["vaos"], opts: [["sim", "Sim, acabamento exterior idêntico"], ["nao", "Não, muda o aspeto exterior"], ["ns", "Não sei"]] },
-    { id: "equip", step: 2, q: "O que vai instalar?", show: ["equipamentos"], opts: [["solar", "Painéis solares ou fotovoltaicos na cobertura"], ["solarSolo", "Painéis solares no terreno"], ["ac", "Ar condicionado ou bomba de calor"], ["antena", "Antena ou parabólica"]] },
-    { id: "anexoArea", step: 2, q: "Qual a dimensão?", show: ["anexo"], opts: [["ate10", "Até 10 m² e 2,2 m de altura"], ["maior", "Maior do que isso"]] },
-    { id: "muroVia", step: 2, q: "O muro confina com a via pública?", show: ["muro"] },
-    { id: "muroAlt", step: 2, q: "Que altura terá?", show: ["muro"], opts: [["ate", "Até 1,8 m"], ["mais", "Mais de 1,8 m"]] },
+    { id: "vaosIgual", step: 2, q: "As novas janelas ou portas mantêm o desenho, a cor e o material exterior?", h: "A divisão dos vidros e das folhas também tem de se manter.", show: ["vaos"], opts: [["sim", "Sim, acabamento exterior idêntico"], ["nao", "Não, muda o aspeto exterior"], ["ns", "Não sei"]] },
+    { id: "equip", step: 2, q: "O que vai instalar? (pode escolher vários)", show: ["equipamentos"], multi: true, opts: [["solar", "Painéis solares (fotovoltaicos ou térmicos) na cobertura"], ["solarSolo", "Painéis solares no terreno"], ["eolico", "Gerador eólico doméstico"], ["bateria", "Baterias ou depósito de água quente"], ["ac", "Ar condicionado ou bomba de calor"], ["antena", "Antena ou parabólica"], ["carregador", "Carregador de carro elétrico"], ["chamine", "Chaminé, exaustão ou conduta de fumos"], ["toldo", "Toldo, reclamo ou letreiro"], ["gas", "Gerador, depósito de gás ou de combustível"]] },
+    { id: "anexoArea", step: 2, q: "O que é e que dimensão tem?", show: ["anexo"], opts: [["ate10", "Até 10 m² e 2,2 m de altura, sem confinar com a via pública"], ["estufa", "Estufa de jardim com menos de 3 m de altura e até 20 m²"], ["ludico", "Equipamento de lazer (parque infantil, campo de jogos) mais pequeno do que a casa"], ["maior", "Maior do que isso, ou confina com a via pública"]] },
+    { id: "muroVia", step: 2, q: "O muro confina com a via pública?", show: ["muro"], when: (s) => q_(s).muroAlt !== "suporte" },
+    { id: "muroAlt", step: 2, q: "Que muro e que altura?", show: ["muro"], opts: [["ate", "Muro de vedação até 1,8 m"], ["suporte", "Muro de suporte de terras até 2 m"], ["mais", "Mais alto do que isso"]] },
+    { id: "agrTipo", step: 2, q: "Que construção agrícola?", show: ["agricola"], opts: [["armazem", "Armazém, estábulo ou outra construção fixa"], ["estufa", "Estufa agrícola com fundações"], ["amovivel", "Estrutura amovível, sem fundações (túnel, abrigo)"]] },
     { id: "legalTipo", step: 2, q: "O que quer legalizar?", show: ["legalizacao"], opts: [["alteracao", "Alterações interiores ou de fachada"], ["ampliacao", "Ampliação ou anexo"], ["construcao", "Construção inteira sem licença"], ["uso", "Uso diferente do licenciado"]] },
-    { id: "altura", step: 2, q: "Aumenta a altura da fachada?", h: "Mais pisos ou mais área sem subir a fachada não conta como aumento.", show: ["ampliacao", "reconstrucao"] },
-    { id: "demoTipo", step: 2, q: "A demolição faz parte de uma obra de reconstrução ou construção nova?", show: ["demolicao"] },
+    { id: "reconstFiel", step: 2, q: "A reconstrução repõe as fachadas e a cobertura como estavam?", h: "Mesmas dimensões, vãos, varandas e recuados do último projeto válido. Pode mudar os materiais da estrutura.", show: ["reconstrucao"] },
+    { id: "demoTipo", step: 2, q: "Que demolição é?", show: ["demolicao"], opts: [["obra", "Faz parte de uma reconstrução ou construção nova"], ["ilegal", "A construção a demolir é ilegal"], ["so", "Só a demolição"]] },
     { id: "usoAtual", step: 2, q: "Qual é o uso atual?", show: ["uso", "usoObras", "ampliacao", "reconstrucao", "legalizacao"], opts: USOS },
-    { id: "usoNovo", step: 2, q: "Qual será o uso?", show: ["uso", "usoObras", "nova", "ampliacao", "reconstrucao"], opts: USOS },
-    { id: "pisos", step: 2, q: "Quantos pisos acima do solo terá o edifício no fim?", show: ["nova", "ampliacao", "reconstrucao", "uso", "usoObras", "legalizacao"], opts: [["1", "1"], ["2", "2"], ["3", "3"], ["5", "4 a 6"], ["8", "7 a 9"], ["10", "10 ou mais"]] },
-    { id: "abc", step: 2, q: "Qual a área bruta de construção total?", show: ["nova", "ampliacao", "reconstrucao", "legalizacao"], opts: [["200", "Até 300 m²"], ["1000", "De 300 a 2200 m²"], ["3000", "Mais de 2200 m²"]] },
-    { id: "pip", step: 2, q: "Já tem um PIP (informação prévia) favorável e válido para esta obra?", h: "Emitido nos termos do art. 14.º, n.os 2 e 3, há menos de 2 anos.", show: ["fachada", "cobertura", "vaos", "anexo", "muro", "piscina", "ampliacao", "reconstrucao", "nova", "demolicao", "terreno", "loteamento", "urbanizacao"], when: (s) => !(s.tipoSel === "anexo" && escassaAnexo(s)) && !(s.tipoSel === "muro" && escassaMuro(s)) && !(s.tipoSel === "vaos" && q_(s).vaosIgual === "sim") },
-    { id: "loteamento", step: 2, q: "O terreno está num loteamento, plano de pormenor ou unidade de execução com parâmetros definidos?", h: "Por exemplo, um lote com alvará de loteamento.", show: ["fachada", "cobertura", "vaos", "anexo", "muro", "ampliacao", "reconstrucao", "nova", "terreno", "loteamento", "urbanizacao"], when: (s) => !(s.tipoSel === "anexo" && escassaAnexo(s)) && !(s.tipoSel === "muro" && escassaMuro(s)) && !(s.tipoSel === "vaos" && q_(s).vaosIgual === "sim") },
-    { id: "zuc", step: 2, q: "Fica em zona urbana consolidada?", h: "Classificação do PDM: zona já urbanizada, com edifícios alinhados ao longo da rua.", show: ["fachada", "cobertura", "vaos", "anexo", "muro", "ampliacao", "reconstrucao", "nova"], when: (s) => q_(s).loteamento !== "sim" && !(s.tipoSel === "anexo" && escassaAnexo(s)) && !(s.tipoSel === "muro" && escassaMuro(s)) && !(s.tipoSel === "vaos" && q_(s).vaosIgual === "sim") },
-    { id: "cercea", step: 2, q: "A altura final fica igual ou abaixo da mais frequente na frente de rua?", show: ["fachada", "cobertura", "vaos", "anexo", "muro", "ampliacao", "reconstrucao", "nova"], when: (s) => q_(s).zuc === "sim" && q_(s).loteamento !== "sim" },
+    { id: "usoNovo", step: 2, q: "Qual será o uso?", show: ["uso", "usoObras", "nova", "modular", "ampliacao", "reconstrucao", "utilizacao"], opts: USOS },
+    { id: "utilObra", step: 2, q: "O edifício ou a fração vem de uma obra?", show: ["utilizacao"], opts: [["controlada", "Sim, obra acabada com licença, comunicação prévia ou PIP completo"], ["isenta", "Sim, mas as obras eram isentas"], ["semObra", "Não: o edifício existe e não tem título de utilização"], ["anterior1951", "O edifício é anterior a 1951"]] },
+    { id: "altLote", step: 2, q: "A alteração muda as áreas de implantação ou de construção, ou o número de fogos, em mais de 3%?", show: ["altLoteamento"], opts: [["ate3", "Não, até 3% e cumpre o PDM"], ["mais", "Sim, mais de 3% ou muda o uso"], ["ns", "Não sei"]] },
+    { id: "altObra", step: 2, q: "Que alterações quer fazer?", show: ["alteracoesObra"], opts: [["isentas", "Só alterações que seriam isentas (interiores sem estrutura, acabamentos)"], ["outras", "Alterações ao projeto sem aumentar a área nem mudar a implantação"], ["ampliacao", "Aumentam a área ou mudam a implantação"]] },
+    { id: "prazoTipo", step: 2, q: "Qual é a situação?", show: ["prazoObra"], opts: [["prorrogar", "O prazo ainda corre e preciso de mais tempo"], ["caducou", "O título caducou e a obra não começou ou vai no início"], ["avancada", "O título caducou com a obra já avançada"]] },
+    { id: "procInicial", step: 2, q: "Qual é o título da obra?", show: ["alteracoesObra", "prazoObra"], opts: [["lic", "Licença"], ["cp", "Comunicação prévia"], ["pip", "PIP com todos os elementos"]] },
+    { id: "arqAprovada", step: 2, q: "O projeto de arquitetura já foi aprovado?", show: ["escavacao"] },
+    { id: "pisos", step: 2, q: "Quantos pisos acima do solo terá o edifício no fim?", show: ["nova", "modular", "ampliacao", "reconstrucao", "uso", "usoObras", "legalizacao"], opts: [["1", "1"], ["2", "2"], ["3", "3"], ["5", "4 a 6"], ["8", "7 a 9"], ["10", "10 ou mais"]] },
+    { id: "pip", step: 2, q: "Já tem um PIP (informação prévia) favorável e válido para esta obra?", h: "Emitido nos termos do art. 14.º, n.º 2, há menos de 2 anos, a tratar todos os pontos das alíneas a) a f).", show: ["fachada", "cobertura", "vaos", "anexo", "muro", "piscina", "ampliacao", "reconstrucao", "nova", "modular", "agricola", "demolicao", "terreno", "loteamento", "urbanizacao", "acess"], when: (s) => !semControlo(s) && !(s.tipoSel === "reconstrucao" && q_(s).reconstFiel === "sim") },
+    { id: "loteamento", step: 2, q: "O terreno está num loteamento, plano de pormenor ou unidade de execução com parâmetros definidos?", h: "Por exemplo, um lote com alvará de loteamento.", show: [...COM_PLANO, "demolicao", "terreno", "loteamento", "urbanizacao", "piscina"], when: (s) => !semControlo(s) && !(s.tipoSel === "reconstrucao" && q_(s).reconstFiel === "sim") && !(s.tipoSel === "usoObras" && q_(s).fachada !== "sim") && !(s.tipoSel === "demolicao" && q_(s).demoTipo !== "so") },
+    { id: "zuc", step: 2, q: "Fica em zona urbana consolidada?", h: "Classificação do PDM: zona já urbanizada, com edifícios alinhados ao longo da rua.", show: COM_PLANO, when: (s) => q_(s).loteamento !== "sim" && !semControlo(s) && !(s.tipoSel === "reconstrucao" && q_(s).reconstFiel === "sim") && !(s.tipoSel === "usoObras" && q_(s).fachada !== "sim") },
+    { id: "cercea", step: 2, q: "A altura final fica igual ou abaixo da mais frequente na frente de rua?", show: COM_PLANO, when: (s) => q_(s).zuc === "sim" && q_(s).loteamento !== "sim" && !semControlo(s) },
     { id: "viaPublica", step: 2, q: "Vai precisar de ocupar a via pública (andaimes, contentor, grua)?", show: menos(TIPOS_OBRA, "loteamento", "urbanizacao", "terreno") },
-    { id: "anterior1951", step: 2, q: "O edifício tem licença de utilização?", show: menos(EXIST, "anexo", "muro", "piscina"), when: (s) => q_(s).predio !== "terreno", opts: [["nao", "Sim, tem licença de utilização"], ["sim", "Não: é anterior a 1951"], ["ns", "Não sei"]] },
+    { id: "anterior1951", step: 2, q: "O edifício tem título de utilização?", h: "Licença ou autorização de utilização, ou comunicação de utilização.", show: menos(EXIST, "anexo", "muro", "piscina"), when: (s) => q_(s).predio !== "terreno", opts: [["nao", "Sim, tem título de utilização"], ["sim", "Não: é anterior a 1951"], ["ns", "Não sei"]] },
     // Sobre o local
-    { id: "classificado", step: 3, q: "O imóvel tem proteção patrimonial (classificado, em vias de classificação ou junto a um monumento)?", h: "O mapa não encontrou proteção nas cartas nacionais. Responda se souber de alguma; na dúvida, veja a planta de condicionantes do PDM.", show: "*", when: (s) => (s.doMapa || !window.pesquisarNoMapa) && !(s.condMapa || []).includes("pat") },
-    { id: "perto", step: 3, q: "Há a menos de 50 m algum destes equipamentos?", show: menos(TIPOS_OBRA, "interior", "conservacao"), opts: [["nenhum", "Nenhum"], ["escola", "Escola"], ["saude", "Hospital ou centro de saúde"], ["cemiterio", "Cemitério"], ["prisao", "Estabelecimento prisional"], ["quartel", "Quartel ou instalação militar"], ["ns", "Não sei"]] },
-    { id: "vias", step: 3, q: "O terreno confina com alguma destas vias?", show: TERRENO, opts: [["nenhuma", "Só com ruas urbanas"], ["municipal", "Estrada ou caminho municipal"], ["nacional", "Estrada nacional ou regional"], ["autoestrada", "Autoestrada, IP ou IC"], ["ferrovia", "Linha de comboio"], ["metro", "Linha de metro"], ["ns", "Não sei"]] },
-    { id: "redes", step: 3, q: "Passa junto ao terreno alguma destas redes?", show: TERRENO, opts: [["nenhuma", "Nenhuma"], ["eletrica", "Linha elétrica de média ou alta tensão"], ["gas", "Gasoduto ou oleoduto"], ["agua", "Conduta de água ou aqueduto"], ["esgoto", "Coletor ou emissário de esgotos"], ["ns", "Não sei"]] },
-    { id: "arvores", step: 3, q: "Há no terreno árvores protegidas?", show: ["anexo", "muro", "piscina", "ampliacao", "nova", "terreno", "loteamento", "urbanizacao", "demolicao"], when: rural, opts: [["nao", "Não"], ["sobreiro", "Sobreiros ou azinheiras"], ["oliveira", "Oliveiras"], ["classificada", "Árvore classificada de interesse público"], ["ns", "Não sei"]] },
-    { id: "ardido", step: 3, q: "O terreno ardeu nos últimos 10 anos?", show: ["ampliacao", "reconstrucao", "nova", "terreno", "loteamento", "urbanizacao", "anexo"], when: rural },
+    { id: "classificado", step: 3, q: "O imóvel tem proteção patrimonial?", h: "Veja a planta de condicionantes do PDM ou o site do Património Cultural. O regime é diferente para o próprio monumento e para a zona à volta.", show: "*", when: (s) => s.doMapa || !window.pesquisarNoMapa || (s.condMapa || []).includes("pat"), opts: [["nao", "Não tem"], ["sim", "O próprio imóvel é classificado ou em vias de classificação"], ["conjunto", "Faz parte de um conjunto ou sítio classificado"], ["zp", "Está na zona de proteção de um imóvel classificado"], ["ns", "Não sei"]] },
+    { id: "perto", step: 3, q: "Há a menos de 50 m algum destes equipamentos? (pode escolher vários)", multi: true, show: menos(TIPOS_OBRA, "interior", "conservacao", "fracoes", "acess", "alteracoesObra", "escavacao"), opts: [["nenhum", "Nenhum"], ["escola", "Escola"], ["saude", "Hospital ou centro de saúde"], ["cemiterio", "Cemitério"], ["prisao", "Estabelecimento prisional"], ["quartel", "Quartel ou instalação militar"], ["ns", "Não sei"]] },
+    { id: "vias", step: 3, q: "O terreno confina com alguma destas vias? (pode escolher várias)", multi: true, show: TERRENO, opts: [["nenhuma", "Só com ruas urbanas"], ["municipal", "Estrada ou caminho municipal"], ["nacional", "Estrada nacional ou regional"], ["autoestrada", "Autoestrada, IP ou IC"], ["ferrovia", "Linha de comboio"], ["metro", "Linha de metro"], ["ns", "Não sei"]] },
+    { id: "redes", step: 3, q: "Passa junto ao terreno alguma destas redes? (pode escolher várias)", multi: true, show: TERRENO, opts: [["nenhuma", "Nenhuma"], ["eletrica", "Linha elétrica de média ou alta tensão"], ["gas", "Gasoduto ou oleoduto"], ["agua", "Conduta de água ou aqueduto"], ["esgoto", "Coletor ou emissário de esgotos"], ["ns", "Não sei"]] },
+    { id: "arvores", step: 3, q: "Há no terreno árvores protegidas?", show: ["anexo", "muro", "piscina", "ampliacao", "nova", "modular", "agricola", "terreno", "loteamento", "urbanizacao", "demolicao"], when: rural, opts: [["nao", "Não"], ["sobreiro", "Sobreiros ou azinheiras"], ["oliveira", "Oliveiras"], ["classificada", "Árvore classificada de interesse público"], ["ns", "Não sei"]] },
+    { id: "ardido", step: 3, q: "O terreno ardeu nos últimos 10 anos?", show: ["ampliacao", "reconstrucao", "nova", "modular", "agricola", "terreno", "loteamento", "urbanizacao", "anexo"], when: rural },
   ];
   const VISIVEL = (qq, s) => (qq.show === "*" || qq.show.includes(s.tipoSel)) && (!qq.when || qq.when(s));
   // Respostas que acrescentam condicionantes (o utilizador não as escolhe: deduzimos).
@@ -368,10 +393,12 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     const t = s.tipoSel, q = q_(s);
     if (t === "fachada" || t === "cobertura") return "exterior";
     if (t === "vaos") return q.vaosIgual === "sim" ? "escassa" : "exterior";
-    if (t === "equipamentos") return "escassa";
+    if (t === "equipamentos") return "equip";
     if (t === "anexo") return escassaAnexo(s) ? "escassa" : "nova";
     if (t === "muro") return escassaMuro(s) ? "escassa" : "exterior";
-    if (t === "usoObras") return "uso";
+    if (t === "acess") return q.acessOnde === "exterior" ? "exterior" : q.acessOnde === "via" ? "acessVia" : "interior";
+    if (t === "modular") return "nova";
+    if (t === "agricola") return q.agrTipo === "amovivel" ? "amovivel" : "nova";
     if (t === "urbanizacao") return "loteamento";
     return t || "conservacao";
   }
@@ -380,9 +407,12 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   function sync(s) {
     if (!s.tipoSel) s.tipoSel = ({ exterior: "fachada", escassa: "equipamentos" })[s.tipo] || (TIPOS.some(([v]) => v === s.tipo) ? s.tipo : "conservacao");
     s.q = s.q || {};
+    // Respostas guardadas com a versão anterior (DL 10/2024).
+    if (s.q.demoTipo === "sim") s.q.demoTipo = "obra"; else if (s.q.demoTipo === "nao") s.q.demoTipo = "so";
+    delete s.q.abc; delete s.q.altura;
     s.tipo = tipoBase(s);
     s.usoAtual = nomeDe(USOS, s.q.usoAtual); s.usoNovo = nomeDe(USOS, s.q.usoNovo);
-    s.pisos = s.q.pisos || ""; s.abc = s.q.abc || "";
+    s.pisos = s.q.pisos || "";
   }
 
   // Condicionantes do local: cada uma implica ouvir uma entidade. serv = servidão ou restrição de utilidade pública.
@@ -491,8 +521,8 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   function condOrigem(s) {
     const o = {}, q = q_(s);
     (s.condMapa || []).forEach((k) => { if (k !== "pat") o[k] = "mapa"; });
-    QUESTIONS.forEach((qq) => { const m = RESP_COND[qq.id]; if (m && VISIVEL(qq, s) && m[q[qq.id]]) o[m[q[qq.id]]] = o[m[q[qq.id]]] || "resposta"; });
-    if (RESP_COND.usoNovo[q.usoNovo] && ["uso", "usoObras", "nova", "ampliacao", "reconstrucao"].includes(s.tipoSel)) o[RESP_COND.usoNovo[q.usoNovo]] = o[RESP_COND.usoNovo[q.usoNovo]] || "resposta";
+    QUESTIONS.forEach((qq) => { const m = RESP_COND[qq.id]; if (m && VISIVEL(qq, s)) [].concat(q[qq.id] || []).forEach((v) => { if (m[v]) o[m[v]] = o[m[v]] || "resposta"; }); });
+    if (RESP_COND.usoNovo[q.usoNovo] && ["uso", "usoObras", "nova", "modular", "ampliacao", "reconstrucao", "utilizacao"].includes(s.tipoSel)) o[RESP_COND.usoNovo[q.usoNovo]] = o[RESP_COND.usoNovo[q.usoNovo]] || "resposta";
     if (parseInt(s.pisos, 10) >= 10) o.scie34 = "resposta";
     return o;
   }
@@ -500,7 +530,8 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   function effQ(s) {
     const c = effCond(s), q = Object.assign({}, s.q || {});
     q.servidao = COND.some((x) => x.serv && c[x.k]) ? "sim" : "nao";
-    if ((s.condMapa || []).includes("pat")) q.classificado = "sim";
+    if ((s.condMapa || []).includes("pat") && !["sim", "conjunto", "zp"].includes(q.classificado)) { q.classificado = "zp"; q.patIncerto = true; }
+    q.prot = ["sim", "conjunto"].includes(q.classificado) ? "cl" : q.classificado === "zp" ? "zp" : "";
     if (!VISIVEL(QUESTIONS.find((x) => x.id === "fachada"), s)) delete q.fachada;
     if (!VISIVEL(QUESTIONS.find((x) => x.id === "azulejos"), s)) delete q.azulejos;
     // Fração: apartamento ou loja; numa mudança de uso conta sempre, nas obras só se mexer em partes comuns.
@@ -511,7 +542,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   function renderCond() {
     const o = condOrigem(state), q = effQ(state);
     const itens = COND.filter((x) => o[x.k]).map((x) => ({ l: x.l, ent: x.ent, o: o[x.k] }));
-    if (q.classificado === "sim") itens.unshift({ l: "Imóvel classificado, em vias de classificação ou em zona de proteção", ent: "Património Cultural, I.P. (ou a CCDR)", o: (state.condMapa || []).includes("pat") ? "mapa" : "resposta" });
+    if (q.prot) itens.unshift({ l: q.prot === "cl" ? "Imóvel classificado, em vias de classificação ou em conjunto classificado" : "Zona de proteção de imóvel classificado", ent: "Património Cultural, I.P. (ou a CCDR)", o: (state.condMapa || []).includes("pat") ? "mapa" : "resposta" });
     const tag = { mapa: "encontrada no mapa", resposta: "pela sua resposta" };
     $("condBox").innerHTML = itens.length ? itens.map((x) => `<div class="cond-item"><b>${esc(x.l)}</b><span class="tag ok">${tag[x.o]}</span><span class="note">Entidade a consultar: ${esc(x.ent || "câmara municipal")}</span></div>`).join("")
       : `<p class="note">${state.doMapa ? "O mapa não encontrou condicionantes neste local. Responda às perguntas abaixo." : "Escreva a morada e carregue em “Pesquisar no mapa”. As condicionantes do local aparecem aqui."}</p>`;
@@ -539,6 +570,10 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
 
   function htmlPergunta(qq) {
     const v = state.q[qq.id] || "", opts = qq.opts || SNS;
+    if (qq.multi) {
+      const sel = [].concat(v || []);
+      return `<div class="q"><p>${esc(qq.q)}${qq.h ? `<small>${esc(qq.h)}</small>` : ""}</p><div class="multi" role="group" aria-label="${esc(qq.q)}">${opts.map(([val, lab]) => `<label><input type="checkbox" name="qm-${qq.id}" value="${val}" ${sel.includes(val) ? "checked" : ""}><span>${esc(lab)}</span></label>`).join("")}</div></div>`;
+    }
     const campo = opts.length <= 3 && opts.every(([, l]) => l.length < 14)
       ? `<div class="seg" role="radiogroup" aria-label="${esc(qq.q)}">${opts.map(([val, lab]) => `<input type="radio" id="q-${qq.id}-${val}" name="q-${qq.id}" value="${val}" ${v === val ? "checked" : ""}><label for="q-${qq.id}-${val}">${esc(lab)}</label>`).join("")}</div>`
       : `<select class="qsel" name="q-${qq.id}" aria-label="${esc(qq.q)}"><option value="">Escolha…</option>${opts.map(([val, lab]) => `<option value="${val}" ${v === val ? "selected" : ""}>${esc(lab)}</option>`).join("")}</select>`;
@@ -561,11 +596,19 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
 
   function fillForm() {
     sync(state);
-    $("tipoSel").innerHTML = TIPOS.map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("");
+    $("tipoSel").innerHTML = [...new Set(TIPOS.map((x) => x[2]))].map((gr) => `<optgroup label="${esc(gr)}">${TIPOS.filter((x) => x[2] === gr).map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("")}</optgroup>`).join("");
     FIELDS.forEach((k) => { const el = $(k); if (el) el.value = state[k] || ""; });
     renderQuestions(true);
   }
 
+  // Escolha múltipla: "Nenhum" e "Não sei" excluem as restantes opções.
+  function respostaMulti(t) {
+    const id = t.name.slice(3), box = [...document.querySelectorAll(`input[name="qm-${id}"]`)];
+    const excl = ["nenhum", "nenhuma", "ns"];
+    if (t.checked) box.forEach((b) => { if (b !== t && (excl.includes(t.value) || excl.includes(b.value))) b.checked = false; });
+    const vals = box.filter((b) => b.checked).map((b) => b.value);
+    if (vals.length) state.q[id] = vals; else delete state.q[id];
+  }
   function respostaQ(t) {
     state.q[t.name.slice(2)] = t.value;
     if (!t.value) delete state.q[t.name.slice(2)];
@@ -573,11 +616,12 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   $("f").addEventListener("input", (e) => {
     const t = e.target;
     if (t.name && t.name.startsWith("q-")) respostaQ(t);
+    else if (t.name && t.name.startsWith("qm-")) respostaMulti(t);
     else if (FIELDS.includes(t.id)) state[t.id] = t.value;
     if (t.id === "tipoSel") minuta = null;
     sync(state); save(); renderQuestions(); render();
   });
-  $("f").addEventListener("change", (e) => { if (e.target.name && e.target.name.startsWith("q-")) { respostaQ(e.target); sync(state); save(); renderQuestions(); render(); } });
+  $("f").addEventListener("change", (e) => { const n = e.target.name || ""; if (n.startsWith("q-") || n.startsWith("qm-")) { if (n.startsWith("qm-")) respostaMulti(e.target); else respostaQ(e.target); sync(state); save(); renderQuestions(); render(); } });
   $("f").addEventListener("submit", (e) => e.preventDefault());
 
   // Página inicial (questionário) e página do resumo.
@@ -601,140 +645,248 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   // ---------- Lógica de enquadramento ----------
   const PROC = {
     isento: { nome: "Isenta de controlo prévio", cor: "var(--green)", resumo: "Não precisa de licença nem de comunicação prévia. Tem de cumprir as normas técnicas e o PDM, e a câmara continua a poder fiscalizar." },
-    isentoTermo: { nome: "Isenta, com termo de responsabilidade", cor: "var(--green)", resumo: "Não precisa de licença nem de comunicação prévia, mas como mexe na estrutura um técnico habilitado tem de assinar um termo a atestar que a obra não prejudica a estabilidade do edifício." },
-    cp: { nome: "Comunicação prévia", cor: "var(--blue)", resumo: "Submete o processo completo na câmara, paga as taxas por autoliquidação e pode começar a obra. Não há decisão expressa; a câmara pode fiscalizar e, se o processo estiver incompleto, notifica uma única vez nos primeiros 15 dias úteis." },
-    cpPrazo: { nome: "Comunicação prévia com prazo", cor: "var(--blue)", resumo: "Para mudar o uso sem obras. A câmara tem 20 dias para decidir se faz vistoria; se não a marcar, pode usar o imóvel com o novo uso." },
-    lic: { nome: "Licenciamento", cor: "var(--red)", resumo: "Precisa de aprovação expressa da câmara antes de começar. Se a câmara não decidir dentro do prazo legal, há deferimento tácito. O comprovativo de pagamento das taxas substitui o antigo alvará." },
+    isentoTermo: { nome: "Isenta, com projeto e termo de estabilidade", cor: "var(--green)", resumo: "Não precisa de licença nem de comunicação prévia, mas como mexe na estrutura um técnico habilitado faz o projeto de estabilidade e assina um termo a atestar que a obra melhora ou não prejudica a estrutura. Ambos são entregues com a comunicação de início dos trabalhos." },
+    cp: { nome: "Comunicação prévia", cor: "var(--blue)", resumo: "Submete o processo completo na câmara, paga as taxas por autoliquidação e pode começar a obra. Não há decisão expressa. Depois, a câmara pode pedir uma única vez o que faltar (10 dias para entregar); a verificação dos projetos caduca 1 ano após o pagamento das taxas, mas a fiscalização da obra continua." },
+    cpPrazo: { nome: "Comunicação prévia com prazo", cor: "var(--blue)", resumo: "Para usar ou mudar o uso de um edifício sem obra sujeita a licença ou comunicação prévia. Pode usar o imóvel 10 dias depois de submeter, se a câmara não rejeitar a comunicação nem marcar vistoria nesse prazo." },
+    cpUtil: { nome: "Comunicação prévia de utilização", cor: "var(--blue)", resumo: "Depois de uma obra com licença, comunicação prévia ou PIP completo: submete a comunicação com o termo do diretor de obra e pode usar o edifício logo a seguir. A câmara verifica depois os elementos." },
+    lic: { nome: "Licenciamento", cor: "var(--red)", resumo: "Precisa de aprovação expressa da câmara antes de começar. Se a câmara não decidir dentro dos prazos legais, há deferimento tácito. O comprovativo de pagamento das taxas, com o requerimento e a notificação do deferimento, é o título da obra." },
+    pedido: { nome: "Pedido à câmara", cor: "var(--blue)", resumo: "Não é um procedimento de obra: é um pedido ou certidão que se faz à câmara municipal, nos termos indicados." },
   };
 
   function decide(s) {
     const q = effQ(s);
     const yes = (k) => q[k] === "sim", no = (k) => q[k] === "nao", ns = (k) => q[k] === "ns" || !q[k];
     const alerts = [];
-    let p, refs = [], motivo = "";
+    let p, refs = [], motivo = "", extraPassos = null, extraDocs = null;
+    const set = (o) => { p = o.p; refs = o.refs; motivo = o.motivo; };
+    const PIP = { p: "isento", refs: ["art. 6.º, n.º 1, al. h) RJUE", "art. 17.º, n.º 2"], motivo: "Um PIP favorável que trate todos os pontos das alíneas a) a f) do art. 14.º, n.º 2, isenta a obra de licença e de comunicação prévia, desde que a obra siga exatamente o que foi apreciado." };
 
-    // Enquadramento geral para obras que não estão isentas
+    // Enquadramento geral das obras de construção, alteração e ampliação (art. 4.º).
     function generic(base) {
-      if (yes("loteamento")) return { p: "cp", refs: ["art. 4.º, n.º 4 RJUE"], motivo: `${base} em área de loteamento, plano de pormenor ou unidade de execução com parâmetros definidos.` };
-      if (yes("zuc") && yes("cercea")) return { p: "cp", refs: ["art. 4.º, n.º 4 RJUE"], motivo: `${base} em zona urbana consolidada, a respeitar os planos e sem cércea acima da dominante na frente edificada.` };
+      if (yes("loteamento")) return { p: "cp", refs: ["art. 4.º, n.º 4, al. d) RJUE"], motivo: `${base} em área de loteamento, plano de pormenor ou unidade de execução com parâmetros definidos.` };
+      if (yes("servidao")) return { p: "lic", refs: ["art. 4.º, n.º 2, al. h) RJUE"], motivo: `${base} em área com servidão ou restrição de utilidade pública que não está prevista em plano de pormenor, loteamento ou unidade de execução.` };
+      if (yes("zuc") && yes("cercea")) return { p: "cp", refs: ["art. 4.º, n.º 4, al. e) RJUE"], motivo: `${base} em zona urbana consolidada, a respeitar os planos e sem altura acima da mais frequente na frente de rua.` };
       if (ns("loteamento") || ns("zuc") || (yes("zuc") && ns("cercea")))
-        alerts.push({ t: "Se o terreno estiver em loteamento ou plano de pormenor, ou em zona urbana consolidada com cércea igual ou abaixo da dominante, o procedimento desce para comunicação prévia. Confirme no PDM." });
-      return { p: "lic", refs: ["art. 4.º, n.º 2 RJUE"], motivo: `${base} fora dos casos de comunicação prévia.` };
+        alerts.push({ t: "Se o terreno estiver em loteamento ou plano de pormenor, ou em zona urbana consolidada com altura igual ou abaixo da dominante, o procedimento desce para comunicação prévia (e aí não se pode optar pela licença). Confirme no PDM." });
+      return { p: "lic", refs: ["art. 4.º, n.º 2, al. c) RJUE"], motivo: `${base} fora dos casos de comunicação prévia.` };
     }
+    const termoEstrutura = "projeto de estabilidade e termo de responsabilidade de técnico habilitado (e projeto de reforço sísmico, quando exigível), entregues para depósito com a comunicação de início dos trabalhos";
 
-    if (yes("classificado")) {
-      p = "lic"; refs = ["art. 4.º, n.º 2 RJUE", "art. 6.º (exceções)", "Lei 107/2001 (património)"];
-      motivo = "As isenções e a comunicação prévia não se aplicam a imóveis classificados, em vias de classificação ou em zona de proteção.";
-      alerts.push({ t: "Há parecer obrigatório do Património Cultural, I.P. (ou da entidade regional). Junte fotografias e um relatório prévio sobre o valor patrimonial." });
-      if (s.tipo === "escassa") alerts.push({ t: "Nas obras de escassa relevância a exceção depende do tipo de classificação. Confirme com a câmara se esta obra fica mesmo sujeita a licença." });
-    } else {
-      if (ns("classificado")) alerts.push({ t: "Falta confirmar se o imóvel é classificado ou está numa zona de proteção. Se estiver, passa a licenciamento." });
-      let tipo = s.tipo;
-      if ((tipo === "conservacao" || tipo === "interior") && yes("fachada")) {
-        alerts.push({ i: 1, t: "Como a obra também mexe na fachada, na cobertura ou na cércea, foi tratada como alteração exterior." });
-        tipo = "exterior";
+    let tipo = s.tipo;
+    if (["conservacao", "interior", "fracoes"].includes(tipo) && yes("fachada")) {
+      alerts.push({ i: 1, t: "Como a obra também mexe na fachada, na cobertura ou na altura, foi tratada como alteração exterior." });
+      tipo = "exterior";
+    }
+    switch (tipo) {
+      case "conservacao":
+        if (yes("azulejos")) set({ p: "lic", refs: ["art. 4.º, n.º 2, al. i) RJUE"], motivo: "Obras de que resulte a remoção de azulejos de fachada estão sujeitas a licença." });
+        else set({ p: "isento", refs: ["art. 6.º, n.º 1, al. a) RJUE"], motivo: "Obras de conservação estão isentas de controlo prévio." });
+        break;
+      case "interior":
+        if (yes("estrutura")) set({ p: "isentoTermo", refs: ["art. 6.º, n.º 1, al. b) RJUE"], motivo: `Alterações no interior estão isentas. Como mexem na estrutura, é preciso ${termoEstrutura}.` });
+        else set({ p: "isento", refs: ["art. 6.º, n.º 1, al. b) RJUE"], motivo: "Alterações no interior que não mexem na estrutura, nas fachadas, na cobertura nem nas alturas estão isentas." });
+        if (ns("estrutura")) alerts.push({ t: "Confirme com um técnico se a obra mexe em paredes resistentes ou lajes. Se mexer, é preciso projeto de estabilidade e termo de responsabilidade." });
+        if (s.tipoSel === "acess") alerts.push({ i: 1, t: "Elevadores e plataformas cumprem as normas técnicas de acessibilidade (DL 163/2006) e de segurança de ascensores. Num prédio em propriedade horizontal, veja no Código Civil (art. 1425.º) as regras para obras de acessibilidade nas partes comuns." });
+        break;
+      case "fracoes":
+        set({ p: "cpPrazo", refs: ["art. 6.º, n.º 1, al. b) RJUE", "art. 62.º-B, n.º 1, al. b)", "art. 1419.º Código Civil"], motivo: "As obras interiores para dividir ou juntar frações estão isentas. A nova divisão em frações ou fogos altera o título de utilização e comunica-se depois por comunicação prévia com prazo." });
+        if (yes("estrutura")) alerts.push({ t: `Como as obras mexem na estrutura, é preciso ${termoEstrutura}.` });
+        alerts.push({ t: "Alterar o título da propriedade horizontal precisa do acordo de todos os condóminos e de escritura ou documento autenticado. A certidão da câmara de que as frações cumprem os requisitos pode ser pedida com a comunicação (art. 66.º, n.º 3)." });
+        break;
+      case "acessVia":
+        set({ p: "pedido", refs: ["Regulamento municipal de ocupação do espaço público"], motivo: "Uma rampa ou plataforma no passeio ocupa espaço público: precisa de licença de ocupação do domínio público municipal, pedida à câmara." });
+        extraPassos = [["Pedir à câmara a ocupação do espaço público", "Com planta, fotografias e descrição da rampa ou plataforma. Algumas câmaras têm apoio próprio para acessibilidade."], ["Executar a obra", "Com as normas técnicas de acessibilidade (DL 163/2006)."]];
+        extraDocs = [["Pedido de ocupação do espaço público", "Ver minuta de ocupação da via pública."], ["Planta de localização e desenho da rampa ou plataforma", ""], ["Fotografias do local", ""]];
+        break;
+      case "exterior":
+        if (yes("pip")) { set(PIP); break; }
+        if (yes("azulejos")) { set({ p: "lic", refs: ["art. 4.º, n.º 2, al. i) RJUE"], motivo: "Obras de que resulte a remoção de azulejos de fachada estão sujeitas a licença, mesmo em fachadas para logradouros." }); break; }
+        set(generic(s.tipoSel === "acess" ? "Rampa, elevador ou plataforma no exterior do edifício" : "Alteração exterior"));
+        if (["fachada", "cobertura", "vaos"].includes(s.tipoSel)) alerts.push({ i: 1, t: "Substituir janelas ou portas por outras com a mesma geometria e acabamento exterior, ou revestimentos e telhas por outros idênticos, que melhorem a eficiência energética, é obra de escassa relevância e fica isenta." });
+        break;
+      case "escassa":
+        set({ p: "isento", refs: ["art. 6.º-A RJUE"], motivo: "Obras de escassa relevância urbanística estão isentas de controlo prévio." });
+        if (s.tipoSel === "vaos") refs = ["art. 6.º-A, n.º 1, al. j) RJUE"];
+        alerts.push({ t: "Limites da lei: anexo até 10 m² e 2,2 m de altura sem confinar com a via pública; estufa de jardim abaixo de 3 m e até 20 m²; muro de vedação até 1,8 m sem confinar com a via pública; muro de suporte até 2 m. O regulamento municipal pode alargar estes limites." });
+        if (yes("servidao")) alerts.push({ t: "Em área com servidão (REN, RAN, domínio hídrico) pode ser preciso parecer ou autorização da entidade que a gere, mesmo sem procedimento camarário." });
+        break;
+      case "equip": {
+        const e = [].concat(q.equip || []);
+        const so = (lista) => e.length && e.every((x) => lista.includes(x));
+        if (so(["carregador"])) set({ p: "isento", refs: ["art. 2.º, al. j) RJUE"], motivo: "Instalar um carregador de carro elétrico num lugar de estacionamento não é uma operação urbanística: não precisa de procedimento camarário." });
+        else if (so(["solar", "solarSolo", "eolico", "bateria", "carregador"])) set({ p: "isento", refs: ["art. 6.º-A, n.º 1, al. g) RJUE"], motivo: "Painéis solares, geradores eólicos domésticos e baterias associados a um edifício são obras de escassa relevância, dentro dos limites da lei." });
+        else set({ p: "isento", refs: ["art. 6.º-A, n.º 1, al. i) RJUE"], motivo: "Estes equipamentos são normalmente tratados como obras de escassa relevância pelo regulamento municipal. Se o regulamento do concelho não os incluir, contam como alteração da fachada ou da cobertura." });
+        break;
       }
-      switch (tipo) {
-        case "conservacao":
-          if (yes("azulejos")) { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "A remoção de azulejos de fachada está sujeita a licença."; }
-          else { p = "isento"; refs = ["art. 6.º, n.º 1 RJUE"]; motivo = "Obras de conservação estão isentas de controlo prévio."; }
-          break;
-        case "interior":
-          if (yes("estrutura")) { p = "isentoTermo"; refs = ["art. 6.º RJUE"]; motivo = "Alterações no interior estão isentas; se afetarem a estrutura, é preciso o termo de responsabilidade de um técnico habilitado."; }
-          else { p = "isento"; refs = ["art. 6.º, n.º 1 RJUE"]; motivo = "Alterações no interior que não mexem na estrutura, cércea, fachadas nem cobertura estão isentas."; }
-          if (ns("estrutura")) alerts.push({ t: "Confirme com um técnico se a parede a demolir é resistente. Se for, é preciso termo de responsabilidade." });
-          break;
-        case "exterior":
-          if (yes("pip")) { p = "isento"; refs = ["art. 6.º RJUE", "art. 14.º, n.os 2 e 3"]; motivo = "Um PIP favorável com as menções do art. 14.º, n.º 2, isenta a obra de controlo prévio."; break; }
-          if (yes("azulejos")) { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "A remoção de azulejos de fachada está sujeita a licença."; break; }
-          if (yes("servidao")) { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Obras em área com servidão ou restrição de utilidade pública estão sujeitas a licença."; break; }
-          ({ p, refs, motivo } = generic("Alteração exterior"));
-          alerts.push({ i: 1, t: "Substituir janelas ou portas por outras com acabamento exterior idêntico, que melhorem a eficiência energética, é obra de escassa relevância e fica isenta." });
-          break;
-        case "escassa":
-          p = "isento"; refs = ["art. 6.º-A RJUE"]; motivo = "Obras de escassa relevância urbanística estão isentas de controlo prévio.";
-          alerts.push({ t: "Limites habituais: anexo até 10 m² e 2,2 m de altura, muro até 1,8 m que não confine com a via pública, painéis solares sem exceder a cobertura. O regulamento municipal pode alterar estes limites." });
-          if (yes("servidao")) alerts.push({ t: "Em área com servidão (REN, RAN, domínio hídrico) pode ser preciso parecer ou autorização da entidade que a gere, mesmo sem procedimento camarário." });
-          break;
-        case "ampliacao":
-        case "reconstrucao": {
-          const nomeT = tipo === "ampliacao" ? "Ampliação" : "Reconstrução";
-          if (yes("pip")) { p = "isento"; refs = ["art. 6.º RJUE", "art. 14.º, n.os 2 e 3"]; motivo = "Um PIP favorável com as menções do art. 14.º, n.º 2, isenta a obra de controlo prévio."; break; }
-          if (no("altura")) {
-            p = "isento"; refs = ["art. 6.º, n.º 1 RJUE"];
-            motivo = `${nomeT} sem aumento da altura da fachada está isenta, mesmo com mais pisos ou mais área, incluindo em área com servidão.`;
-            alerts.push({ t: "Esta isenção é recente e algumas câmaras interpretam-na de forma restritiva. Confirme por escrito, através de um pedido de informação simples, antes de avançar. A obra tem de cumprir o PDM (índices, afastamentos)." });
-            break;
-          }
-          if (ns("altura")) alerts.push({ t: "Se a altura da fachada não aumentar, esta obra fica isenta. Confirme com o projeto." });
-          if (tipo === "reconstrucao" && !yes("loteamento")) { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Reconstrução com aumento da altura da fachada está sujeita a licença."; break; }
-          if (yes("servidao")) { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Obras em área com servidão ou restrição de utilidade pública estão sujeitas a licença."; break; }
-          ({ p, refs, motivo } = generic(`${nomeT} com aumento da altura da fachada`));
+      case "ampliacao":
+        if (yes("pip")) { set(PIP); break; }
+        set(generic("Ampliação"));
+        alerts.push({ i: 1, t: "Desde 1 de outubro de 2026 (DL 108/2026) a ampliação deixou de estar isenta, mesmo quando não aumenta a altura da fachada." });
+        break;
+      case "reconstrucao":
+        if (yes("reconstFiel")) {
+          set({ p: "isento", refs: ["art. 6.º, n.º 1, al. e) RJUE", "art. 2.º, al. c)"], motivo: "A reconstrução que repõe as fachadas e a cobertura, segundo o último antecedente válido, está isenta de licença e de comunicação prévia. A demolição que faz parte dela não precisa de licença própria." });
+          alerts.push({ t: "Guarde a prova do último antecedente válido (projeto aprovado ou prova de que a construção não precisava de licença). A obra tem de cumprir as normas técnicas e pode ser fiscalizada." });
           break;
         }
-        case "nova":
-          if (yes("pip")) { p = "isento"; refs = ["art. 6.º RJUE", "art. 14.º, n.os 2 e 3"]; motivo = "Um PIP favorável com as menções do art. 14.º, n.º 2, isenta a obra de controlo prévio."; break; }
-          if (yes("servidao")) { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Obras em área com servidão ou restrição de utilidade pública estão sujeitas a licença."; break; }
-          ({ p, refs, motivo } = generic("Construção nova"));
-          break;
-        case "piscina":
-          if (yes("pip")) { p = "isento"; refs = ["art. 6.º RJUE", "art. 14.º"]; motivo = "Um PIP favorável isenta a obra de controlo prévio."; break; }
-          p = "cp"; refs = ["art. 4.º, n.º 4 RJUE"]; motivo = "Piscinas associadas à edificação principal estão sujeitas a comunicação prévia.";
-          alerts.push({ t: "Se a piscina não estiver associada a uma habitação ou edifício principal, aplica-se o enquadramento geral da construção nova." });
-          if (yes("servidao")) alerts.push({ t: "Com servidão no local, confirme se a câmara exige licenciamento e que pareceres externos são precisos." });
-          break;
-        case "demolicao":
-          p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Demolições que não estão previstas numa licença ou comunicação prévia de reconstrução ou construção estão sujeitas a licença.";
-          alerts.push({ i: 1, t: "Se a demolição fizer parte de uma obra de reconstrução ou construção nova, entra no mesmo procedimento dessa obra." });
-          break;
-        case "uso":
-          p = "cpPrazo"; refs = ["arts. 62.º e segs. RJUE"]; motivo = "Mudar o uso de um edifício ou fração sem obras sujeitas a controlo prévio exige comunicação prévia com prazo.";
-          if (yes("fracao")) alerts.push({ t: "Numa fração em propriedade horizontal, se o título constitutivo não fixar o fim da fração, a mudança de uso precisa de autorização da assembleia de condóminos por 2/3 do valor do prédio. A mudança para habitação dispensa essa autorização." });
-          alerts.push({ i: 1, t: "Se o uso pretendido for comércio, restauração ou alojamento local, há registos próprios (Balcão do Empreendedor / RNAL) a juntar a este passo." });
-          break;
-        case "terreno":
-          if (yes("pip")) { p = "isento"; refs = ["art. 6.º RJUE", "art. 14.º"]; motivo = "Um PIP favorável isenta a obra de controlo prévio."; break; }
-          if (yes("loteamento")) { p = "cp"; refs = ["art. 4.º, n.º 4 RJUE"]; motivo = "Trabalhos de remodelação de terrenos em área de loteamento ou plano de pormenor com parâmetros definidos estão sujeitos a comunicação prévia."; }
-          else { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Trabalhos de remodelação de terrenos (aterros, escavações, alteração do relevo) estão sujeitos a licença."; }
-          alerts.push({ i: 1, t: "Mobilizações de solo para agricultura ou floresta não contam como remodelação de terreno; nesses casos fale com a câmara e a DRAP." });
-          break;
-        case "destaque":
-          p = "isento"; refs = ["art. 6.º, n.os 4 a 9 RJUE"];
-          motivo = "O destaque de uma parcela está isento de licença, se cumprir as condições do art. 6.º. Pede-se à câmara a certidão de destaque, que serve para o registo predial.";
-          alerts.push({ t: "Dentro do perímetro urbano, as duas parcelas têm de confrontar com arruamentos públicos. Fora dele, a parcela destacada tem de ter a área mínima de unidade de cultura e só pode levar uma habitação de dois pisos. Não se pode destacar de novo a mesma área durante 10 anos." });
-          break;
-        case "legalizacao":
-          p = "lic"; refs = ["art. 102.º-A RJUE"];
-          motivo = "Obras feitas sem controlo prévio legalizam-se pelo procedimento de legalização (art. 102.º-A), com as regras da licença ou da comunicação prévia que se aplicariam à obra.";
-          alerts.push({ t: "A câmara pode dispensar projetos de especialidades se a obra estiver feita e for comprovada por técnico, e aplica as normas em vigor à data da construção quando seja impossível ou desproporcionado cumprir as atuais. Pode haver contraordenação; confirme o regulamento municipal de legalizações." });
-          if (q.legalTipo === "uso") alerts.push({ i: 1, t: "Para legalizar só o uso, sem obras, basta normalmente a comunicação prévia com prazo de alteração de utilização." });
-          break;
-        case "ph":
-          p = "isento"; refs = ["art. 66.º RJUE", "art. 1415.º Código Civil"];
-          motivo = "Não é uma obra: pede-se à câmara a certidão de que o edifício reúne os requisitos legais da propriedade horizontal, para a escritura e o registo.";
-          alerts.push({ i: 1, t: "Cada fração tem de ser independente, distinta e isolada, com saída própria para uma parte comum ou para a via pública. Junte as plantas com a divisão das frações e a memória descritiva com as permilagens." });
-          break;
-        case "loteamento":
-          if (yes("loteamento")) { p = "cp"; refs = ["art. 4.º, n.º 4 RJUE"]; motivo = "Loteamento ou urbanização em área de plano de pormenor ou unidade de execução com conteúdo definido está sujeito a comunicação prévia."; }
-          else { p = "lic"; refs = ["art. 4.º, n.º 2 RJUE"]; motivo = "Loteamentos e obras de urbanização fora de plano de pormenor ou unidade de execução estão sujeitos a licença."; }
-          alerts.push({ i: 1, t: "Neste tipo de operação um PIP prévio costuma compensar: fixa os parâmetros e, em certos casos, isenta de controlo prévio." });
-          break;
+        if (yes("pip")) { set(PIP); break; }
+        set(generic("Reconstrução que altera fachadas, cobertura ou volumes (conta como construção ou ampliação)"));
+        if (ns("reconstFiel")) alerts.push({ t: "Se a reconstrução repuser as fachadas e a cobertura como estavam, fica isenta. Confirme com o projeto." });
+        break;
+      case "nova":
+        if (yes("pip")) { set(PIP); break; }
+        set(generic(s.tipoSel === "modular" ? "Casa modular ou pré-fabricada (é construção nova, seja qual for o sistema construtivo)" : s.tipoSel === "agricola" ? "Construção agrícola" : s.tipoSel === "anexo" ? "Anexo acima dos limites da escassa relevância" : "Construção nova"));
+        if (s.tipoSel === "modular") alerts.push({ i: 1, t: "Uma casa modular, de madeira ou feita de contentores, assente no terreno com carácter de permanência, é edificação: segue as mesmas regras da construção tradicional (art. 2.º, al. a))." });
+        if (s.tipoSel === "agricola") alerts.push({ i: 1, t: "Em solo rústico confirme no PDM o que é permitido. Em RAN ou REN é preciso parecer ou comunicação à entidade regional." });
+        break;
+      case "amovivel":
+        set({ p: "isento", refs: ["art. 2.º, al. a) e j) RJUE"], motivo: "Estruturas amovíveis, sem fundações nem carácter de permanência, usadas só para fins agrícolas, em regra não são edificação nem operação urbanística." });
+        alerts.push({ t: "Confirme com a câmara e veja o PDM: alguns regulamentos fixam regras para estufas e abrigos. Em RAN, REN ou área protegida pode ser precisa autorização." });
+        break;
+      case "piscina":
+        if (yes("pip")) { set(PIP); break; }
+        if (yes("servidao") && !yes("loteamento")) { set({ p: "lic", refs: ["art. 4.º, n.º 2, al. h) RJUE"], motivo: "Construção em área com servidão ou restrição de utilidade pública está sujeita a licença." }); break; }
+        set({ p: "cp", refs: ["art. 4.º, n.º 4, al. j) RJUE"], motivo: "Piscinas associadas a uma edificação principal estão sujeitas a comunicação prévia." });
+        alerts.push({ t: "Se a piscina não estiver associada a uma habitação ou edifício principal, aplica-se o enquadramento geral da construção nova." });
+        break;
+      case "demolicao":
+        if (q.demoTipo === "ilegal") { set({ p: "isento", refs: ["art. 6.º, n.º 1, al. i) RJUE"], motivo: "A demolição de construções ilegais está isenta de licença e de comunicação prévia." }); break; }
+        if (q.demoTipo === "obra") { set({ p: "isento", refs: ["art. 4.º, n.º 2, al. f) RJUE"], motivo: "A demolição que faz parte de uma reconstrução ou construção nova entra no procedimento dessa obra; numa reconstrução isenta, também fica isenta." }); alerts.push({ t: "Escolha antes o tipo de intervenção da obra principal (reconstrução ou construção nova) para ver o seu enquadramento." }); break; }
+        if (yes("pip")) { set(PIP); break; }
+        if (yes("loteamento")) set({ p: "cp", refs: ["art. 4.º, n.º 4, al. d) RJUE"], motivo: "Demolição em área de loteamento, plano de pormenor ou unidade de execução com parâmetros definidos está sujeita a comunicação prévia." });
+        else set({ p: "lic", refs: ["art. 4.º, n.º 2, al. f) RJUE"], motivo: "A demolição que não faz parte de uma reconstrução está sujeita a licença." });
+        alerts.push({ i: 1, t: "A demolição de anexos, muros e outras obras de escassa relevância está isenta (art. 6.º-A, n.º 1, al. f))." });
+        break;
+      case "uso":
+        set({ p: "cpPrazo", refs: ["art. 4.º, n.º 5 RJUE", "arts. 62.º-B, 63.º e 64.º"], motivo: "Mudar o uso sem obras faz-se por comunicação prévia com prazo: pode usar o imóvel 10 dias depois de submeter, se a câmara não rejeitar nem marcar vistoria." });
+        if (yes("fracao")) alerts.push({ t: "Numa fração em propriedade horizontal, se o título constitutivo não fixar o fim da fração, a mudança de uso precisa de autorização da assembleia de condóminos por 2/3 do valor do prédio. A mudança para habitação dispensa essa autorização." });
+        alerts.push({ i: 1, t: "Se o uso pretendido for comércio, restauração ou alojamento local, há registos próprios (Balcão do Empreendedor / RNAL) a juntar a este passo." });
+        break;
+      case "usoObras":
+        if (yes("fachada")) {
+          set(generic("Obras exteriores com mudança de uso"));
+          alerts.push({ i: 1, t: "Acabada a obra, a nova utilização comunica-se por comunicação prévia de utilização (art. 62.º-A) e o imóvel pode ser usado logo a seguir." });
+        } else {
+          set({ p: "cpPrazo", refs: ["art. 6.º, n.º 1, al. b) RJUE", "art. 62.º-B, n.º 1, al. b)", "art. 64.º"], motivo: "As obras interiores estão isentas. Acabadas as obras, a mudança de uso comunica-se por comunicação prévia com prazo: pode usar o imóvel 10 dias depois, se a câmara não rejeitar nem marcar vistoria." });
+          if (yes("estrutura")) alerts.push({ t: `Como as obras mexem na estrutura, é preciso ${termoEstrutura}.` });
+        }
+        if (yes("fracao")) alerts.push({ t: "Numa fração em propriedade horizontal, se o título constitutivo não fixar o fim da fração, a mudança de uso precisa de autorização da assembleia de condóminos por 2/3 do valor do prédio." });
+        break;
+      case "utilizacao":
+        if (q.utilObra === "controlada") set({ p: "cpUtil", refs: ["art. 4.º, n.º 4, al. k) RJUE", "art. 62.º-A"], motivo: "Depois de uma obra com licença, comunicação prévia ou PIP completo, a utilização comunica-se à câmara por comunicação prévia, com o termo do diretor de obra. O edifício pode ser usado logo a seguir." });
+        else if (q.utilObra === "anterior1951") {
+          set({ p: "pedido", refs: ["RGEU (DL 38 382, de 7 de agosto de 1951)"], motivo: "Os edifícios construídos antes de 1951 não precisavam de licença de utilização. A prova faz-se com certidão da câmara, que substitui o título de utilização." });
+          extraPassos = [["Reunir a prova da data", "Fotografias antigas, registos prediais ou matriciais antigos, plantas, cartografia histórica."], ["Pedir a certidão à câmara", "Ver minuta. A taxa consta do regulamento municipal."]];
+          extraDocs = [["Requerimento da certidão de construção anterior a 1951", "Ver minuta."], ["Planta de localização e fotografias do edifício", ""], ["Provas da data de construção", "Registos antigos, cartografia ou fotografias aéreas."]];
+        } else {
+          set({ p: "cpPrazo", refs: ["art. 4.º, n.º 5 RJUE", "arts. 62.º-B, 63.º e 64.º"], motivo: "Sem obra com licença ou comunicação prévia antes (incluindo depois de obras isentas), a utilização comunica-se por comunicação prévia com prazo: pode usar o imóvel 10 dias depois, se a câmara não rejeitar nem marcar vistoria." });
+          if (!q.utilObra) alerts.push({ t: "Indique se houve obra antes. Depois de obra com licença ou comunicação prévia, a comunicação é imediata (art. 62.º-A)." });
+        }
+        break;
+      case "legalizacao":
+        set({ p: "lic", refs: ["art. 102.º-A RJUE"], motivo: "Obras feitas sem controlo prévio legalizam-se pelo procedimento de legalização, com os elementos exigidos para a obra concreta e o regulamento municipal de legalização." });
+        alerts.push({ t: "Pode pedir antes à câmara informação sobre os termos da legalização; a câmara responde em 15 dias (art. 102.º-A, n.º 6). Sem obras a fazer, dispensam-se calendarização, estimativa de custo, caução, seguros e alvará do empreiteiro. Pode ser dispensado o cumprimento de normas técnicas impossíveis de cumprir, se cumprir as da data da construção (prova a cargo do requerente). Pode haver contraordenação." });
+        if (q.legalTipo === "uso") alerts.push({ i: 1, t: "Para legalizar só o uso, sem obras, basta normalmente a comunicação prévia com prazo de alteração de utilização (art. 62.º-B)." });
+        break;
+      case "terreno":
+        if (yes("pip")) { set(PIP); break; }
+        if (yes("loteamento")) set({ p: "cp", refs: ["art. 4.º, n.º 4, al. c) RJUE"], motivo: "Trabalhos de remodelação de terrenos em área de loteamento, plano de pormenor ou unidade de execução que defina essas obras estão sujeitos a comunicação prévia." });
+        else set({ p: "lic", refs: ["art. 4.º, n.º 2, al. b) RJUE"], motivo: "Trabalhos de remodelação de terrenos (aterros, escavações, alteração do relevo, abate de árvores) estão sujeitos a licença." });
+        alerts.push({ i: 1, t: "Mobilizações de solo só para agricultura, pecuária, floresta ou exploração mineira não contam como remodelação de terreno (art. 2.º, al. m)); nesses casos fale com a câmara e a DRAP." });
+        break;
+      case "destaque":
+        set({ p: "isento", refs: ["art. 6.º, n.º 1, al. d), e n.os 4 a 10 RJUE"], motivo: "O destaque de uma parcela está isento de licença, se cumprir as condições do art. 6.º. Pede-se à câmara a certidão de destaque, que serve para o registo predial." });
+        alerts.push({ t: "Dentro do perímetro urbano, as duas parcelas têm de confrontar com arruamentos públicos. Fora dele, na parcela destacada só se pode construir um edifício de habitação com dois fogos no máximo, e a parcela restante tem de ter a área mínima de cultura. Não se pode destacar de novo a mesma área durante 10 anos, e estes ónus vão ao registo predial." });
+        break;
+      case "ph":
+        set({ p: "pedido", refs: ["art. 66.º RJUE", "art. 1415.º Código Civil"], motivo: "Não é uma obra: pede-se à câmara a certidão de que o edifício reúne os requisitos legais da propriedade horizontal, para a escritura e o registo. Pode ser pedida com a comunicação de utilização." });
+        alerts.push({ i: 1, t: "Cada fração tem de ser independente, distinta e isolada, com saída própria para uma parte comum ou para a via pública. Junte as plantas com a divisão das frações e a memória descritiva com as permilagens." });
+        extraPassos = [["Preparar as plantas e a memória", "Com a divisão das frações, as partes comuns e as permilagens."], ["Pedir a certidão à câmara", "Sozinha ou com a comunicação de utilização (art. 66.º, n.º 3)."], ["Fazer a escritura e o registo", "Título constitutivo da propriedade horizontal."]];
+        extraDocs = [["Requerimento da certidão de propriedade horizontal", ""], ["Plantas com a divisão das frações", ""], ["Memória descritiva com permilagens", ""]];
+        break;
+      case "loteamento": {
+        const urb = s.tipoSel === "urbanizacao";
+        if (yes("pip")) { set(PIP); break; }
+        if (yes("loteamento")) set({ p: "cp", refs: [urb ? "art. 4.º, n.º 4, al. c) RJUE" : "art. 4.º, n.º 4, al. b) RJUE"], motivo: urb ? "Obras de urbanização em área de loteamento, plano de pormenor ou unidade de execução que as defina estão sujeitas a comunicação prévia." : "Loteamento em área de plano de pormenor ou unidade de execução com desenho urbano e lotes definidos está sujeito a comunicação prévia." });
+        else set({ p: "lic", refs: [urb ? "art. 4.º, n.º 2, al. b) RJUE" : "art. 4.º, n.º 2, al. a) RJUE"], motivo: urb ? "Obras de urbanização fora de loteamento, plano de pormenor ou unidade de execução que as defina estão sujeitas a licença." : "Loteamentos fora de plano de pormenor ou unidade de execução com conteúdo definido estão sujeitos a licença." });
+        alerts.push({ i: 1, t: "Neste tipo de operação um PIP prévio costuma compensar: fixa os parâmetros e, se tratar todos os pontos do art. 14.º, n.º 2, isenta de controlo prévio." });
+        break;
       }
-      if (yes("servidao") && (p === "lic" || p === "cp")) alerts.push({ t: "As condicionantes do local obrigam a pareceres de entidades externas. Veja quais no separador Entidades." });
+      case "altLoteamento":
+        if (q.altLote === "ate3") set({ p: "lic", refs: ["art. 27.º, n.º 8 RJUE"], motivo: "Alterações a um loteamento até 3% das áreas de implantação ou de construção, ou do número de fogos, que cumpram o PDM, são aprovadas por simples deliberação da câmara, sem outras formalidades." });
+        else set({ p: "lic", refs: ["art. 27.º RJUE"], motivo: "Alterar um loteamento licenciado faz-se por pedido de alteração da licença, que aproveita os documentos do processo que se mantenham válidos." });
+        alerts.push({ t: "A alteração não pode ser aprovada se houver oposição escrita dos donos da maioria da área dos lotes; a câmara notifica-os com 10 dias para se pronunciarem. Pode haver consulta pública. A alteração aprovada é averbada no registo predial." });
+        break;
+      case "alteracoesObra":
+        if (q.altObra === "isentas") set({ p: "isento", refs: ["art. 83.º, n.º 2 RJUE"], motivo: "Alterações em obra que seriam isentas não precisam de comunicação. Entram nas telas finais e no termo do diretor de obra." });
+        else if (q.altObra === "ampliacao") {
+          if (q.procInicial === "cp") set({ p: "cp", refs: ["art. 83.º, n.º 3 RJUE", "art. 35.º"], motivo: "Alterações em obra que ampliam ou mudam a implantação seguem o procedimento inicial: nova comunicação prévia, só com os elementos alterados." });
+          else if (q.procInicial === "pip") set({ p: "pedido", refs: ["art. 83.º, n.º 3 RJUE", "art. 14.º, n.º 2"], motivo: "Alterações em obra que ampliam ou mudam a implantação de uma obra isenta por PIP precisam de nova informação prévia, só com os elementos alterados." });
+          else set({ p: "lic", refs: ["art. 83.º, n.º 3 RJUE", "art. 27.º"], motivo: "Alterações em obra que ampliam ou mudam a implantação seguem o procedimento inicial: pedido de alteração da licença, só com os elementos alterados." });
+        } else set({ p: "cp", refs: ["art. 83.º, n.º 1 RJUE", "art. 35.º"], motivo: "Alterações ao projeto durante a obra comunicam-se por comunicação prévia, só com os elementos alterados, a tempo de estarem concluídas antes da comunicação de utilização." });
+        break;
+      case "prazoObra":
+        if (q.prazoTipo === "caducou") {
+          set({ p: q.procInicial === "cp" ? "cp" : "lic", refs: ["art. 72.º RJUE"], motivo: "Com o título caducado, pede nova licença, apresenta nova comunicação prévia ou novo PIP, aproveitando os elementos do processo anterior que se mantenham válidos." });
+        } else if (q.prazoTipo === "avancada") {
+          set({ p: "lic", refs: ["art. 88.º RJUE"], motivo: "Com a obra em fase avançada e o título caducado, pode pedir uma licença especial para a concluir, se a demolição não for aconselhável por razões ambientais, urbanísticas, técnicas ou económicas." });
+        } else {
+          set({ p: "pedido", refs: ["art. 58.º, n.os 5 e 8 RJUE"], motivo: "Peça a prorrogação antes do fim do prazo, com requerimento fundamentado. A câmara decide em 15 dias; sem resposta, considera-se deferida. Não há novo título: junta-se o comprovativo ao título existente." });
+          extraPassos = [["Fazer o pedido antes de acabar o prazo", "Requerimento fundamentado com o novo prazo e o motivo. Ver minuta."], ["Aguardar 15 dias", "Sem resposta, a prorrogação considera-se concedida."], ["Pagar a taxa, se houver", "E juntar o comprovativo ao título da obra."]];
+          extraDocs = [["Requerimento de prorrogação", "Ver minuta."], ["Nova calendarização da obra", ""]];
+        }
+        break;
+      case "escavacao":
+        set({ p: "pedido", refs: ["art. 81.º RJUE", "art. 23.º, n.º 6"], motivo: "Nas obras sujeitas a licença, depois de aprovada a arquitetura, pode pedir ao presidente da câmara para demolir, escavar e fazer a contenção periférica até ao piso mais baixo, com caução. A decisão é em 15 dias e a notificação do deferimento é o título, guardado na obra." });
+        if (!yes("arqAprovada")) alerts.push({ t: "Este pedido só pode ser feito depois de aprovado o projeto de arquitetura." });
+        alerts.push({ i: 1, t: "Também pode pedir uma licença parcial para construir a estrutura, depois de aprovada a arquitetura, com projeto de estabilidade e caução para a demolir se a licença não for concedida (art. 23.º, n.º 6)." });
+        extraPassos = [["Confirmar que a arquitetura está aprovada", "O pedido só é possível a partir daí."], ["Preparar o plano de demolição ou o projeto de escavação e contenção", "Com o projeto de estabilidade."], ["Prestar a caução", "Para repor o terreno se a obra não avançar."], ["Fazer o pedido", "O presidente da câmara decide em 15 dias."], ["Guardar a notificação na obra", "É o título destes trabalhos."]];
+        extraDocs = [["Requerimento ao abrigo do art. 81.º", ""], ["Plano de demolições ou projeto de escavação e contenção periférica", ""], ["Projeto de estabilidade", ""], ["Comprovativo da caução", ""]];
+        break;
     }
 
-    if (yes("fracao") && s.tipo !== "uso") alerts.push({ t: "Obras em partes comuns, ou que alterem a linha arquitetónica ou o arranjo estético do edifício, precisam de aprovação da assembleia de condóminos (art. 1422.º do Código Civil). Junte a ata." });
-    if (s.tipoSel === "usoObras") alerts.push({ i: 1, t: "As obras associadas seguem o seu próprio enquadramento: interiores sem mexer na estrutura estão isentas; fachada, estrutura ou ampliação podem pedir comunicação prévia ou licença, no mesmo processo." });
+    // Património: o próprio imóvel classificado (ou em conjunto) e a zona de proteção têm regras diferentes (art. 4.º, n.º 2, al. d)).
+    const OBRA_P = ["isento", "isentoTermo", "cp", "lic"];
+    const interiorCl = q.prot === "cl" && ["usoObras", "fracoes"].includes(tipo);
+    if (q.prot && (OBRA_P.includes(p) || interiorCl) && !["destaque", "loteamento", "altLoteamento", "amovivel", "prazoObra", "legalizacao"].includes(tipo) && !(tipo === "equip" && [].concat(q.equip || []).every((x) => x === "carregador")) && !(tipo === "demolicao" && q.demoTipo === "ilegal")) {
+      const licPat = (txt) => {
+        if (yes("pip")) set({ p: "cp", refs: ["art. 4.º, n.º 4, al. l) RJUE", "art. 14.º, n.º 2"], motivo: txt + " Como tem PIP favorável com todos os elementos, passa a comunicação prévia." });
+        else set({ p: "lic", refs: ["art. 4.º, n.º 2, al. d) RJUE", "Lei 107/2001 (património cultural)"], motivo: txt });
+      };
+      if (q.prot === "cl") {
+        if (tipo === "conservacao" && p !== "lic") set({ p: "isento", refs: ["art. 6.º, n.º 1, al. k) RJUE", "art. 4.º, n.º 2, al. d)"], motivo: "Obras de conservação de imóvel classificado ficam isentas só com parecer favorável do Património Cultural, entregue com a comunicação de início dos trabalhos. Sem esse parecer, precisam de licença." });
+        else licPat("Obras em imóvel classificado, em vias de classificação ou integrado em conjunto ou sítio classificado estão sujeitas a licença. As isenções de escassa relevância não se aplicam.");
+      } else {
+        const exteriorZP = ["exterior", "ampliacao", "nova", "piscina", "demolicao", "equip"].includes(tipo) || (tipo === "escassa" && s.tipoSel !== "vaos") || (tipo === "usoObras" && yes("fachada"));
+        if (exteriorZP) licPat("Construção, ampliação, alteração exterior ou demolição na zona de proteção de um imóvel classificado está sujeita a licença. As isenções de escassa relevância não se aplicam aqui, salvo a troca de caixilharia por outra idêntica.");
+        else if (tipo === "escassa" && s.tipoSel === "vaos") alerts.push({ i: 1, t: "Na zona de proteção, a troca de caixilharia continua isenta se mantiver a geometria e o acabamento exterior e melhorar a eficiência energética (art. 6.º-A, n.º 1, al. j))." });
+        else if (tipo === "reconstrucao" && p === "isento") alerts.push({ i: 1, t: "Na zona de proteção, a reconstrução que repõe fachadas e cobertura continua isenta; só o próprio imóvel classificado exige licença." });
+      }
+      alerts.unshift({ t: q.prot === "cl" ? "Há parecer obrigatório e vinculativo do Património Cultural, I.P. (ou da CCDR). Junte fotografias e o relatório prévio de obra em património." : "Nas obras exteriores há parecer do Património Cultural, I.P. (ou da CCDR) sobre a zona de proteção." });
+      if (q.patIncerto) alerts.unshift({ t: "O mapa encontrou proteção patrimonial neste local. Foi tratado como zona de proteção; se o próprio imóvel for classificado, quase todas as obras passam a licença. Confirme no questionário." });
+    } else if (ns("classificado") && OBRA_P.includes(p)) alerts.push({ t: "Falta confirmar se o imóvel tem proteção patrimonial. No próprio imóvel classificado quase todas as obras exigem licença; na zona de proteção, as obras exteriores." });
+
+    if (yes("servidao") && (p === "lic" || p === "cp")) alerts.push({ t: "As condicionantes do local obrigam a pareceres de entidades externas. Têm 20 dias para responder; sem resposta, conta como concordância (art. 13.º). Veja quais no separador Entidades." });
+    if (yes("fracao") && !["uso", "usoObras", "fracoes"].includes(s.tipoSel)) alerts.push({ t: "Obras em partes comuns, ou que alterem a linha arquitetónica ou o arranjo estético do edifício, precisam de aprovação da assembleia de condóminos (art. 1422.º do Código Civil). Junte a ata." });
     if (s.tipoSel === "equipamentos") {
-      if (q.equip === "ac") alerts.push({ t: "Aparelhos de ar condicionado visíveis da via pública costumam ser proibidos ou limitados pelo regulamento municipal, sobretudo em centros históricos. Veja o separador Regras da câmara. Num prédio em propriedade horizontal, na fachada, precisa da autorização do condomínio." });
-      if (q.equip === "solar" || q.equip === "solarSolo") alerts.push({ i: 1, t: "Painéis solares estão isentos se não excederem a área da cobertura nem a altura do edifício em mais de 1 m (no solo, se não ocuparem mais área do que a edificação). Acima de certas potências há registo na DGEG." });
-      if (q.equip === "antena") alerts.push({ i: 1, t: "Antenas de telecomunicações de operadores seguem regime próprio (DL 11/2003). Antenas domésticas estão isentas, mas o regulamento municipal pode impor localização na cobertura." });
+      const e = q.equip;
+      if (!e || ![].concat(e).length) alerts.push({ t: "Escolha o que vai instalar para ver as regras de cada equipamento." });
+      if (tem(e, "solar") || tem(e, "solarSolo") || tem(e, "bateria")) alerts.push({ i: 1, t: "Fora de imóveis protegidos, os painéis solares estão isentos se não excederem a área da cobertura nem a altura do edifício em mais de 1 m. Depósitos e baterias têm de ficar ocultos. Acima de certas potências há registo na DGEG." });
+      if (tem(e, "eolico")) alerts.push({ t: "O gerador eólico está isento até 4 m acima do edifício e 1,5 m de raio, mas tem de notificar a câmara antes, com localização, altura, raio, ruído e termo de responsabilidade (art. 6.º-A, n.os 5 e 6)." });
+      if (tem(e, "ac")) alerts.push({ t: "Aparelhos de ar condicionado visíveis da via pública costumam ser proibidos ou limitados pelo regulamento municipal, sobretudo em centros históricos. Veja o separador Regras da câmara. Num prédio em propriedade horizontal, na fachada, precisa da autorização do condomínio." });
+      if (tem(e, "antena")) alerts.push({ i: 1, t: "Antenas de operadores de telecomunicações seguem regime próprio (DL 11/2003). Antenas domésticas são em regra isentas, mas o regulamento municipal pode impor a localização na cobertura." });
+      if (tem(e, "carregador")) alerts.push({ i: 1, t: "Num prédio em propriedade horizontal, o regime da mobilidade elétrica tem regras próprias para instalar carregadores na garagem comum: fale antes com a administração do condomínio. A instalação é feita por técnico habilitado." });
+      if (tem(e, "chamine")) alerts.push({ t: "Chaminés e condutas de exaustão na fachada ou acima da cobertura alteram o aspeto exterior: confirme o regulamento municipal. Restaurantes têm regras próprias de exaustão de fumos." });
+      if (tem(e, "toldo")) alerts.push({ t: "Toldos, reclamos e letreiros seguem o regulamento municipal de publicidade e de ocupação do espaço público; muitas vezes basta uma mera comunicação no Balcão do Empreendedor." });
+      if (tem(e, "gas")) alerts.push({ t: "Depósitos de gás ou de combustível e geradores têm regime de segurança próprio (projeto e entidade inspetora). Confirme também as distâncias exigidas pela segurança contra incêndio." });
     }
-    if (s.tipoSel === "demolicao" && yes("demoTipo")) alerts.push({ t: "Como a demolição faz parte de uma obra de reconstrução ou construção nova, entra no processo dessa obra. Escolha antes esse tipo de intervenção." });
-    if (yes("viaPublica")) alerts.push({ t: "Peça a licença de ocupação da via pública. No licenciamento pode ir no mesmo pedido; nos outros casos é um pedido à parte." });
-    if (yes("anterior1951")) alerts.push({ i: 1, t: "Peça à câmara a certidão de que o edifício é anterior a 1951. Substitui a licença de utilização na prova do uso existente." });
-    if (p !== "lic" && p !== "cpPrazo") alerts.push({ i: 1, t: "Informe a câmara do início dos trabalhos pelo menos 5 dias antes (art. 80.º-A), indicando quem os executa." });
-    return { p, refs, motivo, alerts };
+    if (yes("viaPublica")) alerts.push({ t: "Peça a licença de ocupação da via pública. No licenciamento pode ir no mesmo pedido (art. 4.º, n.º 7); nos outros casos é um pedido à parte." });
+    if (yes("anterior1951")) alerts.push({ i: 1, t: "Peça à câmara a certidão de que o edifício é anterior a 1951. Substitui o título de utilização na prova do uso existente." });
+    if (p === "isento" || p === "isentoTermo" || p === "cp" || p === "lic") {
+      if (tipo === "conservacao" && q.onde === "interior") alerts.push({ i: 1, t: "Obras de conservação só no interior dispensam a comunicação de início dos trabalhos (art. 80.º-A, n.º 3)." });
+      else alerts.push({ i: 1, t: "Informe a câmara do início dos trabalhos até 5 dias antes (art. 80.º-A), indicando quem os executa, e afixe o aviso da obra visível da via pública." });
+    }
+    return { p, refs, motivo, alerts, extraPassos, extraDocs };
   }
 
   // ---------- Documentos ----------
@@ -747,15 +899,25 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     if (s.qualidade && s.qualidade !== "proprietário") add(P, "Autorização do proprietário ou procuração", "Para quem não é o único proprietário.");
     if (yes("fracao")) add(P, "Ata da assembleia de condóminos", "Para obras em partes comuns ou que mexam no aspeto exterior do edifício.");
     if (yes("anterior1951")) add(P, "Certidão camarária de construção anterior a 1951", "Ver minuta.");
-    else add(P, "Licença ou autorização de utilização existente", "Ou plantas do último processo aprovado, pedidas ao arquivo da câmara.");
+    else if (!["nova", "modular", "agricola", "terreno", "destaque", "loteamento", "urbanizacao", "utilizacao", "ph"].includes(s.tipoSel)) add(P, "Título de utilização existente", "Licença ou autorização de utilização, ou comunicação de utilização. Ou plantas do último processo aprovado, pedidas ao arquivo da câmara.");
     add(P, "Caderneta predial (opcional)", "Deixou de ser exigida, mas ajuda a confirmar áreas e uso.");
     const ext = entidades(s, r).filter((e) => e.k !== "camara");
-    if (ext.length) add(P, "Pareceres prévios das entidades (opcional, recomendado)", ext.map((e) => e.ent.split(" (")[0]).join(", ") + ". Ver minuta de pedido de parecer.");
+    if (ext.length && r.p !== "pedido") add(P, "Pareceres prévios das entidades (opcional, recomendado)", ext.map((e) => e.ent.split(" (")[0]).join(", ") + ". Ver minuta de pedido de parecer.");
+
+    if (r.p === "pedido") {
+      (r.extraDocs || [["Requerimento à câmara", ""]]).forEach(([t, d]) => add("Para o pedido", t, d));
+      return g;
+    }
 
     if (r.p === "isento" || r.p === "isentoTermo") {
       const O = "Para a obra";
-      if (r.p === "isentoTermo") add(O, "Termo de responsabilidade de técnico habilitado", "A atestar que a obra não prejudica a estrutura de estabilidade. Ver minuta.");
-      add(O, "Comunicação de início dos trabalhos", "À câmara, pelo menos 5 dias antes (art. 80.º-A). Ver minuta.");
+      if (r.p === "isentoTermo") {
+        add(O, "Projeto de estabilidade", "Feito por técnico habilitado; inclui o reforço sísmico quando a lei o exija. É entregue para depósito com a comunicação de início dos trabalhos.");
+        add(O, "Termo de responsabilidade do técnico", "A declarar que a obra melhora ou não prejudica a estrutura do edifício. Ver minuta.");
+      }
+      if (s.tipoSel === "conservacao" && q.prot === "cl") add(O, "Parecer favorável do Património Cultural", "Entregue com a comunicação de início dos trabalhos (art. 6.º, n.º 1, al. k)).");
+      add(O, "Comunicação de início dos trabalhos", "À câmara, até 5 dias antes (art. 80.º-A). Ver minuta.");
+      add(O, "Aviso da obra afixado no local", "Visível da via pública, até 5 dias antes do início (art. 80.º-A, n.º 5).");
       add(O, "Empreiteiro com alvará ou certificado IMPIC adequado ao valor da obra", "Peça o número e confirme no portal do IMPIC.");
       add(O, "Seguro de acidentes de trabalho", "Do empreiteiro.");
       add(O, "Registo de resíduos de construção e demolição (RCD)", "Guias e-GAR dos resíduos encaminhados.");
@@ -766,26 +928,39 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
 
     if (r.p === "cpPrazo") {
       const C = "Comunicação com prazo";
-      add(C, "Comunicação prévia com prazo", "Ver minuta.");
+      add(C, "Comunicação prévia com prazo", "No modelo da plataforma. Ver minuta.");
       add(C, "Planta de localização e extratos do PDM", "Ordenamento e condicionantes.");
       add(C, "Plantas do imóvel com o uso pretendido", "Escala 1:100.");
-      add(C, "Termo de responsabilidade de técnico habilitado", "A atestar que o imóvel cumpre as normas aplicáveis ao novo uso.");
+      add(C, "Termo de responsabilidade", "Assinado por quem pode ser autor de projeto de arquitetura: o uso cumpre as normas e o edifício é idóneo para o fim (art. 63.º).");
       add(C, "Certificado energético", "Emitido por perito qualificado (SCE).");
       add(C, "Ficha de segurança contra incêndio (SCIE)", "Ou projeto, conforme a categoria de risco.");
       add(C, "Comprovativo de acessibilidades", "Se o novo uso for aberto ao público.");
+      if (s.tipoSel === "fracoes") add(C, "Pedido de certidão de propriedade horizontal", "Pode ir com a comunicação (art. 66.º, n.º 3).");
+      return g;
+    }
+
+    if (r.p === "cpUtil") {
+      const C = "Comunicação de utilização";
+      add(C, "Comunicação prévia de utilização", "No modelo da plataforma. Ver minuta.");
+      add(C, "Termo de responsabilidade do diretor de obra ou do diretor de fiscalização", "Declara que a obra está conforme o projeto e que as alterações isentas cumprem as normas (art. 62.º-A, n.º 1, al. b)).");
+      add(C, "Telas finais", "Se houve alterações durante a obra.");
+      add(C, "Certificado energético", "Emitido por perito qualificado (SCE).");
+      add(C, "Restantes elementos da portaria de instrução", "Previstos no art. 9.º, n.º 4.");
+      add(C, "Pedido de certidão de propriedade horizontal (se for o caso)", "Pode ir com a comunicação (art. 66.º, n.º 3).");
       return g;
     }
 
     const A = "Projeto de arquitetura";
-    add(A, r.p === "lic" ? "Requerimento de licenciamento" : "Comunicação prévia", "Ver minuta.");
+    add(A, r.p === "lic" ? "Requerimento de licenciamento" : "Comunicação prévia", "No modelo da plataforma. Ver minuta.");
     add(A, "Planta de localização e extratos do PDM", "Ordenamento e condicionantes, com o local assinalado.");
-    if (["nova","ampliacao","reconstrucao","piscina","loteamento"].includes(s.tipo)) add(A, "Levantamento topográfico", "Georreferenciado, com a implantação proposta.");
-    add(A, "Memória descritiva e justificativa", "Inclui enquadramento no PDM, áreas, cércea e índices.");
+    if (["nova", "ampliacao", "reconstrucao", "piscina", "loteamento"].includes(s.tipo)) add(A, "Levantamento topográfico", "Georreferenciado, com a implantação proposta.");
+    add(A, "Memória descritiva e justificativa", "Inclui enquadramento no PDM, áreas, alturas e índices.");
     add(A, "Peças desenhadas do existente e do proposto", "Plantas, alçados e cortes. Alterações a vermelho (a construir) e amarelo (a demolir).");
     add(A, "Fotografias do local", "");
     add(A, "Termos de responsabilidade do autor e do coordenador", "Com prova de inscrição na ordem e seguro de responsabilidade civil.");
     add(A, "Ficha estatística (INE)", "");
     add(A, "Estimativa do custo e calendarização da obra", "");
+    if (q.prot === "cl") add(A, "Relatório prévio de obra em património", "Exigido para imóveis classificados (DL 140/2009).");
     const E = "Especialidades";
     add(E, "Estabilidade", "Se mexer na estrutura ou for construção nova.");
     add(E, "Redes de águas e esgotos e águas pluviais", "");
@@ -795,7 +970,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     add(E, "Condicionamento acústico", "");
     add(E, "Segurança contra incêndio (ficha ou projeto)", "");
     add(E, "Plano de acessibilidades", "Se aplicável.");
-    if (r.p === "lic") add(E, "Nota", "A câmara já não aprecia as especialidades. Podem ser entregues com o pedido ou depois da aprovação da arquitetura.");
+    if (r.p === "lic") add(E, "Nota", "A câmara não aprecia as especialidades. Podem ser entregues com o pedido ou até 6 meses depois de aprovada a arquitetura (art. 20.º, n.º 4).");
     const I = r.p === "lic" ? "Antes de começar a obra" : "Com a comunicação prévia";
     add(I, "Título do empreiteiro (IMPIC) adequado ao valor da obra", "");
     add(I, "Apólice de seguro de acidentes de trabalho", "");
@@ -803,65 +978,75 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     add(I, "Plano de segurança e saúde", "");
     add(I, "Plano de prevenção e gestão de RCD", "");
     add(I, "Livro de obra eletrónico", "");
-    add(I, "Comprovativo de pagamento das taxas", "Autoliquidação. No licenciamento, substitui o alvará.");
-    if (yes("viaPublica")) add(I, "Licença de ocupação da via pública", r.p === "lic" ? "Pode ser pedida no mesmo pedido de licenciamento." : "");
-    if (yes("classificado")) add(A, "Relatório prévio de obra em património", "Exigido para imóveis classificados.");
+    add(I, "Comprovativo de pagamento das taxas", "Autoliquidação. Com o requerimento (e, na licença, a notificação do deferimento), é o título da obra (art. 4.º-A).");
+    if (yes("viaPublica")) add(I, "Licença de ocupação da via pública", r.p === "lic" ? "Pode ir no mesmo pedido de licenciamento (art. 4.º, n.º 7)." : "");
     return g;
   }
 
   // ---------- Passo a passo ----------
+  // Prazo da deliberação final no licenciamento (art. 23.º, n.º 1).
   function prazoDecisao(s) {
-    const a = parseFloat(String(s.abc || "").replace(",", ".")), cl = effQ(s).classificado === "sim";
-    if (s.tipo === "loteamento") return "No seu caso, 200 dias (loteamento ou urbanização).";
-    if (a > 2200) return "No seu caso, 200 dias (mais de 2200 m² de área bruta).";
-    if (a > 300 || cl) return `No seu caso, 150 dias (${cl ? "imóvel classificado ou em zona de proteção" : "entre 300 e 2200 m² de área bruta"}).`;
-    if (a > 0) return "No seu caso, 120 dias (até 300 m² de área bruta).";
-    return "120 dias até 300 m² de área bruta, 150 dias até 2200 m² ou imóvel classificado, 200 dias acima disso ou loteamentos. Indique a área para saber o seu.";
+    if (s.tipoSel === "loteamento" || s.tipoSel === "altLoteamento") return "A câmara decide em 45 dias depois do saneamento ou do último parecer (art. 23.º, n.º 1, al. b)).";
+    if (s.tipoSel === "urbanizacao" || s.tipoSel === "terreno") return "A câmara decide em 30 dias depois do saneamento ou do último parecer (art. 23.º, n.º 1, al. c)).";
+    return "A câmara decide em 20 dias, contados da entrega das especialidades (ou da aprovação da arquitetura, se as especialidades foram entregues logo no início) (art. 23.º, n.os 1 e 2).";
   }
 
   function passos(r, s) {
     const camara = s.concelho ? `Câmara Municipal de ${s.concelho}` : "câmara municipal";
     const comuns = [
-      ["Reunir os dados do imóvel", "Certidão permanente, licença de utilização ou certidão anterior a 1951, e plantas do último processo aprovado."],
+      ["Reunir os dados do imóvel", "Certidão permanente, título de utilização ou certidão anterior a 1951, e plantas do último processo aprovado."],
       ["Confirmar condicionantes", "Consultar o PDM (ordenamento e condicionantes) e o património classificado. Em caso de dúvida, fazer um pedido de informação simples."],
     ];
+    const edificacao = !["loteamento", "altLoteamento", "urbanizacao", "terreno"].includes(s.tipoSel);
+    const fimObra = ["Concluir a obra e comunicar a utilização", "Se a obra se destina a uma nova utilização (construção, ampliação, mudança de uso), submeta a comunicação prévia de utilização com o termo do diretor de obra (art. 62.º-A) e use logo o edifício. Junte as telas finais se houve alterações."];
+    const inicio = ["Comunicar o início dos trabalhos", "Até 5 dias antes, com o empreiteiro e os diretores de obra e de fiscalização (art. 80.º-A). Afixe o aviso da obra."];
     const P = {
       isento: [...comuns,
         ["Obter aprovação do condomínio, se necessário", "Ata da assembleia para partes comuns ou aspeto exterior."],
         ["Contratar o empreiteiro", "Com alvará ou certificado IMPIC adequado ao valor. Pedir seguro de acidentes de trabalho."],
         ["Pedir ocupação da via pública, se precisar", "Andaimes, contentor ou grua."],
-        ["Comunicar o início dos trabalhos", `À ${camara}, pelo menos 5 dias antes (art. 80.º-A).`],
+        ["Comunicar o início dos trabalhos", `À ${camara}, até 5 dias antes (art. 80.º-A), e afixar o aviso da obra. Obras de conservação só no interior dispensam esta comunicação. A comunicação caduca se a obra não começar num ano.`],
         ["Executar a obra e guardar comprovativos", "Guias de resíduos, fotografias e faturas."],
       ],
       cp: [...comuns,
         ["Contratar o técnico autor do projeto", "Arquiteto ou engenheiro com inscrição na ordem e seguro."],
         ["Preparar o projeto completo", "Arquitetura e especialidades, com os termos de responsabilidade."],
-        ["Submeter a comunicação prévia", "Na Plataforma Eletrónica dos Procedimentos Urbanísticos ou no portal da câmara."],
-        ["Aguardar 15 dias úteis", "A câmara só pode pedir correções uma vez neste prazo. Sem notificação, o processo considera-se bem instruído."],
-        ["Pagar as taxas por autoliquidação", "O prazo da obra conta a partir do pagamento."],
-        ["Comunicar o início dos trabalhos", "Pelo menos 5 dias antes, com o empreiteiro e os diretores de obra e de fiscalização."],
-        ["Concluir a obra e entregar os elementos finais", "Termo de responsabilidade do diretor de obra e telas finais, se houve alterações. Não é emitida autorização de utilização."],
+        ["Submeter a comunicação prévia", "Na Plataforma Eletrónica de Licenciamentos Urbanísticos, ou no portal da câmara enquanto a plataforma não estiver disponível."],
+        ["Pagar as taxas por autoliquidação", "Com o comprovativo de submissão, é o título da obra. O prazo da obra conta a partir do pagamento."],
+        inicio,
+        ["Responder se a câmara pedir elementos", "A câmara só pode pedir uma vez o que falta; tem 10 dias para entregar, senão a comunicação é considerada inepta (art. 35.º, n.º 9). A verificação dos projetos caduca 1 ano depois do pagamento das taxas."],
+        fimObra,
       ],
       lic: [...comuns,
-        ["Ponderar um PIP", "Se houver dúvidas sobre o que o PDM permite, um PIP favorável fixa os parâmetros e pode até isentar."],
+        ["Ponderar um PIP", "Se houver dúvidas sobre o que o PDM permite, um PIP favorável fixa os parâmetros. Se tratar todos os pontos do art. 14.º, n.º 2, isenta a obra (num imóvel protegido, passa-a a comunicação prévia)."],
         ["Contratar o técnico autor do projeto", "Arquiteto ou engenheiro com inscrição na ordem e seguro."],
-        ["Submeter o pedido de licenciamento", "Com o projeto de arquitetura. As especialidades podem seguir com o pedido ou depois."],
-        ["Responder ao pedido de correções", "A câmara só o pode fazer uma vez, até 15 dias úteis após a submissão; há 15 dias úteis para responder."],
-        ["Aguardar a decisão", prazoDecisao(s) + " Sem decisão no prazo, há deferimento tácito."],
-        ["Pagar as taxas", "O comprovativo de pagamento é o título da obra (já não há alvará)."],
-        ["Comunicar o início dos trabalhos", "Pelo menos 5 dias antes, com o empreiteiro e os diretores de obra e de fiscalização."],
-        ["Concluir a obra e entregar os elementos finais", "Termo de responsabilidade do diretor de obra e telas finais, se houve alterações."],
+        ["Submeter o pedido de licenciamento", edificacao ? "Com o projeto de arquitetura. As especialidades podem ir já ou até 6 meses depois de aprovada a arquitetura (art. 20.º, n.º 4)." : "Com os elementos da portaria de instrução."],
+        ["Saneamento: 20 dias", "A câmara só pode pedir uma vez que corrija ou complete o pedido; tem 10 dias para responder. Sem notificação nesse prazo, o pedido considera-se bem instruído e o prazo de decisão não pode ser alargado (art. 11.º)."],
+        ["Pareceres das entidades: 20 dias", "Sem resposta no prazo, conta como concordância (art. 13.º). Pode juntar os pareceres logo de início."],
+        ...(edificacao ? [["Aprovação da arquitetura: 30 dias", "Contados do fim do saneamento ou do último parecer (art. 20.º, n.º 3)."]] : []),
+        ["Decisão final", prazoDecisao(s) + " Sem decisão no prazo, há deferimento tácito."],
+        ["Se a câmara pretender indeferir", "Na audiência prévia pode entregar, uma única vez, alterações que corrijam o que está mal (art. 24.º-A)."],
+        ["Pagar as taxas", "Com o requerimento e a notificação do deferimento (ou o comprovativo de submissão, se o deferimento for tácito), é o título da obra (art. 4.º-A)."],
+        inicio,
+        fimObra,
       ],
       cpPrazo: [...comuns,
         ["Obter autorização do condomínio, se necessário", "Quando o título constitutivo não fixa o fim da fração (exceto mudança para habitação)."],
-        ["Pedir o termo de responsabilidade e o certificado energético", "A um técnico habilitado e a um perito SCE."],
-        ["Submeter a comunicação prévia com prazo", `À ${camara}.`],
-        ["Aguardar 20 dias", "Se a câmara não determinar vistoria, pode usar o imóvel com o novo uso."],
-        ["Se houver vistoria", "Realiza-se em 15 dias. Se exigir obras, faça-as e peça nova vistoria; se não ocorrer em 10 dias, conta como não oposição."],
+        ["Pedir o termo de responsabilidade e o certificado energético", "O termo é assinado por quem pode ser autor de projeto de arquitetura (art. 63.º)."],
+        ["Submeter a comunicação prévia com prazo", `À ${camara}, na plataforma eletrónica.`],
+        ["Aguardar 10 dias", "Se a câmara não rejeitar nem marcar vistoria nesse prazo, pode usar o imóvel (art. 64.º)."],
+        ["Se houver vistoria", "Realiza-se em 15 dias. Se exigir obras, faça-as e peça nova vistoria; se não for feita em 10 dias, pode usar o imóvel (art. 65.º)."],
       ],
+      cpUtil: [
+        ["Reunir o termo do diretor de obra", "Ou do diretor de fiscalização: declara que a obra está conforme o projeto (art. 62.º-A)."],
+        ["Pedir o certificado energético e preparar as telas finais", "Telas finais só se houve alterações durante a obra."],
+        ["Submeter a comunicação prévia de utilização", `À ${camara}, na plataforma eletrónica.`],
+        ["Usar o edifício", "Pode usá-lo logo depois de submeter. A câmara verifica depois os elementos e pode pedir, uma única vez, o que faltar, com 10 dias para entregar."],
+      ],
+      pedido: r.extraPassos || [["Fazer o pedido à câmara", "Com os elementos indicados nos Documentos."]],
     };
     P.isentoTermo = [...P.isento];
-    P.isentoTermo.splice(3, 0, ["Pedir o termo de responsabilidade", "A um engenheiro ou arquiteto, a atestar que a obra não prejudica a estrutura."]);
+    P.isentoTermo.splice(3, 0, ["Pedir o projeto de estabilidade e o termo de responsabilidade", "A um engenheiro ou arquiteto habilitado, a atestar que a obra melhora ou não prejudica a estrutura. Seguem com a comunicação de início dos trabalhos."]);
     return P[r.p];
   }
 
@@ -878,23 +1063,27 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     const fecho = `\n\nPede deferimento.\n\n${v(s.concelho, "local")}, ${hoje}\n\nO requerente,\n\n_______________________________\n${v(s.nome, "nome")}`;
     const M = {};
     M.lic = { nome: "Requerimento de licenciamento", desc: "Pedido de licença para obras sujeitas a licenciamento.",
-      txt: head + `${req}, vem, ao abrigo do disposto no n.º 2 do artigo 4.º e no artigo 9.º do Regime Jurídico da Urbanização e da Edificação (RJUE), aprovado pelo Decreto-Lei n.º 555/99, de 16 de dezembro, na sua redação atual, requerer a V. Exa. o licenciamento da seguinte operação urbanística, a realizar no ${imovel}:\n\n${obra}\n\nPara o efeito, junta os elementos instrutórios previstos na Portaria n.º 71-A/2024, de 27 de fevereiro, e a ${cert}.${yes(s,"viaPublica") ? "\n\nRequer ainda, ao abrigo do RJUE, a licença de ocupação da via pública necessária à execução da obra, conforme planta de estaleiro anexa." : ""}\n\nIndica como técnico responsável ${v(s.tecnico, "nome do técnico")}, ${v(s.ordem, "n.º de inscrição na ordem")}.` + fecho };
+      txt: head + `${req}, vem, ao abrigo do disposto no n.º 2 do artigo 4.º e no artigo 9.º do Regime Jurídico da Urbanização e da Edificação (RJUE), aprovado pelo Decreto-Lei n.º 555/99, de 16 de dezembro, na sua redação atual, requerer a V. Exa. o licenciamento da seguinte operação urbanística, a realizar no ${imovel}:\n\n${obra}\n\nPara o efeito, junta os elementos instrutórios previstos na portaria a que se refere o n.º 4 do artigo 9.º do RJUE e a ${cert}.${yes(s,"viaPublica") ? "\n\nRequer ainda, ao abrigo do n.º 7 do artigo 4.º do RJUE, a licença de ocupação da via pública necessária à execução da obra, conforme planta de estaleiro anexa." : ""}\n\nIndica como técnico responsável ${v(s.tecnico, "nome do técnico")}, ${v(s.ordem, "n.º de inscrição na ordem")}.` + fecho };
     M.cp = { nome: "Comunicação prévia", desc: "Para obras sujeitas a comunicação prévia.",
-      txt: head + `${req}, vem, ao abrigo do disposto no n.º 4 do artigo 4.º e nos artigos 34.º e seguintes do Regime Jurídico da Urbanização e da Edificação (RJUE), aprovado pelo Decreto-Lei n.º 555/99, de 16 de dezembro, na sua redação atual, apresentar comunicação prévia da seguinte operação urbanística, a realizar no ${imovel}:\n\n${obra}\n\nA operação enquadra-se em comunicação prévia por: ${r.motivo.toLowerCase()}\n\nJunta os elementos instrutórios previstos na Portaria n.º 71-A/2024, de 27 de fevereiro, incluindo os termos de responsabilidade dos técnicos, e a ${cert}.\n\nProcederá à autoliquidação das taxas devidas e informará a câmara municipal do início dos trabalhos nos termos do artigo 80.º-A do RJUE.` + fecho.replace("Pede deferimento.", "Com os melhores cumprimentos,") };
-    M.cpPrazo = { nome: "Comunicação prévia com prazo (mudança de uso)", desc: "Para mudar o uso sem obras sujeitas a controlo prévio.",
-      txt: head + `${req}, vem, ao abrigo dos artigos 62.º e seguintes do Regime Jurídico da Urbanização e da Edificação (RJUE), na sua redação atual, apresentar comunicação prévia com prazo para alteração da utilização do ${imovel}, de ${v(s.usoAtual, "uso atual")} para ${v(s.usoNovo, "uso pretendido")}.\n\nA alteração não é precedida de operação urbanística sujeita a controlo prévio.\n\nJunta: ${cert}; planta de localização; plantas do imóvel com o uso pretendido; termo de responsabilidade subscrito por técnico habilitado, atestando a conformidade com as normas legais e regulamentares aplicáveis ao novo uso; certificado energético; ficha de segurança contra incêndio${yes(s,"fracao") ? "; ata da assembleia de condóminos" : ""}.\n\nNa ausência de determinação de vistoria no prazo legal, a utilização pretendida será iniciada.` + fecho.replace("Pede deferimento.", "Com os melhores cumprimentos,") };
-    M.inicio = { nome: "Comunicação de início dos trabalhos", desc: "Obrigatória pelo menos 5 dias antes de começar (art. 80.º-A), incluindo em obras isentas.",
+      txt: head + `${req}, vem, ao abrigo do disposto no n.º 4 do artigo 4.º e nos artigos 34.º e 35.º do Regime Jurídico da Urbanização e da Edificação (RJUE), aprovado pelo Decreto-Lei n.º 555/99, de 16 de dezembro, na sua redação atual, apresentar comunicação prévia da seguinte operação urbanística, a realizar no ${imovel}:\n\n${obra}\n\nA operação enquadra-se em comunicação prévia por: ${r.motivo.toLowerCase()}\n\nJunta os elementos instrutórios previstos na portaria a que se refere o n.º 4 do artigo 35.º do RJUE, incluindo os termos de responsabilidade dos técnicos, e a ${cert}.\n\nProcederá à autoliquidação das taxas devidas e informará a câmara municipal do início dos trabalhos nos termos do artigo 80.º-A do RJUE.` + fecho.replace("Pede deferimento.", "Com os melhores cumprimentos,") };
+    M.cpPrazo = { nome: "Comunicação prévia com prazo (utilização ou mudança de uso)", desc: "Para usar ou mudar o uso sem obra sujeita a licença ou comunicação prévia (arts. 62.º-B a 64.º).",
+      txt: head + `${req}, vem, ao abrigo do n.º 5 do artigo 4.º e dos artigos 62.º-B, 63.º e 64.º do Regime Jurídico da Urbanização e da Edificação (RJUE), na sua redação atual, apresentar comunicação prévia com prazo para alteração da utilização do ${imovel}, de ${v(s.usoAtual, "uso atual")} para ${v(s.usoNovo, "uso pretendido")}.\n\nA utilização não é precedida de obra sujeita a licença, comunicação prévia ou informação prévia favorável que contemple todos os elementos do n.º 2 do artigo 14.º.\n\nJunta: ${cert}; planta de localização; plantas do imóvel com o uso pretendido; termo de responsabilidade subscrito por pessoa legalmente habilitada a ser autor de projeto de arquitetura, declarando a conformidade da utilização prevista com as normas legais e regulamentares e a idoneidade do edifício ou fração para o fim pretendido (artigo 63.º); certificado energético; ficha de segurança contra incêndio${yes(s,"fracao") ? "; ata da assembleia de condóminos" : ""}.\n\nDecorridos dez dias sem rejeição nem determinação de vistoria, a utilização pretendida será iniciada, nos termos do n.º 1 do artigo 64.º.` + fecho.replace("Pede deferimento.", "Com os melhores cumprimentos,") };
+    M.inicio = { nome: "Comunicação de início dos trabalhos", desc: "Obrigatória até 5 dias antes de começar (art. 80.º-A), incluindo em obras isentas.",
       txt: head + `${req}, vem, nos termos do artigo 80.º-A do Regime Jurídico da Urbanização e da Edificação (RJUE), informar V. Exa. de que os trabalhos de:\n\n${obra}\n\nno ${imovel}, terão início no dia <mark>[data de início]</mark>, com duração prevista de <mark>[n.º]</mark> dias.\n\nEnquadramento: ${PROC[r.p].nome.toLowerCase()} (${r.refs.join("; ")}).\n\nA execução dos trabalhos está a cargo de <mark>[nome do empreiteiro]</mark>, NIF <mark>[NIF]</mark>, titular do alvará/certificado IMPIC n.º <mark>[n.º]</mark>.` + fecho.replace("Pede deferimento.", "Com os melhores cumprimentos,") };
-    M.termo = { nome: "Termo de responsabilidade (estrutura)", desc: "Para obras isentas que mexem na estrutura. A assinar pelo técnico.",
-      txt: `TERMO DE RESPONSABILIDADE\n\n${v(s.tecnico, "nome do técnico")}, ${v(s.ordem, "inscrito na Ordem dos ... sob o n.º ...")}, declara, para efeitos do artigo 6.º do Regime Jurídico da Urbanização e da Edificação (RJUE), na sua redação atual, que as obras de:\n\n${obra}\n\na realizar no ${imovel}, de que é requerente ${v(s.nome, "nome do requerente")}, não prejudicam a estrutura de estabilidade do edifício face ao seu estado anterior, e que foram concebidas e serão executadas em conformidade com as normas legais e regulamentares aplicáveis.\n\n${v(s.concelho, "local")}, ${hoje}\n\nO técnico,\n\n_______________________________` };
+    M.termo = { nome: "Termo de responsabilidade (estrutura)", desc: "Para obras interiores isentas que mexem na estrutura. A assinar pelo técnico e entregar, com o projeto de estabilidade, junto com a comunicação de início dos trabalhos.",
+      txt: `TERMO DE RESPONSABILIDADE\n\n${v(s.tecnico, "nome do técnico")}, ${v(s.ordem, "inscrito na Ordem dos ... sob o n.º ...")}, autor do projeto de estabilidade, declara, para efeitos da subalínea ii) da alínea b) do n.º 1 do artigo 6.º do Regime Jurídico da Urbanização e da Edificação (RJUE), na sua redação atual, que as obras de:\n\n${obra}\n\na realizar no ${imovel}, de que é requerente ${v(s.nome, "nome do requerente")}, consideradas na sua globalidade, <mark>[melhoram / não prejudicam]</mark> a estrutura de estabilidade do edifício face à situação anterior às obras, e que foram concebidas e serão executadas em conformidade com as normas legais e regulamentares aplicáveis.\n\n${v(s.concelho, "local")}, ${hoje}\n\nO técnico,\n\n_______________________________` };
     const ents = entidades(s, r).filter((e) => e.k !== "camara");
-    const umParecer = (e) => `Exmo(a). Senhor(a) Presidente do(a) ${e ? e.ent.split(" (")[0] : "<mark>[entidade]</mark>"}\n\n${req}, vem, ao abrigo do artigo 13.º-B do Regime Jurídico da Urbanização e da Edificação (RJUE), na sua redação atual, requerer a emissão de parecer sobre a seguinte operação urbanística, a realizar no ${imovel}:\n\n${obra}\n\nO local está abrangido por: ${e ? e.porque : "<mark>[servidão ou restrição]</mark>"} (${e ? e.base : "<mark>[base legal]</mark>"}).\n\nO parecer destina-se a instruir o procedimento de ${PROC[r.p].nome.toLowerCase()} junto da Câmara Municipal de ${conc}.\n\nJunta: planta de localização com o local assinalado, extrato da planta de condicionantes, memória descritiva, peças desenhadas e fotografias do local.` + fecho;
+    const umParecer = (e) => `Exmo(a). Senhor(a) Presidente do(a) ${e ? e.ent.split(" (")[0] : "<mark>[entidade]</mark>"}\n\n${req}, vem, ao abrigo dos artigos 13.º e 13.º-B do Regime Jurídico da Urbanização e da Edificação (RJUE), na sua redação atual, requerer a emissão de parecer sobre a seguinte operação urbanística, a realizar no ${imovel}:\n\n${obra}\n\nO local está abrangido por: ${e ? e.porque : "<mark>[servidão ou restrição]</mark>"} (${e ? e.base : "<mark>[base legal]</mark>"}).\n\nO parecer destina-se a instruir o procedimento de ${PROC[r.p].nome.toLowerCase()} junto da Câmara Municipal de ${conc}.\n\nJunta: planta de localização com o local assinalado, extrato da planta de condicionantes, memória descritiva, peças desenhadas e fotografias do local.` + fecho;
     M.parecer = { nome: "Pedido de parecer a entidade externa", desc: `Para pedir o parecer antes de submeter o processo e juntá-lo (art. 13.º-B). ${ents.length > 1 ? `Tem ${ents.length} pedidos, um por entidade.` : ""}`,
       txt: (ents.length ? ents : [null]).map(umParecer).join("\n\n\n— — — — — — — — — —\n\n\n") };
     M.info = { nome: "Pedido de informação simples", desc: "Para a câmara confirmar por escrito o que se aplica ao local (art. 110.º).",
       txt: head + `${req}, vem, ao abrigo do artigo 110.º do Regime Jurídico da Urbanização e da Edificação (RJUE), requerer a V. Exa. informação sobre os instrumentos de gestão territorial, servidões administrativas e restrições de utilidade pública aplicáveis ao ${imovel}, bem como sobre o enquadramento procedimental da seguinte operação pretendida:\n\n${obra}\n\nEm particular, solicita confirmação de que a operação se enquadra em ${PROC[r.p].nome.toLowerCase()} (${r.refs.join("; ")}).\n\nJunta ${cert} e planta de localização.` + fecho };
-    M.pip = { nome: "Pedido de informação prévia (PIP)", desc: "Para fixar o que o PDM permite antes de fazer o projeto (art. 14.º).",
-      txt: head + `${req}, vem, ao abrigo do artigo 14.º, n.os 1 e 2, do Regime Jurídico da Urbanização e da Edificação (RJUE), na sua redação atual, requerer informação prévia sobre a viabilidade da seguinte operação urbanística, a realizar no ${imovel}:\n\n${obra}\n\nRequer que a informação se pronuncie sobre os aspetos previstos nas alíneas a) a f) do n.º 2 do artigo 14.º, designadamente implantação, cércea, número de pisos, área de construção, uso e infraestruturas.\n\nJunta os elementos previstos na Portaria n.º 71-A/2024, de 27 de fevereiro, e a ${cert}.` + fecho };
+    M.pip = { nome: "Pedido de informação prévia (PIP)", desc: "Para fixar o que o PDM permite antes de fazer o projeto (art. 14.º). Com todos os pontos do n.º 2, isenta a obra.",
+      txt: head + `${req}, vem, ao abrigo do artigo 14.º, n.os 1 e 2, do Regime Jurídico da Urbanização e da Edificação (RJUE), na sua redação atual, requerer informação prévia sobre a viabilidade da seguinte operação urbanística, a realizar no ${imovel}:\n\n${obra}\n\nRequer que a informação se pronuncie sobre os aspetos previstos nas alíneas a) a f) do n.º 2 do artigo 14.º, designadamente implantação, cércea, número de pisos, área de construção, uso e infraestruturas.\n\nJunta os elementos previstos na portaria a que se refere o n.º 4 do artigo 9.º do RJUE e a ${cert}.` + fecho };
+    M.cpUtil = { nome: "Comunicação prévia de utilização", desc: "Depois de obra com licença, comunicação prévia ou PIP completo (art. 62.º-A). Pode usar o edifício logo após submeter.",
+      txt: head + `${req}, vem, ao abrigo da alínea k) do n.º 4 do artigo 4.º e do artigo 62.º-A do Regime Jurídico da Urbanização e da Edificação (RJUE), na sua redação atual, apresentar comunicação prévia de utilização do ${imovel}, para ${v(s.usoNovo, "uso pretendido")}, na sequência da obra objeto de <mark>[licença / comunicação prévia / informação prévia]</mark> n.º <mark>[n.º do processo]</mark>.\n\nJunta: ${cert}; termo de responsabilidade subscrito pelo <mark>[diretor de obra / diretor de fiscalização de obra]</mark>, declarando a conformidade da obra com o projeto e a conformidade legal e regulamentar das alterações em obra isentas; telas finais, se aplicável; certificado energético; e os demais elementos previstos na portaria a que se refere o n.º 4 do artigo 9.º.\n\nNos termos do n.º 2 do artigo 62.º-A, a utilização será iniciada após a submissão da presente comunicação.` + fecho.replace("Pede deferimento.", "Com os melhores cumprimentos,") };
+    M.prorrog = { nome: "Pedido de prorrogação do prazo da obra", desc: "Antes de acabar o prazo da obra (art. 58.º, n.º 5). Decisão em 15 dias, senão deferido.",
+      txt: head + `${req}, titular da <mark>[licença / comunicação prévia]</mark> n.º <mark>[n.º do processo]</mark>, relativa à obra de:\n\n${obra}\n\nno ${imovel}, vem, ao abrigo do n.º 5 do artigo 58.º do Regime Jurídico da Urbanização e da Edificação (RJUE), requerer a prorrogação do prazo de execução da obra por <mark>[n.º]</mark> meses, até <mark>[data]</mark>, com os seguintes fundamentos:\n\n<mark>[motivos do atraso]</mark>\n\nJunta a calendarização atualizada dos trabalhos.` + fecho };
     M.cert1951 = { nome: "Certidão de construção anterior a 1951", desc: "Comprova o uso de edifícios sem licença de utilização.",
       txt: head + `${req}, vem requerer a V. Exa. a emissão de certidão comprovativa de que o edifício existente no ${imovel} foi construído em data anterior à entrada em vigor do Regulamento Geral das Edificações Urbanas (Decreto-Lei n.º 38 382, de 7 de agosto de 1951), não estando por isso a sua utilização sujeita a licença.\n\nJunta ${cert}, planta de localização e fotografias do edifício.` + fecho };
     M.via = { nome: "Licença de ocupação da via pública", desc: "Para andaimes, contentor ou grua.",
@@ -908,10 +1097,13 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     if (r.p === "lic") out.push("lic");
     if (r.p === "cp") out.push("cp");
     if (r.p === "cpPrazo") out.push("cpPrazo");
+    if (r.p === "cpUtil") out.push("cpUtil");
+    if (s.tipoSel === "prazoObra" && (s.q || {}).prazoTipo !== "caducou" && (s.q || {}).prazoTipo !== "avancada") out.push("prorrog");
+    if (s.tipoSel === "utilizacao" && (s.q || {}).utilObra === "anterior1951") out.push("cert1951");
     if (r.p === "isentoTermo") out.push("termo");
-    if (r.p !== "cpPrazo") out.push("inicio");
+    if (["isento", "isentoTermo", "cp", "lic"].includes(r.p)) out.push("inicio");
     if (yes(s, "viaPublica") && r.p !== "lic") out.push("via");
-    if (yes(s, "anterior1951")) out.push("cert1951");
+    if (yes(s, "anterior1951") && !out.includes("cert1951")) out.push("cert1951");
     if (entidades(s, r).some((e) => e.k !== "camara")) out.push("parecer");
     if (r.alerts.some((a) => /Confirme|confirmar|Falta/.test(a.t)) || effCond(s).ns) out.push("info");
     return out;
@@ -923,46 +1115,50 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   const CP_LIC = ["cp", "lic"], OBRA = ["isento", "isentoTermo", "cp", "lic"];
   const GUIA = [
     { id: "situacoes", t: "Situações que podem acontecer", itens: [
-      { t: "A câmara pede correções ou documentos", d: "Só o pode fazer uma vez, até 15 dias úteis depois da submissão. Tem 15 dias úteis para responder, senão o pedido é rejeitado. Se não houver notificação nesse prazo, o processo considera-se bem instruído.", b: "art. 11.º RJUE", a: CP_LIC },
-      { t: "Parecer desfavorável de uma entidade", d: "Se o parecer for vinculativo, a câmara tem de indeferir. Pode alterar o projeto e pedir novo parecer, ou contestar o parecer.", b: "arts. 13.º e 24.º RJUE", a: CP_LIC },
-      { t: "A câmara pretende indeferir", d: "Antes de decidir, tem de lhe comunicar o projeto de decisão e os motivos. Tem 10 dias úteis para responder por escrito ou corrigir o projeto (audiência prévia).", b: "arts. 121.º e 122.º CPA", a: ["lic"] },
+      { t: "A câmara pede correções ou documentos", d: "No licenciamento só o pode fazer uma vez, nos primeiros 20 dias (saneamento); tem 10 dias para corrigir, senão o pedido é rejeitado. Sem notificação nesse prazo, o pedido considera-se bem instruído. Na comunicação prévia, a câmara pode pedir uma vez o que falta, com 10 dias para entregar.", b: "arts. 11.º e 35.º, n.º 9 RJUE", a: CP_LIC },
+      { t: "Mudança de lei a meio do processo", d: "O DL 108/2026 aplica-se aos processos iniciados desde 1 de outubro de 2026 e aos que nessa data ainda estavam em saneamento. Os restantes seguem as regras anteriores.", b: "art. 12.º do DL 108/2026; DL 155-B/2026", a: [] },
+      { t: "Parecer desfavorável de uma entidade", d: "As entidades têm 20 dias; sem resposta, conta como concordância. Só é vinculativo quando a lei o diz e chega dentro do prazo. Se for vinculativo e desfavorável, a câmara tem de indeferir; pode alterar o projeto e pedir novo parecer, ou contestá-lo.", b: "arts. 13.º e 24.º RJUE", a: CP_LIC },
+      { t: "A câmara pretende indeferir", d: "Antes de decidir, tem de lhe comunicar o projeto de decisão e os motivos (audiência prévia). Pode responder por escrito e entregar, uma única vez, alterações ao projeto que corrijam o que está mal; o prazo pode ser prorrogado uma vez.", b: "art. 24.º-A RJUE; arts. 121.º e 122.º CPA", a: ["lic"] },
       { t: "Indeferimento", d: "Só é possível pelos motivos da lei: violação de planos ou servidões, parecer negativo vinculativo, falta de infraestruturas ou má inserção urbana. A câmara não pode apreciar o interior do edifício nem os projetos de especialidades.", b: "art. 24.º RJUE", a: ["lic"] },
-      { t: "A câmara não decide no prazo", d: "Há deferimento tácito: pode pagar as taxas e avançar. Peça a certidão gratuita no ePortugal. O deferimento é nulo se violar planos ou pareceres obrigatórios.", b: "art. 23.º e 113.º RJUE (DL 10/2024)", a: ["lic"] },
-      { t: "Fiscalização durante a comunicação prévia", d: "A câmara não aprova, mas pode fiscalizar a qualquer momento. Se a obra não cumprir as normas, pode ordenar a correção, o embargo ou a reposição.", b: "arts. 35.º e 93.º RJUE", a: ["cp"] },
-      { t: "Alterações durante a obra", d: "Podem ser comunicadas e entram nas telas finais. Ampliações e mudanças de implantação precisam de novo procedimento.", b: "art. 83.º RJUE", a: CP_LIC },
-      { t: "A obra atrasa", d: "Peça a prorrogação do prazo antes de terminar. Depois do Simplex não há limite ao número de prorrogações.", b: "arts. 53.º e 58.º RJUE", a: CP_LIC },
-      { t: "Caducidade", d: "O título caduca se não pagar as taxas ou não começar a obra nos prazos, ou se a obra ficar parada demasiado tempo. Pode pedir a renovação aproveitando o processo anterior.", b: "arts. 71.º e 72.º RJUE", a: CP_LIC },
+      { t: "A câmara não decide no prazo", d: "Há deferimento tácito: o título passa a ser o comprovativo da submissão com o requerimento, e o pagamento das taxas não é condição de eficácia. O deferimento não vale se violar planos ou pareceres obrigatórios.", b: "arts. 4.º-A, n.º 2, 23.º e 68.º RJUE", a: ["lic"] },
+      { t: "Controlo depois da comunicação prévia", d: "A câmara não aprova. A verificação dos projetos caduca 1 ano após o pagamento das taxas (ou no início da utilização, se for depois), mas a fiscalização da obra continua sempre. Se a obra não cumprir as normas, pode ordenar a correção, o embargo ou a reposição.", b: "arts. 35.º, n.os 8 a 11, e 93.º RJUE", a: ["cp"] },
+      { t: "Alterações durante a obra", d: "As que seriam isentas fazem-se sem comunicar e entram nas telas finais. As outras comunicam-se por comunicação prévia, só com os elementos alterados. Ampliações e mudanças de implantação seguem o procedimento inicial (alteração da licença, nova comunicação ou novo PIP).", b: "art. 83.º RJUE", a: CP_LIC },
+      { t: "A obra atrasa", d: "Peça a prorrogação antes de acabar o prazo, com requerimento fundamentado. A câmara decide em 15 dias; sem resposta, considera-se deferida. Não há novo título.", b: "art. 58.º, n.os 5 e 8 RJUE", a: CP_LIC },
+      { t: "Caducidade", d: "O título caduca se não pagar as taxas ou não começar a obra nos prazos, ou se a obra ficar parada demasiado tempo. Pode pedir nova licença ou nova comunicação aproveitando os elementos válidos do processo anterior; com a obra avançada, uma licença especial para a concluir.", b: "arts. 71.º, 72.º e 88.º RJUE", a: CP_LIC },
       { t: "Mudança de técnico, empreiteiro ou proprietário", d: "Comunique à câmara a substituição, com os novos termos de responsabilidade ou a prova da nova titularidade. O processo continua.", b: "RJUE", a: OBRA },
-      { t: "Vistoria no fim ou na mudança de uso", d: "A câmara só a pode fazer pelos motivos da lei. Se exigir correções, faça-as e peça nova vistoria; se não a fizer no prazo, conta como não oposição.", b: "arts. 62.º e segs. RJUE", a: ["cpPrazo", "cp", "lic"] },
+      { t: "Vistoria na utilização", d: "Na comunicação prévia com prazo, a câmara só pode marcar vistoria nos 10 dias seguintes, se houver indícios sérios de que o edifício não é idóneo. A vistoria é em 15 dias; se exigir obras, depois de feitas há nova vistoria em 10 dias, e se não for feita pode usar o imóvel.", b: "arts. 64.º e 65.º RJUE", a: ["cpPrazo"] },
       { t: "Embargo ou obra feita sem título", d: "A câmara pode embargar. Pode pedir a legalização se a obra cumprir as normas atuais. Se não cumprir, pode ser obrigado a demolir ou repor.", b: "arts. 102.º, 102.º-A, 102.º-B e 106.º RJUE", a: [] },
       { t: "Queixa ou conflito com vizinhos", d: "Janelas, varandas e terraços sobre o vizinho exigem 1,5 m de distância à estrema. A água do telhado não pode cair no prédio vizinho. Estas regras do Código Civil aplicam-se mesmo a obras isentas.", b: "arts. 1360.º e 1365.º Código Civil", a: [] },
     ]},
     { id: "ferramentas", t: "Ferramentas ao seu dispor", itens: [
       { t: "Pedido de informação simples", d: "A câmara diz por escrito que planos, servidões e procedimento se aplicam ao local. É útil quando há dúvidas.", b: "art. 110.º RJUE", a: [] },
-      { t: "Pedido de informação prévia (PIP)", d: "Fixa o que pode construir antes de fazer o projeto completo. É válido 2 anos e, em certos casos, isenta a obra de controlo prévio.", b: "art. 14.º RJUE", a: [] },
-      { t: "Pareceres prévios das entidades", d: "Pode pedir os pareceres antes de submeter e juntá-los ao processo. Assim a câmara não tem de os pedir e o prazo encurta.", b: "art. 13.º-B RJUE", a: CP_LIC },
+      { t: "Pedido de informação prévia (PIP)", d: "Fixa o que pode construir antes de fazer o projeto completo. Se tratar todos os pontos do art. 14.º, n.º 2, isenta a obra e dispensa novas consultas. Vale 2 anos; depois, pode pedir uma vez a declaração de que se mantém (resposta em 20 dias) e tem mais 1 ano.", b: "arts. 14.º e 17.º RJUE", a: [] },
+      { t: "Pareceres prévios das entidades", d: "Pode pedir os pareceres antes de submeter e juntá-los ao processo. Assim a câmara não tem de os pedir e o prazo encurta.", b: "arts. 13.º e 13.º-B RJUE", a: CP_LIC },
       { t: "Consulta do processo", d: "Tem direito a consultar o processo, saber em que fase está e pedir certidões ou cópias.", b: "arts. 82.º e segs. CPA; art. 110.º RJUE", a: [] },
-      { t: "Certidão de deferimento tácito", d: "Gratuita, pedida no ePortugal à AMA. Serve de título perante terceiros.", b: "DL 10/2024", a: ["lic"] },
+      { t: "Título em caso de deferimento tácito", d: "O comprovativo da submissão, com o último requerimento e o comprovativo das taxas, é o título da obra.", b: "art. 4.º-A, n.º 2, al. b) RJUE", a: ["lic"] },
+      { t: "Certidão da comunicação prévia", d: "Pode pedir aos serviços, sem despacho, uma certidão com a identificação da operação comunicada e a data.", b: "art. 35.º, n.º 6 RJUE", a: ["cp"] },
       { t: "Reclamação para a câmara", d: "Pede ao próprio órgão que reveja a decisão. Prazo de 15 dias úteis.", b: "art. 191.º CPA", a: [] },
       { t: "Queixa ao Provedor de Justiça", d: "Gratuita, por atrasos ou ilegalidades da câmara. Não suspende prazos judiciais.", b: "Lei 9/91 (Estatuto do Provedor)", a: [] },
       { t: "Intimação judicial para a prática de ato devido", d: "Quando a câmara não pratica um ato a que está obrigada, o tribunal administrativo pode intimá-la a fazê-lo.", b: "art. 112.º RJUE", a: CP_LIC },
       { t: "Ação no tribunal administrativo", d: "Para anular um indeferimento ou outra decisão ilegal. Prazo de 3 meses. Pode pedir uma providência cautelar se houver urgência.", b: "arts. 58.º e 112.º e segs. CPTA", a: [] },
-      { t: "Plataforma Eletrónica dos Procedimentos Urbanísticos", d: "Plataforma nacional única para submeter e acompanhar licenciamentos e comunicações prévias, obrigatória para os municípios desde 5 de janeiro de 2026.", b: "DL 10/2024", a: CP_LIC },
+      { t: "Plataforma Eletrónica de Licenciamentos Urbanísticos", d: "Plataforma nacional para submeter e acompanhar os processos. É obrigatória a partir da sua disponibilização; as câmaras podem manter os seus portais, mas não podem acrescentar fases nem documentos.", b: "art. 8.º-A RJUE", a: ["cp", "lic", "cpPrazo", "cpUtil"] },
       { t: "Pesquisas públicas", d: "Inscrição dos técnicos nas ordens (OA, OE, OET), alvarás no IMPIC, peritos e certificados na ADENE, cadastro no BUPI, PDM no SNIT e no geoportal do município.", b: "", a: [] },
     ]},
     { id: "direitos", t: "Os seus direitos", itens: [
-      { t: "Só uma notificação de correções", d: "A câmara não pode fazer vários pedidos sucessivos, nem pedir documentos fora da lista legal ou que já tem.", b: "art. 11.º RJUE; Portaria 71-A/2024", a: CP_LIC },
-      { t: "Decisão no prazo legal", d: "120 dias até 300 m², 150 dias até 2200 m² ou em imóvel classificado, 200 dias acima disso ou em loteamentos. Sem decisão, há deferimento tácito.", b: "art. 23.º RJUE", a: ["lic"] },
+      { t: "Só uma notificação de correções", d: "A câmara não pode fazer vários pedidos sucessivos, nem pedir documentos fora da lista legal ou que já tem.", b: "arts. 8.º-A, n.º 2, 11.º e 35.º, n.º 9 RJUE", a: CP_LIC },
+      { t: "Decisão nos prazos legais", d: "Saneamento em 20 dias, arquitetura em 30 dias, decisão final em 20 dias (edificação e demolição), 30 dias (urbanização e terrenos) ou 45 dias (loteamento). Sem decisão, há deferimento tácito.", b: "arts. 11.º, 20.º e 23.º RJUE", a: ["lic"] },
+      { t: "Prazos em dias úteis", d: "Os prazos do procedimento administrativo não contam sábados, domingos nem feriados.", b: "art. 87.º CPA", a: [] },
       { t: "Começar a obra sem esperar por aprovação", d: "Na comunicação prévia, basta submeter o processo completo e pagar as taxas.", b: "art. 34.º RJUE", a: ["cp"] },
-      { t: "Ser ouvido antes de uma decisão desfavorável", d: "Audiência prévia, com 10 dias úteis para responder.", b: "art. 121.º CPA", a: CP_LIC },
+      { t: "Ser ouvido antes de uma decisão desfavorável", d: "Audiência prévia, com 10 dias para responder e a possibilidade de entregar uma vez alterações ao projeto.", b: "art. 121.º CPA; art. 24.º-A RJUE", a: CP_LIC },
       { t: "Decisões fundamentadas", d: "Qualquer indeferimento ou exigência tem de indicar os motivos de facto e de direito.", b: "art. 152.º CPA", a: [] },
-      { t: "Prorrogações sem limite", d: "Pode pedir mais tempo para a obra as vezes que precisar, desde que o faça a tempo.", b: "DL 10/2024", a: CP_LIC },
+      { t: "Prorrogação com resposta rápida", d: "O pedido de mais tempo para a obra é decidido em 15 dias; sem resposta, considera-se concedido.", b: "art. 58.º, n.º 5 RJUE", a: CP_LIC },
+      { t: "Usar o edifício sem esperar", d: "Depois de obra com licença ou comunicação prévia, pode usar o edifício logo após comunicar a utilização. Sem obra controlada, 10 dias depois, se a câmara não reagir.", b: "arts. 62.º-A e 64.º RJUE", a: ["cp", "lic", "cpPrazo", "cpUtil"] },
       { t: "Garantia da obra", d: "O empreiteiro responde por defeitos graves durante 5 anos após a entrega.", b: "art. 1225.º Código Civil", a: OBRA },
       { t: "Escolher livremente os técnicos e o empreiteiro", d: "Não há tabela oficial de honorários. Peça várias propostas e faça contrato escrito.", b: "", a: [] },
     ]},
     { id: "obrigacoes", t: "As suas obrigações", itens: [
-      { t: "Comunicar o início dos trabalhos", d: "À câmara, pelo menos 5 dias antes, com a identificação de quem os executa. Aplica-se também às obras isentas.", b: "art. 80.º-A RJUE", a: OBRA },
-      { t: "Aviso no local da obra", d: "Afixar, de forma visível da via pública, o aviso com os dados do título da obra.", b: "art. 78.º RJUE", a: CP_LIC },
+      { t: "Comunicar o início dos trabalhos", d: "À câmara, até 5 dias antes, com a identificação de quem os executa, e afixar o aviso da obra. Aplica-se também às obras isentas, salvo conservação só no interior. Caduca se a obra não começar num ano.", b: "art. 80.º-A RJUE", a: OBRA },
+      { t: "Aviso no local da obra", d: "Afixar, de forma visível da via pública, o aviso com os dados do título da obra.", b: "arts. 78.º e 80.º-A, n.º 5 RJUE", a: OBRA },
       { t: "Livro de obra eletrónico", d: "Registo das ocorrências da obra, mantido pelo diretor de obra.", b: "art. 97.º RJUE", a: CP_LIC },
       { t: "Empreiteiro habilitado e diretores", d: "Empreiteiro com alvará ou certificado IMPIC para a classe do valor. Nomear diretor de obra e diretor de fiscalização.", b: "Lei 41/2015; Lei 31/2009", a: OBRA },
       { t: "Contrato de empreitada escrito", d: "Obrigatório quando o valor passa 10% do limite da classe 1 de alvará (cerca de 16 600 €).", b: "Lei 41/2015", a: OBRA },
@@ -970,7 +1166,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
       { t: "Resíduos de construção (RCD)", d: "Separar e encaminhar os resíduos para operador licenciado, com guias e-GAR.", b: "DL 102-D/2020", a: OBRA },
       { t: "Licença de ocupação da via pública", d: "Para andaimes, contentores ou gruas.", b: "Regulamento municipal", a: OBRA },
       { t: "Pagar as taxas", d: "Por autoliquidação, antes de começar. O prazo da obra conta a partir do pagamento.", b: "arts. 116.º e 117.º RJUE", a: CP_LIC },
-      { t: "Entregar os elementos de fim de obra", d: "Termo de responsabilidade do diretor de obra e telas finais, se houve alterações. Certificado energético do edifício.", b: "arts. 62.º e segs. RJUE; DL 101-D/2020", a: CP_LIC },
+      { t: "Comunicar a utilização no fim da obra", d: "Comunicação prévia de utilização com o termo do diretor de obra ou de fiscalização, telas finais se houve alterações, e certificado energético.", b: "art. 62.º-A RJUE; DL 101-D/2020", a: CP_LIC },
       { t: "Dever de conservação", d: "Fazer obras de conservação pelo menos uma vez em cada 8 anos.", b: "art. 89.º RJUE", a: [] },
     ]},
     { id: "custos", t: "Custos", itens: [
@@ -981,7 +1177,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
       { t: "Pareceres de entidades externas", d: "Algumas entidades cobram taxa pelo parecer (por exemplo APA ou Infraestruturas de Portugal).", b: "Tabelas de cada entidade", a: CP_LIC },
       { t: "Ocupação da via pública", d: "Taxa por m² e por período, fixada pelo município.", b: "Regulamento municipal", a: OBRA },
       { t: "Honorários dos técnicos", d: "Livres. Dependem da complexidade e do número de especialidades. Compare propostas no separador Propostas.", b: "", a: [] },
-      { t: "Certificado energético", d: "Honorários do perito mais a taxa de registo na ADENE, que varia com a tipologia.", b: "DL 101-D/2020", a: ["cpPrazo", "cp", "lic"] },
+      { t: "Certificado energético", d: "Honorários do perito mais a taxa de registo na ADENE, que varia com a tipologia.", b: "DL 101-D/2020", a: ["cpPrazo", "cpUtil", "cp", "lic"] },
       { t: "IVA a 6% na obra", d: "Aplica-se a empreitadas de reabilitação em Área de Reabilitação Urbana e à mão de obra de obras de conservação ou remodelação em habitação. Confirme as condições com o contabilista.", b: "Lista I do CIVA, verbas 2.23 e 2.27", a: OBRA },
       { t: "Benefícios em Área de Reabilitação Urbana", d: "Possível isenção ou redução de IMI e IMT após reabilitação. Peça à câmara a certificação do estado de conservação.", b: "art. 45.º e 71.º EBF", a: OBRA },
       { t: "Coimas por obra sem título", d: "Podem chegar a 200 000 €, conforme a infração e se o infrator é pessoa singular ou coletiva, além dos custos de legalização ou demolição.", b: "art. 98.º RJUE", a: [] },
@@ -1018,8 +1214,8 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
 
   // ---------- Entidades a consultar ----------
   function entidades(s, r) {
-    const out = [{ k: "camara", ent: `Câmara Municipal${s.concelho ? " de " + s.concelho : ""}`, porque: "Decide o procedimento", av: r.p === "isento" || r.p === "isentoTermo" ? "Recebe a comunicação de início dos trabalhos e pode fiscalizar." : "Aprecia o pedido e pede os pareceres às outras entidades.", base: "RJUE", vinc: false }];
-    if (effQ(s).classificado === "sim") out.push({ k: "patrimonio", ent: "Património Cultural, I.P. (ou a CCDR, conforme a classificação)", porque: "Imóvel classificado ou em zona de proteção", av: "Intervenções em monumentos e nas zonas de proteção, incluindo cor, materiais e volumetria. O parecer é vinculativo.", base: "Lei 107/2001 e DL 309/2009", vinc: true });
+    const out = [{ k: "camara", ent: `Câmara Municipal${s.concelho ? " de " + s.concelho : ""}`, porque: "Decide o procedimento", av: r.p === "isento" || r.p === "isentoTermo" ? "Recebe a comunicação de início dos trabalhos e pode fiscalizar." : r.p === "pedido" ? "Recebe e decide o pedido." : "Aprecia o pedido e pede os pareceres às outras entidades.", base: "RJUE", vinc: false }];
+    if (effQ(s).prot) out.push({ k: "patrimonio", ent: "Património Cultural, I.P. (ou a CCDR, conforme a classificação)", porque: "Imóvel classificado ou em zona de proteção", av: "Intervenções em monumentos e nas zonas de proteção, incluindo cor, materiais e volumetria. O parecer é vinculativo.", base: "Lei 107/2001 e DL 309/2009", vinc: true });
     const c = effCond(s);
     COND.forEach((x) => { if (c[x.k] && x.ent) out.push({ k: x.k, ent: x.ent, porque: x.l, av: x.av, base: x.base, vinc: x.serv }); });
     return out;
@@ -1076,20 +1272,30 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     const t = s.tipo, q = effQ(s), out = [];
     const add = (k, quem, porque, fase = "Projeto") => out.push({ k, quem, porque, fase });
     if (r.p === "isento" || r.p === "isentoTermo") {
-      if (r.p === "isentoTermo") add("termo", "Engenheiro civil (OE/OET) ou arquiteto (OA)", "Assina o termo a atestar que a obra não prejudica a estrutura.");
+      if (r.p === "isentoTermo") add("estabilidade", "Engenheiro civil (OE/OET)", "Projeto de estabilidade e termo a atestar que a obra melhora ou não prejudica a estrutura.");
       add("empreitada", "Empreiteiro com alvará ou certificado IMPIC", "Executa a obra, com classe adequada ao valor.", "Obra");
       return out;
     }
+    if (r.p === "pedido") {
+      add("arquitetura", "Arquiteto ou engenheiro", "Prepara as peças e o requerimento.");
+      return out;
+    }
+    if (r.p === "cpUtil") {
+      add("termo", "Diretor de obra ou diretor de fiscalização", "Termo de conformidade da obra com o projeto (art. 62.º-A).");
+      add("sce", "Perito qualificado SCE (ADENE)", "Certificado energético.");
+      return out;
+    }
     if (r.p === "cpPrazo") {
-      add("termo", "Arquiteto (OA) ou engenheiro (OE/OET)", "Termo de responsabilidade sobre a conformidade com o novo uso.");
+      add("termo", "Arquiteto (ou outro técnico habilitado a ser autor de projeto de arquitetura)", "Termo de responsabilidade sobre o uso e a idoneidade do edifício (art. 63.º).");
       add("sce", "Perito qualificado SCE (ADENE)", "Certificado energético.");
       add("scie", "Técnico de SCIE (OA, OE ou OET)", "Ficha ou projeto de segurança contra incêndio.");
       return out;
     }
     const obraNova = ["nova", "ampliacao", "reconstrucao", "loteamento", "piscina"].includes(t);
+    if (t === "escavacao") { add("estabilidade", "Engenheiro civil (OE/OET)", "Projeto de escavação, contenção periférica e estabilidade."); return out; }
     add("coordenacao", "Arquiteto ou engenheiro", "Coordena os projetos e assina o termo de coordenação (Lei 31/2009).");
     if (t !== "demolicao") add("arquitetura", "Arquiteto inscrito na Ordem dos Arquitetos", "Projeto de arquitetura.");
-    if (q.classificado === "sim") add("patrimonio", "Arquiteto com experiência em património", "Relatório prévio de obra em bem classificado (DL 140/2009).");
+    if (q.prot === "cl") add("patrimonio", "Arquiteto com experiência em património", "Relatório prévio de obra em bem classificado (DL 140/2009).");
     if (t === "loteamento") add("paisagismo", "Arquiteto paisagista", "Espaços verdes e de utilização coletiva.");
     if (obraNova || t === "exterior" || t === "demolicao" || q.estrutura === "sim") add("estabilidade", "Engenheiro civil (OE/OET)", "Projeto de estabilidade e contenções.");
     if (t !== "demolicao") {
