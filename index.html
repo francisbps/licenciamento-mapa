@@ -334,42 +334,53 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   const escassaAnexo = (s) => ["ate10", "estufa", "ludico"].includes(q_(s).anexoArea);
   const escassaMuro = (s) => q_(s).muroAlt === "suporte" || (q_(s).muroVia === "nao" && q_(s).muroAlt === "ate");
   // Obras sem procedimento próprio: não fazem sentido as perguntas de PIP, loteamento e zona consolidada.
-  const semControlo = (s) => (s.tipoSel === "anexo" && escassaAnexo(s)) || (s.tipoSel === "muro" && escassaMuro(s)) || (s.tipoSel === "vaos" && q_(s).vaosIgual === "sim") || (s.tipoSel === "acess" && q_(s).acessOnde !== "exterior") || (s.tipoSel === "agricola" && q_(s).agrTipo === "amovivel");
+  const revIgual = (s) => ["fachada", "cobertura"].includes(s.tipoSel) && q_(s).revIgual === "sim";
+  const semControlo = (s) => revIgual(s) || (s.tipoSel === "anexo" && escassaAnexo(s)) || (s.tipoSel === "muro" && escassaMuro(s)) || (s.tipoSel === "vaos" && q_(s).vaosIgual === "sim") || (s.tipoSel === "acess" && q_(s).acessOnde !== "exterior") || (s.tipoSel === "agricola" && q_(s).agrTipo === "amovivel");
   const COM_PLANO = ["fachada", "cobertura", "vaos", "anexo", "muro", "ampliacao", "reconstrucao", "nova", "modular", "agricola", "acess", "usoObras"];
+  const PREDIO_OPTS = [["apartamento", "Apartamento (fração)"], ["moradia", "Moradia"], ["edificio", "Edifício inteiro"], ["loja", "Loja, escritório ou outra fração"], ["armazem", "Armazém ou pavilhão"], ["rural", "Construção rural ou agrícola"]];
+  const COM_TITULO = ["fracoes", "fachada", "vaos", "cobertura", "ampliacao", "reconstrucao", "uso", "usoObras", "legalizacao", "ph"];
   // Perguntas: step 2 = sobre a obra, step 3 = sobre o local (podem acrescentar condicionantes).
   // show = tipos (tipoSel) em que aparece; when = condição extra; opts = respostas (por omissão Sim/Não/Não sei); multi = pode escolher várias.
   const QUESTIONS = [
-    { id: "predio", step: 2, q: "Que tipo de imóvel é?", show: menos(TIPOS.map(([v]) => v), "loteamento", "altLoteamento", "urbanizacao", "destaque", "terreno", "nova", "modular", "agricola", "prazoObra", "alteracoesObra", "escavacao"), opts: [["apartamento", "Apartamento (fração)"], ["moradia", "Moradia"], ["edificio", "Edifício inteiro"], ["loja", "Loja, escritório ou outra fração"], ["armazem", "Armazém ou pavilhão"], ["rural", "Construção rural ou agrícola"], ["terreno", "Terreno sem construção"]] },
+    { id: "predio", step: 2, q: "Que tipo de imóvel é?", show: menos(TIPOS.map(([v]) => v), "loteamento", "altLoteamento", "urbanizacao", "destaque", "terreno", "nova", "modular", "agricola", "prazoObra", "alteracoesObra", "escavacao", "ph"), opts: (s) => ["anexo", "muro", "piscina"].includes(s.tipoSel) ? [...PREDIO_OPTS, ["terreno", "Terreno sem construção"]] : PREDIO_OPTS },
     { id: "onde", step: 2, q: "Onde é a obra de conservação?", show: ["conservacao"], opts: [["interior", "Só no interior"], ["fachada", "Fachada"], ["cobertura", "Cobertura"], ["varios", "Interior e exterior"]] },
     { id: "azulejos", step: 2, q: "Vai remover ou substituir azulejos da fachada?", show: ["conservacao", "fachada"], when: (s) => s.tipoSel !== "conservacao" || ["fachada", "varios"].includes(q_(s).onde) },
     { id: "acessOnde", step: 2, q: "Onde fica o elevador, a plataforma ou a rampa?", show: ["acess"], opts: [["interior", "Dentro do edifício (caixa de escada, interior da fração)"], ["exterior", "No exterior do edifício (fachada, logradouro, entrada)"], ["via", "Na via pública (passeio)"]] },
     { id: "estrutura", step: 2, q: "Mexe na estrutura (paredes resistentes, lajes, vigas, pilares)?", h: "Na dúvida, um técnico confirma se a parede é resistente.", show: ["interior", "usoObras", "fracoes", "acess"], when: (s) => s.tipoSel !== "acess" || q_(s).acessOnde === "interior" },
     { id: "fachada", step: 2, q: "A obra também altera a fachada, a cobertura ou a altura do edifício?", show: ["interior", "usoObras", "fracoes"] },
     { id: "comuns", step: 2, q: "A obra mexe em partes comuns do prédio (fachada, telhado, escadas, estrutura, colunas de água ou gás)?", show: menos(EXIST, "uso", "ph"), when: (s) => ["apartamento", "loja"].includes(q_(s).predio) },
+    { id: "revIgual", step: 2, q: "Só troca o revestimento por outro com acabamento exterior idêntico, para melhorar a eficiência energética?", h: "Por exemplo, isolamento pelo exterior com o mesmo acabamento, ou telha igual com isolamento.", show: ["fachada", "cobertura"], when: (s) => q_(s).azulejos !== "sim" && q_(s).cobAumenta !== "sim" },
+    { id: "cobAumenta", step: 2, q: "A obra aumenta a altura ou o volume do edifício (ex.: nova mansarda, sobrelevação, fechar um terraço)?", show: ["cobertura"], when: (s) => q_(s).revIgual !== "sim" },
     { id: "vaosIgual", step: 2, q: "As novas janelas ou portas mantêm o desenho, a cor e o material exterior?", h: "A divisão dos vidros e das folhas também tem de se manter.", show: ["vaos"], opts: [["sim", "Sim, acabamento exterior idêntico"], ["nao", "Não, muda o aspeto exterior"], ["ns", "Não sei"]] },
     { id: "equip", step: 2, q: "O que vai instalar? (pode escolher vários)", show: ["equipamentos"], multi: true, opts: [["solar", "Painéis solares (fotovoltaicos ou térmicos) na cobertura"], ["solarSolo", "Painéis solares no terreno"], ["eolico", "Gerador eólico doméstico"], ["bateria", "Baterias ou depósito de água quente"], ["ac", "Ar condicionado ou bomba de calor"], ["antena", "Antena ou parabólica"], ["carregador", "Carregador de carro elétrico"], ["chamine", "Chaminé, exaustão ou conduta de fumos"], ["toldo", "Toldo, reclamo ou letreiro"], ["gas", "Gerador, depósito de gás ou de combustível"]] },
     { id: "anexoArea", step: 2, q: "O que é e que dimensão tem?", show: ["anexo"], opts: [["ate10", "Até 10 m² e 2,2 m de altura, sem confinar com a via pública"], ["estufa", "Estufa de jardim com menos de 3 m de altura e até 20 m²"], ["ludico", "Equipamento de lazer (parque infantil, campo de jogos) mais pequeno do que a casa"], ["maior", "Maior do que isso, ou confina com a via pública"]] },
-    { id: "muroVia", step: 2, q: "O muro confina com a via pública?", show: ["muro"], when: (s) => q_(s).muroAlt !== "suporte" },
     { id: "muroAlt", step: 2, q: "Que muro e que altura?", show: ["muro"], opts: [["ate", "Muro de vedação até 1,8 m"], ["suporte", "Muro de suporte de terras até 2 m"], ["mais", "Mais alto do que isso"]] },
+    { id: "muroVia", step: 2, q: "O muro de vedação confina com a via pública?", show: ["muro"], when: (s) => q_(s).muroAlt !== "suporte" },
+    { id: "piscinaAssoc", step: 2, q: "A piscina fica associada a uma casa ou edifício principal?", show: ["piscina"] },
+    { id: "destPerim", step: 2, q: "Onde fica o terreno?", h: "Veja a planta de ordenamento do PDM.", show: ["destaque"], opts: [["dentro", "Dentro do perímetro urbano ou de um aglomerado rural"], ["fora", "Fora do perímetro urbano"], ["ns", "Não sei"]] },
+    { id: "destVia", step: 2, q: "As duas parcelas ficam a confrontar com arruamentos públicos?", show: ["destaque"], when: (s) => q_(s).destPerim !== "fora" },
     { id: "agrTipo", step: 2, q: "Que construção agrícola?", show: ["agricola"], opts: [["armazem", "Armazém, estábulo ou outra construção fixa"], ["estufa", "Estufa agrícola com fundações"], ["amovivel", "Estrutura amovível, sem fundações (túnel, abrigo)"]] },
     { id: "legalTipo", step: 2, q: "O que quer legalizar?", show: ["legalizacao"], opts: [["alteracao", "Alterações interiores ou de fachada"], ["ampliacao", "Ampliação ou anexo"], ["construcao", "Construção inteira sem licença"], ["uso", "Uso diferente do licenciado"]] },
     { id: "reconstFiel", step: 2, q: "A reconstrução repõe as fachadas e a cobertura como estavam?", h: "Mesmas dimensões, vãos, varandas e recuados do último projeto válido. Pode mudar os materiais da estrutura.", show: ["reconstrucao"] },
     { id: "demoTipo", step: 2, q: "Que demolição é?", show: ["demolicao"], opts: [["obra", "Faz parte de uma reconstrução ou construção nova"], ["ilegal", "A construção a demolir é ilegal"], ["so", "Só a demolição"]] },
+    { id: "utilObra", step: 2, q: "O edifício ou a fração vem de uma obra?", show: ["utilizacao"], opts: [["controlada", "Sim, obra acabada com licença, comunicação prévia ou PIP completo"], ["isenta", "Sim, mas as obras eram isentas"], ["semObra", "Não: o edifício existe e não tem título de utilização"], ["anterior1951", "O edifício é anterior a 1951"]] },
     { id: "usoAtual", step: 2, q: "Qual é o uso atual?", show: ["uso", "usoObras", "ampliacao", "reconstrucao", "legalizacao"], opts: USOS },
     { id: "usoNovo", step: 2, q: "Qual será o uso?", show: ["uso", "usoObras", "nova", "modular", "ampliacao", "reconstrucao", "utilizacao"], opts: USOS },
-    { id: "utilObra", step: 2, q: "O edifício ou a fração vem de uma obra?", show: ["utilizacao"], opts: [["controlada", "Sim, obra acabada com licença, comunicação prévia ou PIP completo"], ["isenta", "Sim, mas as obras eram isentas"], ["semObra", "Não: o edifício existe e não tem título de utilização"], ["anterior1951", "O edifício é anterior a 1951"]] },
     { id: "altLote", step: 2, q: "A alteração muda as áreas de implantação ou de construção, ou o número de fogos, em mais de 3%?", show: ["altLoteamento"], opts: [["ate3", "Não, até 3% e cumpre o PDM"], ["mais", "Sim, mais de 3% ou muda o uso"], ["ns", "Não sei"]] },
     { id: "altObra", step: 2, q: "Que alterações quer fazer?", show: ["alteracoesObra"], opts: [["isentas", "Só alterações que seriam isentas (interiores sem estrutura, acabamentos)"], ["outras", "Alterações ao projeto sem aumentar a área nem mudar a implantação"], ["ampliacao", "Aumentam a área ou mudam a implantação"]] },
     { id: "prazoTipo", step: 2, q: "Qual é a situação?", show: ["prazoObra"], opts: [["prorrogar", "O prazo ainda corre e preciso de mais tempo"], ["caducou", "O título caducou e a obra não começou ou vai no início"], ["avancada", "O título caducou com a obra já avançada"]] },
-    { id: "procInicial", step: 2, q: "Qual é o título da obra?", show: ["alteracoesObra", "prazoObra"], opts: [["lic", "Licença"], ["cp", "Comunicação prévia"], ["pip", "PIP com todos os elementos"]] },
+    { id: "procInicial", step: 2, q: "Qual é o título da obra?", show: ["alteracoesObra", "prazoObra"], when: (s) => (s.tipoSel === "alteracoesObra" && q_(s).altObra === "ampliacao") || (s.tipoSel === "prazoObra" && q_(s).prazoTipo === "caducou"), opts: [["lic", "Licença"], ["cp", "Comunicação prévia"], ["pip", "PIP com todos os elementos"]] },
     { id: "arqAprovada", step: 2, q: "O projeto de arquitetura já foi aprovado?", show: ["escavacao"] },
-    { id: "pisos", step: 2, q: "Quantos pisos acima do solo terá o edifício no fim?", show: ["nova", "modular", "ampliacao", "reconstrucao", "uso", "usoObras", "legalizacao"], opts: [["1", "1"], ["2", "2"], ["3", "3"], ["5", "4 a 6"], ["8", "7 a 9"], ["10", "10 ou mais"]] },
-    { id: "pip", step: 2, q: "Já tem um PIP (informação prévia) favorável e válido para esta obra?", h: "Emitido nos termos do art. 14.º, n.º 2, há menos de 2 anos, a tratar todos os pontos das alíneas a) a f).", show: ["fachada", "cobertura", "vaos", "anexo", "muro", "piscina", "ampliacao", "reconstrucao", "nova", "modular", "agricola", "demolicao", "terreno", "loteamento", "urbanizacao", "acess"], when: (s) => !semControlo(s) && !(s.tipoSel === "reconstrucao" && q_(s).reconstFiel === "sim") },
-    { id: "loteamento", step: 2, q: "O terreno está num loteamento, plano de pormenor ou unidade de execução com parâmetros definidos?", h: "Por exemplo, um lote com alvará de loteamento.", show: [...COM_PLANO, "demolicao", "terreno", "loteamento", "urbanizacao", "piscina"], when: (s) => !semControlo(s) && !(s.tipoSel === "reconstrucao" && q_(s).reconstFiel === "sim") && !(s.tipoSel === "usoObras" && q_(s).fachada !== "sim") && !(s.tipoSel === "demolicao" && q_(s).demoTipo !== "so") },
-    { id: "zuc", step: 2, q: "Fica em zona urbana consolidada?", h: "Classificação do PDM: zona já urbanizada, com edifícios alinhados ao longo da rua.", show: COM_PLANO, when: (s) => q_(s).loteamento !== "sim" && !semControlo(s) && !(s.tipoSel === "reconstrucao" && q_(s).reconstFiel === "sim") && !(s.tipoSel === "usoObras" && q_(s).fachada !== "sim") },
-    { id: "cercea", step: 2, q: "A altura final fica igual ou abaixo da mais frequente na frente de rua?", show: COM_PLANO, when: (s) => q_(s).zuc === "sim" && q_(s).loteamento !== "sim" && !semControlo(s) },
-    { id: "viaPublica", step: 2, q: "Vai precisar de ocupar a via pública (andaimes, contentor, grua)?", show: menos(TIPOS_OBRA, "loteamento", "urbanizacao", "terreno") },
-    { id: "anterior1951", step: 2, q: "O edifício tem título de utilização?", h: "Licença ou autorização de utilização, ou comunicação de utilização.", show: menos(EXIST, "anexo", "muro", "piscina"), when: (s) => q_(s).predio !== "terreno", opts: [["nao", "Sim, tem título de utilização"], ["sim", "Não: é anterior a 1951"], ["ns", "Não sei"]] },
+    { id: "pisos", step: 2, q: "Quantos pisos acima do solo terá o edifício no fim?", show: ["nova", "modular", "ampliacao", "reconstrucao", "usoObras"], opts: [["1", "1"], ["2", "2"], ["3", "3"], ["5", "4 a 6"], ["8", "7 a 9"], ["10", "10 ou mais"]] },
+    { id: "pisos", step: 2, q: "Quantos pisos acima do solo tem o edifício?", h: "Serve para saber a categoria de risco de incêndio.", show: ["uso", "legalizacao"], opts: [["1", "1"], ["2", "2"], ["3", "3"], ["5", "4 a 6"], ["8", "7 a 9"], ["10", "10 ou mais"]] },
+    { id: "pip", step: 2, q: "Já tem um PIP (informação prévia) favorável e válido para esta obra?", h: "Emitido nos termos do art. 14.º, n.º 2, há menos de 2 anos, a tratar todos os pontos das alíneas a) a f).", show: ["fachada", "cobertura", "vaos", "anexo", "muro", "piscina", "ampliacao", "reconstrucao", "nova", "modular", "agricola", "demolicao", "terreno", "loteamento", "urbanizacao", "acess"], when: (s) => !semControlo(s) && !(s.tipoSel === "reconstrucao" && q_(s).reconstFiel === "sim") && !(s.tipoSel === "demolicao" && q_(s).demoTipo !== "so") && !(s.tipoSel === "piscina" && q_(s).piscinaAssoc !== "nao") },
+    { id: "loteamento", step: 2, q: "O terreno está num loteamento, plano de pormenor ou unidade de execução com parâmetros definidos?", h: "Por exemplo, um lote com alvará de loteamento.", show: [...COM_PLANO, "demolicao", "terreno", "piscina"], when: (s) => !semControlo(s) && !(s.tipoSel === "reconstrucao" && q_(s).reconstFiel === "sim") && !(s.tipoSel === "usoObras" && q_(s).fachada !== "sim") && !(s.tipoSel === "demolicao" && q_(s).demoTipo !== "so") },
+    { id: "loteamento", step: 2, q: "O terreno está num plano de pormenor ou unidade de execução que já define os lotes e o desenho urbano?", show: ["loteamento"] },
+    { id: "loteamento", step: 2, q: "As obras estão definidas num loteamento, plano de pormenor ou unidade de execução?", show: ["urbanizacao"] },
+    { id: "zuc", step: 2, q: "Fica em zona urbana consolidada?", h: "Classificação do PDM: zona já urbanizada, com edifícios alinhados ao longo da rua.", show: menos(COM_PLANO, "agricola"), when: (s) => q_(s).loteamento !== "sim" && !semControlo(s) && !(s.tipoSel === "reconstrucao" && q_(s).reconstFiel === "sim") && !(s.tipoSel === "usoObras" && q_(s).fachada !== "sim") },
+    { id: "cercea", step: 2, q: "A altura final fica igual ou abaixo da mais frequente na frente de rua?", show: menos(COM_PLANO, "agricola"), when: (s) => q_(s).zuc === "sim" && q_(s).loteamento !== "sim" && !semControlo(s) },
+    { id: "viaPublica", step: 2, q: "Vai precisar de ocupar a via pública (andaimes, contentor, grua)?", show: menos(TIPOS_OBRA, "loteamento", "urbanizacao", "terreno", "legalizacao", "alteracoesObra") },
+    { id: "anterior1951", step: 2, q: "O edifício tem título de utilização?", h: "Licença ou autorização de utilização, ou comunicação de utilização.", show: COM_TITULO, when: (s) => q_(s).predio !== "terreno", opts: [["nao", "Sim, tem título de utilização"], ["sim", "Não: é anterior a 1951"], ["semTitulo", "Não tem, e é posterior a 1951"], ["ns", "Não sei"]] },
     // Sobre o local
     { id: "classificado", step: 3, q: "O imóvel tem proteção patrimonial?", h: "Veja a planta de condicionantes do PDM ou o site do Património Cultural. O regime é diferente para o próprio monumento e para a zona à volta.", show: "*", when: (s) => s.doMapa || !window.pesquisarNoMapa || (s.condMapa || []).includes("pat"), opts: [["nao", "Não tem"], ["sim", "O próprio imóvel é classificado ou em vias de classificação"], ["conjunto", "Faz parte de um conjunto ou sítio classificado"], ["zp", "Está na zona de proteção de um imóvel classificado"], ["ns", "Não sei"]] },
     { id: "perto", step: 3, q: "Há a menos de 50 m algum destes equipamentos? (pode escolher vários)", multi: true, show: menos(TIPOS_OBRA, "interior", "conservacao", "fracoes", "acess", "alteracoesObra", "escavacao"), opts: [["nenhum", "Nenhum"], ["escola", "Escola"], ["saude", "Hospital ou centro de saúde"], ["cemiterio", "Cemitério"], ["prisao", "Estabelecimento prisional"], ["quartel", "Quartel ou instalação militar"], ["ns", "Não sei"]] },
@@ -391,6 +402,8 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   // Enquadramento-base a partir do tipo escolhido e das respostas.
   function tipoBase(s) {
     const t = s.tipoSel, q = q_(s);
+    if (revIgual(s)) return "escassa";
+    if (t === "cobertura" && q.cobAumenta === "sim") return "ampliacao";
     if (t === "fachada" || t === "cobertura") return "exterior";
     if (t === "vaos") return q.vaosIgual === "sim" ? "escassa" : "exterior";
     if (t === "equipamentos") return "equip";
@@ -569,7 +582,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   const FIELDS = ["tipoSel","descricao","morada","freguesia","concelho","artigo","descPredial","codCertidao","nome","nif","moradaReq","email","qualidade","tecnico","ordem"];
 
   function htmlPergunta(qq) {
-    const v = state.q[qq.id] || "", opts = qq.opts || SNS;
+    const v = state.q[qq.id] || "", opts = (typeof qq.opts === "function" ? qq.opts(state) : qq.opts) || SNS;
     if (qq.multi) {
       const sel = [].concat(v || []);
       return `<div class="q"><p>${esc(qq.q)}${qq.h ? `<small>${esc(qq.h)}</small>` : ""}</p><div class="multi" role="group" aria-label="${esc(qq.q)}">${opts.map(([val, lab]) => `<label><input type="checkbox" name="qm-${qq.id}" value="${val}" ${sel.includes(val) ? "checked" : ""}><span>${esc(lab)}</span></label>`).join("")}</div></div>`;
@@ -707,6 +720,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
       case "escassa":
         set({ p: "isento", refs: ["art. 6.º-A RJUE"], motivo: "Obras de escassa relevância urbanística estão isentas de controlo prévio." });
         if (s.tipoSel === "vaos") refs = ["art. 6.º-A, n.º 1, al. j) RJUE"];
+        if (revIgual(s)) { refs = ["art. 6.º-A, n.º 1, al. h) RJUE"]; motivo = "Substituir o revestimento exterior ou da cobertura por outro com acabamento idêntico, que melhore a eficiência energética, é obra de escassa relevância e está isenta."; }
         alerts.push({ t: "Limites da lei: anexo até 10 m² e 2,2 m de altura sem confinar com a via pública; estufa de jardim abaixo de 3 m e até 20 m²; muro de vedação até 1,8 m sem confinar com a via pública; muro de suporte até 2 m. O regulamento municipal pode alargar estes limites." });
         if (yes("servidao")) alerts.push({ t: "Em área com servidão (REN, RAN, domínio hídrico) pode ser preciso parecer ou autorização da entidade que a gere, mesmo sem procedimento camarário." });
         break;
@@ -745,9 +759,10 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
         break;
       case "piscina":
         if (yes("pip")) { set(PIP); break; }
+        if (no("piscinaAssoc")) { set(generic("Piscina sem edifício principal (segue as regras da construção)")); break; }
         if (yes("servidao") && !yes("loteamento")) { set({ p: "lic", refs: ["art. 4.º, n.º 2, al. h) RJUE"], motivo: "Construção em área com servidão ou restrição de utilidade pública está sujeita a licença." }); break; }
         set({ p: "cp", refs: ["art. 4.º, n.º 4, al. j) RJUE"], motivo: "Piscinas associadas a uma edificação principal estão sujeitas a comunicação prévia." });
-        alerts.push({ t: "Se a piscina não estiver associada a uma habitação ou edifício principal, aplica-se o enquadramento geral da construção nova." });
+        if (ns("piscinaAssoc")) alerts.push({ t: "Se a piscina não estiver associada a uma habitação ou edifício principal, aplica-se o enquadramento geral da construção nova." });
         break;
       case "demolicao":
         if (q.demoTipo === "ilegal") { set({ p: "isento", refs: ["art. 6.º, n.º 1, al. i) RJUE"], motivo: "A demolição de construções ilegais está isenta de licença e de comunicação prévia." }); break; }
@@ -795,8 +810,13 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
         alerts.push({ i: 1, t: "Mobilizações de solo só para agricultura, pecuária, floresta ou exploração mineira não contam como remodelação de terreno (art. 2.º, al. m)); nesses casos fale com a câmara e a DRAP." });
         break;
       case "destaque":
+        if (q.destPerim !== "fora" && no("destVia")) {
+          set({ p: "lic", refs: ["art. 6.º, n.º 4 RJUE", "art. 4.º, n.º 2, al. a)"], motivo: "Dentro do perímetro urbano, o destaque só está isento se as duas parcelas confrontarem com arruamentos públicos. Sem isso, dividir o terreno para construir é um loteamento, sujeito a licença." });
+          break;
+        }
         set({ p: "isento", refs: ["art. 6.º, n.º 1, al. d), e n.os 4 a 10 RJUE"], motivo: "O destaque de uma parcela está isento de licença, se cumprir as condições do art. 6.º. Pede-se à câmara a certidão de destaque, que serve para o registo predial." });
-        alerts.push({ t: "Dentro do perímetro urbano, as duas parcelas têm de confrontar com arruamentos públicos. Fora dele, na parcela destacada só se pode construir um edifício de habitação com dois fogos no máximo, e a parcela restante tem de ter a área mínima de cultura. Não se pode destacar de novo a mesma área durante 10 anos, e estes ónus vão ao registo predial." });
+        if (q.destPerim === "fora") alerts.push({ t: "Fora do perímetro urbano, na parcela destacada só se pode construir um edifício de habitação com dois fogos no máximo, e a parcela restante tem de ter a área mínima de cultura (ou a do projeto de intervenção em espaço rural). Não se pode destacar de novo a mesma área durante 10 anos, e estes ónus vão ao registo predial." });
+        else alerts.push({ t: "Dentro do perímetro urbano, as duas parcelas têm de confrontar com arruamentos públicos. Fora dele, na parcela destacada só se pode construir um edifício de habitação com dois fogos no máximo, e a parcela restante tem de ter a área mínima de cultura. Não se pode destacar de novo a mesma área durante 10 anos, e estes ónus vão ao registo predial." });
         break;
       case "ph":
         set({ p: "pedido", refs: ["art. 66.º RJUE", "art. 1415.º Código Civil"], motivo: "Não é uma obra: pede-se à câmara a certidão de que o edifício reúne os requisitos legais da propriedade horizontal, para a escritura e o registo. Pode ser pedida com a comunicação de utilização." });
@@ -882,6 +902,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     }
     if (yes("viaPublica")) alerts.push({ t: "Peça a licença de ocupação da via pública. No licenciamento pode ir no mesmo pedido (art. 4.º, n.º 7); nos outros casos é um pedido à parte." });
     if (yes("anterior1951")) alerts.push({ i: 1, t: "Peça à câmara a certidão de que o edifício é anterior a 1951. Substitui o título de utilização na prova do uso existente." });
+    if (q.anterior1951 === "semTitulo" && s.tipoSel !== "legalizacao") alerts.push({ t: "Um edifício posterior a 1951 sem título de utilização pode ter de ser legalizado antes, ou no mesmo processo (art. 102.º-A). Confirme no arquivo da câmara se houve licença." });
     if (p === "isento" || p === "isentoTermo" || p === "cp" || p === "lic") {
       if (tipo === "conservacao" && q.onde === "interior") alerts.push({ i: 1, t: "Obras de conservação só no interior dispensam a comunicação de início dos trabalhos (art. 80.º-A, n.º 3)." });
       else alerts.push({ i: 1, t: "Informe a câmara do início dos trabalhos até 5 dias antes (art. 80.º-A), indicando quem os executa, e afixe o aviso da obra visível da via pública." });
