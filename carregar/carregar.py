@@ -200,7 +200,8 @@ def camadas_mapserver(servico):
         raise RuntimeError(j["error"].get("message", "erro do serviço"))
     so = {int(i) for i in str(servico.get("ids") or "").split(",") if i.strip()}
     return [{"id": c["id"], "nome": c["name"]} for c in j.get("layers") or []
-            if not c.get("subLayerIds") and (not so or c["id"] in so)]
+            if not c.get("subLayerIds") and (not so or c["id"] in so)
+            and not re.search(LIMITES, sem_acentos(c["name"]))]
 
 
 def lonlat(g):
@@ -233,6 +234,9 @@ CONDICIONANTE = (r"(^|[^a-z])(ran|ren)([^a-z]|$)|reserva|patrim|prote|servid|per
                  r"(^|[^a-z])(zec|zpe)([^a-z]|$)|incend|aeropor|militar|gasod|marco|vertice|albufeir|cheia|inunda|"
                  r"arvore|regime florestal|baldio|rega")
 BASE = r"toponimia|curnivel|edificado|cartogener|caop|freguesia|percurso|uopg|qualificacao|espanha|policia|hidrgener|fotovolt|ocupsolo"
+
+
+LIMITES = r"^limite (de |da |do |dos |das )?(freguesia|concelho|municipio|administrativo)"
 
 
 def sem_acentos(t):
