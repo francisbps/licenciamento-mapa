@@ -10,6 +10,7 @@ Se uma fonte falhar, fica o ficheiro da semana anterior e o erro fica registado 
 """
 import json
 import math
+import re
 import sys
 import time
 import xml.etree.ElementTree as ET
@@ -226,7 +227,32 @@ def camadas_geoserver(servico):
         return nomes
     escolhidas = [n for n in nomes if n.split(":")[-1] in pedidas or n in pedidas]
     if not escolhidas:
-        raise RuntimeError(f"camada {', '.join(pedidas)} não existe no WFS (há: {', '.join(nomes[:10])})")
+        # Um nome do WMS pode ser um grupo de camadas: o GeoServer diz quais são as camadas WFS por baixo.
+        try:
+            j = json_ou_erro(pedir(servico["url"], {"service": "WMS", "version": "1.1.1", "request": "DescribeLayer",
+                                                    "layers": ",".join(pedidas), "outputFormat": "application/json"}))
+            tipos = {d.get("typeName") for d in j.get("layerDescriptions") or []}
+            escolhidas = [n for n in nomes if n in tipos or n.split(":")[-1] in {str(t).split(":")[-1] for t in tipos}]
+        except Exception:
+            pass
+    if not escolhidas:
+        # Ou então a lista do grupo no GetCapabilities do WMS.
+        try:
+            wms = ET.fromstring(pedir(servico["url"], {"service": "WMS", "version": "1.3.0",
+                                                       "request": "GetCapabilities"}).content)
+            for camada in wms.iter():
+                if local(camada) != "Layer":
+                    continue
+                nome = next((e.text for e in camada if local(e) == "Name"), None)
+                if nome and nome.split(":")[-1] in pedidas:
+                    filhos = {e.text.split(":")[-1] for c in camada.iter() if local(c) == "Layer" and c is not camada
+                              for e in c if local(e) == "Name" and e.text}
+                    escolhidas = [n for n in nomes if n.split(":")[-1] in filhos]
+                    break
+        except Exception:
+            pass
+    if not escolhidas:
+        raise RuntimeError(f"camada {', '.join(pedidas)} não existe no WFS (há: {', '.join(n.split(':')[-1] for n in nomes)})"[:1000])
     return escolhidas
 
 
@@ -348,16 +374,18 @@ def carregar(chave, cfg, municipios, cfgs):
                     continue
             except Exception as e:
                 indice[f"{pre}servico"] = {"origem": origem, "descricao": s["url"], "ok": False,
-                                           "tentativa": agora(), "erro": str(e)[:300]}
+                                           "tentativa": agora(), "erro": str(e)[:1000]}
                 print(f"FALHA {pre}servico {e}")
                 continue
             indice.pop(f"{pre}servico", None)
             for c in camadas:
                 if s.get("tipo") == "wms":
                     # Uma só camada com todas as condicionantes: o nome de cada uma vem do próprio elemento.
-                    fonte = pre + c.split(":")[-1]
-                    gravar(pasta, fonte, wfs_geoserver(s, c, folga),
-                           {"origem": origem, "descricao": s.get("nome") or c, "app": None,
+                    curto = c.split(":")[-1]
+                    rotulo = (s.get("nome") or curto) if len(camadas) == 1 else \
+                        re.sub(r"^(PDM)?\d{4}_", "", curto).replace("_", " ")
+                    gravar(pasta, pre + curto, wfs_geoserver({**s, "nome": rotulo}, c, folga),
+                           {"origem": origem, "descricao": rotulo, "app": None,
                             "entidade": "Câmara municipal", "por_elemento": True}, indice)
                 else:
                     gravar(pasta, f"{pre}{c['id']}", ags_camara(s, c, folga),
