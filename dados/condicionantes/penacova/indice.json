@@ -1,6 +1,6 @@
 {
  "concelho": "penacova",
- "gerado": "2026-11-11T17:52:38+00:00",
+ "gerado": "2026-11-11T20:19:29+00:00",
  "fontes": {
   "CM_1_18": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -10,8 +10,9 @@
    "ficheiro": "CM_1_18.geojson",
    "ok": true,
    "elementos": 126,
-   "atualizado": "2026-11-11T17:22:28+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:06:22+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_1_17": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -21,8 +22,9 @@
    "ficheiro": "CM_1_17.geojson",
    "ok": true,
    "elementos": 10,
-   "atualizado": "2026-11-11T17:22:33+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:06:33+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_1_13": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -32,8 +34,9 @@
    "ficheiro": "CM_1_13.geojson",
    "ok": true,
    "elementos": 324,
-   "atualizado": "2026-11-11T17:22:35+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:06:35+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_1_7": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -43,8 +46,9 @@
    "ficheiro": "CM_1_7.geojson",
    "ok": true,
    "elementos": 26,
-   "atualizado": "2026-11-11T17:22:35+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:06:35+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_1_11": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -54,8 +58,9 @@
    "ficheiro": "CM_1_11.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-11T17:22:35+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:06:36+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_1_10": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -65,8 +70,31 @@
    "ficheiro": "CM_1_10.geojson",
    "ok": true,
    "elementos": 9603,
-   "atualizado": "2026-11-11T17:23:08+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:10+00:00",
+   "erro": null,
+   "ladrilhos": {
+    "tamanho": 0.05,
+    "lista": [
+     "-163_805",
+     "-163_806",
+     "-164_805",
+     "-164_806",
+     "-165_805",
+     "-165_806",
+     "-166_804",
+     "-166_805",
+     "-166_806",
+     "-166_807",
+     "-167_804",
+     "-167_805",
+     "-167_806",
+     "-167_807",
+     "-168_804",
+     "-168_805",
+     "-168_806",
+     "-168_807"
+    ]
+   }
   },
   "CM_2_27": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -76,8 +104,9 @@
    "ficheiro": "CM_2_27.geojson",
    "ok": true,
    "elementos": 28,
-   "atualizado": "2026-11-11T17:23:08+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:10+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_25": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -87,8 +116,9 @@
    "ficheiro": "CM_2_25.geojson",
    "ok": true,
    "elementos": 11,
-   "atualizado": "2026-11-11T17:23:10+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:11+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_39": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -98,8 +128,9 @@
    "ficheiro": "CM_2_39.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T17:23:12+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:14+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_40": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -109,8 +140,9 @@
    "ficheiro": "CM_2_40.geojson",
    "ok": true,
    "elementos": 8,
-   "atualizado": "2026-11-11T17:23:13+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:14+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_41": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -120,8 +152,9 @@
    "ficheiro": "CM_2_41.geojson",
    "ok": true,
    "elementos": 8,
-   "atualizado": "2026-11-11T17:23:13+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:15+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_42": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -131,8 +164,9 @@
    "ficheiro": "CM_2_42.geojson",
    "ok": true,
    "elementos": 5,
-   "atualizado": "2026-11-11T17:23:13+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:15+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_43": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -142,8 +176,9 @@
    "ficheiro": "CM_2_43.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T17:23:14+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:16+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_44": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -153,8 +188,9 @@
    "ficheiro": "CM_2_44.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T17:23:14+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:16+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_45": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -164,8 +200,9 @@
    "ficheiro": "CM_2_45.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T17:23:15+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:16+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_46": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -175,8 +212,9 @@
    "ficheiro": "CM_2_46.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T17:23:15+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:17+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_47": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -186,8 +224,9 @@
    "ficheiro": "CM_2_47.geojson",
    "ok": true,
    "elementos": 4,
-   "atualizado": "2026-11-11T17:23:15+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:17+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_33": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -197,8 +236,9 @@
    "ficheiro": "CM_2_33.geojson",
    "ok": true,
    "elementos": 11,
-   "atualizado": "2026-11-11T17:23:16+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:18+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_34": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -208,8 +248,9 @@
    "ficheiro": "CM_2_34.geojson",
    "ok": true,
    "elementos": 7,
-   "atualizado": "2026-11-11T17:23:16+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:18+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_35": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -219,8 +260,9 @@
    "ficheiro": "CM_2_35.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T17:23:17+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:18+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_36": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -230,8 +272,9 @@
    "ficheiro": "CM_2_36.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T17:23:17+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:19+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_37": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -241,8 +284,9 @@
    "ficheiro": "CM_2_37.geojson",
    "ok": true,
    "elementos": 12122,
-   "atualizado": "2026-11-11T17:23:36+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:38+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_29": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -252,8 +296,9 @@
    "ficheiro": "CM_2_29.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-11T17:23:37+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:38+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_30": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -263,8 +308,9 @@
    "ficheiro": "CM_2_30.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T17:23:37+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:39+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_31": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -274,8 +320,9 @@
    "ficheiro": "CM_2_31.geojson",
    "ok": true,
    "elementos": 5,
-   "atualizado": "2026-11-11T17:23:37+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:39+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_21": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -285,8 +332,9 @@
    "ficheiro": "CM_2_21.geojson",
    "ok": true,
    "elementos": 5,
-   "atualizado": "2026-11-11T17:23:38+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:39+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_22": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -296,8 +344,9 @@
    "ficheiro": "CM_2_22.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T17:23:38+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:40+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_23": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -307,8 +356,9 @@
    "ficheiro": "CM_2_23.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T17:23:38+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:40+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_51": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -318,8 +368,9 @@
    "ficheiro": "CM_2_51.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T17:23:39+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:40+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_52": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -329,8 +380,9 @@
    "ficheiro": "CM_2_52.geojson",
    "ok": true,
    "elementos": 7,
-   "atualizado": "2026-11-11T17:23:39+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:41+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_2_54": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",
@@ -340,8 +392,9 @@
    "ficheiro": "CM_2_54.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-11T17:23:40+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:07:42+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_REN": {
    "origem": "DGT (SNIT, SRUP)",
@@ -349,8 +402,8 @@
    "app": "ren",
    "entidade": "CCDR Centro",
    "ok": false,
-   "tentativa": "2026-11-11T17:28:51+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "tentativa": "2026-11-11T18:09:20+00:00",
+   "erro": "400 Client Error: Bad Request for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_CENTRO/WFService.aspx?service=WFS&version=2.0.0&request=GetFeature&typeNames=gmgml%3AREN_Centro&count=200&startIndex=0&outputFormat=application%2Fjson&bbox=-21983.93811831399%2C60906.686608260046%2C2283.528069"
   },
   "DGT_DPH": {
    "origem": "DGT (SNIT, SRUP)",
@@ -360,8 +413,9 @@
    "ficheiro": "DGT_DPH.geojson",
    "ok": true,
    "elementos": 0,
-   "atualizado": "2026-11-11T17:31:51+00:00",
-   "erro": null
+   "atualizado": "2026-11-11T18:10:05+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_IC": {
    "origem": "DGT (SNIT, SRUP)",
@@ -369,8 +423,101 @@
    "app": "pat",
    "entidade": "Património Cultural, I.P.",
    "ok": false,
-   "tentativa": "2026-11-11T17:52:38+00:00",
+   "tentativa": "2026-11-11T18:14:50+00:00",
+   "erro": "400 Client Error: Bad Request for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_IC_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetFeature&typeNames=gmgml%3AIm%C3%B3veis_Classificados_com_Zona_de_Prote%C3%A7%C3%A3o&count=200&startIndex=3000&outputFormat=application%2Fjson&bbox=-21983."
+  },
+  "DGT_EIP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "EIP",
+   "app": "edificios_publicos_valor",
+   "entidade": "Entidade que tutela o edifício",
+   "ok": false,
+   "tentativa": "2026-11-11T18:53:44+00:00",
+   "erro": "400 Client Error: Bad Request for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_EIP_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetFeature&typeNames=gmgml%3AEdif%C3%ADcios_de_Interesse_P%C3%BAblico&count=200&startIndex=18200&outputFormat=application%2Fjson&bbox=-21983.93811831399%2C6"
+  },
+  "DGT_AA": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AA",
+   "app": "aero",
+   "entidade": "ANAC",
+   "ficheiro": "DGT_AA.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-11T19:04:27+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_GO": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "GO",
+   "app": "gas",
+   "entidade": "REN Gasodutos e DGEG",
+   "ok": false,
+   "tentativa": "2026-11-11T19:39:00+00:00",
    "erro": "mais de 20 min sem terminar"
+  },
+  "DGT_TC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "TC",
+   "app": "telecomunicacoes_radioeletricas",
+   "entidade": "ANACOM",
+   "ok": false,
+   "tentativa": "2026-11-11T19:44:11+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_MG": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "MG",
+   "app": "marcos_geodesicos",
+   "entidade": "Direção-Geral do Território",
+   "ok": false,
+   "tentativa": "2026-11-11T19:47:17+00:00",
+   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_MG_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_DN": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "DN",
+   "app": "militar",
+   "entidade": "Ministério da Defesa Nacional",
+   "ok": false,
+   "tentativa": "2026-11-11T19:52:28+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_IPE": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IPE",
+   "app": "militar",
+   "entidade": "PSP / Defesa Nacional",
+   "ficheiro": "DGT_IPE.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-11T20:02:34+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_EPTM": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "EPTM",
+   "app": "estabelecimentos_prisionais",
+   "entidade": "DGRSP",
+   "ficheiro": "DGT_EPTM.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-11T20:08:55+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_IA": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IA",
+   "app": "instalacoes_aduaneiras",
+   "entidade": "Autoridade Tributária e Aduaneira",
+   "ficheiro": "DGT_IA.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-11T20:19:29+00:00",
+   "erro": null,
+   "ladrilhos": null
   }
  }
 }
