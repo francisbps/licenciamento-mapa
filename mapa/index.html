@@ -407,7 +407,13 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
       let r;
       if (cm && cm.length) {
         const hits = [];
-        cm.forEach(([f, v]) => { if (tocados(v, lat, lng).length) hits.push({ nome: v.descricao, k: v.app || chaveDe(v.descricao || ""), origem: v.origem, entidade: v.entidade, documento: v.documento }); });
+        cm.forEach(([f, v]) => {
+          const t = tocados(v, lat, lng);
+          if (!t.length) return;
+          // Camada única com todas as condicionantes (GeoServer): cada elemento tocado diz qual é.
+          const nomes = v.por_elemento ? [...new Set(t.map((e) => e.p.nome || v.descricao))] : [v.descricao];
+          nomes.forEach((nome) => hits.push({ nome, k: v.app || chaveDe(nome || ""), origem: v.origem, entidade: v.entidade, documento: v.documento }));
+        });
         r = { m: (await municipios())[norm(concelho)] || null, hits, estado: "ok", data: dl.indice.gerado };
       } else r = await consultarMunicipio(concelho, lat, lng);
       if (g !== ger) return; muni = r; r.hits.forEach((x) => { if (x.k) achados[x.k] = true; }); renderRes();

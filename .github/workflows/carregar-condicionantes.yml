@@ -15,23 +15,49 @@ permissions:
 concurrency: carregar-condicionantes
 
 jobs:
+  lista:
+    runs-on: ubuntu-latest
+    outputs:
+      concelhos: ${{ steps.l.outputs.concelhos }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: l
+        run: |
+          if [ -n "$CONCELHOS" ]; then
+            echo "concelhos=$(printf '%s\n' $CONCELHOS | jq -R . | jq -sc .)" >> "$GITHUB_OUTPUT"
+          else
+            echo "concelhos=$(jq -c '[keys_unsorted[] | select(startswith("_") | not)]' carregar/fontes.json)" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          CONCELHOS: ${{ github.event.inputs.concelhos }}
+
+  # Um trabalho por concelho, alguns em simultâneo: cada um tem o seu tempo e uma falha não pára os outros.
   carregar:
+    needs: lista
     runs-on: ubuntu-latest
     timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        concelho: ${{ fromJson(needs.lista.outputs.concelhos) }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install requests==2.32.3 shapely==2.0.6 pyproj==3.7.0
-      - run: python -u carregar/carregar.py $CONCELHOS
-        env:
-          CONCELHOS: ${{ github.event.inputs.concelhos }}
+      - run: python -u carregar/carregar.py "${{ matrix.concelho }}"
       - name: Guardar no site
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
           git add dados/condicionantes
-          git diff --cached --quiet || git commit -m "Condicionantes atualizadas ($(date -u +%F))"
-          git pull --rebase origin "$GITHUB_REF_NAME" && git push
+          git diff --cached --quiet && exit 0
+          git commit -m "Condicionantes de ${{ matrix.concelho }} atualizadas ($(date -u +%F))"
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push && exit 0
+            sleep $((i * 15))
+          done
+          exit 1

@@ -4,7 +4,7 @@ Uso: python carregar/carregar.py [concelho ...]       (sem argumentos: todos os 
 
 Para cada concelho junta três origens, todas recortadas pelo limite oficial do concelho (CAOP):
 - cartas nacionais da DGT (serviços WFS SRUP);
-- planta de condicionantes da câmara, quando tem serviço (camadas em dados/municipios.json);
+- planta de condicionantes da câmara, quando tem serviço aberto (dados/municipios.json): ArcGIS ou GeoServer;
 - ficheiros carregados à mão em dados/condicionantes/manual/<concelho>/ (respostas escritas de entidades).
 Se uma fonte falhar, fica o ficheiro da semana anterior e o erro fica registado no índice.
 """
@@ -153,6 +153,56 @@ def ags_camara(servico, camada, limite):
                                camada=camada["nome"])
 
 
+def camadas_mapserver(servico):
+    """Lista as camadas com elementos de um MapServer (sem os grupos); respeita os ids indicados, se houver."""
+    j = json_ou_erro(pedir(servico["url"], {"f": "json"}))
+    if "error" in j:
+        raise RuntimeError(j["error"].get("message", "erro do serviço"))
+    so = {int(i) for i in str(servico.get("ids") or "").split(",") if i.strip()}
+    return [{"id": c["id"], "nome": c["name"]} for c in j.get("layers") or []
+            if not c.get("subLayerIds") and (not so or c["id"] in so)]
+
+
+def lonlat(g):
+    """Algumas respostas em EPSG:4326 vêm em latitude, longitude: em Portugal a longitude é negativa."""
+    x, y = g.representative_point().coords[0]
+    return transform(lambda a, b, z=None: (b, a), g) if x > 0 and y < 0 else g
+
+
+def wfs_geoserver(servico, camada, limite):
+    """Camada de um GeoServer municipal, pedida por WFS em páginas."""
+    url, inicio = servico["url"], 0
+    while True:
+        lote = json_ou_erro(pedir(url, {
+            "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
+            "outputFormat": "application/json", "srsName": "EPSG:4326", "count": 1000, "startIndex": inicio}))
+        if "features" not in lote:
+            raise RuntimeError(str(lote)[:200])
+        els = lote["features"]
+        for el in els:
+            if el.get("geometry"):
+                yield elemento(lonlat(shape(el["geometry"])), limite, el.get("properties") or {},
+                               camada=servico.get("nome") or camada)
+        if len(els) < 1000:
+            break
+        inicio += len(els)
+
+
+def camadas_geoserver(servico):
+    caps = ET.fromstring(pedir(servico["url"], {"service": "WFS", "version": "2.0.0",
+                                                "request": "GetCapabilities"}).content)
+    local = lambda e: e.tag.split("}")[-1]  # nome da etiqueta sem o espaço de nomes
+    nomes = [e.text for t in caps.iter() if local(t) == "FeatureType"
+             for e in t if local(e) == "Name" and e.text]
+    pedidas = [n.strip() for n in str(servico.get("layers") or "").split(",") if n.strip()]
+    if not pedidas:
+        return nomes
+    escolhidas = [n for n in nomes if n.split(":")[-1] in pedidas or n in pedidas]
+    if not escolhidas:
+        raise RuntimeError(f"camada {', '.join(pedidas)} não existe no WFS (há: {', '.join(nomes[:10])})")
+    return escolhidas
+
+
 def gravar(pasta, fonte, gerador, meta, indice):
     """Grava só se correr bem; em caso de falha mantém o ficheiro anterior."""
     t = time.time()
@@ -187,27 +237,59 @@ def agora():
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def carregar(chave, cfg, municipios):
+def carregar(chave, cfg, municipios, cfgs):
     pasta = DADOS / chave
     pasta.mkdir(parents=True, exist_ok=True)
     ficheiro_indice = pasta / "indice.json"
     indice = json.loads(ficheiro_indice.read_text())["fontes"] if ficheiro_indice.exists() else {}
 
-    limite = shape(pedir(CAOP.format(cfg["dico"])).json()["geometry"])
+    caop = pedir(CAOP.format(cfg["dico"])).json()
+    limite = shape(caop["geometry"])
+    print(f"== {cfg['nome']} (CAOP {cfg['dico']}: {(caop.get('properties') or {}).get('municipio', '?')})")
     folga = limite.buffer(0.002)  # cerca de 200 m, para servidões que entram a partir do concelho vizinho
     (pasta / "limite.geojson").write_text(json.dumps({"type": "Feature", "geometry": mapping(
         limite.simplify(0.0001)), "properties": {"nome": cfg["nome"], "dico": cfg["dico"]}}))
 
     if cfg.get("camara"):
-        for s in municipios[chave].get("servicos", []):
-            if s.get("tipo") != "ags-query":
+        origem = f"Câmara Municipal de {cfg['nome']} (planta de condicionantes)"
+        m = municipios.get(chave) or municipios.get(chave.replace("-", " ")) or {}
+        servicos = m.get("servicos", [])
+        for n, s in enumerate(servicos, 1):
+            pre = "CM_" if len(servicos) == 1 else f"CM_{n}_"
+            try:
+                if s.get("tipo") == "ags-query":
+                    camadas = s["camadas"]
+                elif s.get("tipo") == "ags-identify":
+                    camadas = camadas_mapserver(s)
+                elif s.get("tipo") == "wms":
+                    camadas = camadas_geoserver(s)
+                else:
+                    continue
+            except Exception as e:
+                indice[f"{pre}servico"] = {"origem": origem, "descricao": s["url"], "ok": False,
+                                           "tentativa": agora(), "erro": str(e)[:300]}
+                print(f"FALHA {pre}servico {e}")
                 continue
-            for c in s["camadas"]:
-                gravar(pasta, f"CM_{c['id']}", ags_camara(s, c, folga),
-                       {"origem": f"Câmara Municipal de {cfg['nome']} (planta de condicionantes)",
-                        "descricao": c["nome"], "app": c.get("k") or None, "entidade": "Câmara municipal"}, indice)
+            indice.pop(f"{pre}servico", None)
+            for c in camadas:
+                if s.get("tipo") == "wms":
+                    # Uma só camada com todas as condicionantes: o nome de cada uma vem do próprio elemento.
+                    fonte = pre + c.split(":")[-1]
+                    gravar(pasta, fonte, wfs_geoserver(s, c, folga),
+                           {"origem": origem, "descricao": s.get("nome") or c, "app": None,
+                            "entidade": "Câmara municipal", "por_elemento": True}, indice)
+                else:
+                    gravar(pasta, f"{pre}{c['id']}", ags_camara(s, c, folga),
+                           {"origem": origem, "descricao": c["nome"], "app": c.get("k") or None,
+                            "entidade": "Câmara municipal"}, indice)
 
-    for f in cfg.get("nacionais", []):
+    nacionais = cfg.get("nacionais")
+    if nacionais is None:  # cartas nacionais comuns, com a REN da região do concelho
+        ren = cfg.get("ren")
+        nacionais = ([{"fonte": "DGT_REN", "codigo": "REN", "app": "ren", "entidade": cfgs["_ren"][ren],
+                       "url": f"https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_{ren}/WFService.aspx"}]
+                     if ren else []) + cfgs["_nacionais"]
+    for f in nacionais:
         gravar(pasta, f["fonte"], wfs_dgt(f, folga),
                {"origem": "DGT (SNIT, SRUP)", "descricao": f["codigo"], "app": f["app"], "entidade": f["entidade"]}, indice)
 
@@ -229,8 +311,8 @@ def carregar(chave, cfg, municipios):
 def main():
     cfgs = json.loads((RAIZ / "carregar" / "fontes.json").read_text())
     municipios = json.loads((RAIZ / "dados" / "municipios.json").read_text())
-    escolhidos = sys.argv[1:] or list(cfgs)
-    tudo_falhou = [carregar(c, cfgs[c], municipios) for c in escolhidos]
+    escolhidos = sys.argv[1:] or [c for c in cfgs if not c.startswith("_")]
+    tudo_falhou = [carregar(c, cfgs[c], municipios, cfgs) for c in escolhidos]
     sys.exit(1 if all(tudo_falhou) else 0)
 
 
