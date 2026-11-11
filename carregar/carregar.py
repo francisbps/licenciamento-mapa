@@ -11,6 +11,7 @@ Se uma fonte falhar, fica o ficheiro da semana anterior e o erro fica registado 
 import json
 import math
 import re
+import unicodedata
 import sys
 import time
 import xml.etree.ElementTree as ET
@@ -227,6 +228,17 @@ def wfs_geoserver(servico, camada, limite):
         inicio += len(els)
 
 
+CONDICIONANTE = (r"(^|[^a-z])(ran|ren)([^a-z]|$)|reserva|patrim|prote|servid|perigos|captac|cursos de agua|leitos|"
+                 r"(^|[^a-z])rnt([^a-z]|$)|eletric|rodovi|ferrovi|linha da beira|geositi|concess|jazig|habitat|natura|"
+                 r"(^|[^a-z])(zec|zpe)([^a-z]|$)|incend|aeropor|militar|gasod|marco|vertice|albufeir|cheia|inunda|"
+                 r"arvore|regime florestal|baldio|rega")
+BASE = r"toponimia|curnivel|edificado|cartogener|caop|freguesia|percurso|uopg|qualificacao|espanha|policia|hidrgener|fotovolt|ocupsolo"
+
+
+def sem_acentos(t):
+    return unicodedata.normalize("NFD", t).encode("ascii", "ignore").decode().lower().replace("_", " ")
+
+
 def camadas_geoserver(servico):
     caps = ET.fromstring(pedir(servico["url"], {"service": "WFS", "version": "2.0.0",
                                                 "request": "GetCapabilities"}).content)
@@ -262,6 +274,10 @@ def camadas_geoserver(servico):
                     break
         except Exception:
             pass
+    if not escolhidas:
+        # Último recurso: as camadas cujo nome diz que são condicionantes (sem a cartografia de base).
+        escolhidas = [n for n in nomes if re.search(CONDICIONANTE, sem_acentos(n.split(":")[-1]))
+                      and not re.search(BASE, sem_acentos(n.split(":")[-1]))]
     if not escolhidas:
         raise RuntimeError(f"camada {', '.join(pedidas)} não existe no WFS (há: {', '.join(n.split(':')[-1] for n in nomes)})"[:1000])
     return escolhidas
@@ -397,7 +413,7 @@ def carregar(chave, cfg, municipios, cfgs):
                     curto = c.split(":")[-1]
                     rotulo = (s.get("nome") or curto) if len(camadas) == 1 else \
                         re.sub(r"^(PDM)?\d{4}_", "", curto).replace("_", " ")
-                    gravar(pasta, pre + curto, wfs_geoserver({**s, "nome": rotulo}, c, folga),
+                    gravar(pasta, pre + re.sub(r"[^a-z0-9]+", "_", sem_acentos(curto)).strip("_"), wfs_geoserver({**s, "nome": rotulo}, c, folga),
                            {"origem": origem, "descricao": rotulo, "app": None,
                             "entidade": "Câmara municipal", "por_elemento": True}, indice)
                 else:
