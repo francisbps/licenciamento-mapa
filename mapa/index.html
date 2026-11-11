@@ -294,13 +294,28 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
         if (!r.ok) return null;
         const indice = await r.json(), fontes = {};
         await Promise.all(Object.entries(indice.fontes).filter(([, v]) => v.ok).map(async ([f, v]) => {
-          const els = v.elementos ? (await (await fetch(base + v.ficheiro)).json()).features : [];
-          fontes[f] = { ...v, els: els.map((e) => ({ p: e.properties, g: e.geometry, b: caixa(e.geometry.coordinates) })) };
+          // Fontes grandes estão partidas em ladrilhos: esses só se descarregam para o ponto escolhido (pontoLocal).
+          const els = v.elementos && !v.ladrilhos ? await lerEls(base + v.ficheiro) : [];
+          fontes[f] = { ...v, els, cache: {} };
         }));
-        return { indice, fontes };
+        return { indice, fontes, base };
       } catch (e) { return null; }
     })();
     return locais[k];
+  }
+  async function lerEls(url) {
+    const r = await fetch(url);
+    if (!r.ok) return [];
+    return (await r.json()).features.map((e) => ({ p: e.properties, g: e.geometry, b: caixa(e.geometry.coordinates) }));
+  }
+  // Para as fontes em ladrilhos, carrega só o ladrilho onde está o ponto.
+  async function pontoLocal(dl, lat, lng) {
+    await Promise.all(Object.entries(dl.fontes).filter(([, v]) => v.ladrilhos).map(async ([f, v]) => {
+      const t = v.ladrilhos.tamanho, k = `${Math.floor(lng / t)}_${Math.floor(lat / t)}`;
+      if (!v.ladrilhos.lista.includes(k)) { v.els = []; return; }
+      if (!v.cache[k]) v.cache[k] = lerEls(`${dl.base}${f}/${k}.geojson`);
+      v.els = await v.cache[k];
+    }));
   }
   function caixa(c, b = [180, 90, -180, -90]) {
     if (typeof c[0] === "number") { b[0] = Math.min(b[0], c[0]); b[1] = Math.min(b[1], c[1]); b[2] = Math.max(b[2], c[0]); b[3] = Math.max(b[3], c[1]); }
@@ -395,11 +410,12 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     const concelho = (await concelhoP) || local.concelho;
     if (g !== ger) return;
     const dl = await dadosLocais(concelho);
+    if (dl) await pontoLocal(dl, lat, lng);
     if (g !== ger) return;
     const nac = Promise.all(LAYERS.map(async (l) => {
       // Uma carta descarregada sem nenhum elemento no concelho pode ser falha da fonte: aí pergunta-se ao serviço.
       const f = dl && dl.fontes[FONTE_LOCAL[l.id]];
-      const s = f && f.els.length ? (tocados(f, lat, lng).length ? "sim" : "nao") : await consultar(l, lat, lng);
+      const s = f && f.elementos ? (tocados(f, lat, lng).length ? "sim" : "nao") : await consultar(l, lat, lng);
       if (g !== ger) return; estado[l.id] = s; if (s === "sim" && l.app) achados[l.app] = true; renderRes();
     }));
     const mun = (async () => {

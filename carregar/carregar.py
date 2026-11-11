@@ -9,6 +9,7 @@ Para cada concelho junta três origens, todas recortadas pelo limite oficial do 
 Se uma fonte falhar, fica o ficheiro da semana anterior e o erro fica registado no índice.
 """
 import json
+import math
 import sys
 import time
 import xml.etree.ElementTree as ET
@@ -16,9 +17,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+import shapely
 from pyproj import Transformer
 from shapely import make_valid
-from shapely.geometry import (LinearRing, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon,
+from shapely.geometry import (LinearRing, box, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon,
                               mapping, shape)
 from shapely.ops import transform
 
@@ -31,6 +33,10 @@ LOTE_IDS = 200  # elementos por pedido à câmara (o servidor não pagina)
 ESPERA = 150  # segundos por pedido: a DGT é lenta
 TEMPO_FONTE = 1200  # uma fonte que passe disto é dada como falhada nesta semana
 SIMPLIFICAR = 0.000005  # cerca de 0,5 m
+CASAS = 6  # casas decimais das coordenadas (cerca de 10 cm)
+LADRILHO = 0.05  # graus (cerca de 5 km): fontes grandes são partidas em ladrilhos
+MAX_FICHEIRO = 8e6  # bytes; acima disto a fonte é partida, para o browser só descarregar a zona do ponto
+CAMPOS_FORA = ("objectid", "shape", "globalid", "fid", "st_area", "st_length", "gml_id")
 CAMPOS_NOME = ("nome", "designa", "denomina", "name", "titulo", "tipo")
 
 sessao = requests.Session()
@@ -64,9 +70,11 @@ def elemento(geom, limite, props, **extra):
     g = make_valid(geom).intersection(limite)
     if g.is_empty:
         return None
-    g = g.simplify(SIMPLIFICAR, preserve_topology=True)
+    g = shapely.transform(g.simplify(SIMPLIFICAR, preserve_topology=True), lambda c: c.round(CASAS))
+    props = {k: v for k, v in props.items()
+             if v not in (None, "", " ") and not k.lower().startswith(CAMPOS_FORA)}
     return {"type": "Feature", "geometry": mapping(g),
-            "properties": {**extra, "nome": nome_de(props) or extra.get("camada"), "atributos": props}}
+            "properties": {"nome": nome_de(props) or extra.get("camada"), "atributos": props}}
 
 
 def json_ou_erro(r):
@@ -203,6 +211,42 @@ def camadas_geoserver(servico):
     return escolhidas
 
 
+def colecao(els):
+    return json.dumps({"type": "FeatureCollection", "features": els}, ensure_ascii=False, separators=(",", ":"))
+
+
+def escrever(pasta, fonte, els):
+    """Grava a fonte num ficheiro; se for grande, parte-a em ladrilhos numa pasta com o nome da fonte."""
+    texto = colecao(els)
+    pasta_l = pasta / fonte
+    for velho in pasta_l.glob("*.geojson") if pasta_l.exists() else []:
+        velho.unlink()
+    if len(texto.encode()) <= MAX_FICHEIRO:
+        (pasta / f"{fonte}.geojson").write_text(texto)
+        return {"ladrilhos": None}
+    (pasta / f"{fonte}.geojson").unlink(missing_ok=True)
+    pasta_l.mkdir(exist_ok=True)
+    grupos = {}
+    for e in els:
+        g = shape(e["geometry"])
+        x0, y0, x1, y1 = g.bounds
+        for ix in range(math.floor(x0 / LADRILHO), math.floor(x1 / LADRILHO) + 1):
+            for iy in range(math.floor(y0 / LADRILHO), math.floor(y1 / LADRILHO) + 1):
+                if g.geom_type.endswith("Polygon") and (x1 - x0 > LADRILHO or y1 - y0 > LADRILHO):
+                    # Elementos grandes: só o pedaço dentro do ladrilho (com 20 m de folga).
+                    caixa = box(ix * LADRILHO, iy * LADRILHO, (ix + 1) * LADRILHO, (iy + 1) * LADRILHO).buffer(0.0002)
+                    parte = g.intersection(caixa)
+                    if parte.is_empty:
+                        continue
+                    e2 = {**e, "geometry": mapping(shapely.transform(parte, lambda c: c.round(CASAS)))}
+                else:
+                    e2 = e
+                grupos.setdefault(f"{ix}_{iy}", []).append(e2)
+    for nome, lista in grupos.items():
+        (pasta_l / f"{nome}.geojson").write_text(colecao(lista))
+    return {"ladrilhos": {"tamanho": LADRILHO, "lista": sorted(grupos)}}
+
+
 def gravar(pasta, fonte, gerador, meta, indice):
     """Grava só se correr bem; em caso de falha mantém o ficheiro anterior."""
     t = time.time()
@@ -213,12 +257,9 @@ def gravar(pasta, fonte, gerador, meta, indice):
                 raise TimeoutError(f"mais de {TEMPO_FONTE // 60} min sem terminar")
             if e:
                 els.append(e)
-        for e in els:
-            e["properties"].update(fonte=fonte, app=meta.get("app"), entidade=meta.get("entidade"))
-        (pasta / f"{fonte}.geojson").write_text(
-            json.dumps({"type": "FeatureCollection", "features": els}, ensure_ascii=False, separators=(",", ":")))
+        extra = escrever(pasta, fonte, els)
         indice[fonte] = {**meta, "ficheiro": f"{fonte}.geojson", "ok": True, "elementos": len(els),
-                         "atualizado": agora(), "erro": None}
+                         "atualizado": agora(), "erro": None, **extra}
         print(f"OK    {fonte:28} {len(els):6} elementos  {time.time() - t:5.0f} s")
     except Exception as e:  # uma fonte em baixo não pára as outras
         anterior = indice.get(fonte, {})
