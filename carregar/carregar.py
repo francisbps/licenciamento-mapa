@@ -86,40 +86,59 @@ def json_ou_erro(r):
         raise RuntimeError(f"resposta não é JSON ({r.headers.get('content-type', '?')}): {texto}") from None
 
 
+def de_pttm_certo(g, perto):
+    """Passa de PT-TM06 para graus. Alguns serviços trocam a ordem dos eixos (norte, este):
+    fica a leitura que cai perto do concelho."""
+    a = transform(de_pttm, g)
+    if a.intersects(perto):
+        return a
+    b = transform(de_pttm, transform(lambda x, y, z=None: (y, x), g))
+    return b if b.intersects(perto) else a
+
+
 def wfs_dgt(f, limite):
     url = f.get("url") or WFS_DGT.format(f["codigo"])
     caps = ET.fromstring(pedir(url, {"service": "WFS", "version": "2.0.0", "request": "GetCapabilities"}).content)
     nomes = [e.text for e in caps.iter() if e.tag.endswith("}Name") and e.text and ":" in e.text]
     x0, y0, x1, y1 = transform(para_pttm, limite).bounds
-    # Nem todos os serviços aceitam o mesmo pedido: experimenta variantes e fica com a primeira que der JSON.
-    variantes = [
-        {"outputFormat": "application/vnd.geo+json", "bbox": f"{x0},{y0},{x1},{y1},urn:ogc:def:crs:EPSG::3763"},
-        {"outputFormat": "application/vnd.geo+json", "bbox": f"{x0},{y0},{x1},{y1}"},
-        {"outputFormat": "application/json", "bbox": f"{x0},{y0},{x1},{y1}"},
-    ]
-    for camada in nomes:
-        inicio, erro = 0, None
-        while True:
-            for v in list(variantes):
-                try:
-                    lote = json_ou_erro(pedir(url, {
-                        "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
-                        "count": PAGINA_DGT, "startIndex": inicio, **v})).get("features") or []
-                    variantes.remove(v)
-                    variantes.insert(0, v)
-                    break
-                except RuntimeError as e:
-                    erro = e
-            else:
-                raise erro
-            for el in lote:
-                if el.get("geometry"):
-                    geom = transform(de_pttm, shape(el["geometry"]))  # a DGT responde em PT-TM06
-                    yield elemento(geom, limite, el.get("properties") or {},
+    perto = limite.envelope.buffer(0.05)
+    vistos = set()
+    # A ordem dos eixos da caixa não é igual em todos os serviços: pede-se nas duas ordens
+    # (o que cair fora do concelho é cortado depois) e junta-se sem repetidos.
+    for caixa in (f"{x0},{y0},{x1},{y1}", f"{y0},{x0},{y1},{x1}"):
+        # Nem todos os serviços aceitam o mesmo pedido: experimenta variantes e fica com a primeira que der JSON.
+        variantes = [
+            {"outputFormat": "application/vnd.geo+json", "bbox": f"{caixa},urn:ogc:def:crs:EPSG::3763"},
+            {"outputFormat": "application/vnd.geo+json", "bbox": caixa},
+            {"outputFormat": "application/json", "bbox": caixa},
+        ]
+        for camada in nomes:
+            inicio, erro = 0, None
+            while True:
+                for v in list(variantes):
+                    try:
+                        lote = json_ou_erro(pedir(url, {
+                            "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
+                            "count": PAGINA_DGT, "startIndex": inicio, **v})).get("features") or []
+                        variantes.remove(v)
+                        variantes.insert(0, v)
+                        break
+                    except RuntimeError as e:
+                        erro = e
+                else:
+                    raise erro
+                for el in lote:
+                    if not el.get("geometry"):
+                        continue
+                    chave = (camada, el.get("id") or json.dumps(el["geometry"])[:500])
+                    if chave in vistos:
+                        continue
+                    vistos.add(chave)
+                    yield elemento(de_pttm_certo(shape(el["geometry"]), perto), limite, el.get("properties") or {},
                                    camada=camada.split(":")[-1].replace("_", " "))
-            if not lote or len(lote) < PAGINA_DGT:
-                break
-            inicio += len(lote)
+                if not lote or len(lote) < PAGINA_DGT:
+                    break
+                inicio += len(lote)
 
 
 def esri_para_shape(g):
