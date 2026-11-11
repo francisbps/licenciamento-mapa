@@ -394,6 +394,7 @@ def carregar(chave, cfg, municipios, cfgs):
         origem = f"Câmara Municipal de {cfg['nome']} (planta de condicionantes)"
         m = municipios.get(chave) or municipios.get(chave.replace("-", " ")) or {}
         servicos = m.get("servicos", [])
+        vistas = set()
         for n, s in enumerate(servicos, 1):
             pre = "CM_" if len(servicos) == 1 else f"CM_{n}_"
             try:
@@ -417,13 +418,23 @@ def carregar(chave, cfg, municipios, cfgs):
                     curto = c.split(":")[-1]
                     rotulo = (s.get("nome") or curto) if len(camadas) == 1 else \
                         re.sub(r"^(PDM)?\d{4}_", "", curto).replace("_", " ")
-                    gravar(pasta, pre + re.sub(r"[^a-z0-9]+", "_", sem_acentos(curto)).strip("_"), wfs_geoserver({**s, "nome": rotulo}, c, folga),
-                           {"origem": origem, "descricao": rotulo, "app": None,
-                            "entidade": "Câmara municipal", "por_elemento": True}, indice)
+                    fonte = pre + re.sub(r"[^a-z0-9]+", "_", sem_acentos(curto)).strip("_")
+                    gravar(pasta, fonte, wfs_geoserver({**s, "nome": rotulo}, c, folga),
+                           {"origem": origem, "descricao": rotulo, "app": None, "entidade": "Câmara municipal",
+                            "por_elemento": len(camadas) == 1}, indice)
                 else:
-                    gravar(pasta, f"{pre}{c['id']}", ags_camara(s, c, folga),
+                    fonte = f"{pre}{c['id']}"
+                    gravar(pasta, fonte, ags_camara(s, c, folga),
                            {"origem": origem, "descricao": c["nome"], "app": c.get("k") or None,
                             "entidade": "Câmara municipal"}, indice)
+                vistas.add(fonte)
+        if not any(k.endswith("servico") for k in indice):
+            # Camadas que a câmara já não publica (ou que passaram a ficar de fora) saem do site.
+            for k in [k for k in indice if k.startswith("CM_") and k not in vistas]:
+                indice.pop(k)
+                (pasta / f"{k}.geojson").unlink(missing_ok=True)
+                for velho in (pasta / k).glob("*.geojson") if (pasta / k).exists() else []:
+                    velho.unlink()
 
     nacionais = cfg.get("nacionais")
     if nacionais is None:  # cartas nacionais comuns, com a REN da região do concelho
