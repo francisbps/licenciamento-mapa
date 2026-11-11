@@ -1,0 +1,33 @@
+{
+ "concelho": "belmonte",
+ "gerado": "2026-11-11T17:49:17+00:00",
+ "fontes": {
+  "CM_servico": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "https://sig.amcb.pt/geoserver/cm_belmonte/ows",
+   "ok": false,
+   "tentativa": "2026-11-11T17:40:02+00:00",
+   "erro": "camada PDM0501_Co_2_m_b não existe no WFS (há: cm_belmonte:0501_AHCB, cm_belmonte:0501_CALM_Leitos, cm_belmonte:0501_CALM_LinhAg, cm_belmonte:0501_CartoGener, cm_belmonte:0501_CurNivel, cm_belmonte:0501_DesdrobFls, cm_belmonte:0501_Edificado, cm_belmonte:0501_HidrDrenag, cm_belmonte:0501_HidrGener, "
+  },
+  "DGT_REN": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "REN",
+   "app": "ren",
+   "entidade": "CCDR Centro",
+   "ok": false,
+   "tentativa": "2026-11-11T17:46:16+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_DPH": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "DPH",
+   "app": "hidrico",
+   "entidade": "APA, I.P.",
+   "ficheiro": "DGT_DPH.geojson",
+   "ok": true,
+   "elementos": 1,
+   "atualizado": "2026-11-11T17:49:17+00:00",
+   "erro": null
+  }
+ }
+}
