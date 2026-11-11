@@ -281,6 +281,61 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     } catch (e) { return "erro"; }
   }
 
+  // Condicionantes já descarregadas para o site (dados/condicionantes/<concelho>/, atualizadas todas as semanas).
+  // Quando existem, a resposta sai daqui, sem perguntar aos serviços oficiais.
+  const FONTE_LOCAL = { ren: "DGT_REN", dph: "DGT_DPH", ic: "DGT_IC", eip: "DGT_EIP", aa: "DGT_AA", go: "DGT_GO", tc: "DGT_TC", mg: "DGT_MG", dn: "DGT_DN", ipe: "DGT_IPE", eptm: "DGT_EPTM", ia: "DGT_IA", aip: "DGT_AIP", ap: "DGT_AP", zpe: "DGT_ZPE", zec: "DGT_ZEC" };
+  const locais = {};
+  function dadosLocais(concelho) {
+    const k = norm(concelho).replace(/\s+/g, "-");
+    if (!k) return Promise.resolve(null);
+    if (!locais[k]) locais[k] = (async () => {
+      try {
+        const base = `../dados/condicionantes/${k}/`, r = await fetch(base + "indice.json");
+        if (!r.ok) return null;
+        const indice = await r.json(), fontes = {};
+        await Promise.all(Object.entries(indice.fontes).filter(([, v]) => v.ok).map(async ([f, v]) => {
+          const els = v.elementos ? (await (await fetch(base + v.ficheiro)).json()).features : [];
+          fontes[f] = { ...v, els: els.map((e) => ({ p: e.properties, g: e.geometry, b: caixa(e.geometry.coordinates) })) };
+        }));
+        return { indice, fontes };
+      } catch (e) { return null; }
+    })();
+    return locais[k];
+  }
+  function caixa(c, b = [180, 90, -180, -90]) {
+    if (typeof c[0] === "number") { b[0] = Math.min(b[0], c[0]); b[1] = Math.min(b[1], c[1]); b[2] = Math.max(b[2], c[0]); b[3] = Math.max(b[3], c[1]); }
+    else c.forEach((x) => caixa(x, b));
+    return b;
+  }
+  const dentroAnel = (x, y, a) => { let d = false; for (let i = 0, j = a.length - 1; i < a.length; j = i++) { const [xi, yi] = a[i], [xj, yj] = a[j]; if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) d = !d; } return d; };
+  const dentroPoligono = (x, y, rs) => dentroAnel(x, y, rs[0]) && !rs.slice(1).some((h) => dentroAnel(x, y, h));
+  // Distância aproximada em metros (suficiente para alguns metros à volta de Portugal).
+  function distSeg(x, y, [ax, ay], [bx, by]) {
+    const kx = 111320 * Math.cos((y * Math.PI) / 180), ky = 110540;
+    const px = (x - ax) * kx, py = (y - ay) * ky, dx = (bx - ax) * kx, dy = (by - ay) * ky, l = dx * dx + dy * dy;
+    const t = l ? Math.max(0, Math.min(1, (px * dx + py * dy) / l)) : 0;
+    return Math.hypot(px - t * dx, py - t * dy);
+  }
+  const TOL = 5; // metros, para pontos e linhas (marcos, feixes, gasodutos...)
+  function toca(g, x, y) {
+    const c = g.coordinates;
+    switch (g.type) {
+      case "Polygon": return dentroPoligono(x, y, c);
+      case "MultiPolygon": return c.some((p) => dentroPoligono(x, y, p));
+      case "LineString": return c.some((q, i) => i && distSeg(x, y, c[i - 1], q) <= TOL);
+      case "MultiLineString": return c.some((l) => toca({ type: "LineString", coordinates: l }, x, y));
+      case "Point": return distSeg(x, y, c, c) <= TOL;
+      case "MultiPoint": return c.some((q) => distSeg(x, y, q, q) <= TOL);
+      case "GeometryCollection": return g.geometries.some((h) => toca(h, x, y));
+    }
+    return false;
+  }
+  function tocados(fonte, lat, lng) {
+    const m = 0.0001;
+    return fonte.els.filter((e) => lng >= e.b[0] - m && lng <= e.b[2] + m && lat >= e.b[1] - m && lat <= e.b[3] + m && toca(e.g, lng, lat));
+  }
+  const dataCurta = (iso) => (iso ? new Date(iso).toLocaleDateString("pt-PT") : "");
+
   // Planta de condicionantes do PDM: serviços municipais conhecidos (dados/municipios.json).
   let MUNI = null;
   const municipios = () => MUNI || (MUNI = fetch("../dados/municipios.json").then((r) => r.json()).catch(() => ({})));
@@ -323,7 +378,8 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     if (!muni) h += `<p class="note">A consultar a câmara…</p>`;
     else {
       const m = muni.m;
-      if (muni.estado === "ok") h += muni.hits.length ? muni.hits.map((x) => `<div class="row"><span class="sw" style="background:var(--red)"></span><div><b>${esc(x.nome)}</b></div><span class="tag sim">abrangido</span></div>`).join("") : `<p class="note">O serviço da câmara não mostra condicionantes neste ponto.</p>`;
+      if (muni.data) h += `<p class="note">Dados guardados no site, atualizados em ${esc(dataCurta(muni.data))}.</p>`;
+      if (muni.estado === "ok") h += muni.hits.length ? muni.hits.map((x) => `<div class="row"><span class="sw" style="background:var(--red)"></span><div><b>${esc(x.nome)}</b>${x.documento ? `<span class="d">${esc([x.entidade, x.documento].filter(Boolean).join(" · "))}</span>` : ""}</div><span class="tag sim">abrangido</span></div>`).join("") : `<p class="note">${muni.data ? "A planta de condicionantes" : "O serviço da câmara"} não mostra condicionantes neste ponto.</p>`;
       else if (muni.estado === "erro") h += `<p class="note">O serviço da câmara não respondeu.</p>`;
       else h += `<p class="note">${m ? "A câmara não tem um serviço que se possa consultar automaticamente." : "Ainda não temos os dados desta câmara."} Servidões como aeroportos, aquedutos, estradas, linhas elétricas ou cemitérios só aparecem na planta de condicionantes do PDM: confirme lá.</p>`;
       const links = [m && m.condicionantes && `<a href="${esc(m.condicionantes)}" target="_blank" rel="noopener">Planta de condicionantes</a>`, m && m.geoportal && `<a href="${esc(m.geoportal)}" target="_blank" rel="noopener">Geoportal da câmara</a>`, `<a href="https://snit-mais.dgterritorio.gov.pt/portalsnit/" target="_blank" rel="noopener">PDM no SNIT (DGT)</a>`].filter(Boolean);
@@ -336,8 +392,26 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     const g = ++ger;
     if (marker) marker.setLatLng([lat, lng]); else marker = L.marker([lat, lng], { icon: PIN, keyboard: false }).addTo(map);
     achados = {}; estado = {}; muni = null; renderRes();
-    const nac = Promise.all(LAYERS.map(async (l) => { const s = await consultar(l, lat, lng); if (g !== ger) return; estado[l.id] = s; if (s === "sim" && l.app) achados[l.app] = true; renderRes(); }));
-    const mun = (async () => { const c = await concelhoP; if (g !== ger) return; const r = await consultarMunicipio(c || local.concelho, lat, lng); if (g !== ger) return; muni = r; r.hits.forEach((x) => { if (x.k) achados[x.k] = true; }); renderRes(); })();
+    const concelho = (await concelhoP) || local.concelho;
+    if (g !== ger) return;
+    const dl = await dadosLocais(concelho);
+    if (g !== ger) return;
+    const nac = Promise.all(LAYERS.map(async (l) => {
+      // Uma carta descarregada sem nenhum elemento no concelho pode ser falha da fonte: aí pergunta-se ao serviço.
+      const f = dl && dl.fontes[FONTE_LOCAL[l.id]];
+      const s = f && f.els.length ? (tocados(f, lat, lng).length ? "sim" : "nao") : await consultar(l, lat, lng);
+      if (g !== ger) return; estado[l.id] = s; if (s === "sim" && l.app) achados[l.app] = true; renderRes();
+    }));
+    const mun = (async () => {
+      const cm = dl && Object.entries(dl.fontes).filter(([f]) => /^(CM|MANUAL)_/.test(f));
+      let r;
+      if (cm && cm.length) {
+        const hits = [];
+        cm.forEach(([f, v]) => { if (tocados(v, lat, lng).length) hits.push({ nome: v.descricao, k: v.app || chaveDe(v.descricao || ""), origem: v.origem, entidade: v.entidade, documento: v.documento }); });
+        r = { m: (await municipios())[norm(concelho)] || null, hits, estado: "ok", data: dl.indice.gerado };
+      } else r = await consultarMunicipio(concelho, lat, lng);
+      if (g !== ger) return; muni = r; r.hits.forEach((x) => { if (x.k) achados[x.k] = true; }); renderRes();
+    })();
     await Promise.all([nac, mun]);
     if (g === ger) atualizarCTA();
   }
