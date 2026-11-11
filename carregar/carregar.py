@@ -32,7 +32,7 @@ CAOP = "https://ogcapi.dgterritorio.gov.pt/collections/municipios/items/{}?f=jso
 PAGINA_DGT = 200  # páginas pequenas: a REN e o domínio hídrico esgotavam o tempo com 1000
 LOTE_IDS = 200  # elementos por pedido à câmara (o servidor não pagina)
 ESPERA = 150  # segundos por pedido: a DGT é lenta
-TEMPO_FONTE = 1200  # uma fonte que passe disto é dada como falhada nesta semana
+TEMPO_FONTE = 900  # uma fonte que passe disto (15 min) é dada como falhada nesta semana
 SIMPLIFICAR = 0.000005  # cerca de 0,5 m
 CASAS = 6  # casas decimais das coordenadas (cerca de 10 cm)
 LADRILHO = 0.05  # graus (cerca de 5 km): fontes grandes são partidas em ladrilhos
@@ -46,8 +46,13 @@ de_pttm = Transformer.from_crs(3763, 4326, always_xy=True).transform
 para_pttm = Transformer.from_crs(4326, 3763, always_xy=True).transform
 
 
+PRAZO = [None]  # hora limite da fonte em curso (ver gravar)
+
+
 def pedir(url, params=None, tentativas=2):
     for i in range(tentativas):
+        if PRAZO[0] and time.time() > PRAZO[0]:
+            raise TimeoutError(f"mais de {TEMPO_FONTE // 60} min sem terminar")
         try:
             r = sessao.get(url, params=params, timeout=ESPERA)
             r.raise_for_status()
@@ -104,9 +109,10 @@ def wfs_dgt(f, limite):
     x0, y0, x1, y1 = transform(para_pttm, limite).bounds
     perto = limite.envelope.buffer(0.05)
     vistos = set()
-    # A ordem dos eixos da caixa não é igual em todos os serviços: pede-se nas duas ordens
-    # (o que cair fora do concelho é cortado depois) e junta-se sem repetidos.
-    for caixa in (f"{x0},{y0},{x1},{y1}", f"{y0},{x0},{y1},{x1}"):
+    com_dados = set()
+    # A ordem dos eixos da caixa não é igual em todos os serviços: pede-se na ordem normal e, para as camadas
+    # que não deram nada no concelho, na ordem trocada (o que cair fora do concelho é cortado depois).
+    for n, caixa in enumerate((f"{x0},{y0},{x1},{y1}", f"{y0},{x0},{y1},{x1}")):
         # Nem todos os serviços aceitam o mesmo pedido: experimenta variantes e fica com a primeira que der JSON.
         variantes = [
             {"outputFormat": "application/vnd.geo+json", "bbox": f"{caixa},urn:ogc:def:crs:EPSG::3763"},
@@ -114,6 +120,8 @@ def wfs_dgt(f, limite):
             {"outputFormat": "application/json", "bbox": caixa},
         ]
         for camada in nomes:
+            if n and camada in com_dados:
+                continue
             inicio, erro = 0, None
             while True:
                 for v in list(variantes):
@@ -135,8 +143,11 @@ def wfs_dgt(f, limite):
                     if chave in vistos:
                         continue
                     vistos.add(chave)
-                    yield elemento(de_pttm_certo(shape(el["geometry"]), perto), limite, el.get("properties") or {},
-                                   camada=camada.split(":")[-1].replace("_", " "))
+                    e = elemento(de_pttm_certo(shape(el["geometry"]), perto), limite, el.get("properties") or {},
+                                 camada=camada.split(":")[-1].replace("_", " "))
+                    if e:
+                        com_dados.add(camada)
+                    yield e
                 if not lote or len(lote) < PAGINA_DGT:
                     break
                 inicio += len(lote)
@@ -295,6 +306,7 @@ def escrever(pasta, fonte, els):
 def gravar(pasta, fonte, gerador, meta, indice):
     """Grava só se correr bem; em caso de falha mantém o ficheiro anterior."""
     t = time.time()
+    PRAZO[0] = t + TEMPO_FONTE
     try:
         els = []
         for e in gerador:
@@ -310,6 +322,7 @@ def gravar(pasta, fonte, gerador, meta, indice):
         anterior = indice.get(fonte, {})
         indice[fonte] = {**anterior, **meta, "ok": False, "tentativa": agora(), "erro": str(e)[:300]}
         print(f"FALHA {fonte:28} {e}")
+    PRAZO[0] = None
     gravar_indice(pasta, indice)
 
 
