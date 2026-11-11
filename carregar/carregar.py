@@ -237,13 +237,34 @@ def agora():
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
+def limite_caop(cfg):
+    """Limite do concelho na CAOP. O identificador do elemento nem sempre é o código DICO:
+    se não der, procura pelo código e depois pelo nome."""
+    try:
+        return pedir(CAOP.format(cfg["dico"]), tentativas=1).json()
+    except requests.HTTPError:
+        pass
+    base = CAOP.split("/items/")[0] + "/items"
+    nome = cfg["nome"].upper()
+    for filtro in ({"dico": cfg["dico"]}, {"dtmn": cfg["dico"]}, {"municipio": nome}, {"concelho": nome}):
+        try:
+            els = pedir(base, {"f": "json", "limit": 5, **filtro}, tentativas=1).json().get("features") or []
+        except requests.RequestException:
+            continue
+        for el in els:
+            props = " ".join(str(v) for v in (el.get("properties") or {}).values()).upper()
+            if cfg["dico"] in props or nome in props:
+                return el
+    raise RuntimeError(f"limite de {cfg['nome']} ({cfg['dico']}) não encontrado na CAOP")
+
+
 def carregar(chave, cfg, municipios, cfgs):
     pasta = DADOS / chave
     pasta.mkdir(parents=True, exist_ok=True)
     ficheiro_indice = pasta / "indice.json"
     indice = json.loads(ficheiro_indice.read_text())["fontes"] if ficheiro_indice.exists() else {}
 
-    caop = pedir(CAOP.format(cfg["dico"])).json()
+    caop = limite_caop(cfg)
     limite = shape(caop["geometry"])
     print(f"== {cfg['nome']} (CAOP {cfg['dico']}: {(caop.get('properties') or {}).get('municipio', '?')})")
     folga = limite.buffer(0.002)  # cerca de 200 m, para servidões que entram a partir do concelho vizinho
