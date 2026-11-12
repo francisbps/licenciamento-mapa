@@ -135,20 +135,27 @@ def wfs_dgt(f, limite):
         for camada in nomes:
             if n and camada in com_dados:
                 continue
-            inicio, erro = 0, None
+            inicio, erro, pagina = 0, None, PAGINA_DGT
             while True:
-                for v in list(variantes):
-                    try:
-                        lote = json_ou_erro(pedir(url, {
-                            "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
-                            "count": PAGINA_DGT, "startIndex": inicio, **v})).get("features") or []
-                        variantes.remove(v)
-                        variantes.insert(0, v)
-                        break
-                    except RuntimeError as e:
-                        erro = e
-                else:
-                    raise erro
+                try:
+                    for v in list(variantes):
+                        try:
+                            lote = json_ou_erro(pedir(url, {
+                                "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
+                                "count": pagina, "startIndex": inicio, **v})).get("features") or []
+                            variantes.remove(v)
+                            variantes.insert(0, v)
+                            break
+                        except RuntimeError as e:
+                            erro = e
+                    else:
+                        raise erro
+                except (RuntimeError, requests.RequestException):
+                    # Alguns serviços caem (erro 500) ou esgotam o tempo com páginas grandes: tenta com páginas mais pequenas.
+                    if pagina <= 25:
+                        raise
+                    pagina //= 2
+                    continue
                 for el in lote:
                     if not el.get("geometry"):
                         continue
@@ -161,7 +168,7 @@ def wfs_dgt(f, limite):
                     if e:
                         com_dados.add(camada)
                     yield e
-                if not lote or len(lote) < PAGINA_DGT:
+                if not lote or len(lote) < pagina:
                     break
                 inicio += len(lote)
 
@@ -223,12 +230,17 @@ def lonlat(g):
 
 
 def wfs_geoserver(servico, camada, limite):
-    """Camada de um GeoServer municipal, pedida por WFS em páginas."""
+    """Camada de um GeoServer, pedida por WFS em páginas. Com "caixa", só a zona do concelho
+    (na forma urn, a ordem latitude, longitude é a da norma)."""
     url, inicio = servico["url"], 0
+    extra = {}
+    if servico.get("caixa"):
+        x0, y0, x1, y1 = limite.bounds
+        extra = {"bbox": f"{y0},{x0},{y1},{x1},urn:ogc:def:crs:EPSG::4326"}
     while True:
         lote = json_ou_erro(pedir(url, {
             "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
-            "outputFormat": "application/json", "srsName": "EPSG:4326", "count": 1000, "startIndex": inicio}))
+            "outputFormat": "application/json", "srsName": "EPSG:4326", "count": 1000, "startIndex": inicio, **extra}))
         if "features" not in lote:
             raise RuntimeError(str(lote)[:200])
         els = lote["features"]
@@ -333,6 +345,11 @@ def escrever(pasta, fonte, els):
     for nome, lista in grupos.items():
         (pasta_l / f"{nome}.geojson").write_text(colecao(lista))
     return {"ladrilhos": {"tamanho": LADRILHO, "lista": sorted(grupos)}}
+
+
+def iter_erro(e):
+    raise e
+    yield
 
 
 def gravar(pasta, fonte, gerador, meta, indice):
@@ -461,9 +478,28 @@ def carregar(chave, cfg, municipios, cfgs):
         nacionais = ([{"fonte": "DGT_REN", "codigo": "REN", "app": "ren", "entidade": cfgs["_ren"][ren],
                        "url": f"https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_{ren}/WFService.aspx"}]
                      if ren else []) + cfgs["_nacionais"]
+    esperas_dgt = 0
     for f in nacionais:
-        gravar(pasta, f["fonte"], wfs_dgt(f, folga),
-               {"origem": "DGT (SNIT, SRUP)", "descricao": f["codigo"], "app": f["app"], "entidade": f["entidade"]}, indice)
+        meta = {"origem": f.get("origem") or "DGT (SNIT, SRUP)", "descricao": f.get("descricao") or f.get("codigo"),
+                "app": f["app"], "entidade": f["entidade"]}
+        for k in ("dist", "classe"):
+            if f.get(k):
+                meta[k] = f[k]
+        if f.get("tipo") == "ags":
+            gerador = (e for c in f["camadas"] for e in ags_camara(f, {"id": c, "nome": meta["descricao"]}, folga))
+        elif f.get("tipo") == "wfs":
+            gerador = wfs_geoserver({**f, "nome": meta["descricao"]}, f["camada"], folga)
+        elif esperas_dgt >= 3:
+            # A DGT não respondeu a 3 cartas seguidas: as restantes ficam para a próxima semana (mantêm os dados).
+            gerador = iter_erro(RuntimeError("DGT sem resposta nesta execução"))
+        else:
+            gerador = wfs_dgt(f, folga)
+        gravar(pasta, f["fonte"], gerador, meta, indice)
+        if f.get("tipo") is None and esperas_dgt < 3:
+            r = indice.get(f["fonte"], {})
+            falhou_agora = r.get("erro") and r.get("tentativa", "") >= (r.get("atualizado") or "")
+            esperou = any(t in str(r.get("erro")) for t in ("timed out", "min sem terminar", "Max retries"))
+            esperas_dgt = esperas_dgt + 1 if falhou_agora and esperou else 0
 
     manual = DADOS / "manual" / chave
     for fich in sorted(manual.glob("*.geojson")) if manual.exists() else []:
