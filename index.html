@@ -229,6 +229,20 @@ details.gd { border-bottom: 1px solid var(--line); padding: 8px 0; }
 details.gd summary { cursor: pointer; padding: 6px 0; font-family: var(--f-display); }
 details.gd summary:hover { color: var(--brand); }
 details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color: var(--muted); margin-left: 6px; }
+.ac { display: grid; gap: 5px; }
+.acbox { position: relative; }
+.ac > label.f { display: block; }
+#morada { scroll-margin-top: 76px; }
+.ac .note { font-size: 0.82rem; }
+.sug { position: absolute; z-index: 30; top: calc(100% + 4px); left: 0; right: 0; margin: 0; padding: 4px; list-style: none; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); box-shadow: 0 10px 30px rgba(22, 32, 44, .16); max-height: 320px; overflow-y: auto; }
+.sug li { display: grid; gap: 1px; padding: 8px 10px; border-radius: 7px; cursor: pointer; }
+.sug li b { font-weight: 600; font-size: 0.95rem; }
+.sug li span { font-size: 0.82rem; color: var(--muted); }
+.sug li[aria-selected="true"], .sug li:hover { background: var(--brand-soft); }
+.sug li.info { cursor: default; color: var(--muted); font-size: 0.86rem; }
+.sug li.info:hover { background: none; }
+.sug li.fonte { cursor: default; font-size: 0.72rem; color: var(--muted); padding: 4px 10px 2px; }
+.sug li.fonte:hover { background: none; }
 .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .toast { position: fixed; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--panel); padding: 10px 18px; border-radius: 999px; font-size: 0.9rem; box-shadow: 0 6px 24px rgba(0,0,0,.18); max-width: calc(100vw - 32px); text-align: center; }
 @media (prefers-reduced-motion: no-preference) { .tabpanel { animation: fade .18s ease-out; } @keyframes fade { from { opacity: .6; } to { opacity: 1; } } }
@@ -270,11 +284,21 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
 
         <fieldset id="cs">
           <legend class="sec"><span class="n" aria-hidden="true">3</span><span class="vh">3 · </span>O imóvel</legend>
-          <label class="f">Morada<input type="text" id="morada" name="morada"></label>
-          <div class="row2">
-            <label class="f">Freguesia<input type="text" id="freguesia" name="freguesia"></label>
-            <label class="f">Concelho<input type="text" id="concelho" name="concelho"></label>
+          <div class="ac">
+            <label class="f" for="morada">Morada (rua e número)</label>
+            <div class="acbox"><input type="text" id="morada" name="morada" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="moradaSug" aria-describedby="moradaAjuda" autocomplete="off" spellcheck="false" placeholder="Comece a escrever, por exemplo: Rua Augusta 100, Lisboa">
+            <ul id="moradaSug" class="sug" role="listbox" aria-label="Moradas sugeridas" hidden></ul></div>
+            <p class="note" id="moradaAjuda">Escolha a morada na lista. A freguesia, o concelho e o código postal ficam preenchidos e o local aparece no mapa.</p>
           </div>
+          <div class="row2">
+            <label class="f">Andar ou fração<input type="text" id="fracao" name="fracao" placeholder="Por exemplo: 2.º Esq. ou fração B"></label>
+            <label class="f">Código postal<input type="text" id="codPostal" name="codPostal" inputmode="numeric" placeholder="0000-000" maxlength="8"></label>
+          </div>
+          <div class="row2">
+            <label class="f">Freguesia<input type="text" id="freguesia" name="freguesia" placeholder="Preenchida pelo mapa"></label>
+            <label class="f">Concelho<input type="text" id="concelho" name="concelho" list="concelhosLista" placeholder="Escreva ou escolha"></label>
+          </div>
+          <datalist id="concelhosLista"></datalist>
           <div><button class="btn primary" type="button" id="btnMapa">Pesquisar no mapa</button></div>
           <div id="mapaSlot" class="mapa"><iframe id="mapaFrame" title="Mapa de condicionantes"></iframe></div>
           <div class="condres">
@@ -357,12 +381,12 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     if (q.prot) itens.unshift({ l: q.prot === "cl" ? "Imóvel classificado, em vias de classificação ou em conjunto classificado" : "Zona de proteção de imóvel classificado", ent: "Património Cultural, I.P. (ou a CCDR)", o: (state.condMapa || []).includes("pat") ? "mapa" : "resposta" });
     const tag = { mapa: "encontrada no mapa", resposta: "pela sua resposta" };
     $("condBox").innerHTML = itens.length ? itens.map((x) => `<div class="cond-item"><b>${esc(x.l)}</b><span class="tag ok">${tag[x.o]}</span><span class="note">Entidade a consultar: ${esc(x.ent || "câmara municipal")}</span></div>`).join("")
-      : `<p class="note">${state.doMapa ? "O mapa não encontrou condicionantes neste local. Responda às perguntas abaixo." : "Escreva a morada e carregue em “Pesquisar no mapa”. As condicionantes do local aparecem aqui."}</p>`;
+      : `<p class="note">${state.doMapa ? "O mapa não encontrou condicionantes neste local. Responda às perguntas abaixo." : "Escolha a morada na lista de sugestões (ou carregue em “Pesquisar no mapa”). As condicionantes do local aparecem aqui."}</p>`;
   }
 
   const SAMPLE = {
     tipoSel: "interior", descricao: "Remodelação da cozinha e de uma casa de banho, com demolição de uma parede divisória não resistente.",
-    morada: "Rua de Exemplo, 12, 2.º Esq.", freguesia: "Arroios", concelho: "Lisboa",
+    morada: "Rua de Exemplo, 12", fracao: "2.º Esq.", codPostal: "1000-000", freguesia: "Arroios", concelho: "Lisboa",
     artigo: "U-0000", descPredial: "0000/20000101", codCertidao: "",
     nome: "Nome do Requerente", nif: "000000000", moradaReq: "Rua de Exemplo, 12, 2.º Esq., 1000-000 Lisboa", email: "", qualidade: "proprietário",
     tecnico: "", ordem: "",
@@ -378,7 +402,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   function save() { try { state.checks = checks; localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
 
   // ---------- Formulário ----------
-  const FIELDS = ["tipoSel","descricao","morada","freguesia","concelho","artigo","descPredial","codCertidao","nome","nif","moradaReq","email","qualidade","tecnico","ordem"];
+  const FIELDS = ["tipoSel","descricao","morada","fracao","codPostal","freguesia","concelho","artigo","descPredial","codCertidao","nome","nif","moradaReq","email","qualidade","tecnico","ordem"];
 
   function htmlPergunta(qq) {
     const v = state.q[qq.id] || "", opts = (typeof qq.opts === "function" ? qq.opts(state) : qq.opts) || SNS;
@@ -447,6 +471,78 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     if (!q) { $("morada").focus(); return; }
     if (window.pesquisarNoMapa) window.pesquisarNoMapa(q); else window.open(MAPA_URL + "?q=" + encodeURIComponent(q), "_blank", "noopener");
   });
+
+  // Morada com sugestões enquanto se escreve (Photon, dados do OpenStreetMap; o Nominatim não permite este uso).
+  // Ao escolher: preenche rua e número, código postal e concelho; o mapa encontra o local e preenche a freguesia.
+  const CONCELHOS = ["Abrantes","Aguiar da Beira","Alandroal","Albergaria-a-Velha","Albufeira","Alcanena","Alcobaça","Alcochete","Alcoutim","Alcácer do Sal","Alenquer","Alfândega da Fé","Alijó","Aljezur","Aljustrel","Almada","Almeida","Almeirim","Almodôvar","Alpiarça","Alter do Chão","Alvaiázere","Alvito","Amadora","Amarante","Amares","Anadia","Angra do Heroísmo","Ansião","Arcos de Valdevez","Arganil","Armamar","Arouca","Arraiolos","Arronches","Arruda dos Vinhos","Aveiro","Avis","Azambuja","Baião","Barcelos","Barrancos","Barreiro","Batalha","Beja","Belmonte","Benavente","Bombarral","Borba","Boticas","Braga","Bragança","Cabeceiras de Basto","Cadaval","Caldas da Rainha","Calheta","Calheta","Caminha","Campo Maior","Cantanhede","Carrazeda de Ansiães","Carregal do Sal","Cartaxo","Cascais","Castanheira de Pera","Castelo Branco","Castelo de Paiva","Castelo de Vide","Castro Daire","Castro Marim","Castro Verde","Celorico da Beira","Celorico de Basto","Chamusca","Chaves","Cinfães","Coimbra","Condeixa-a-Nova","Constância","Coruche","Corvo","Covilhã","Crato","Cuba","Câmara de Lobos","Elvas","Entroncamento","Espinho","Esposende","Estarreja","Estremoz","Fafe","Faro","Felgueiras","Ferreira do Alentejo","Ferreira do Zêzere","Figueira da Foz","Figueira de Castelo Rodrigo","Figueiró dos Vinhos","Fornos de Algodres","Freixo de Espada à Cinta","Fronteira","Funchal","Fundão","Gavião","Golegã","Gondomar","Gouveia","Grândola","Guarda","Guimarães","Góis","Horta","Idanha-a-Nova","Lagoa","Lagoa","Lagos","Lajes das Flores","Lajes do Pico","Lamego","Leiria","Lisboa","Loulé","Loures","Lourinhã","Lousada","Lousã","Macedo de Cavaleiros","Machico","Madalena","Mafra","Maia","Mangualde","Manteigas","Marco de Canaveses","Marinha Grande","Marvão","Matosinhos","Mação","Mealhada","Melgaço","Mesão Frio","Mira","Miranda do Corvo","Miranda do Douro","Mirandela","Mogadouro","Moimenta da Beira","Moita","Monchique","Mondim de Basto","Monforte","Montalegre","Montemor-o-Novo","Montemor-o-Velho","Montijo","Monção","Mora","Mortágua","Moura","Mourão","Murtosa","Murça","Mértola","Mêda","Nazaré","Nelas","Nisa","Nordeste","Odemira","Odivelas","Oeiras","Oleiros","Olhão","Oliveira de Azeméis","Oliveira de Frades","Oliveira do Bairro","Oliveira do Hospital","Ourique","Ourém","Ovar","Palmela","Pampilhosa da Serra","Paredes","Paredes de Coura","Paços de Ferreira","Pedrógão Grande","Penacova","Penafiel","Penalva do Castelo","Penamacor","Penedono","Penela","Peniche","Peso da Régua","Pinhel","Pombal","Ponta Delgada","Ponta do Sol","Ponte da Barca","Ponte de Lima","Ponte de Sor","Portalegre","Portel","Portimão","Porto","Porto de Mós","Porto Moniz","Porto Santo","Povoação","Proença-a-Nova","Póvoa de Lanhoso","Póvoa de Varzim","Redondo","Reguengos de Monsaraz","Resende","Ribeira Brava","Ribeira de Pena","Ribeira Grande","Rio Maior","Sabrosa","Sabugal","Salvaterra de Magos","Santa Comba Dão","Santa Cruz","Santa Cruz da Graciosa","Santa Cruz das Flores","Santa Maria da Feira","Santa Marta de Penaguião","Santana","Santarém","Santiago do Cacém","Santo Tirso","Sardoal","Seia","Seixal","Sernancelhe","Serpa","Sertã","Sesimbra","Setúbal","Sever do Vouga","Silves","Sines","Sintra","Sobral de Monte Agraço","Soure","Sousel","Sátão","São Brás de Alportel","São João da Madeira","São João da Pesqueira","São Pedro do Sul","São Roque do Pico","São Vicente","Tabuaço","Tarouca","Tavira","Terras de Bouro","Tomar","Tondela","Torre de Moncorvo","Torres Novas","Torres Vedras","Trancoso","Trofa","Tábua","Vagos","Vale de Cambra","Valença","Valongo","Valpaços","Velas","Vendas Novas","Viana do Alentejo","Viana do Castelo","Vidigueira","Vieira do Minho","Vila da Praia da Vitória","Vila de Rei","Vila do Bispo","Vila do Conde","Vila do Porto","Vila Flor","Vila Franca de Xira","Vila Franca do Campo","Vila Nova da Barquinha","Vila Nova de Cerveira","Vila Nova de Famalicão","Vila Nova de Foz Côa","Vila Nova de Gaia","Vila Nova de Paiva","Vila Nova de Poiares","Vila Pouca de Aguiar","Vila Real","Vila Real de Santo António","Vila Velha de Ródão","Vila Verde","Vila Viçosa","Vimioso","Vinhais","Viseu","Vizela","Vouzela","Águeda","Évora","Ílhavo","Óbidos"];
+  $("concelhosLista").innerHTML = CONCELHOS.map((c) => `<option value="${c}">`).join("");
+  const concelhoDe = (...vs) => { for (const x of vs) { const c = x && CONCELHOS.find((n) => norm(n) === norm(x)); if (c) return c; } return ""; };
+  $("concelho").addEventListener("change", () => { const c = concelhoDe($("concelho").value); if (c && c !== $("concelho").value) { $("concelho").value = c; state.concelho = c; save(); render(); } });
+  $("codPostal").addEventListener("input", (e) => { const d = e.target.value.replace(/\D/g, "").slice(0, 7); const f = d.length > 4 ? d.slice(0, 4) + "-" + d.slice(4) : d; if (f !== e.target.value) { e.target.value = f; state.codPostal = f; save(); } });
+  (function () {
+    const inp = $("morada"), box = $("moradaSug");
+    let sug = [], ativo = -1, temp = 0, ger = 0, escolhida = "";
+    const fechar = () => { box.hidden = true; inp.setAttribute("aria-expanded", "false"); inp.removeAttribute("aria-activedescendant"); ativo = -1; };
+    const abrir = (html) => { box.innerHTML = html; box.hidden = false; inp.setAttribute("aria-expanded", "true"); };
+    function ler(f) {
+      const p = f.properties || {};
+      const via = p.street || (p.osm_key === "highway" || p.osm_key === "place" ? p.name : "") || "";
+      const poi = p.name && p.name !== via ? p.name : "";
+      const rua = p.housenumber ? `${via || poi}, ${p.housenumber}` : [poi, via].filter(Boolean).join(", ");
+      const conc = concelhoDe(p.city, p.county, p.locality, p.district, p.name);
+      const local = [p.postcode, p.locality || p.district || p.city].filter(Boolean).join(" ");
+      return { rua: rua || p.name || "", cp: /^\d{4}-\d{3}$/.test(p.postcode || "") ? p.postcode : "", conc, num: !!p.housenumber, sub: [local, conc && conc !== (p.locality || p.district || p.city) ? conc : ""].filter(Boolean).join(" · ") };
+    }
+    function mostrar() {
+      if (!sug.length) { abrir(`<li class="info" role="presentation">Sem sugestões. Escreva a rua e a localidade, ou carregue em “Pesquisar no mapa”.</li>`); return; }
+      abrir(sug.map((x, i) => `<li role="option" id="ms-${i}" data-i="${i}" aria-selected="${i === ativo}"><b>${esc(x.rua)}</b>${x.sub ? `<span>${esc(x.sub)}</span>` : ""}</li>`).join("") + `<li class="fonte" role="presentation">Moradas do OpenStreetMap</li>`);
+      if (ativo >= 0) inp.setAttribute("aria-activedescendant", "ms-" + ativo); else inp.removeAttribute("aria-activedescendant");
+    }
+    async function procurar(q) {
+      const g = ++ger;
+      try {
+        const r = await fetch("https://photon.komoot.io/api/?limit=8&lang=default&bbox=-31.6,29.9,-6.1,42.2&q=" + encodeURIComponent(q));
+        const j = await r.json();
+        if (g !== ger || inp.value.trim() !== q) return;
+        const vistos = new Set();
+        sug = (j.features || []).filter((f) => (f.properties || {}).countrycode === "PT").map(ler).filter((x) => x.rua && !vistos.has(x.rua + x.sub) && vistos.add(x.rua + x.sub)).slice(0, 6);
+        ativo = -1; if (document.activeElement === inp) mostrar();
+      } catch (e) { if (g === ger) fechar(); }
+    }
+    function escolher(i) {
+      const x = sug[i]; if (!x) return;
+      fechar();
+      escolhida = x.rua + (x.num ? "" : ", ");
+      inp.value = escolhida; state.morada = x.rua.trim();
+      state.freguesia = ""; $("freguesia").value = "";
+      state.codPostal = x.cp; $("codPostal").value = x.cp;
+      if (x.conc) { state.concelho = x.conc; $("concelho").value = x.conc; }
+      save(); render();
+      if (!x.num) { inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); toast("Escreva o número da porta e carregue em Enter"); return; }
+      $("btnMapa").click();
+    }
+    inp.addEventListener("input", () => {
+      clearTimeout(temp);
+      const q = inp.value.trim();
+      if (escolhida && inp.value.startsWith(escolhida.trim())) { fechar(); return; }
+      escolhida = "";
+      if (q.length < 3) { ger++; fechar(); return; }
+      temp = setTimeout(() => procurar(q), 250);
+    });
+    // Em captura, para correr antes do Enter que pesquisa no mapa.
+    inp.addEventListener("keydown", (e) => {
+      if (box.hidden || !sug.length) { if (e.key === "Escape") fechar(); return; }
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); ativo = e.key === "ArrowDown" ? (ativo + 1 >= sug.length ? -1 : ativo + 1) : (ativo - 1 < -1 ? sug.length - 1 : ativo - 1); mostrar(); }
+      else if (e.key === "Enter" && ativo >= 0) { e.preventDefault(); e.stopImmediatePropagation(); escolher(ativo); }
+      else if (e.key === "Escape") { e.preventDefault(); fechar(); }
+    }, true);
+    box.addEventListener("mousedown", (e) => e.preventDefault());
+    box.addEventListener("click", (e) => { const li = e.target.closest("li[data-i]"); if (li) escolher(+li.dataset.i); });
+    inp.addEventListener("blur", () => setTimeout(fechar, 120));
+    // No telemóvel, sobe o campo para a lista caber acima do teclado.
+    inp.addEventListener("focus", () => { if (matchMedia("(max-width: 760px)").matches) setTimeout(() => inp.scrollIntoView({ block: "start", behavior: "smooth" }), 250); });
+    inp.addEventListener("focus", () => { if (sug.length && inp.value.trim().length >= 3 && !escolhida) mostrar(); });
+  })();
 
   $("btnSample").addEventListener("click", () => { state = structuredClone(SAMPLE); checks = {}; minuta = null; save(); fillForm(); render(); $("sampleBar").firstElementChild.textContent = "Preenchido com um exemplo fictício."; });
   $("btnClear").addEventListener("click", () => {
@@ -622,7 +718,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     const hoje = new Date().toLocaleDateString("pt-PT", { day: "numeric", month: "long", year: "numeric" });
     const conc = v(s.concelho, "concelho");
     const req = `${v(s.nome, "nome do requerente")}, contribuinte n.º ${v(s.nif, "NIF")}, residente em ${v(s.moradaReq, "morada do requerente")}${s.email ? `, email ${s.email}` : ""}, na qualidade de ${v(s.qualidade, "qualidade")}`;
-    const imovel = `prédio sito em ${v(s.morada, "morada do imóvel")}, freguesia de ${v(s.freguesia, "freguesia")}, concelho de ${conc}, inscrito na matriz predial sob o artigo ${v(s.artigo, "artigo matricial")} e descrito na Conservatória do Registo Predial sob o n.º ${v(s.descPredial, "n.º da descrição")}`;
+    const imovel = `prédio sito em ${v([s.morada, s.fracao, s.codPostal].filter(Boolean).join(", "), "morada do imóvel")}, freguesia de ${v(s.freguesia, "freguesia")}, concelho de ${conc}, inscrito na matriz predial sob o artigo ${v(s.artigo, "artigo matricial")} e descrito na Conservatória do Registo Predial sob o n.º ${v(s.descPredial, "n.º da descrição")}`;
     const cert = s.codCertidao ? `certidão permanente com o código de acesso ${s.codCertidao}` : `certidão permanente com o código de acesso <mark>[código]</mark>`;
     const obra = v(s.descricao, "descrição da obra");
     const head = `Exmo. Senhor Presidente da Câmara Municipal de ${conc}\n\n`;
@@ -1122,7 +1218,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   function render() {
     sync(state);
     renderCond();
-    $("resLocal").textContent = [nomeDe(TIPOS, state.tipoSel), [state.morada, state.concelho].filter(Boolean).join(", ")].filter(Boolean).join(" · ");
+    $("resLocal").textContent = [nomeDe(TIPOS, state.tipoSel), [state.morada, state.fracao, state.concelho].filter(Boolean).join(", ")].filter(Boolean).join(" · ");
     const r = decide(state);
     const P = PROC[r.p];
     $("verdict").style.setProperty("--v", P.cor);
