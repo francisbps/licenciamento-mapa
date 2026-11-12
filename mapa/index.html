@@ -91,6 +91,7 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
   </div>
   <section>
     <h2>Camadas no mapa</h2>
+    <p class="note" id="layersNota">Nas câmaras com dados guardados no site, as áreas são desenhadas a partir desses dados (aproxime o mapa e toque numa área para ver o nome). Fora delas, a imagem vem do serviço oficial.</p>
     <div id="layers" class="layers"></div>
   </section>
   <p class="foot">Dados: Direção-Geral do Território (SNIT, servidões e restrições de utilidade pública) e ICNF. Mapa base © colaboradores do OpenStreetMap; pesquisa de moradas Nominatim. A informação é indicativa: a referência legal é a planta de condicionantes do PDM em vigor, disponível na câmara municipal. Algumas cartas nacionais podem estar desatualizadas ou incompletas para o seu concelho.</p>
@@ -191,9 +192,11 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
   const urlsDe = (l) => l.urls || [l.url];
   async function camadasDe(l, url) { return l.layers || (await nomesDe(url)); }
 
-  // Camadas visíveis no mapa (criadas só quando se ligam).
+  // Imagens dos serviços oficiais (criadas só quando se ligam). Onde há dados guardados, desenha-se a partir deles (ver desenhar).
   const vis = {};
   async function mostrarCamada(l, on) {
+    on = on && !temLocal(l.id);
+    if (!on && !vis[l.id]) return;
     if (!vis[l.id]) {
       if (l.tipo === "ags") { vis[l.id] = L.layerGroup(); }
       else {
@@ -203,10 +206,10 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     }
     on ? vis[l.id].addTo(map) : map.removeLayer(vis[l.id]);
   }
-  $("layers").innerHTML = Object.entries(G).map(([g, gn]) => `<details${g === "pat" ? " open" : ""}><summary>${esc(gn)}</summary>` +
+  $("layers").innerHTML = `<details open><summary>Câmara municipal</summary><label><input type="checkbox" data-cm checked><span><span class="sw" style="display:inline-block;width:10px;height:10px;background:var(--red);margin-right:6px;border-radius:2px"></span>Planta de condicionantes do PDM (dados guardados)</span></label></details>` + Object.entries(G).map(([g, gn]) => `<details${g === "pat" ? " open" : ""}><summary>${esc(gn)}</summary>` +
     LAYERS.filter((l) => l.g === g).map((l) => `<label><input type="checkbox" data-l="${l.id}" ${l.on ? "checked" : ""}><span><span class="sw" style="display:inline-block;width:10px;height:10px;background:${l.cor};margin-right:6px;border-radius:2px"></span>${esc(l.nome)}</span></label>`).join("") + `</details>`).join("");
-  $("layers").addEventListener("change", (e) => { const l = LAYERS.find((x) => x.id === e.target.dataset.l); if (l) mostrarCamada(l, e.target.checked); });
-  LAYERS.filter((l) => l.on).forEach((l) => mostrarCamada(l, true));
+  $("layers").addEventListener("change", (e) => { const l = LAYERS.find((x) => x.id === e.target.dataset.l); if (l) mostrarCamada(l, e.target.checked); desenhar(); });
+  const ligada = (id) => { const c = document.querySelector(`#layers [data-l="${id}"]`); return !!(c && c.checked); };
 
   let marker = null, local = { morada: "", concelho: "", freguesia: "" }, achados = {}, ger = 0, ultimaQ = "", estado = {}, muni = null;
   const PIN = L.divIcon({ className: "pin", iconSize: [28, 40], iconAnchor: [14, 40],
@@ -283,7 +286,10 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
 
   // Condicionantes já descarregadas para o site (dados/condicionantes/<concelho>/, atualizadas todas as semanas).
   // Quando existem, a resposta sai daqui, sem perguntar aos serviços oficiais.
-  const FONTE_LOCAL = { ren: "DGT_REN", dph: "DGT_DPH", ic: "DGT_IC", eip: "DGT_EIP", aa: "DGT_AA", go: "DGT_GO", tc: "DGT_TC", mg: "DGT_MG", dn: "DGT_DN", ipe: "DGT_IPE", eptm: "DGT_EPTM", ia: "DGT_IA", aip: "DGT_AIP", ap: "DGT_AP", zpe: "DGT_ZPE", zec: "DGT_ZEC" };
+  const FONTE_LOCAL = { pc: "PC_CLASSIFICADO", pcr: "PC_RESTRICOES", arq: "PC_ARQ", sic: "ICNF_SIC",
+    ren: "DGT_REN", dph: "DGT_DPH", ic: "DGT_IC", eip: "DGT_EIP", aa: "DGT_AA", go: "DGT_GO", tc: "DGT_TC", mg: "DGT_MG", dn: "DGT_DN", ipe: "DGT_IPE", eptm: "DGT_EPTM", ia: "DGT_IA",
+    aip: "DGT_AIP", ap: "DGT_AP", zpe: "DGT_ZPE", zec: "DGT_ZEC", ran: "DGT_RAN", aapc: "DGT_AAPC", casap: "DGT_CASAP", oah: "DGT_OAH", eaf: "DGT_EAF", cpir: "DGT_CPIR", rg: "DGT_RG" };
+  const CAMADA_DE = Object.fromEntries(Object.entries(FONTE_LOCAL).map(([id, f]) => [f, LAYERS.find((l) => l.id === id)]));
   const locais = {};
   function dadosLocais(concelho) {
     const k = norm(concelho).replace(/\s+/g, "-");
@@ -335,23 +341,86 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     return Math.hypot(px - t * dx, py - t * dy);
   }
   const TOL = 5; // metros, para pontos e linhas (marcos, feixes, gasodutos...)
-  function toca(g, x, y) {
+  // tol: distância em metros que conta como "toca" (5 m; 100 m nos sítios arqueológicos). Polígonos: dentro ou a menos de tol só se tol > TOL.
+  function toca(g, x, y, tol = TOL) {
     const c = g.coordinates;
+    const perto = (anel) => anel.some((q, i) => i && distSeg(x, y, anel[i - 1], q) <= tol);
     switch (g.type) {
-      case "Polygon": return dentroPoligono(x, y, c);
-      case "MultiPolygon": return c.some((p) => dentroPoligono(x, y, p));
-      case "LineString": return c.some((q, i) => i && distSeg(x, y, c[i - 1], q) <= TOL);
-      case "MultiLineString": return c.some((l) => toca({ type: "LineString", coordinates: l }, x, y));
-      case "Point": return distSeg(x, y, c, c) <= TOL;
-      case "MultiPoint": return c.some((q) => distSeg(x, y, q, q) <= TOL);
-      case "GeometryCollection": return g.geometries.some((h) => toca(h, x, y));
+      case "Polygon": return dentroPoligono(x, y, c) || (tol > TOL && c.some(perto));
+      case "MultiPolygon": return c.some((p) => dentroPoligono(x, y, p) || (tol > TOL && p.some(perto)));
+      case "LineString": return perto(c);
+      case "MultiLineString": return c.some(perto);
+      case "Point": return distSeg(x, y, c, c) <= tol;
+      case "MultiPoint": return c.some((q) => distSeg(x, y, q, q) <= tol);
+      case "GeometryCollection": return g.geometries.some((h) => toca(h, x, y, tol));
     }
     return false;
   }
+  // Algumas cartas só contam numa classe (perigosidade de incêndio alta ou muito alta).
+  const daClasse = (fonte) => { if (!fonte.classe) return () => true; const re = fonte.re || (fonte.re = new RegExp(fonte.classe, "i")); return (e) => re.test(Object.values(e.p || {}).join(" ")); };
   function tocados(fonte, lat, lng) {
-    const m = 0.0001;
-    return fonte.els.filter((e) => lng >= e.b[0] - m && lng <= e.b[2] + m && lat >= e.b[1] - m && lat <= e.b[3] + m && toca(e.g, lng, lat));
+    const tol = fonte.dist || TOL, m = 0.0001 + tol / 100000, ok = daClasse(fonte);
+    return fonte.els.filter((e) => lng >= e.b[0] - m && lng <= e.b[2] + m && lat >= e.b[1] - m && lat <= e.b[3] + m && ok(e) && toca(e.g, lng, lat, tol));
   }
+
+  // Desenho das áreas guardadas (canvas, só o que está à vista). Fora dos concelhos com dados, ficam as imagens dos serviços.
+  const ZMIN = 12, MAX_DESENHO = 8000, MAX_LADRILHOS = 16;
+  const tela = L.canvas({ padding: 0.3 });
+  const vetor = L.layerGroup().addTo(map);
+  const PALETA = ["#c0392b", "#d35400", "#8e44ad", "#2471a3", "#117a65", "#b7950b", "#6e2c00", "#1b4f72", "#7d3c98", "#a04000", "#148f77", "#922b21"];
+  const corDe = (t) => { let h = 0; for (const ch of String(t)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return PALETA[h % PALETA.length]; };
+  let CONC = null;
+  // Concelhos com dados guardados (lista do carregador) e os seus limites.
+  const concelhos = () => CONC || (CONC = fetch("../carregar/fontes.json").then((r) => r.json()).then((j) => Promise.all([...Object.keys(j), ...Object.keys(j._parados || {})].filter((k) => !k.startsWith("_")).map(async (k) => {
+    try { const r = await fetch(`../dados/condicionantes/${k}/limite.geojson`); if (!r.ok) return null; const f = await r.json(); return { k, g: f.geometry, b: caixa(f.geometry.coordinates) }; } catch (e) { return null; }
+  }))).then((l) => l.filter(Boolean)).catch(() => []));
+  let aqui = null; // dados do concelho no centro do mapa (null fora deles ou longe demais)
+  const temLocal = (id) => { const f = aqui && aqui.fontes[FONTE_LOCAL[id]]; return !!(f && f.elementos); };
+  const cruza = (b, v) => b[0] <= v.getEast() && b[2] >= v.getWest() && b[1] <= v.getNorth() && b[3] >= v.getSouth();
+  let gerV = 0;
+  async function desenhar() {
+    const g = ++gerV, z = map.getZoom(), v = map.getBounds(), c = map.getCenter();
+    const cs = z >= ZMIN ? (await concelhos()).filter((x) => cruza(x.b, v)).slice(0, 4) : [];
+    const noCentro = cs.find((x) => x.b[0] <= c.lng && x.b[2] >= c.lng && x.b[1] <= c.lat && x.b[3] >= c.lat && toca(x.g, c.lng, c.lat));
+    const dls = await Promise.all(cs.map((x) => dadosLocais(x.k)));
+    if (g !== gerV) return;
+    aqui = noCentro ? dls[cs.indexOf(noCentro)] : null;
+    LAYERS.forEach((l) => { if (ligada(l.id) || vis[l.id]) mostrarCamada(l, ligada(l.id)); });
+    const cm = document.querySelector("#layers [data-cm]").checked, grupos = [];
+    let total = 0, cortado = false;
+    for (const dl of dls) {
+      if (!dl) continue;
+      for (const [f, v0] of Object.entries(dl.fontes)) {
+        const l = CAMADA_DE[f], cam = /^(CM|MANUAL)_/.test(f);
+        if (!v0.elementos || (cam ? !cm : !(l && ligada(l.id)))) continue;
+        let els = v0.ladrilhos ? [] : v0.els;
+        if (v0.ladrilhos) {
+          const t = v0.ladrilhos.tamanho, ks = [];
+          for (let ix = Math.floor(v.getWest() / t); ix <= Math.floor(v.getEast() / t); ix++)
+            for (let iy = Math.floor(v.getSouth() / t); iy <= Math.floor(v.getNorth() / t); iy++) if (v0.ladrilhos.lista.includes(`${ix}_${iy}`)) ks.push(`${ix}_${iy}`);
+          if (ks.length > MAX_LADRILHOS) { cortado = true; continue; }
+          els = (await Promise.all(ks.map((k) => v0.cache[k] || (v0.cache[k] = lerEls(`${dl.base}${f}/${k}.geojson`).catch(() => []))))).flat();
+          if (g !== gerV) return;
+        }
+        const ok = daClasse(v0), vistos = els.filter((e) => cruza(e.b, v) && ok(e));
+        if (total + vistos.length > MAX_DESENHO) { cortado = true; continue; }
+        total += vistos.length;
+        if (vistos.length) grupos.push({ v: v0, cor: l ? l.cor : corDe(v0.app || v0.descricao || f), els: vistos });
+      }
+    }
+    vetor.clearLayers();
+    grupos.forEach(({ v: v0, cor, els }) => vetor.addLayer(L.geoJSON(els.map((e) => ({ type: "Feature", geometry: e.g, properties: e.p || {} })), {
+      renderer: tela, style: { color: cor, weight: 1.2, fillColor: cor, fillOpacity: 0.15, opacity: 0.85 },
+      pointToLayer: (ft, ll) => L.circleMarker(ll, { renderer: tela, radius: 4 }),
+      onEachFeature: (ft, ly) => ly.bindPopup(() => {
+        const n = ft.properties.nome, proprio = n && n !== v0.descricao;
+        return `${proprio ? `<b>${esc(n)}</b><br>${esc(v0.descricao || "")}` : `<b>${esc(v0.descricao || "")}</b>`}<br><small>${esc([v0.entidade, v0.origem].filter(Boolean).join(" · "))}${v0.atualizado ? " · atualizado em " + esc(dataCurta(v0.atualizado)) : ""}</small>`;
+      }),
+    })));
+    $("layersNota").textContent = cortado ? "Há demasiadas áreas para desenhar a esta escala: aproxime o mapa para as ver todas." : "Nas câmaras com dados guardados no site, as áreas são desenhadas a partir desses dados (aproxime o mapa e toque numa área para ver o nome). Fora delas, a imagem vem do serviço oficial.";
+  }
+  map.on("moveend", desenhar);
+  desenhar();
   const dataCurta = (iso) => (iso ? new Date(iso).toLocaleDateString("pt-PT") : "");
 
   // Planta de condicionantes do PDM: serviços municipais conhecidos (dados/municipios.json).

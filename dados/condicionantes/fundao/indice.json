@@ -1,6 +1,6 @@
 {
  "concelho": "fundao",
- "gerado": "2026-11-12T00:05:08+00:00",
+ "gerado": "2026-11-12T13:18:08+00:00",
  "fontes": {
   "DGT_REN": {
    "origem": "DGT (SNIT, SRUP)",
@@ -32,7 +32,7 @@
    "ficheiro": "CM_habitats_naturais_e_semi_naturais_psrn2000.geojson",
    "ok": true,
    "elementos": 166,
-   "atualizado": "2026-11-11T22:57:14+00:00",
+   "atualizado": "2026-11-12T13:17:54+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -45,7 +45,7 @@
    "ficheiro": "CM_ren_fundao.geojson",
    "ok": true,
    "elementos": 10,
-   "atualizado": "2026-11-11T22:57:26+00:00",
+   "atualizado": "2026-11-12T13:18:06+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -58,7 +58,7 @@
    "ficheiro": "CM_ran_fundao.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T22:57:27+00:00",
+   "atualizado": "2026-11-12T13:18:08+00:00",
    "erro": null,
    "ladrilhos": null
   },

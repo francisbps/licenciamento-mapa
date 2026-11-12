@@ -1,6 +1,56 @@
 {
   "_nacionais": [
     {
+      "fonte": "PC_CLASSIFICADO",
+      "tipo": "ags",
+      "url": "https://geo.patrimoniocultural.gov.pt/arcgis/rest/services/PatrimonioClassificadoEmViasClassificacao/Atlas_Patrimonio_Servicos/MapServer",
+      "camadas": [
+        0,
+        1,
+        2
+      ],
+      "descricao": "Património cultural (classificado, em vias, ZEP e ZGP)",
+      "origem": "Património Cultural, I.P. (Atlas do Património)",
+      "app": "pat",
+      "entidade": "Património Cultural, I.P."
+    },
+    {
+      "fonte": "PC_RESTRICOES",
+      "tipo": "ags",
+      "url": "https://geo.patrimoniocultural.gov.pt/arcgis/rest/services/PatrimonioClassificadoEmViasClassificacao/Atlas_Patrimonio_Servicos/MapServer",
+      "camadas": [
+        3
+      ],
+      "descricao": "Áreas com restrições patrimoniais",
+      "origem": "Património Cultural, I.P. (Atlas do Património)",
+      "app": "arqueologia",
+      "entidade": "Património Cultural, I.P."
+    },
+    {
+      "fonte": "PC_ARQ",
+      "tipo": "ags",
+      "url": "https://geo.patrimoniocultural.gov.pt/arcgis/rest/services/PatrimonioArqueologico/Sitios_Arqueologicos/MapServer",
+      "camadas": [
+        0
+      ],
+      "dist": 100,
+      "descricao": "Sítios arqueológicos (até 100 m)",
+      "origem": "Património Cultural, I.P. (Portal do Arqueólogo)",
+      "app": "arqueologia",
+      "entidade": "Património Cultural, I.P."
+    },
+    {
+      "fonte": "ICNF_SIC",
+      "tipo": "wfs",
+      "url": "https://si.icnf.pt/geoserver/INSPIRE/wfs",
+      "camada": "sic_INSPIREcompliant",
+      "caixa": true,
+      "descricao": "Rede Natura 2000: Sítios de Importância Comunitária",
+      "origem": "ICNF, I.P. (INSPIRE)",
+      "app": "natura",
+      "entidade": "ICNF, I.P."
+    },
+    {
       "fonte": "DGT_DPH",
       "codigo": "DPH",
       "app": "hidrico",
@@ -89,6 +139,49 @@
       "codigo": "ZEC",
       "app": "natura",
       "entidade": "ICNF, I.P."
+    },
+    {
+      "fonte": "DGT_RAN",
+      "codigo": "RAN",
+      "app": "ran",
+      "entidade": "Entidade Regional da RAN"
+    },
+    {
+      "fonte": "DGT_AAPC",
+      "codigo": "AAPC",
+      "app": "albufeiras_aguas_publicas",
+      "entidade": "APA, I.P."
+    },
+    {
+      "fonte": "DGT_CASAP",
+      "codigo": "CASAP",
+      "app": "captacoes_agua_subterranea",
+      "entidade": "APA, I.P. e entidade gestora"
+    },
+    {
+      "fonte": "DGT_OAH",
+      "codigo": "OAH",
+      "app": "aproveitamentos_hidroagricolas",
+      "entidade": "DGADR e associação de regantes"
+    },
+    {
+      "fonte": "DGT_EAF",
+      "codigo": "EAF",
+      "app": "sobreiro_azinheira",
+      "entidade": "ICNF, I.P. / DRAP"
+    },
+    {
+      "fonte": "DGT_CPIR",
+      "codigo": "CPIR",
+      "app": "incendio",
+      "entidade": "ICNF, I.P. e câmara (CMGIFR)",
+      "classe": "muito alta|\\balta\\b"
+    },
+    {
+      "fonte": "DGT_RG",
+      "codigo": "RG",
+      "app": "",
+      "entidade": "DGEG"
     }
   ],
   "_ren": {
@@ -102,158 +195,63 @@
     "nome": "Lisboa",
     "dico": "1106",
     "camara": true,
-    "nacionais": [
-      {
-        "fonte": "DGT_REN",
-        "codigo": "REN",
-        "app": "ren",
-        "entidade": "CCDR LVT",
-        "url": "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_LVT/WFService.aspx"
-      },
-      {
-        "fonte": "DGT_DPH",
-        "codigo": "DPH",
-        "app": "hidrico",
-        "entidade": "APA, I.P."
-      },
-      {
-        "fonte": "DGT_IC",
-        "codigo": "IC",
-        "app": "pat",
-        "entidade": "Património Cultural, I.P."
-      },
-      {
-        "fonte": "DGT_EIP",
-        "codigo": "EIP",
-        "app": "edificios_publicos_valor",
-        "entidade": "Entidade que tutela o edifício"
-      },
-      {
-        "fonte": "DGT_AA",
-        "codigo": "AA",
-        "app": "aero",
-        "entidade": "ANAC"
-      },
-      {
-        "fonte": "DGT_GO",
-        "codigo": "GO",
-        "app": "gas",
-        "entidade": "REN Gasodutos e DGEG"
-      },
-      {
-        "fonte": "DGT_TC",
-        "codigo": "TC",
-        "app": "telecomunicacoes_radioeletricas",
-        "entidade": "ANACOM"
-      },
-      {
-        "fonte": "DGT_MG",
-        "codigo": "MG",
-        "app": "marcos_geodesicos",
-        "entidade": "Direção-Geral do Território"
-      },
-      {
-        "fonte": "DGT_DN",
-        "codigo": "DN",
-        "app": "militar",
-        "entidade": "Ministério da Defesa Nacional"
-      },
-      {
-        "fonte": "DGT_IPE",
-        "codigo": "IPE",
-        "app": "militar",
-        "entidade": "PSP / Defesa Nacional"
-      },
-      {
-        "fonte": "DGT_EPTM",
-        "codigo": "EPTM",
-        "app": "estabelecimentos_prisionais",
-        "entidade": "DGRSP"
-      },
-      {
-        "fonte": "DGT_IA",
-        "codigo": "IA",
-        "app": "instalacoes_aduaneiras",
-        "entidade": "Autoridade Tributária e Aduaneira"
-      },
-      {
-        "fonte": "DGT_AIP",
-        "codigo": "AIP",
-        "app": "arvoredo_interesse_publico",
-        "entidade": "ICNF, I.P."
-      },
-      {
-        "fonte": "DGT_AP",
-        "codigo": "AP",
-        "app": "natura",
-        "entidade": "ICNF, I.P."
-      },
-      {
-        "fonte": "DGT_ZPE",
-        "codigo": "ZPE",
-        "app": "natura",
-        "entidade": "ICNF, I.P."
-      },
-      {
-        "fonte": "DGT_ZEC",
-        "codigo": "ZEC",
-        "app": "natura",
-        "entidade": "ICNF, I.P."
-      }
-    ]
-  },
-  "sintra": {
-    "nome": "Sintra",
-    "dico": "1111",
-    "camara": true,
     "ren": "LVT"
   },
-  "loures": {
-    "nome": "Loures",
-    "dico": "1107",
-    "camara": true,
-    "ren": "LVT"
-  },
-  "condeixa-a-nova": {
-    "nome": "Condeixa-a-Nova",
-    "dico": "0604",
-    "camara": true,
-    "ren": "CENTRO"
-  },
-  "penacova": {
-    "nome": "Penacova",
-    "dico": "0613",
-    "camara": true,
-    "ren": "CENTRO"
-  },
-  "belmonte": {
-    "nome": "Belmonte",
-    "dico": "0501",
-    "camara": true,
-    "ren": "CENTRO"
-  },
-  "fundao": {
-    "nome": "Fundão",
-    "dico": "0504",
-    "camara": true,
-    "ren": "CENTRO"
-  },
-  "penamacor": {
-    "nome": "Penamacor",
-    "dico": "0507",
-    "camara": true,
-    "ren": "CENTRO"
-  },
-  "mondim-de-basto": {
-    "nome": "Mondim de Basto",
-    "dico": "1705",
-    "camara": true,
-    "ren": "NORTE"
-  },
-  "povoa-de-varzim": {
-    "nome": "Póvoa de Varzim",
-    "dico": "1313",
-    "camara": true,
-    "ren": "NORTE"
+  "_parados": {
+    "_nota": "Câmaras paradas por decisão do Francisco (2026-11-12): os dados já publicados ficam no site, mas não são recarregados. Para retomar, mover a entrada para fora de _parados.",
+    "sintra": {
+      "nome": "Sintra",
+      "dico": "1111",
+      "camara": true,
+      "ren": "LVT"
+    },
+    "loures": {
+      "nome": "Loures",
+      "dico": "1107",
+      "camara": true,
+      "ren": "LVT"
+    },
+    "condeixa-a-nova": {
+      "nome": "Condeixa-a-Nova",
+      "dico": "0604",
+      "camara": true,
+      "ren": "CENTRO"
+    },
+    "penacova": {
+      "nome": "Penacova",
+      "dico": "0613",
+      "camara": true,
+      "ren": "CENTRO"
+    },
+    "belmonte": {
+      "nome": "Belmonte",
+      "dico": "0501",
+      "camara": true,
+      "ren": "CENTRO"
+    },
+    "fundao": {
+      "nome": "Fundão",
+      "dico": "0504",
+      "camara": true,
+      "ren": "CENTRO"
+    },
+    "penamacor": {
+      "nome": "Penamacor",
+      "dico": "0507",
+      "camara": true,
+      "ren": "CENTRO"
+    },
+    "mondim-de-basto": {
+      "nome": "Mondim de Basto",
+      "dico": "1705",
+      "camara": true,
+      "ren": "NORTE"
+    },
+    "povoa-de-varzim": {
+      "nome": "Póvoa de Varzim",
+      "dico": "1313",
+      "camara": true,
+      "ren": "NORTE"
+    }
   }
 }
