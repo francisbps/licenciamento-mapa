@@ -468,7 +468,7 @@
    "app": "hidrico",
    "entidade": "APA, I.P.",
    "ficheiro": "DGT_DPH.geojson",
-   "ok": false,
+   "ok": true,
    "elementos": 0,
    "atualizado": "2026-11-11T18:12:41+00:00",
    "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)",

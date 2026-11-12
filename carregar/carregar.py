@@ -206,7 +206,7 @@ def camadas_mapserver(servico):
 
 def lonlat(g):
     """Algumas respostas em EPSG:4326 vêm em latitude, longitude: em Portugal a longitude é negativa."""
-    x, y = g.representative_point().coords[0]
+    x, y = g.representative_point().coords[0][:2]
     return transform(lambda a, b, z=None: (b, a), g) if x > 0 and y < 0 else g
 
 
@@ -340,7 +340,9 @@ def gravar(pasta, fonte, gerador, meta, indice):
         print(f"OK    {fonte:28} {len(els):6} elementos  {time.time() - t:5.0f} s")
     except Exception as e:  # uma fonte em baixo não pára as outras
         anterior = indice.get(fonte, {})
-        indice[fonte] = {**anterior, **meta, "ok": False, "tentativa": agora(), "erro": str(e)[:300]}
+        guardado = anterior.get("ok") and anterior.get("atualizado")
+        # Se havia dados bons de uma semana anterior, continuam a valer (o mapa usa-os); fica registada a falha.
+        indice[fonte] = {**anterior, **meta, "ok": bool(guardado), "tentativa": agora(), "erro": str(e)[:300]}
         print(f"FALHA {fonte:28} {e}")
     PRAZO[0] = None
     gravar_indice(pasta, indice)
