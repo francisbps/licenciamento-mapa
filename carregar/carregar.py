@@ -413,6 +413,33 @@ def limite_caop(cfg):
     raise RuntimeError(f"limite de {cfg['nome']} ({cfg['dico']}) não encontrado na CAOP")
 
 
+def freguesias_caop(cfg, limite):
+    """Freguesias do concelho na CAOP (para o mapa dizer a freguesia oficial do ponto)."""
+    url = CAOP.split("/municipios/")[0] + "/freguesias/items"
+    x0, y0, x1, y1 = limite.bounds
+    params = {"f": "json", "limit": 500, "bbox": f"{x0},{y0},{x1},{y1}"}
+    nome_mun = sem_acentos(cfg["nome"]).upper()
+    els = []
+    while url:
+        j = pedir(url, params, tentativas=2).json()
+        for el in j.get("features") or []:
+            p = el.get("properties") or {}
+            codigo = str(next((v for k, v in p.items() if "dicofre" in k.lower()), ""))
+            mun = sem_acentos(str(next((v for k, v in p.items() if k.lower() in ("municipio", "concelho")), ""))).upper()
+            if not (codigo.startswith(cfg["dico"]) or mun == nome_mun):
+                continue
+            nome = next((v for k, v in p.items() if k.lower() in ("freguesia", "nome", "designacao")), None)
+            if not nome or not el.get("geometry"):
+                continue
+            g = shape(el["geometry"]).simplify(0.00005)
+            els.append({"type": "Feature", "geometry": mapping(g), "properties": {"nome": str(nome), "dicofre": codigo}})
+        url = next((l["href"] for l in j.get("links") or [] if l.get("rel") == "next"), None)
+        params = None
+    if not els:
+        raise RuntimeError("nenhuma freguesia encontrada")
+    return {"type": "FeatureCollection", "features": els}
+
+
 def carregar(chave, cfg, municipios, cfgs):
     pasta = DADOS / chave
     pasta.mkdir(parents=True, exist_ok=True)
@@ -423,6 +450,12 @@ def carregar(chave, cfg, municipios, cfgs):
     limite = shape(caop["geometry"])
     print(f"== {cfg['nome']} (CAOP {cfg['dico']}: {(caop.get('properties') or {}).get('municipio', '?')})")
     folga = limite.buffer(0.002)  # cerca de 200 m, para servidões que entram a partir do concelho vizinho
+    try:
+        fr = freguesias_caop(cfg, limite)
+        (pasta / "freguesias.geojson").write_text(json.dumps(fr, ensure_ascii=False, separators=(",", ":")))
+        print(f"   {len(fr['features'])} freguesias")
+    except Exception as e:  # sem freguesias o mapa usa o nome dado pela pesquisa de moradas
+        print(f"   freguesias: {e}")
     (pasta / "limite.geojson").write_text(json.dumps({"type": "Feature", "geometry": mapping(
         limite.simplify(0.0001)), "properties": {"nome": cfg["nome"], "dico": cfg["dico"]}}))
 
@@ -498,7 +531,8 @@ def carregar(chave, cfg, municipios, cfgs):
         if f.get("tipo") is None and esperas_dgt < 3:
             r = indice.get(f["fonte"], {})
             falhou_agora = r.get("erro") and r.get("tentativa", "") >= (r.get("atualizado") or "")
-            esperou = any(t in str(r.get("erro")) for t in ("timed out", "min sem terminar", "Max retries"))
+            # Conta também os erros do servidor (500, 502, 503): com a DGT em baixo, cada carta gastava 15 min.
+            esperou = any(t in str(r.get("erro")) for t in ("timed out", "min sem terminar", "Max retries", "Server Error"))
             esperas_dgt = esperas_dgt + 1 if falhou_agora and esperou else 0
 
     manual = DADOS / "manual" / chave

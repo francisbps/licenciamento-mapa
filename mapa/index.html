@@ -305,7 +305,9 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
           const els = v.elementos && !v.ladrilhos ? await lerEls(base + v.ficheiro).catch(() => []) : [];
           fontes[f] = { ...v, els, cache: {} };
         }));
-        return { indice, fontes, base };
+        // Limites oficiais das freguesias (CAOP), para dizer a freguesia certa do ponto.
+        const freg = await lerEls(base + "freguesias.geojson").catch(() => []);
+        return { indice, fontes, base, freg };
       } catch (e) { return null; }
     })();
     return locais[k];
@@ -484,6 +486,11 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     const dl = await dadosLocais(concelho);
     if (dl) await pontoLocal(dl, lat, lng);
     if (g !== ger) return;
+    const fr = dl && dl.freg.find((e) => lng >= e.b[0] && lng <= e.b[2] && lat >= e.b[1] && lat <= e.b[3] && toca(e.g, lng, lat));
+    if (fr) { local.freguesia = fr.p.nome; mostrarLocal(); }
+    // A morada, a freguesia e o código postal seguem logo para a app; as condicionantes seguem quando estiverem todas.
+    enviado = false;
+    setTimeout(() => { if (g === ger && !enviado) atualizarCTA(); }, 1500);
     const nac = Promise.all(LAYERS.map(async (l) => {
       // Uma carta descarregada sem nenhum elemento no concelho pode ser falha da fonte: aí pergunta-se ao serviço.
       const f = dl && dl.fontes[FONTE_LOCAL[l.id]];
@@ -516,11 +523,14 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
   }
 
   // Passa a morada e as condicionantes à app num token seguro para o #anchor (base64url, sem "=").
+  let enviado = false;
   function atualizarCTA() {
-    const dados = { m: local.morada, f: local.freguesia, c: local.concelho, k: Object.keys(achados) };
+    const dados = { m: local.morada, f: local.freguesia, c: local.concelho, cp: local.cp, k: Object.keys(achados) };
     const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(dados)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
     $("toApp").href = APP_URL + "#mapa." + b64;
-    if (EMBED) window.parent.postMessage({ tipo: "licenciamento-mapa", dados }, location.origin);
+    // Na segunda mensagem (condicionantes completas) a morada já foi: não volta a mexer no que o utilizador escreveu.
+    if (EMBED) window.parent.postMessage({ tipo: "licenciamento-mapa", dados: enviado ? { k: dados.k } : dados }, location.origin);
+    enviado = true;
     $("cta").hidden = false;
   }
 
@@ -545,6 +555,7 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
       freguesia: a.suburb || a.city_district || a.quarter || a.village || "",
       concelho: a.municipality || a.city || a.town || a.county || "",
       regiao: a.state || a.archipelago || "",
+      cp: /^\d{4}-\d{3}$/.test(a.postcode || "") ? a.postcode : "",
     };
   }
 
