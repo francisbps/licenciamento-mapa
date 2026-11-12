@@ -230,6 +230,7 @@ details.gd summary { cursor: pointer; padding: 6px 0; font-family: var(--f-displ
 details.gd summary:hover { color: var(--brand); }
 details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color: var(--muted); margin-left: 6px; }
 .ac { display: grid; gap: 5px; }
+label.f .opc { font-weight: 400; color: var(--muted); }
 .acbox { position: relative; }
 .ac > label.f { display: block; }
 #morada { scroll-margin-top: 76px; }
@@ -288,14 +289,14 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
             <label class="f" for="morada">Morada (rua e número)</label>
             <div class="acbox"><input type="text" id="morada" name="morada" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="moradaSug" aria-describedby="moradaAjuda" autocomplete="off" spellcheck="false" placeholder="Comece a escrever, por exemplo: Rua Augusta 100, Lisboa">
             <ul id="moradaSug" class="sug" role="listbox" aria-label="Moradas sugeridas" hidden></ul></div>
-            <p class="note" id="moradaAjuda">Escolha a morada na lista. A freguesia, o concelho e o código postal ficam preenchidos e o local aparece no mapa.</p>
+            <p class="note" id="moradaAjuda">Escreva a rua e o número e escolha na lista, ou carregue em “Pesquisar no mapa”. O mapa acerta a morada e preenche a freguesia, o concelho e o código postal.</p>
           </div>
           <div class="row2">
-            <label class="f">Andar ou fração<input type="text" id="fracao" name="fracao" placeholder="Por exemplo: 2.º Esq. ou fração B"></label>
-            <label class="f">Código postal<input type="text" id="codPostal" name="codPostal" inputmode="numeric" placeholder="0000-000" maxlength="8"></label>
+            <label class="f"><span>Andar ou fração <span class="opc">(opcional)</span></span><input type="text" id="fracao" name="fracao" placeholder="Por exemplo: 2.º Esq. ou fração B"></label>
+            <label class="f"><span>Código postal <span class="opc">(opcional)</span></span><input type="text" id="codPostal" name="codPostal" inputmode="numeric" placeholder="Preenchido pelo mapa" maxlength="8"></label>
           </div>
           <div class="row2">
-            <label class="f">Freguesia<input type="text" id="freguesia" name="freguesia" placeholder="Preenchida pelo mapa"></label>
+            <label class="f"><span>Freguesia <span class="opc">(opcional)</span></span><input type="text" id="freguesia" name="freguesia" placeholder="Preenchida pelo mapa"></label>
             <label class="f">Concelho<input type="text" id="concelho" name="concelho" list="concelhosLista" placeholder="Escreva ou escolha"></label>
           </div>
           <datalist id="concelhosLista"></datalist>
@@ -1299,9 +1300,14 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
   if (!state.q) state.q = {};
   // Mapa integrado: troca as condicionantes vindas do mapa anterior pelas novas.
   let pedidoApp = 0, pinAtivo = false;
+  // O mapa acerta a morada (ex.: "av barbosa du bocage 23" passa a "Avenida Barbosa du Bocage, 23") e preenche
+  // freguesia (limites oficiais), concelho e código postal. Só não troca uma morada com número por outra sem número.
+  const temNum = (x) => /[0-9]/.test(x || "");
   function aplicarMapa(d, moradaDoMapa) {
-    if (moradaDoMapa) { if (d.m) state.morada = d.m; if (d.f) state.freguesia = d.f; if (d.c) state.concelho = d.c; }
-    else { if (d.m && !state.morada) state.morada = d.m; if (d.f && !state.freguesia) state.freguesia = d.f; if (d.c && !state.concelho) state.concelho = d.c; }
+    if (d.m && (moradaDoMapa || !state.morada || temNum(d.m) || !temNum(state.morada))) state.morada = d.m;
+    if (d.f) state.freguesia = d.f;
+    if (d.c) state.concelho = d.c;
+    if (d.cp && (moradaDoMapa || d.m || !state.codPostal)) state.codPostal = d.cp;
     state.condMapa = (d.k || []).filter((k) => k === "pat" || COND.some((x) => x.k === k));
     state.doMapa = !!(d.k && !d.limpo); save();
   }
@@ -1320,7 +1326,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     aplicarMapa(e.data.dados || {}, Date.now() - pedidoApp > 15000);
     pinAtivo = true;
     fillForm(); render();
-    toast("Local identificado: veja as condicionantes abaixo do mapa");
+    if ((e.data.dados || {}).m) toast("Local identificado: veja as condicionantes abaixo do mapa");
   });
   // Mudar ou apagar a morada tira o pin e as condicionantes que vieram do mapa; Enter pesquisa.
   $("f").addEventListener("input", (e) => {
