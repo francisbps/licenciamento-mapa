@@ -1,6 +1,6 @@
 {
  "concelho": "loures",
- "gerado": "2026-11-11T19:53:15+00:00",
+ "gerado": "2026-11-12T01:01:20+00:00",
  "fontes": {
   "CM_0": {
    "origem": "Câmara Municipal de Loures (planta de condicionantes)",
@@ -10,7 +10,7 @@
    "ficheiro": "CM_0.geojson",
    "ok": true,
    "elementos": 12165,
-   "atualizado": "2026-11-11T18:06:32+00:00",
+   "atualizado": "2026-11-12T00:03:29+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -22,7 +22,7 @@
    "ficheiro": "CM_1.geojson",
    "ok": true,
    "elementos": 27851,
-   "atualizado": "2026-11-11T18:07:04+00:00",
+   "atualizado": "2026-11-12T00:04:10+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -34,7 +34,7 @@
    "ficheiro": "CM_2.geojson",
    "ok": true,
    "elementos": 36180,
-   "atualizado": "2026-11-11T18:07:44+00:00",
+   "atualizado": "2026-11-12T00:05:02+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -46,7 +46,7 @@
    "ficheiro": "CM_3.geojson",
    "ok": true,
    "elementos": 34,
-   "atualizado": "2026-11-11T18:07:45+00:00",
+   "atualizado": "2026-11-12T00:05:03+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -58,7 +58,7 @@
    "ficheiro": "CM_4.geojson",
    "ok": true,
    "elementos": 18,
-   "atualizado": "2026-11-11T18:07:45+00:00",
+   "atualizado": "2026-11-12T00:05:03+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -70,7 +70,7 @@
    "ficheiro": "CM_5.geojson",
    "ok": true,
    "elementos": 4996,
-   "atualizado": "2026-11-11T18:07:50+00:00",
+   "atualizado": "2026-11-12T00:05:10+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -82,7 +82,7 @@
    "ficheiro": "CM_6.geojson",
    "ok": true,
    "elementos": 76294,
-   "atualizado": "2026-11-11T18:09:19+00:00",
+   "atualizado": "2026-11-12T00:07:04+00:00",
    "erro": null,
    "ladrilhos": {
     "tamanho": 0.05,
@@ -113,19 +113,7 @@
    "ficheiro": "CM_7.geojson",
    "ok": true,
    "elementos": 238,
-   "atualizado": "2026-11-11T18:09:19+00:00",
-   "erro": null,
-   "ladrilhos": null
-  },
-  "CM_8": {
-   "origem": "Câmara Municipal de Loures (planta de condicionantes)",
-   "descricao": "Limite de Freguesia",
-   "app": null,
-   "entidade": "Câmara municipal",
-   "ficheiro": "CM_8.geojson",
-   "ok": true,
-   "elementos": 10,
-   "atualizado": "2026-11-11T18:09:20+00:00",
+   "atualizado": "2026-11-12T00:07:05+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -137,7 +125,7 @@
    "ficheiro": "CM_9.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:09:20+00:00",
+   "atualizado": "2026-11-12T00:07:05+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -149,7 +137,7 @@
    "ficheiro": "CM_10.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:09:20+00:00",
+   "atualizado": "2026-11-12T00:07:05+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -161,7 +149,7 @@
    "ficheiro": "CM_11.geojson",
    "ok": true,
    "elementos": 46,
-   "atualizado": "2026-11-11T18:09:21+00:00",
+   "atualizado": "2026-11-12T00:07:06+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -173,7 +161,7 @@
    "ficheiro": "CM_12.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:09:21+00:00",
+   "atualizado": "2026-11-12T00:07:06+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -185,7 +173,7 @@
    "ficheiro": "CM_13.geojson",
    "ok": true,
    "elementos": 46,
-   "atualizado": "2026-11-11T18:09:21+00:00",
+   "atualizado": "2026-11-12T00:07:07+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -197,7 +185,7 @@
    "ficheiro": "CM_15.geojson",
    "ok": true,
    "elementos": 455,
-   "atualizado": "2026-11-11T18:09:22+00:00",
+   "atualizado": "2026-11-12T00:07:08+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -209,7 +197,7 @@
    "ficheiro": "CM_16.geojson",
    "ok": true,
    "elementos": 7,
-   "atualizado": "2026-11-11T18:09:22+00:00",
+   "atualizado": "2026-11-12T00:07:08+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -221,7 +209,7 @@
    "ficheiro": "CM_17.geojson",
    "ok": true,
    "elementos": 15,
-   "atualizado": "2026-11-11T18:09:22+00:00",
+   "atualizado": "2026-11-12T00:07:08+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -233,7 +221,7 @@
    "ficheiro": "CM_18.geojson",
    "ok": true,
    "elementos": 3,
-   "atualizado": "2026-11-11T18:09:23+00:00",
+   "atualizado": "2026-11-12T00:07:08+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -245,7 +233,7 @@
    "ficheiro": "CM_19.geojson",
    "ok": true,
    "elementos": 2202,
-   "atualizado": "2026-11-11T18:09:25+00:00",
+   "atualizado": "2026-11-12T00:07:12+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -257,7 +245,7 @@
    "ficheiro": "CM_20.geojson",
    "ok": true,
    "elementos": 86,
-   "atualizado": "2026-11-11T18:09:25+00:00",
+   "atualizado": "2026-11-12T00:07:12+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -269,7 +257,7 @@
    "ficheiro": "CM_21.geojson",
    "ok": true,
    "elementos": 116,
-   "atualizado": "2026-11-11T18:09:26+00:00",
+   "atualizado": "2026-11-12T00:07:12+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -281,7 +269,7 @@
    "ficheiro": "CM_22.geojson",
    "ok": true,
    "elementos": 7,
-   "atualizado": "2026-11-11T18:09:26+00:00",
+   "atualizado": "2026-11-12T00:07:13+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -293,7 +281,7 @@
    "ficheiro": "CM_23.geojson",
    "ok": true,
    "elementos": 3,
-   "atualizado": "2026-11-11T18:09:26+00:00",
+   "atualizado": "2026-11-12T00:07:13+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -305,7 +293,7 @@
    "ficheiro": "CM_24.geojson",
    "ok": true,
    "elementos": 297,
-   "atualizado": "2026-11-11T18:09:27+00:00",
+   "atualizado": "2026-11-12T00:07:14+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -317,7 +305,7 @@
    "ficheiro": "CM_25.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-11T18:09:27+00:00",
+   "atualizado": "2026-11-12T00:07:14+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -329,7 +317,7 @@
    "ficheiro": "CM_26.geojson",
    "ok": true,
    "elementos": 3,
-   "atualizado": "2026-11-11T18:09:28+00:00",
+   "atualizado": "2026-11-12T00:07:15+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -341,7 +329,7 @@
    "ficheiro": "CM_27.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:09:28+00:00",
+   "atualizado": "2026-11-12T00:07:15+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -353,7 +341,7 @@
    "ficheiro": "CM_28.geojson",
    "ok": true,
    "elementos": 26,
-   "atualizado": "2026-11-11T18:09:28+00:00",
+   "atualizado": "2026-11-12T00:07:16+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -365,7 +353,7 @@
    "ficheiro": "CM_29.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:09:29+00:00",
+   "atualizado": "2026-11-12T00:07:16+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -377,7 +365,7 @@
    "ficheiro": "CM_30.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-11T18:09:30+00:00",
+   "atualizado": "2026-11-12T00:07:17+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -389,7 +377,7 @@
    "ficheiro": "CM_31.geojson",
    "ok": true,
    "elementos": 0,
-   "atualizado": "2026-11-11T18:09:30+00:00",
+   "atualizado": "2026-11-12T00:07:17+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -401,7 +389,7 @@
    "ficheiro": "CM_32.geojson",
    "ok": true,
    "elementos": 3,
-   "atualizado": "2026-11-11T18:09:30+00:00",
+   "atualizado": "2026-11-12T00:07:17+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -413,7 +401,7 @@
    "ficheiro": "CM_33.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:09:30+00:00",
+   "atualizado": "2026-11-12T00:07:18+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -425,7 +413,7 @@
    "ficheiro": "CM_34.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:09:31+00:00",
+   "atualizado": "2026-11-12T00:07:19+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -437,7 +425,7 @@
    "ficheiro": "CM_35.geojson",
    "ok": true,
    "elementos": 29,
-   "atualizado": "2026-11-11T18:09:31+00:00",
+   "atualizado": "2026-11-12T00:07:19+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -449,7 +437,7 @@
    "ficheiro": "CM_36.geojson",
    "ok": true,
    "elementos": 6,
-   "atualizado": "2026-11-11T18:09:32+00:00",
+   "atualizado": "2026-11-12T00:07:20+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -461,7 +449,7 @@
    "ficheiro": "CM_37.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:09:32+00:00",
+   "atualizado": "2026-11-12T00:07:20+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -471,8 +459,8 @@
    "app": "ren",
    "entidade": "CCDR LVT",
    "ok": false,
-   "tentativa": "2026-11-11T18:12:00+00:00",
-   "erro": "400 Client Error: Bad Request for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_LVT/WFService.aspx?service=WFS&version=2.0.0&request=GetFeature&typeNames=gmgml%3AREN_LVT&count=200&startIndex=0&outputFormat=application%2Fjson&bbox=-96793.8856816272%2C-98962.74025367574%2C-81058.80569661016"
+   "tentativa": "2026-11-12T00:12:32+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
   },
   "DGT_DPH": {
    "origem": "DGT (SNIT, SRUP)",
@@ -480,11 +468,12 @@
    "app": "hidrico",
    "entidade": "APA, I.P.",
    "ficheiro": "DGT_DPH.geojson",
-   "ok": true,
+   "ok": false,
    "elementos": 0,
    "atualizado": "2026-11-11T18:12:41+00:00",
-   "erro": null,
-   "ladrilhos": null
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)",
+   "ladrilhos": null,
+   "tentativa": "2026-11-12T00:17:33+00:00"
   },
   "DGT_IC": {
    "origem": "DGT (SNIT, SRUP)",
@@ -492,7 +481,7 @@
    "app": "pat",
    "entidade": "Património Cultural, I.P.",
    "ok": false,
-   "tentativa": "2026-11-11T19:42:52+00:00",
+   "tentativa": "2026-11-12T00:22:10+00:00",
    "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
   },
   "DGT_EIP": {
@@ -501,7 +490,7 @@
    "app": "edificios_publicos_valor",
    "entidade": "Entidade que tutela o edifício",
    "ok": false,
-   "tentativa": "2026-11-11T19:48:03+00:00",
+   "tentativa": "2026-11-12T00:25:20+00:00",
    "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
   },
   "DGT_AA": {
@@ -510,8 +499,107 @@
    "app": "aero",
    "entidade": "ANAC",
    "ok": false,
-   "tentativa": "2026-11-11T19:53:15+00:00",
+   "tentativa": "2026-11-12T00:30:32+00:00",
    "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_GO": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "GO",
+   "app": "gas",
+   "entidade": "REN Gasodutos e DGEG",
+   "ok": false,
+   "tentativa": "2026-11-12T00:35:43+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_TC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "TC",
+   "app": "telecomunicacoes_radioeletricas",
+   "entidade": "ANACOM",
+   "ok": false,
+   "tentativa": "2026-11-12T00:40:55+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_MG": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "MG",
+   "app": "marcos_geodesicos",
+   "entidade": "Direção-Geral do Território",
+   "ok": false,
+   "tentativa": "2026-11-12T00:43:56+00:00",
+   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_MG_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_DN": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "DN",
+   "app": "militar",
+   "entidade": "Ministério da Defesa Nacional",
+   "ok": false,
+   "tentativa": "2026-11-12T00:49:07+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_IPE": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IPE",
+   "app": "militar",
+   "entidade": "PSP / Defesa Nacional",
+   "ok": false,
+   "tentativa": "2026-11-12T00:52:08+00:00",
+   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_IPE_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_EPTM": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "EPTM",
+   "app": "estabelecimentos_prisionais",
+   "entidade": "DGRSP",
+   "ok": false,
+   "tentativa": "2026-11-12T00:55:08+00:00",
+   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_EPTM_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_IA": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IA",
+   "app": "instalacoes_aduaneiras",
+   "entidade": "Autoridade Tributária e Aduaneira",
+   "ok": false,
+   "tentativa": "2026-11-12T00:58:08+00:00",
+   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_IA_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_AIP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AIP",
+   "app": "arvoredo_interesse_publico",
+   "entidade": "ICNF, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-12T01:00:49+00:00",
+   "erro": "503 Server Error: Service Unavailable for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_AIP_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_AP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AP",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-12T01:00:59+00:00",
+   "erro": "503 Server Error: Service Unavailable for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_AP_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_ZPE": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "ZPE",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-12T01:01:10+00:00",
+   "erro": "503 Server Error: Service Unavailable for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_ZPE_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_ZEC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "ZEC",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-12T01:01:20+00:00",
+   "erro": "503 Server Error: Service Unavailable for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_ZEC_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
   }
  }
 }
