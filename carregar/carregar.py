@@ -531,7 +531,8 @@ def carregar(chave, cfg, municipios, cfgs):
         if f.get("tipo") is None and esperas_dgt < 3:
             r = indice.get(f["fonte"], {})
             falhou_agora = r.get("erro") and r.get("tentativa", "") >= (r.get("atualizado") or "")
-            esperou = any(t in str(r.get("erro")) for t in ("timed out", "min sem terminar", "Max retries"))
+            # Conta também os erros do servidor (500, 502, 503): com a DGT em baixo, cada carta gastava 15 min.
+            esperou = any(t in str(r.get("erro")) for t in ("timed out", "min sem terminar", "Max retries", "Server Error"))
             esperas_dgt = esperas_dgt + 1 if falhou_agora and esperou else 0
 
     manual = DADOS / "manual" / chave
