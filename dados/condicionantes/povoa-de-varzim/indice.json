@@ -1,16 +1,17 @@
 {
  "concelho": "povoa-de-varzim",
- "gerado": "2026-11-12T02:54:26+00:00",
+ "gerado": "2026-11-12T04:05:32+00:00",
  "fontes": {
   "CM_499": {
    "origem": "Câmara Municipal de Póvoa de Varzim (planta de condicionantes)",
    "descricao": "PDM - Condicionantes - Pontos",
    "app": null,
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_499.geojson",
    "ok": true,
    "elementos": 11,
-   "atualizado": "2026-11-12T02:54:18+00:00",
+   "atualizado": "2026-11-12T03:00:13+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -19,10 +20,11 @@
    "descricao": "PDM - Condicionantes - Linhas",
    "app": null,
    "entidade": "Câmara municipal",
+   "por_elemento": true,
    "ficheiro": "CM_500.geojson",
    "ok": true,
    "elementos": 489,
-   "atualizado": "2026-11-12T02:54:21+00:00",
+   "atualizado": "2026-11-12T03:00:15+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -31,10 +33,11 @@
    "descricao": "PDM - Condicionantes - Reserva Ecologica Nacional",
    "app": null,
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_502.geojson",
    "ok": true,
    "elementos": 61,
-   "atualizado": "2026-11-12T02:54:22+00:00",
+   "atualizado": "2026-11-12T03:00:16+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -43,10 +46,11 @@
    "descricao": "PDM - Condicionantes - Cheias",
    "app": null,
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_503.geojson",
    "ok": true,
    "elementos": 13,
-   "atualizado": "2026-11-12T02:54:23+00:00",
+   "atualizado": "2026-11-12T03:00:17+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -55,10 +59,11 @@
    "descricao": "PDM - Condicionantes - Poligonos",
    "app": null,
    "entidade": "Câmara municipal",
+   "por_elemento": true,
    "ficheiro": "CM_504.geojson",
    "ok": true,
    "elementos": 278,
-   "atualizado": "2026-11-12T02:54:26+00:00",
+   "atualizado": "2026-11-12T03:00:20+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -68,17 +73,20 @@
    "app": "ren",
    "entidade": "CCDR Norte",
    "ok": false,
-   "tentativa": "2026-11-12T00:07:14+00:00",
-   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_NORTE/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+   "tentativa": "2026-11-12T03:01:38+00:00",
+   "erro": "400 Client Error: Bad Request for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_NORTE/WFService.aspx?service=WFS&version=2.0.0&request=GetFeature&typeNames=gmgml%3AREN_Norte&count=200&startIndex=0&outputFormat=application%2Fjson&bbox=-55007.69312512734%2C188320.8207256997%2C-38094.1858081"
   },
   "DGT_DPH": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "DPH",
    "app": "hidrico",
    "entidade": "APA, I.P.",
-   "ok": false,
-   "tentativa": "2026-11-12T00:12:25+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "ficheiro": "DGT_DPH.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T03:01:51+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_IC": {
    "origem": "DGT (SNIT, SRUP)",
@@ -86,8 +94,8 @@
    "app": "pat",
    "entidade": "Património Cultural, I.P.",
    "ok": false,
-   "tentativa": "2026-11-12T00:16:29+00:00",
-   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_IC_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+   "tentativa": "2026-11-12T03:16:54+00:00",
+   "erro": "mais de 15 min sem terminar"
   },
   "DGT_EIP": {
    "origem": "DGT (SNIT, SRUP)",
@@ -95,17 +103,20 @@
    "app": "edificios_publicos_valor",
    "entidade": "Entidade que tutela o edifício",
    "ok": false,
-   "tentativa": "2026-11-12T00:19:30+00:00",
-   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_EIP_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+   "tentativa": "2026-11-12T03:31:56+00:00",
+   "erro": "mais de 15 min sem terminar"
   },
   "DGT_AA": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "AA",
    "app": "aero",
    "entidade": "ANAC",
-   "ok": false,
-   "tentativa": "2026-11-12T00:22:31+00:00",
-   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_AA_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+   "ficheiro": "DGT_AA.geojson",
+   "ok": true,
+   "elementos": 3,
+   "atualizado": "2026-11-12T03:32:37+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_GO": {
    "origem": "DGT (SNIT, SRUP)",
@@ -113,17 +124,20 @@
    "app": "gas",
    "entidade": "REN Gasodutos e DGEG",
    "ok": false,
-   "tentativa": "2026-11-12T00:27:42+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "tentativa": "2026-11-12T03:47:43+00:00",
+   "erro": "mais de 15 min sem terminar"
   },
   "DGT_TC": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "TC",
    "app": "telecomunicacoes_radioeletricas",
    "entidade": "ANACOM",
-   "ok": false,
-   "tentativa": "2026-11-12T00:32:53+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "ficheiro": "DGT_TC.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T03:48:17+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_MG": {
    "origem": "DGT (SNIT, SRUP)",
@@ -131,7 +145,7 @@
    "app": "marcos_geodesicos",
    "entidade": "Direção-Geral do Território",
    "ok": false,
-   "tentativa": "2026-11-12T00:35:55+00:00",
+   "tentativa": "2026-11-12T03:48:30+00:00",
    "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_MG_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
   },
   "DGT_DN": {
@@ -139,36 +153,48 @@
    "descricao": "DN",
    "app": "militar",
    "entidade": "Ministério da Defesa Nacional",
-   "ok": false,
-   "tentativa": "2026-11-12T00:38:55+00:00",
-   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_DN_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+   "ficheiro": "DGT_DN.geojson",
+   "ok": true,
+   "elementos": 2,
+   "atualizado": "2026-11-12T03:48:41+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_IPE": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "IPE",
    "app": "militar",
    "entidade": "PSP / Defesa Nacional",
-   "ok": false,
-   "tentativa": "2026-11-12T00:41:56+00:00",
-   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_IPE_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+   "ficheiro": "DGT_IPE.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T03:49:02+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_EPTM": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "EPTM",
    "app": "estabelecimentos_prisionais",
    "entidade": "DGRSP",
-   "ok": false,
-   "tentativa": "2026-11-12T00:44:57+00:00",
-   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_EPTM_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+   "ficheiro": "DGT_EPTM.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T03:49:16+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_IA": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "IA",
    "app": "instalacoes_aduaneiras",
    "entidade": "Autoridade Tributária e Aduaneira",
-   "ok": false,
-   "tentativa": "2026-11-12T00:47:58+00:00",
-   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_IA_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+   "ficheiro": "DGT_IA.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T03:49:32+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_AIP": {
    "origem": "DGT (SNIT, SRUP)",
@@ -176,35 +202,44 @@
    "app": "arvoredo_interesse_publico",
    "entidade": "ICNF, I.P.",
    "ok": false,
-   "tentativa": "2026-11-12T00:50:58+00:00",
-   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_AIP_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+   "tentativa": "2026-11-12T04:04:35+00:00",
+   "erro": "mais de 15 min sem terminar"
   },
   "DGT_AP": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "AP",
    "app": "natura",
    "entidade": "ICNF, I.P.",
-   "ok": false,
-   "tentativa": "2026-11-12T00:56:09+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "ficheiro": "DGT_AP.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T04:04:54+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_ZPE": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "ZPE",
    "app": "natura",
    "entidade": "ICNF, I.P.",
-   "ok": false,
-   "tentativa": "2026-11-12T01:01:20+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "ficheiro": "DGT_ZPE.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T04:05:10+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_ZEC": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "ZEC",
    "app": "natura",
    "entidade": "ICNF, I.P.",
-   "ok": false,
-   "tentativa": "2026-11-12T01:01:31+00:00",
-   "erro": "503 Server Error: Service Unavailable for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_ZEC_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+   "ficheiro": "DGT_ZEC.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T04:05:32+00:00",
+   "erro": null,
+   "ladrilhos": null
   }
  }
 }
