@@ -1,15 +1,18 @@
 {
  "concelho": "povoa-de-varzim",
- "gerado": "2026-11-12T01:01:31+00:00",
+ "gerado": "2026-11-12T02:54:26+00:00",
  "fontes": {
   "CM_499": {
    "origem": "Câmara Municipal de Póvoa de Varzim (planta de condicionantes)",
    "descricao": "PDM - Condicionantes - Pontos",
    "app": null,
    "entidade": "Câmara municipal",
-   "ok": false,
-   "tentativa": "2026-11-12T00:04:03+00:00",
-   "erro": "502 Server Error: Bad Gateway for url: https://sigonline.cm-pvarzim.pt/arcgis/rest/services/Inter_Intra/PLANOS_PMOTSeOUTROS/MapServer/499/query?geometry=-8.791061078300311%2C41.362571896099006%2C-8.588647091229147%2C41.47396974452177&geometryType=esriGeometryEnvelope&inSR=4326&spatialRel=esriSpatial"
+   "ficheiro": "CM_499.geojson",
+   "ok": true,
+   "elementos": 11,
+   "atualizado": "2026-11-12T02:54:18+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_500": {
    "origem": "Câmara Municipal de Póvoa de Varzim (planta de condicionantes)",
@@ -19,7 +22,7 @@
    "ficheiro": "CM_500.geojson",
    "ok": true,
    "elementos": 489,
-   "atualizado": "2026-11-12T00:04:06+00:00",
+   "atualizado": "2026-11-12T02:54:21+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -31,7 +34,7 @@
    "ficheiro": "CM_502.geojson",
    "ok": true,
    "elementos": 61,
-   "atualizado": "2026-11-12T00:04:08+00:00",
+   "atualizado": "2026-11-12T02:54:22+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -43,7 +46,7 @@
    "ficheiro": "CM_503.geojson",
    "ok": true,
    "elementos": 13,
-   "atualizado": "2026-11-12T00:04:09+00:00",
+   "atualizado": "2026-11-12T02:54:23+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -55,7 +58,7 @@
    "ficheiro": "CM_504.geojson",
    "ok": true,
    "elementos": 278,
-   "atualizado": "2026-11-12T00:04:13+00:00",
+   "atualizado": "2026-11-12T02:54:26+00:00",
    "erro": null,
    "ladrilhos": null
   },
