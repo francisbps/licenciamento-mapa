@@ -1,171 +1,201 @@
 {
  "concelho": "lisboa",
- "gerado": "2026-10-29T12:03:41+00:00",
+ "gerado": "2026-11-12T13:16:31+00:00",
  "fontes": {
   "CM_84": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Servidão aeronáutica do Aeroporto Humberto Delgado",
    "app": "aero",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_84.geojson",
    "ok": true,
    "elementos": 11,
-   "atualizado": "2026-10-29T11:29:02+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:30+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_259": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Zona de proteção dos sistemas de abastecimento de água (Aqueduto das Águas Livres, Tejo, Alviela)",
    "app": "aqueduto",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_259.geojson",
    "ok": true,
    "elementos": 4,
-   "atualizado": "2026-10-29T11:29:03+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:31+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_250": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Infraestruturas de abastecimento de água",
    "app": "aqueduto",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_250.geojson",
    "ok": true,
    "elementos": 4,
-   "atualizado": "2026-10-29T11:29:03+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:32+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_63": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Gasoduto",
    "app": "gas",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_63.geojson",
    "ok": true,
    "elementos": 7,
-   "atualizado": "2026-10-29T11:29:04+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:32+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_64": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Faixa de servidão do gasoduto",
    "app": "gas",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_64.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-10-29T11:29:04+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:33+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_80": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Corredor de linha de alta tensão",
    "app": "eletrica",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_80.geojson",
    "ok": true,
    "elementos": 14,
-   "atualizado": "2026-10-29T11:29:05+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:33+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_81": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Zona de proteção de linha de alta tensão",
    "app": "eletrica",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_81.geojson",
    "ok": true,
    "elementos": 14,
-   "atualizado": "2026-10-29T11:29:05+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:34+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_215": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Subestação elétrica",
    "app": "eletrica",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_215.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-10-29T11:29:08+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:35+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_83": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Área de jurisdição do Porto de Lisboa",
    "app": "porto",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_83.geojson",
    "ok": true,
    "elementos": 3,
-   "atualizado": "2026-10-29T11:29:09+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:35+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_87": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Cemitério",
    "app": "cemiterios",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_87.geojson",
    "ok": true,
    "elementos": 10,
-   "atualizado": "2026-10-29T11:29:12+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:36+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_88": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Zona de proteção de cemitério (non aedificandi 10 m)",
    "app": "cemiterios",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_88.geojson",
    "ok": true,
    "elementos": 10,
-   "atualizado": "2026-10-29T11:29:13+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:37+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_89": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Zona de proteção de cemitério (40 m)",
    "app": "cemiterios",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_89.geojson",
    "ok": true,
    "elementos": 10,
-   "atualizado": "2026-10-29T11:29:14+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:37+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_65": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Domínio hídrico",
    "app": "hidrico",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_65.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-10-29T11:29:14+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:38+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_66": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Domínio hídrico (margens)",
    "app": "hidrico",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_66.geojson",
    "ok": true,
    "elementos": 71,
-   "atualizado": "2026-10-29T11:29:15+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:38+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_67": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Domínio hídrico (leitos)",
    "app": "hidrico",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_67.geojson",
    "ok": true,
    "elementos": 71,
-   "atualizado": "2026-10-29T11:29:15+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:39+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_224": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
@@ -173,7 +203,7 @@
    "app": "hidrico",
    "entidade": "Câmara municipal",
    "ok": false,
-   "tentativa": "2026-10-29T11:29:15+00:00",
+   "tentativa": "2026-11-12T13:01:41+00:00",
    "erro": "Invalid or missing input parameters."
   },
   "CM_432": {
@@ -181,330 +211,390 @@
    "descricao": "Domínio hídrico",
    "app": "hidrico",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_432.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-10-29T11:29:16+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:42+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_68": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Servidão militar",
    "app": "militar",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_68.geojson",
    "ok": true,
    "elementos": 14,
-   "atualizado": "2026-10-29T11:29:17+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:42+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_78": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Imóvel militar e zona de proteção",
    "app": "militar",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_78.geojson",
    "ok": true,
    "elementos": 73,
-   "atualizado": "2026-10-29T11:29:17+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:43+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_71": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Feixe hertziano",
    "app": "telecomunicacoes_radioeletricas",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_71.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-10-29T11:29:17+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:44+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_72": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Zona de proteção de feixe hertziano",
    "app": "telecomunicacoes_radioeletricas",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_72.geojson",
    "ok": true,
    "elementos": 0,
-   "atualizado": "2026-10-29T11:29:18+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:45+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_76": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Centro radioelétrico",
    "app": "telecomunicacoes_radioeletricas",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_76.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-10-29T11:29:18+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:45+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_77": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Zona de proteção de centro radioelétrico",
    "app": "telecomunicacoes_radioeletricas",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_77.geojson",
    "ok": true,
    "elementos": 0,
-   "atualizado": "2026-10-29T11:29:23+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:46+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_58": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Rede ferroviária",
    "app": "estradas",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_58.geojson",
    "ok": true,
    "elementos": 10,
-   "atualizado": "2026-10-29T11:29:25+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:47+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_70": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Rodovias (servidão rodoviária)",
    "app": "estradas",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_70.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-10-29T11:29:27+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:47+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_110": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "REN",
    "app": "ren",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_110.geojson",
    "ok": true,
    "elementos": 6,
-   "atualizado": "2026-10-29T11:29:28+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:48+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_111": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "REN",
    "app": "ren",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_111.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-10-29T11:29:28+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:49+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_86": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Regime florestal",
    "app": "regime_florestal",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_86.geojson",
    "ok": true,
    "elementos": 13,
-   "atualizado": "2026-10-29T11:29:29+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:49+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_207": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Arvoredo de interesse público",
    "app": "arvoredo_interesse_publico",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_207.geojson",
    "ok": true,
    "elementos": 56,
-   "atualizado": "2026-10-29T11:29:29+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:50+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_208": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Arvoredo de interesse público",
    "app": "arvoredo_interesse_publico",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_208.geojson",
    "ok": true,
    "elementos": 23,
-   "atualizado": "2026-10-29T11:29:30+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:51+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_209": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Arvoredo de interesse público (zona de proteção)",
    "app": "arvoredo_interesse_publico",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_209.geojson",
    "ok": true,
    "elementos": 67,
-   "atualizado": "2026-10-29T11:29:32+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:55+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_210": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Arvoredo de interesse municipal",
    "app": null,
    "entidade": "Câmara municipal",
+   "por_elemento": true,
    "ficheiro": "CM_210.geojson",
    "ok": true,
    "elementos": 27,
-   "atualizado": "2026-10-29T11:29:34+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:55+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_211": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Arvoredo de interesse municipal (área de proteção)",
    "app": null,
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_211.geojson",
    "ok": true,
    "elementos": 7,
-   "atualizado": "2026-10-29T11:29:35+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:56+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_73": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Vértice geodésico",
    "app": "marcos_geodesicos",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_73.geojson",
    "ok": true,
    "elementos": 40,
-   "atualizado": "2026-10-29T11:29:36+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:56+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_214": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Zona de proteção de vértice geodésico",
    "app": "marcos_geodesicos",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_214.geojson",
    "ok": true,
    "elementos": 43,
-   "atualizado": "2026-10-29T11:29:36+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:57+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_82": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Zona de proteção de hospital",
    "app": "estabelecimentos_saude",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_82.geojson",
    "ok": true,
    "elementos": 13,
-   "atualizado": "2026-10-29T11:29:37+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:58+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_74": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Estabelecimento tutelar de menores",
    "app": "estabelecimentos_prisionais",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_74.geojson",
    "ok": true,
    "elementos": 3,
-   "atualizado": "2026-10-29T11:29:37+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:58+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_75": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Estabelecimento prisional",
    "app": "estabelecimentos_prisionais",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_75.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-10-29T11:29:38+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:01:59+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_231": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Património Mundial (UNESCO)",
    "app": "pat",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_231.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-10-29T11:29:38+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:02:00+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_91": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Património classificado",
    "app": "pat",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_91.geojson",
    "ok": true,
    "elementos": 298,
-   "atualizado": "2026-10-29T11:29:40+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:02:02+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_92": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Imóvel em vias de classificação",
    "app": "pat",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_92.geojson",
    "ok": true,
    "elementos": 39,
-   "atualizado": "2026-10-29T11:29:41+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:02:02+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_93": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Zona de proteção de imóvel",
    "app": "pat",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_93.geojson",
    "ok": true,
    "elementos": 197,
-   "atualizado": "2026-10-29T11:29:47+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:02:04+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_94": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Zona especial de proteção",
    "app": "pat",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_94.geojson",
    "ok": true,
    "elementos": 73,
-   "atualizado": "2026-10-29T11:29:49+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:02:08+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_95": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Restrições do Património Cultural (sensibilidade arqueológica, non aedificandi)",
    "app": "arqueologia",
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_95.geojson",
    "ok": true,
    "elementos": 64,
-   "atualizado": "2026-10-29T11:29:50+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:02:09+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_253": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Património classificado municipal",
    "app": null,
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_253.geojson",
    "ok": true,
    "elementos": 27,
-   "atualizado": "2026-10-29T11:29:51+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:02:10+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_228": {
    "origem": "Câmara Municipal de Lisboa (planta de condicionantes)",
    "descricao": "Imóvel em vias de classificação municipal",
    "app": null,
    "entidade": "Câmara municipal",
+   "por_elemento": false,
    "ficheiro": "CM_228.geojson",
    "ok": true,
    "elementos": 4,
-   "atualizado": "2026-10-29T11:29:52+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:02:10+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_REN": {
    "origem": "DGT (SNIT, SRUP)",
@@ -512,7 +602,7 @@
    "app": "ren",
    "entidade": "CCDR LVT",
    "ok": false,
-   "tentativa": "2026-10-29T11:35:10+00:00",
+   "tentativa": "2026-11-12T13:07:33+00:00",
    "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
   },
   "DGT_DPH": {
@@ -524,7 +614,8 @@
    "ok": true,
    "elementos": 0,
    "atualizado": "2026-10-29T11:36:37+00:00",
-   "erro": null
+   "erro": "503 Server Error: Service Unavailable for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_DPH_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetFeature&typeNames=gmgml%3AZona_de_Ocupa%C3%A7%C3%A3o_Condicionada&count=200&startIndex=0&outputFormat=application%2Fvnd.geo%2Bjson&bbox=-109362.9",
+   "tentativa": "2026-11-12T13:11:23+00:00"
   },
   "DGT_IC": {
    "origem": "DGT (SNIT, SRUP)",
@@ -532,8 +623,8 @@
    "app": "pat",
    "entidade": "Património Cultural, I.P.",
    "ok": false,
-   "tentativa": "2026-10-29T11:56:41+00:00",
-   "erro": "mais de 20 min sem terminar"
+   "tentativa": "2026-11-12T13:11:33+00:00",
+   "erro": "503 Server Error: Service Unavailable for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_IC_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
   },
   "DGT_EIP": {
    "origem": "DGT (SNIT, SRUP)",
@@ -544,7 +635,8 @@
    "ok": true,
    "elementos": 0,
    "atualizado": "2026-10-29T11:57:40+00:00",
-   "erro": null
+   "erro": "503 Server Error: Service Unavailable for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_EIP_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities",
+   "tentativa": "2026-11-12T13:11:44+00:00"
   },
   "DGT_AA": {
    "origem": "DGT (SNIT, SRUP)",
@@ -555,7 +647,8 @@
    "ok": true,
    "elementos": 3,
    "atualizado": "2026-10-29T11:58:49+00:00",
-   "erro": null
+   "erro": "502 Server Error: Bad Gateway for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_AA_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities",
+   "tentativa": "2026-11-12T13:11:55+00:00"
   },
   "DGT_GO": {
    "origem": "DGT (SNIT, SRUP)",
@@ -566,7 +659,8 @@
    "ok": true,
    "elementos": 0,
    "atualizado": "2026-10-29T11:59:02+00:00",
-   "erro": null
+   "erro": "502 Server Error: Bad Gateway for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_GO_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities",
+   "tentativa": "2026-11-12T13:12:07+00:00"
   },
   "DGT_TC": {
    "origem": "DGT (SNIT, SRUP)",
@@ -577,7 +671,8 @@
    "ok": true,
    "elementos": 8,
    "atualizado": "2026-10-29T12:00:28+00:00",
-   "erro": null
+   "erro": "502 Server Error: Bad Gateway for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_TC_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities",
+   "tentativa": "2026-11-12T13:12:20+00:00"
   },
   "DGT_MG": {
    "origem": "DGT (SNIT, SRUP)",
@@ -585,7 +680,7 @@
    "app": "marcos_geodesicos",
    "entidade": "Direção-Geral do Território",
    "ok": false,
-   "tentativa": "2026-10-29T12:01:01+00:00",
+   "tentativa": "2026-11-12T13:12:42+00:00",
    "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_MG_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
   },
   "DGT_DN": {
@@ -595,9 +690,10 @@
    "entidade": "Ministério da Defesa Nacional",
    "ficheiro": "DGT_DN.geojson",
    "ok": true,
-   "elementos": 0,
-   "atualizado": "2026-10-29T12:01:18+00:00",
-   "erro": null
+   "elementos": 47,
+   "atualizado": "2026-11-12T13:13:28+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_IPE": {
    "origem": "DGT (SNIT, SRUP)",
@@ -606,9 +702,10 @@
    "entidade": "PSP / Defesa Nacional",
    "ficheiro": "DGT_IPE.geojson",
    "ok": true,
-   "elementos": 0,
-   "atualizado": "2026-10-29T12:01:53+00:00",
-   "erro": null
+   "elementos": 1,
+   "atualizado": "2026-11-12T13:13:47+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_EPTM": {
    "origem": "DGT (SNIT, SRUP)",
@@ -617,9 +714,10 @@
    "entidade": "DGRSP",
    "ficheiro": "DGT_EPTM.geojson",
    "ok": true,
-   "elementos": 0,
-   "atualizado": "2026-10-29T12:02:01+00:00",
-   "erro": null
+   "elementos": 5,
+   "atualizado": "2026-11-12T13:13:57+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_IA": {
    "origem": "DGT (SNIT, SRUP)",
@@ -628,9 +726,10 @@
    "entidade": "Autoridade Tributária e Aduaneira",
    "ficheiro": "DGT_IA.geojson",
    "ok": true,
-   "elementos": 0,
-   "atualizado": "2026-10-29T12:02:15+00:00",
-   "erro": null
+   "elementos": 7,
+   "atualizado": "2026-11-12T13:14:10+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_AIP": {
    "origem": "DGT (SNIT, SRUP)",
@@ -641,7 +740,8 @@
    "ok": true,
    "elementos": 0,
    "atualizado": "2026-10-29T12:02:43+00:00",
-   "erro": null
+   "erro": "400 Client Error: Bad Request for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_AIP_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetFeature&typeNames=gmgml%3AArvores_Isoladas&count=200&startIndex=9600&outputFormat=application%2Fjson&bbox=-109362.96146374334%2C-96309.35775107837%2C-960",
+   "tentativa": "2026-11-12T13:15:42+00:00"
   },
   "DGT_AP": {
    "origem": "DGT (SNIT, SRUP)",
@@ -650,9 +750,10 @@
    "entidade": "ICNF, I.P.",
    "ficheiro": "DGT_AP.geojson",
    "ok": true,
-   "elementos": 0,
-   "atualizado": "2026-10-29T12:03:13+00:00",
-   "erro": null
+   "elementos": 1,
+   "atualizado": "2026-11-12T13:16:05+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_ZPE": {
    "origem": "DGT (SNIT, SRUP)",
@@ -662,8 +763,9 @@
    "ficheiro": "DGT_ZPE.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-10-29T12:03:26+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:16:16+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_ZEC": {
    "origem": "DGT (SNIT, SRUP)",
@@ -673,8 +775,9 @@
    "ficheiro": "DGT_ZEC.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-10-29T12:03:41+00:00",
-   "erro": null
+   "atualizado": "2026-11-12T13:16:31+00:00",
+   "erro": null,
+   "ladrilhos": null
   }
  }
 }
