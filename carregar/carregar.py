@@ -72,9 +72,21 @@ def nome_de(props):
     return None
 
 
+def so_um_tipo(g):
+    """Um recorte pode dar uma mistura (polígono + linha solta): fica a parte de maior dimensão."""
+    if g.geom_type != "GeometryCollection":
+        return g
+    partes = [p for p in getattr(g, "geoms", []) if not p.is_empty]
+    if not partes:
+        return g
+    dim = max(shapely.get_dimensions(p) for p in partes)
+    partes = [p for p in partes if shapely.get_dimensions(p) == dim]
+    return shapely.union_all(partes)
+
+
 def elemento(geom, limite, props, **extra):
     """Recorta pelo concelho e devolve um elemento GeoJSON, ou None se ficar fora."""
-    g = make_valid(geom).intersection(limite)
+    g = so_um_tipo(make_valid(geom).intersection(limite))
     if g.is_empty:
         return None
     g = shapely.transform(g.simplify(SIMPLIFICAR, preserve_topology=True), lambda c: c.round(CASAS))
@@ -334,6 +346,11 @@ def gravar(pasta, fonte, gerador, meta, indice):
                 raise TimeoutError(f"mais de {TEMPO_FONTE // 60} min sem terminar")
             if e:
                 els.append(e)
+        if fonte.startswith("CM_") and not meta.get("por_elemento"):
+            # Camada com vários tipos de condicionante (ex.: Póvoa de Varzim, "PDM - Condicionantes - Polígonos"):
+            # o mapa mostra o nome de cada elemento em vez do nome da camada.
+            nomes = {e["properties"].get("nome") for e in els} - {None, meta.get("descricao")}
+            meta = {**meta, "por_elemento": 2 <= len(nomes) <= 50 and len(els) >= 3 * len(nomes)}
         extra = escrever(pasta, fonte, els)
         indice[fonte] = {**meta, "ficheiro": f"{fonte}.geojson", "ok": True, "elementos": len(els),
                          "atualizado": agora(), "erro": None, **extra}

@@ -118,7 +118,8 @@
    "elementos": 11,
    "atualizado": "2026-11-12T00:06:16+00:00",
    "erro": null,
-   "ladrilhos": null
+   "ladrilhos": null,
+   "por_elemento": true
   },
   "CM_2_39": {
    "origem": "Câmara Municipal de Penacova (planta de condicionantes)",

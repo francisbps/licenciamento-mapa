@@ -172,7 +172,8 @@
    "elementos": 57,
    "atualizado": "2026-11-12T00:06:51+00:00",
    "erro": null,
-   "ladrilhos": null
+   "ladrilhos": null,
+   "por_elemento": true
   },
   "CM_260": {
    "origem": "Câmara Municipal de Sintra (planta de condicionantes)",
@@ -184,7 +185,8 @@
    "elementos": 97,
    "atualizado": "2026-11-12T00:06:52+00:00",
    "erro": null,
-   "ladrilhos": null
+   "ladrilhos": null,
+   "por_elemento": true
   },
   "CM_262": {
    "origem": "Câmara Municipal de Sintra (planta de condicionantes)",
@@ -388,7 +390,8 @@
    "elementos": 6137,
    "atualizado": "2026-11-12T00:07:24+00:00",
    "erro": null,
-   "ladrilhos": null
+   "ladrilhos": null,
+   "por_elemento": true
   },
   "CM_284": {
    "origem": "Câmara Municipal de Sintra (planta de condicionantes)",
@@ -400,7 +403,8 @@
    "elementos": 2826,
    "atualizado": "2026-11-12T00:07:29+00:00",
    "erro": null,
-   "ladrilhos": null
+   "ladrilhos": null,
+   "por_elemento": true
   },
   "CM_285": {
    "origem": "Câmara Municipal de Sintra (planta de condicionantes)",
@@ -796,7 +800,8 @@
    "elementos": 1289,
    "atualizado": "2026-11-12T00:08:08+00:00",
    "erro": null,
-   "ladrilhos": null
+   "ladrilhos": null,
+   "por_elemento": true
   },
   "CM_337": {
    "origem": "Câmara Municipal de Sintra (planta de condicionantes)",
@@ -808,7 +813,8 @@
    "elementos": 3211,
    "atualizado": "2026-11-12T00:08:14+00:00",
    "erro": null,
-   "ladrilhos": null
+   "ladrilhos": null,
+   "por_elemento": true
   },
   "CM_339": {
    "origem": "Câmara Municipal de Sintra (planta de condicionantes)",
@@ -820,7 +826,8 @@
    "elementos": 1314,
    "atualizado": "2026-11-12T00:08:17+00:00",
    "erro": null,
-   "ladrilhos": null
+   "ladrilhos": null,
+   "por_elemento": true
   },
   "CM_340": {
    "origem": "Câmara Municipal de Sintra (planta de condicionantes)",
@@ -832,7 +839,8 @@
    "elementos": 5174,
    "atualizado": "2026-11-12T00:08:26+00:00",
    "erro": null,
-   "ladrilhos": null
+   "ladrilhos": null,
+   "por_elemento": true
   },
   "CM_342": {
    "origem": "Câmara Municipal de Sintra (planta de condicionantes)",

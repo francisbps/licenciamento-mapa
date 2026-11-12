@@ -295,7 +295,8 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
         const indice = await r.json(), fontes = {};
         await Promise.all(Object.entries(indice.fontes).filter(([, v]) => v.ok).map(async ([f, v]) => {
           // Fontes grandes estão partidas em ladrilhos: esses só se descarregam para o ponto escolhido (pontoLocal).
-          const els = v.elementos && !v.ladrilhos ? await lerEls(base + v.ficheiro) : [];
+          // Uma fonte estragada não deve impedir as outras de responder.
+          const els = v.elementos && !v.ladrilhos ? await lerEls(base + v.ficheiro).catch(() => []) : [];
           fontes[f] = { ...v, els, cache: {} };
         }));
         return { indice, fontes, base };
@@ -306,14 +307,16 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
   async function lerEls(url) {
     const r = await fetch(url);
     if (!r.ok) return [];
-    return (await r.json()).features.map((e) => ({ p: e.properties, g: e.geometry, b: caixa(e.geometry.coordinates) }));
+    // Uma GeometryCollection não tem "coordinates": a caixa junta as das suas partes.
+    const coords = (g) => g.coordinates || (g.geometries || []).map(coords);
+    return (await r.json()).features.filter((e) => e.geometry).map((e) => ({ p: e.properties, g: e.geometry, b: caixa(coords(e.geometry)) }));
   }
   // Para as fontes em ladrilhos, carrega só o ladrilho onde está o ponto.
   async function pontoLocal(dl, lat, lng) {
     await Promise.all(Object.entries(dl.fontes).filter(([, v]) => v.ladrilhos).map(async ([f, v]) => {
       const t = v.ladrilhos.tamanho, k = `${Math.floor(lng / t)}_${Math.floor(lat / t)}`;
       if (!v.ladrilhos.lista.includes(k)) { v.els = []; return; }
-      if (!v.cache[k]) v.cache[k] = lerEls(`${dl.base}${f}/${k}.geojson`);
+      if (!v.cache[k]) v.cache[k] = lerEls(`${dl.base}${f}/${k}.geojson`).catch(() => []);
       v.els = await v.cache[k];
     }));
   }
@@ -427,8 +430,13 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
           const t = tocados(v, lat, lng);
           if (!t.length) return;
           // Camada única com todas as condicionantes (GeoServer): cada elemento tocado diz qual é.
-          const nomes = v.por_elemento ? [...new Set(t.map((e) => e.p.nome || v.descricao))] : [v.descricao];
-          nomes.forEach((nome) => hits.push({ nome, k: v.app || chaveDe(nome || ""), origem: v.origem, entidade: v.entidade, documento: v.documento }));
+          // Camada com vários tipos: junta o nome de cada elemento (sozinho se a camada só se chama "Condicionantes").
+          const generica = /condicionantes/i.test(v.descricao || "");
+          const nomes = v.por_elemento ? [...new Set(t.map((e) => {
+            const n = e.p.nome;
+            return !n || n === v.descricao ? v.descricao : generica ? n : `${v.descricao} (${n})`;
+          }))] : [v.descricao];
+          nomes.forEach((nome) => hits.push({ nome, k: v.app || chaveDe(nome || "") || chaveDe(v.descricao || ""), origem: v.origem, entidade: v.entidade, documento: v.documento }));
         });
         r = { m: (await municipios())[norm(concelho)] || null, hits, estado: "ok", data: dl.indice.gerado };
       } else r = await consultarMunicipio(concelho, lat, lng);

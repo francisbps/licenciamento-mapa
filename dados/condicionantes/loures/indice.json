@@ -151,7 +151,8 @@
    "elementos": 46,
    "atualizado": "2026-11-12T00:07:06+00:00",
    "erro": null,
-   "ladrilhos": null
+   "ladrilhos": null,
+   "por_elemento": true
   },
   "CM_12": {
    "origem": "Câmara Municipal de Loures (planta de condicionantes)",
@@ -235,7 +236,8 @@
    "elementos": 2202,
    "atualizado": "2026-11-12T00:07:12+00:00",
    "erro": null,
-   "ladrilhos": null
+   "ladrilhos": null,
+   "por_elemento": true
   },
   "CM_20": {
    "origem": "Câmara Municipal de Loures (planta de condicionantes)",
@@ -247,7 +249,8 @@
    "elementos": 86,
    "atualizado": "2026-11-12T00:07:12+00:00",
    "erro": null,
-   "ladrilhos": null
+   "ladrilhos": null,
+   "por_elemento": true
   },
   "CM_21": {
    "origem": "Câmara Municipal de Loures (planta de condicionantes)",
@@ -271,7 +274,8 @@
    "elementos": 7,
    "atualizado": "2026-11-12T00:07:13+00:00",
    "erro": null,
-   "ladrilhos": null
+   "ladrilhos": null,
+   "por_elemento": true
   },
   "CM_23": {
    "origem": "Câmara Municipal de Loures (planta de condicionantes)",
