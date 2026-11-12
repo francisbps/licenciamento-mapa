@@ -371,7 +371,7 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
   const corDe = (t) => { let h = 0; for (const ch of String(t)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return PALETA[h % PALETA.length]; };
   let CONC = null;
   // Concelhos com dados guardados (lista do carregador) e os seus limites.
-  const concelhos = () => CONC || (CONC = fetch("../carregar/fontes.json").then((r) => r.json()).then((j) => Promise.all(Object.keys(j).filter((k) => !k.startsWith("_")).map(async (k) => {
+  const concelhos = () => CONC || (CONC = fetch("../carregar/fontes.json").then((r) => r.json()).then((j) => Promise.all([...Object.keys(j), ...Object.keys(j._parados || {})].filter((k) => !k.startsWith("_")).map(async (k) => {
     try { const r = await fetch(`../dados/condicionantes/${k}/limite.geojson`); if (!r.ok) return null; const f = await r.json(); return { k, g: f.geometry, b: caixa(f.geometry.coordinates) }; } catch (e) { return null; }
   }))).then((l) => l.filter(Boolean)).catch(() => []));
   let aqui = null; // dados do concelho no centro do mapa (null fora deles ou longe demais)
