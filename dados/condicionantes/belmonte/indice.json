@@ -1,6 +1,6 @@
 {
  "concelho": "belmonte",
- "gerado": "2026-11-12T00:05:08+00:00",
+ "gerado": "2026-11-12T02:56:25+00:00",
  "fontes": {
   "DGT_REN": {
    "origem": "DGT (SNIT, SRUP)",
@@ -8,8 +8,8 @@
    "app": "ren",
    "entidade": "CCDR Centro",
    "ok": false,
-   "tentativa": "2026-11-11T23:02:37+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "tentativa": "2026-11-12T02:56:07+00:00",
+   "erro": "400 Client Error: Bad Request for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_CENTRO/WFService.aspx?service=WFS&version=2.0.0&request=GetFeature&typeNames=gmgml%3AREN_Centro&count=200&startIndex=0&outputFormat=application%2Fjson&bbox=62707.64464587965%2C64055.22158091775%2C73437.1352701"
   },
   "DGT_DPH": {
    "origem": "DGT (SNIT, SRUP)",
@@ -19,10 +19,9 @@
    "ficheiro": "DGT_DPH.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:34:31+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)",
-   "ladrilhos": null,
-   "tentativa": "2026-11-11T23:07:48+00:00"
+   "atualizado": "2026-11-12T02:56:25+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_IC": {
    "origem": "DGT (SNIT, SRUP)",
@@ -64,7 +63,7 @@
    "ficheiro": "CM_0501_calm_leitos.geojson",
    "ok": true,
    "elementos": 9,
-   "atualizado": "2026-11-11T22:57:09+00:00",
+   "atualizado": "2026-11-12T02:54:19+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -77,7 +76,7 @@
    "ficheiro": "CM_0501_ran.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T22:57:09+00:00",
+   "atualizado": "2026-11-12T02:54:20+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -90,7 +89,7 @@
    "ficheiro": "CM_0501_ren_tip_p.geojson",
    "ok": true,
    "elementos": 6,
-   "atualizado": "2026-11-11T22:57:14+00:00",
+   "atualizado": "2026-11-12T02:54:24+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -103,7 +102,7 @@
    "ficheiro": "CM_captacao_de_agua.geojson",
    "ok": true,
    "elementos": 4,
-   "atualizado": "2026-11-11T22:57:15+00:00",
+   "atualizado": "2026-11-12T02:54:25+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -116,7 +115,7 @@
    "ficheiro": "CM_concessoes_geologicas.geojson",
    "ok": true,
    "elementos": 6,
-   "atualizado": "2026-11-11T22:57:15+00:00",
+   "atualizado": "2026-11-12T02:54:25+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -129,7 +128,7 @@
    "ficheiro": "CM_cursos_de_agua_e_respetivos_leitos_e_margens.geojson",
    "ok": true,
    "elementos": 22,
-   "atualizado": "2026-11-11T22:57:16+00:00",
+   "atualizado": "2026-11-12T02:54:26+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -142,7 +141,7 @@
    "ficheiro": "CM_geositios.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-11T22:57:16+00:00",
+   "atualizado": "2026-11-12T02:54:26+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -155,7 +154,7 @@
    "ficheiro": "CM_jazigos_de_uranio.geojson",
    "ok": true,
    "elementos": 8,
-   "atualizado": "2026-11-11T22:57:16+00:00",
+   "atualizado": "2026-11-12T02:54:26+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -165,9 +164,12 @@
    "app": null,
    "entidade": "Câmara municipal",
    "por_elemento": false,
-   "ok": false,
-   "tentativa": "2026-11-11T22:57:16+00:00",
-   "erro": "too many values to unpack (expected 2)"
+   "ficheiro": "CM_linha_da_beira_baixa.geojson",
+   "ok": true,
+   "elementos": 1,
+   "atualizado": "2026-11-12T02:54:26+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_patrimonio_classificado": {
    "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
@@ -178,7 +180,7 @@
    "ficheiro": "CM_patrimonio_classificado.geojson",
    "ok": true,
    "elementos": 9,
-   "atualizado": "2026-11-11T22:57:17+00:00",
+   "atualizado": "2026-11-12T02:54:27+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -191,7 +193,7 @@
    "ficheiro": "CM_patrimonio_zona_protecao.geojson",
    "ok": true,
    "elementos": 15,
-   "atualizado": "2026-11-11T22:57:17+00:00",
+   "atualizado": "2026-11-12T02:54:27+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -204,7 +206,7 @@
    "ficheiro": "CM_perigosidade_de_incendio_rural.geojson",
    "ok": true,
    "elementos": 286,
-   "atualizado": "2026-11-11T22:57:18+00:00",
+   "atualizado": "2026-11-12T02:54:28+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -214,9 +216,12 @@
    "app": null,
    "entidade": "Câmara municipal",
    "por_elemento": false,
-   "ok": false,
-   "tentativa": "2026-11-11T22:57:18+00:00",
-   "erro": "too many values to unpack (expected 2)"
+   "ficheiro": "CM_rnt.geojson",
+   "ok": true,
+   "elementos": 2,
+   "atualizado": "2026-11-12T02:54:28+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_rede_eletrica": {
    "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
@@ -224,9 +229,12 @@
    "app": null,
    "entidade": "Câmara municipal",
    "por_elemento": false,
-   "ok": false,
-   "tentativa": "2026-11-11T22:57:18+00:00",
-   "erro": "too many values to unpack (expected 2)"
+   "ficheiro": "CM_rede_eletrica.geojson",
+   "ok": true,
+   "elementos": 487,
+   "atualizado": "2026-11-12T02:54:29+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_rede_rodoviaria": {
    "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
@@ -234,9 +242,12 @@
    "app": null,
    "entidade": "Câmara municipal",
    "por_elemento": false,
-   "ok": false,
-   "tentativa": "2026-11-11T22:57:20+00:00",
-   "erro": "too many values to unpack (expected 2)"
+   "ficheiro": "CM_rede_rodoviaria.geojson",
+   "ok": true,
+   "elementos": 31,
+   "atualizado": "2026-11-12T02:54:32+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_rede_de_rega_primaria": {
    "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
@@ -244,9 +255,12 @@
    "app": null,
    "entidade": "Câmara municipal",
    "por_elemento": false,
-   "ok": false,
-   "tentativa": "2026-11-11T22:57:21+00:00",
-   "erro": "too many values to unpack (expected 2)"
+   "ficheiro": "CM_rede_de_rega_primaria.geojson",
+   "ok": true,
+   "elementos": 3,
+   "atualizado": "2026-11-12T02:54:32+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_rede_de_rega_secundaria": {
    "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
@@ -254,9 +268,12 @@
    "app": null,
    "entidade": "Câmara municipal",
    "por_elemento": false,
-   "ok": false,
-   "tentativa": "2026-11-11T22:57:21+00:00",
-   "erro": "too many values to unpack (expected 2)"
+   "ficheiro": "CM_rede_de_rega_secundaria.geojson",
+   "ok": true,
+   "elementos": 342,
+   "atualizado": "2026-11-12T02:54:33+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_rede_rodoviaria_existente": {
    "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
@@ -264,9 +281,12 @@
    "app": null,
    "entidade": "Câmara municipal",
    "por_elemento": false,
-   "ok": false,
-   "tentativa": "2026-11-11T22:57:23+00:00",
-   "erro": "too many values to unpack (expected 2)"
+   "ficheiro": "CM_rede_rodoviaria_existente.geojson",
+   "ok": true,
+   "elementos": 31,
+   "atualizado": "2026-11-12T02:54:35+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_reserva_agricola_nacional": {
    "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
@@ -277,7 +297,7 @@
    "ficheiro": "CM_reserva_agricola_nacional.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T22:57:24+00:00",
+   "atualizado": "2026-11-12T02:54:36+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -290,7 +310,7 @@
    "ficheiro": "CM_servidao_rodoviaria.geojson",
    "ok": true,
    "elementos": 5,
-   "atualizado": "2026-11-11T22:57:24+00:00",
+   "atualizado": "2026-11-12T02:54:36+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -300,9 +320,12 @@
    "app": null,
    "entidade": "Câmara municipal",
    "por_elemento": false,
-   "ok": false,
-   "tentativa": "2026-11-11T22:57:24+00:00",
-   "erro": "too many values to unpack (expected 2)"
+   "ficheiro": "CM_vertices_geodesicos.geojson",
+   "ok": true,
+   "elementos": 10,
+   "atualizado": "2026-11-12T02:54:37+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_zona_inundavel": {
    "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
@@ -313,7 +336,7 @@
    "ficheiro": "CM_zona_inundavel.geojson",
    "ok": true,
    "elementos": 4,
-   "atualizado": "2026-11-11T22:57:25+00:00",
+   "atualizado": "2026-11-12T02:54:37+00:00",
    "erro": null,
    "ladrilhos": null
   },
