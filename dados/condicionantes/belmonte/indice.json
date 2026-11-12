@@ -1,6 +1,6 @@
 {
  "concelho": "belmonte",
- "gerado": "2026-11-12T02:56:25+00:00",
+ "gerado": "2026-11-12T03:51:30+00:00",
  "fontes": {
   "DGT_REN": {
    "origem": "DGT (SNIT, SRUP)",
@@ -8,7 +8,7 @@
    "app": "ren",
    "entidade": "CCDR Centro",
    "ok": false,
-   "tentativa": "2026-11-12T02:56:07+00:00",
+   "tentativa": "2026-11-12T03:01:33+00:00",
    "erro": "400 Client Error: Bad Request for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_CENTRO/WFService.aspx?service=WFS&version=2.0.0&request=GetFeature&typeNames=gmgml%3AREN_Centro&count=200&startIndex=0&outputFormat=application%2Fjson&bbox=62707.64464587965%2C64055.22158091775%2C73437.1352701"
   },
   "DGT_DPH": {
@@ -19,7 +19,7 @@
    "ficheiro": "DGT_DPH.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-12T02:56:25+00:00",
+   "atualizado": "2026-11-12T03:01:45+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -29,8 +29,8 @@
    "app": "pat",
    "entidade": "Património Cultural, I.P.",
    "ok": false,
-   "tentativa": "2026-11-11T23:13:00+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "tentativa": "2026-11-12T03:16:51+00:00",
+   "erro": "mais de 15 min sem terminar"
   },
   "DGT_EIP": {
    "origem": "DGT (SNIT, SRUP)",
@@ -38,8 +38,8 @@
    "app": "edificios_publicos_valor",
    "entidade": "Entidade que tutela o edifício",
    "ok": false,
-   "tentativa": "2026-11-11T23:15:51+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "tentativa": "2026-11-12T03:31:56+00:00",
+   "erro": "mais de 15 min sem terminar"
   },
   "DGT_AA": {
    "origem": "DGT (SNIT, SRUP)",
@@ -49,10 +49,9 @@
    "ficheiro": "DGT_AA.geojson",
    "ok": true,
    "elementos": 0,
-   "atualizado": "2026-11-11T20:08:42+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)",
-   "ladrilhos": null,
-   "tentativa": "2026-11-11T23:21:02+00:00"
+   "atualizado": "2026-11-12T03:32:46+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "CM_0501_calm_leitos": {
    "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
@@ -63,7 +62,7 @@
    "ficheiro": "CM_0501_calm_leitos.geojson",
    "ok": true,
    "elementos": 9,
-   "atualizado": "2026-11-12T02:54:19+00:00",
+   "atualizado": "2026-11-12T03:00:14+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -76,7 +75,7 @@
    "ficheiro": "CM_0501_ran.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-12T02:54:20+00:00",
+   "atualizado": "2026-11-12T03:00:14+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -89,7 +88,7 @@
    "ficheiro": "CM_0501_ren_tip_p.geojson",
    "ok": true,
    "elementos": 6,
-   "atualizado": "2026-11-12T02:54:24+00:00",
+   "atualizado": "2026-11-12T03:00:19+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -102,7 +101,7 @@
    "ficheiro": "CM_captacao_de_agua.geojson",
    "ok": true,
    "elementos": 4,
-   "atualizado": "2026-11-12T02:54:25+00:00",
+   "atualizado": "2026-11-12T03:00:19+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -115,7 +114,7 @@
    "ficheiro": "CM_concessoes_geologicas.geojson",
    "ok": true,
    "elementos": 6,
-   "atualizado": "2026-11-12T02:54:25+00:00",
+   "atualizado": "2026-11-12T03:00:19+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -128,7 +127,7 @@
    "ficheiro": "CM_cursos_de_agua_e_respetivos_leitos_e_margens.geojson",
    "ok": true,
    "elementos": 22,
-   "atualizado": "2026-11-12T02:54:26+00:00",
+   "atualizado": "2026-11-12T03:00:20+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -141,7 +140,7 @@
    "ficheiro": "CM_geositios.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-12T02:54:26+00:00",
+   "atualizado": "2026-11-12T03:00:20+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -154,7 +153,7 @@
    "ficheiro": "CM_jazigos_de_uranio.geojson",
    "ok": true,
    "elementos": 8,
-   "atualizado": "2026-11-12T02:54:26+00:00",
+   "atualizado": "2026-11-12T03:00:20+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -167,7 +166,7 @@
    "ficheiro": "CM_linha_da_beira_baixa.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-12T02:54:26+00:00",
+   "atualizado": "2026-11-12T03:00:21+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -180,7 +179,7 @@
    "ficheiro": "CM_patrimonio_classificado.geojson",
    "ok": true,
    "elementos": 9,
-   "atualizado": "2026-11-12T02:54:27+00:00",
+   "atualizado": "2026-11-12T03:00:21+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -193,7 +192,7 @@
    "ficheiro": "CM_patrimonio_zona_protecao.geojson",
    "ok": true,
    "elementos": 15,
-   "atualizado": "2026-11-12T02:54:27+00:00",
+   "atualizado": "2026-11-12T03:00:21+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -206,7 +205,7 @@
    "ficheiro": "CM_perigosidade_de_incendio_rural.geojson",
    "ok": true,
    "elementos": 286,
-   "atualizado": "2026-11-12T02:54:28+00:00",
+   "atualizado": "2026-11-12T03:00:22+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -219,7 +218,7 @@
    "ficheiro": "CM_rnt.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-12T02:54:28+00:00",
+   "atualizado": "2026-11-12T03:00:22+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -228,11 +227,11 @@
    "descricao": "Rede Eletrica",
    "app": null,
    "entidade": "Câmara municipal",
-   "por_elemento": false,
+   "por_elemento": true,
    "ficheiro": "CM_rede_eletrica.geojson",
    "ok": true,
    "elementos": 487,
-   "atualizado": "2026-11-12T02:54:29+00:00",
+   "atualizado": "2026-11-12T03:00:23+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -245,7 +244,7 @@
    "ficheiro": "CM_rede_rodoviaria.geojson",
    "ok": true,
    "elementos": 31,
-   "atualizado": "2026-11-12T02:54:32+00:00",
+   "atualizado": "2026-11-12T03:00:25+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -258,7 +257,7 @@
    "ficheiro": "CM_rede_de_rega_primaria.geojson",
    "ok": true,
    "elementos": 3,
-   "atualizado": "2026-11-12T02:54:32+00:00",
+   "atualizado": "2026-11-12T03:00:26+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -271,7 +270,7 @@
    "ficheiro": "CM_rede_de_rega_secundaria.geojson",
    "ok": true,
    "elementos": 342,
-   "atualizado": "2026-11-12T02:54:33+00:00",
+   "atualizado": "2026-11-12T03:00:26+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -284,7 +283,7 @@
    "ficheiro": "CM_rede_rodoviaria_existente.geojson",
    "ok": true,
    "elementos": 31,
-   "atualizado": "2026-11-12T02:54:35+00:00",
+   "atualizado": "2026-11-12T03:00:29+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -297,7 +296,7 @@
    "ficheiro": "CM_reserva_agricola_nacional.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-12T02:54:36+00:00",
+   "atualizado": "2026-11-12T03:00:29+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -310,7 +309,7 @@
    "ficheiro": "CM_servidao_rodoviaria.geojson",
    "ok": true,
    "elementos": 5,
-   "atualizado": "2026-11-12T02:54:36+00:00",
+   "atualizado": "2026-11-12T03:00:30+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -323,7 +322,7 @@
    "ficheiro": "CM_vertices_geodesicos.geojson",
    "ok": true,
    "elementos": 10,
-   "atualizado": "2026-11-12T02:54:37+00:00",
+   "atualizado": "2026-11-12T03:00:30+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -336,7 +335,7 @@
    "ficheiro": "CM_zona_inundavel.geojson",
    "ok": true,
    "elementos": 4,
-   "atualizado": "2026-11-12T02:54:37+00:00",
+   "atualizado": "2026-11-12T03:00:30+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -345,18 +344,24 @@
    "descricao": "GO",
    "app": "gas",
    "entidade": "REN Gasodutos e DGEG",
-   "ok": false,
-   "tentativa": "2026-11-11T23:23:50+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "ficheiro": "DGT_GO.geojson",
+   "ok": true,
+   "elementos": 1,
+   "atualizado": "2026-11-12T03:32:55+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_TC": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "TC",
    "app": "telecomunicacoes_radioeletricas",
    "entidade": "ANACOM",
-   "ok": false,
-   "tentativa": "2026-11-11T23:26:50+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "ficheiro": "DGT_TC.geojson",
+   "ok": true,
+   "elementos": 3,
+   "atualizado": "2026-11-12T03:33:29+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_MG": {
    "origem": "DGT (SNIT, SRUP)",
@@ -364,44 +369,56 @@
    "app": "marcos_geodesicos",
    "entidade": "Direção-Geral do Território",
    "ok": false,
-   "tentativa": "2026-11-11T23:30:09+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "tentativa": "2026-11-12T03:33:43+00:00",
+   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_MG_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
   },
   "DGT_DN": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "DN",
    "app": "militar",
    "entidade": "Ministério da Defesa Nacional",
-   "ok": false,
-   "tentativa": "2026-11-11T23:35:21+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "ficheiro": "DGT_DN.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T03:34:10+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_IPE": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "IPE",
    "app": "militar",
    "entidade": "PSP / Defesa Nacional",
-   "ok": false,
-   "tentativa": "2026-11-11T23:40:32+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "ficheiro": "DGT_IPE.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T03:34:38+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_EPTM": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "EPTM",
    "app": "estabelecimentos_prisionais",
    "entidade": "DGRSP",
-   "ok": false,
-   "tentativa": "2026-11-11T23:45:44+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "ficheiro": "DGT_EPTM.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T03:34:53+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_IA": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "IA",
    "app": "instalacoes_aduaneiras",
    "entidade": "Autoridade Tributária e Aduaneira",
-   "ok": false,
-   "tentativa": "2026-11-11T23:48:44+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "ficheiro": "DGT_IA.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T03:35:13+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_AIP": {
    "origem": "DGT (SNIT, SRUP)",
@@ -409,35 +426,44 @@
    "app": "arvoredo_interesse_publico",
    "entidade": "ICNF, I.P.",
    "ok": false,
-   "tentativa": "2026-11-11T23:51:45+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "tentativa": "2026-11-12T03:50:15+00:00",
+   "erro": "mais de 15 min sem terminar"
   },
   "DGT_AP": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "AP",
    "app": "natura",
    "entidade": "ICNF, I.P.",
-   "ok": false,
-   "tentativa": "2026-11-11T23:56:56+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "ficheiro": "DGT_AP.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T03:50:42+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_ZPE": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "ZPE",
    "app": "natura",
    "entidade": "ICNF, I.P.",
-   "ok": false,
-   "tentativa": "2026-11-11T23:59:56+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "ficheiro": "DGT_ZPE.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T03:51:01+00:00",
+   "erro": null,
+   "ladrilhos": null
   },
   "DGT_ZEC": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "ZEC",
    "app": "natura",
    "entidade": "ICNF, I.P.",
-   "ok": false,
-   "tentativa": "2026-11-12T00:05:08+00:00",
-   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+   "ficheiro": "DGT_ZEC.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T03:51:30+00:00",
+   "erro": null,
+   "ladrilhos": null
   }
  }
 }
