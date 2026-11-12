@@ -1,6 +1,6 @@
 {
  "concelho": "sintra",
- "gerado": "2026-11-11T20:08:24+00:00",
+ "gerado": "2026-11-12T01:10:44+00:00",
  "fontes": {
   "CM_244": {
    "origem": "Câmara Municipal de Sintra (planta de condicionantes)",
@@ -10,7 +10,7 @@
    "ficheiro": "CM_244.geojson",
    "ok": true,
    "elementos": 23818,
-   "atualizado": "2026-11-11T18:06:51+00:00",
+   "atualizado": "2026-11-12T00:06:18+00:00",
    "erro": null,
    "ladrilhos": {
     "tamanho": 0.05,
@@ -50,7 +50,7 @@
    "ficheiro": "CM_245.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:13+00:00",
+   "atualizado": "2026-11-12T00:06:42+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -62,7 +62,7 @@
    "ficheiro": "CM_247.geojson",
    "ok": true,
    "elementos": 111,
-   "atualizado": "2026-11-11T18:07:13+00:00",
+   "atualizado": "2026-11-12T00:06:43+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -74,7 +74,7 @@
    "ficheiro": "CM_248.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:16+00:00",
+   "atualizado": "2026-11-12T00:06:47+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -86,7 +86,7 @@
    "ficheiro": "CM_249.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:17+00:00",
+   "atualizado": "2026-11-12T00:06:48+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -98,7 +98,7 @@
    "ficheiro": "CM_250.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:17+00:00",
+   "atualizado": "2026-11-12T00:06:48+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -110,7 +110,7 @@
    "ficheiro": "CM_251.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:17+00:00",
+   "atualizado": "2026-11-12T00:06:49+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -122,7 +122,7 @@
    "ficheiro": "CM_253.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:18+00:00",
+   "atualizado": "2026-11-12T00:06:49+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -134,7 +134,7 @@
    "ficheiro": "CM_254.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:18+00:00",
+   "atualizado": "2026-11-12T00:06:49+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -146,7 +146,7 @@
    "ficheiro": "CM_255.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:18+00:00",
+   "atualizado": "2026-11-12T00:06:50+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -158,7 +158,7 @@
    "ficheiro": "CM_258.geojson",
    "ok": true,
    "elementos": 7,
-   "atualizado": "2026-11-11T18:07:18+00:00",
+   "atualizado": "2026-11-12T00:06:50+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -170,7 +170,7 @@
    "ficheiro": "CM_259.geojson",
    "ok": true,
    "elementos": 57,
-   "atualizado": "2026-11-11T18:07:19+00:00",
+   "atualizado": "2026-11-12T00:06:51+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -182,7 +182,7 @@
    "ficheiro": "CM_260.geojson",
    "ok": true,
    "elementos": 97,
-   "atualizado": "2026-11-11T18:07:19+00:00",
+   "atualizado": "2026-11-12T00:06:52+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -194,7 +194,7 @@
    "ficheiro": "CM_262.geojson",
    "ok": true,
    "elementos": 15,
-   "atualizado": "2026-11-11T18:07:20+00:00",
+   "atualizado": "2026-11-12T00:06:52+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -206,7 +206,7 @@
    "ficheiro": "CM_264.geojson",
    "ok": true,
    "elementos": 169,
-   "atualizado": "2026-11-11T18:07:21+00:00",
+   "atualizado": "2026-11-12T00:06:54+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -218,7 +218,7 @@
    "ficheiro": "CM_265.geojson",
    "ok": true,
    "elementos": 14,
-   "atualizado": "2026-11-11T18:07:21+00:00",
+   "atualizado": "2026-11-12T00:06:55+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -230,7 +230,7 @@
    "ficheiro": "CM_266.geojson",
    "ok": true,
    "elementos": 14,
-   "atualizado": "2026-11-11T18:07:22+00:00",
+   "atualizado": "2026-11-12T00:06:55+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -242,7 +242,7 @@
    "ficheiro": "CM_267.geojson",
    "ok": true,
    "elementos": 14,
-   "atualizado": "2026-11-11T18:07:22+00:00",
+   "atualizado": "2026-11-12T00:06:56+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -254,7 +254,7 @@
    "ficheiro": "CM_268.geojson",
    "ok": true,
    "elementos": 148,
-   "atualizado": "2026-11-11T18:07:23+00:00",
+   "atualizado": "2026-11-12T00:06:57+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -266,7 +266,7 @@
    "ficheiro": "CM_271.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:23+00:00",
+   "atualizado": "2026-11-12T00:06:57+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -278,7 +278,7 @@
    "ficheiro": "CM_272.geojson",
    "ok": true,
    "elementos": 323,
-   "atualizado": "2026-11-11T18:07:24+00:00",
+   "atualizado": "2026-11-12T00:06:59+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -290,7 +290,7 @@
    "ficheiro": "CM_273.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:31+00:00",
+   "atualizado": "2026-11-12T00:07:08+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -302,7 +302,7 @@
    "ficheiro": "CM_275.geojson",
    "ok": true,
    "elementos": 4,
-   "atualizado": "2026-11-11T18:07:31+00:00",
+   "atualizado": "2026-11-12T00:07:09+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -314,7 +314,7 @@
    "ficheiro": "CM_276.geojson",
    "ok": true,
    "elementos": 12,
-   "atualizado": "2026-11-11T18:07:32+00:00",
+   "atualizado": "2026-11-12T00:07:09+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -326,7 +326,7 @@
    "ficheiro": "CM_277.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:32+00:00",
+   "atualizado": "2026-11-12T00:07:10+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -338,7 +338,7 @@
    "ficheiro": "CM_278.geojson",
    "ok": true,
    "elementos": 53,
-   "atualizado": "2026-11-11T18:07:33+00:00",
+   "atualizado": "2026-11-12T00:07:11+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -350,7 +350,7 @@
    "ficheiro": "CM_279.geojson",
    "ok": true,
    "elementos": 16,
-   "atualizado": "2026-11-11T18:07:33+00:00",
+   "atualizado": "2026-11-12T00:07:11+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -362,7 +362,7 @@
    "ficheiro": "CM_280.geojson",
    "ok": true,
    "elementos": 7,
-   "atualizado": "2026-11-11T18:07:34+00:00",
+   "atualizado": "2026-11-12T00:07:12+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -374,7 +374,7 @@
    "ficheiro": "CM_281.geojson",
    "ok": true,
    "elementos": 11,
-   "atualizado": "2026-11-11T18:07:35+00:00",
+   "atualizado": "2026-11-12T00:07:13+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -386,7 +386,7 @@
    "ficheiro": "CM_283.geojson",
    "ok": true,
    "elementos": 6137,
-   "atualizado": "2026-11-11T18:07:43+00:00",
+   "atualizado": "2026-11-12T00:07:24+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -398,7 +398,7 @@
    "ficheiro": "CM_284.geojson",
    "ok": true,
    "elementos": 2826,
-   "atualizado": "2026-11-11T18:07:47+00:00",
+   "atualizado": "2026-11-12T00:07:29+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -410,7 +410,7 @@
    "ficheiro": "CM_285.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:51+00:00",
+   "atualizado": "2026-11-12T00:07:33+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -422,7 +422,7 @@
    "ficheiro": "CM_287.geojson",
    "ok": true,
    "elementos": 74,
-   "atualizado": "2026-11-11T18:07:52+00:00",
+   "atualizado": "2026-11-12T00:07:34+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -434,7 +434,7 @@
    "ficheiro": "CM_290.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:52+00:00",
+   "atualizado": "2026-11-12T00:07:35+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -446,7 +446,7 @@
    "ficheiro": "CM_291.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:52+00:00",
+   "atualizado": "2026-11-12T00:07:35+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -458,7 +458,7 @@
    "ficheiro": "CM_293.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:53+00:00",
+   "atualizado": "2026-11-12T00:07:35+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -470,7 +470,7 @@
    "ficheiro": "CM_294.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:53+00:00",
+   "atualizado": "2026-11-12T00:07:36+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -482,7 +482,7 @@
    "ficheiro": "CM_298.geojson",
    "ok": true,
    "elementos": 77,
-   "atualizado": "2026-11-11T18:07:54+00:00",
+   "atualizado": "2026-11-12T00:07:37+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -494,7 +494,7 @@
    "ficheiro": "CM_299.geojson",
    "ok": true,
    "elementos": 79,
-   "atualizado": "2026-11-11T18:07:54+00:00",
+   "atualizado": "2026-11-12T00:07:38+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -506,7 +506,7 @@
    "ficheiro": "CM_300.geojson",
    "ok": true,
    "elementos": 24,
-   "atualizado": "2026-11-11T18:07:55+00:00",
+   "atualizado": "2026-11-12T00:07:38+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -518,7 +518,7 @@
    "ficheiro": "CM_301.geojson",
    "ok": true,
    "elementos": 50,
-   "atualizado": "2026-11-11T18:07:56+00:00",
+   "atualizado": "2026-11-12T00:07:39+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -530,7 +530,7 @@
    "ficheiro": "CM_302.geojson",
    "ok": true,
    "elementos": 13,
-   "atualizado": "2026-11-11T18:07:56+00:00",
+   "atualizado": "2026-11-12T00:07:40+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -542,7 +542,7 @@
    "ficheiro": "CM_305.geojson",
    "ok": true,
    "elementos": 6,
-   "atualizado": "2026-11-11T18:07:56+00:00",
+   "atualizado": "2026-11-12T00:07:40+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -554,7 +554,7 @@
    "ficheiro": "CM_306.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:07:57+00:00",
+   "atualizado": "2026-11-12T00:07:40+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -566,7 +566,7 @@
    "ficheiro": "CM_308.geojson",
    "ok": true,
    "elementos": 3,
-   "atualizado": "2026-11-11T18:07:57+00:00",
+   "atualizado": "2026-11-12T00:07:41+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -578,7 +578,7 @@
    "ficheiro": "CM_309.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-11T18:07:57+00:00",
+   "atualizado": "2026-11-12T00:07:41+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -590,7 +590,7 @@
    "ficheiro": "CM_310.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-11T18:07:58+00:00",
+   "atualizado": "2026-11-12T00:07:42+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -602,7 +602,7 @@
    "ficheiro": "CM_311.geojson",
    "ok": true,
    "elementos": 24,
-   "atualizado": "2026-11-11T18:07:58+00:00",
+   "atualizado": "2026-11-12T00:07:42+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -614,7 +614,7 @@
    "ficheiro": "CM_312.geojson",
    "ok": true,
    "elementos": 33,
-   "atualizado": "2026-11-11T18:07:58+00:00",
+   "atualizado": "2026-11-12T00:07:43+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -626,7 +626,7 @@
    "ficheiro": "CM_317.geojson",
    "ok": true,
    "elementos": 43,
-   "atualizado": "2026-11-11T18:07:59+00:00",
+   "atualizado": "2026-11-12T00:07:43+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -638,7 +638,7 @@
    "ficheiro": "CM_318.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-11T18:07:59+00:00",
+   "atualizado": "2026-11-12T00:07:43+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -650,7 +650,7 @@
    "ficheiro": "CM_319.geojson",
    "ok": true,
    "elementos": 571,
-   "atualizado": "2026-11-11T18:08:00+00:00",
+   "atualizado": "2026-11-12T00:07:45+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -662,7 +662,7 @@
    "ficheiro": "CM_320.geojson",
    "ok": true,
    "elementos": 38,
-   "atualizado": "2026-11-11T18:08:00+00:00",
+   "atualizado": "2026-11-12T00:07:45+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -674,7 +674,7 @@
    "ficheiro": "CM_321.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:08:01+00:00",
+   "atualizado": "2026-11-12T00:07:46+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -686,7 +686,7 @@
    "ficheiro": "CM_322.geojson",
    "ok": true,
    "elementos": 89,
-   "atualizado": "2026-11-11T18:08:01+00:00",
+   "atualizado": "2026-11-12T00:07:46+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -698,7 +698,7 @@
    "ficheiro": "CM_324.geojson",
    "ok": true,
    "elementos": 1750,
-   "atualizado": "2026-11-11T18:08:03+00:00",
+   "atualizado": "2026-11-12T00:07:49+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -710,7 +710,7 @@
    "ficheiro": "CM_325.geojson",
    "ok": true,
    "elementos": 35,
-   "atualizado": "2026-11-11T18:08:04+00:00",
+   "atualizado": "2026-11-12T00:07:49+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -722,7 +722,7 @@
    "ficheiro": "CM_327.geojson",
    "ok": true,
    "elementos": 1223,
-   "atualizado": "2026-11-11T18:08:06+00:00",
+   "atualizado": "2026-11-12T00:07:52+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -734,7 +734,7 @@
    "ficheiro": "CM_328.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:08:07+00:00",
+   "atualizado": "2026-11-12T00:07:53+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -746,7 +746,7 @@
    "ficheiro": "CM_330.geojson",
    "ok": true,
    "elementos": 4177,
-   "atualizado": "2026-11-11T18:08:15+00:00",
+   "atualizado": "2026-11-12T00:08:04+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -758,7 +758,7 @@
    "ficheiro": "CM_331.geojson",
    "ok": true,
    "elementos": 87,
-   "atualizado": "2026-11-11T18:08:15+00:00",
+   "atualizado": "2026-11-12T00:08:04+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -770,7 +770,7 @@
    "ficheiro": "CM_332.geojson",
    "ok": true,
    "elementos": 8,
-   "atualizado": "2026-11-11T18:08:15+00:00",
+   "atualizado": "2026-11-12T00:08:05+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -782,7 +782,7 @@
    "ficheiro": "CM_334.geojson",
    "ok": true,
    "elementos": 8,
-   "atualizado": "2026-11-11T18:08:16+00:00",
+   "atualizado": "2026-11-12T00:08:06+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -794,7 +794,7 @@
    "ficheiro": "CM_336.geojson",
    "ok": true,
    "elementos": 1289,
-   "atualizado": "2026-11-11T18:08:18+00:00",
+   "atualizado": "2026-11-12T00:08:08+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -806,7 +806,7 @@
    "ficheiro": "CM_337.geojson",
    "ok": true,
    "elementos": 3211,
-   "atualizado": "2026-11-11T18:08:22+00:00",
+   "atualizado": "2026-11-12T00:08:14+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -818,7 +818,7 @@
    "ficheiro": "CM_339.geojson",
    "ok": true,
    "elementos": 1314,
-   "atualizado": "2026-11-11T18:08:24+00:00",
+   "atualizado": "2026-11-12T00:08:17+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -830,7 +830,7 @@
    "ficheiro": "CM_340.geojson",
    "ok": true,
    "elementos": 5174,
-   "atualizado": "2026-11-11T18:08:31+00:00",
+   "atualizado": "2026-11-12T00:08:26+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -842,7 +842,7 @@
    "ficheiro": "CM_342.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:08:32+00:00",
+   "atualizado": "2026-11-12T00:08:27+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -854,7 +854,7 @@
    "ficheiro": "CM_343.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:08:33+00:00",
+   "atualizado": "2026-11-12T00:08:29+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -866,7 +866,7 @@
    "ficheiro": "CM_344.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:08:33+00:00",
+   "atualizado": "2026-11-12T00:08:29+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -878,7 +878,7 @@
    "ficheiro": "CM_345.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:08:34+00:00",
+   "atualizado": "2026-11-12T00:08:31+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -890,7 +890,7 @@
    "ficheiro": "CM_348.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-11T18:08:35+00:00",
+   "atualizado": "2026-11-12T00:08:32+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -902,7 +902,7 @@
    "ficheiro": "CM_349.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:08:35+00:00",
+   "atualizado": "2026-11-12T00:08:33+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -914,7 +914,7 @@
    "ficheiro": "CM_350.geojson",
    "ok": true,
    "elementos": 11,
-   "atualizado": "2026-11-11T18:08:36+00:00",
+   "atualizado": "2026-11-12T00:08:33+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -926,7 +926,7 @@
    "ficheiro": "CM_352.geojson",
    "ok": true,
    "elementos": 5,
-   "atualizado": "2026-11-11T18:08:36+00:00",
+   "atualizado": "2026-11-12T00:08:34+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -938,7 +938,7 @@
    "ficheiro": "CM_353.geojson",
    "ok": true,
    "elementos": 11,
-   "atualizado": "2026-11-11T18:08:36+00:00",
+   "atualizado": "2026-11-12T00:08:34+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -950,7 +950,7 @@
    "ficheiro": "CM_354.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:08:37+00:00",
+   "atualizado": "2026-11-12T00:08:35+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -962,7 +962,7 @@
    "ficheiro": "CM_355.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:08:37+00:00",
+   "atualizado": "2026-11-12T00:08:35+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -974,7 +974,7 @@
    "ficheiro": "CM_356.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-11T18:08:37+00:00",
+   "atualizado": "2026-11-12T00:08:36+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -986,7 +986,7 @@
    "ficheiro": "CM_357.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-11T18:08:38+00:00",
+   "atualizado": "2026-11-12T00:08:36+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -998,7 +998,7 @@
    "ficheiro": "CM_359.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:08:38+00:00",
+   "atualizado": "2026-11-12T00:08:36+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -1010,7 +1010,7 @@
    "ficheiro": "CM_360.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:08:38+00:00",
+   "atualizado": "2026-11-12T00:08:37+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -1022,7 +1022,7 @@
    "ficheiro": "CM_362.geojson",
    "ok": true,
    "elementos": 70,
-   "atualizado": "2026-11-11T18:08:39+00:00",
+   "atualizado": "2026-11-12T00:08:37+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -1034,7 +1034,7 @@
    "ficheiro": "CM_363.geojson",
    "ok": true,
    "elementos": 70,
-   "atualizado": "2026-11-11T18:08:39+00:00",
+   "atualizado": "2026-11-12T00:08:38+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -1046,7 +1046,7 @@
    "ficheiro": "CM_366.geojson",
    "ok": true,
    "elementos": 8,
-   "atualizado": "2026-11-11T18:08:40+00:00",
+   "atualizado": "2026-11-12T00:08:39+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -1058,7 +1058,7 @@
    "ficheiro": "CM_367.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-11T18:08:40+00:00",
+   "atualizado": "2026-11-12T00:08:39+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -1070,7 +1070,7 @@
    "ficheiro": "CM_368.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-11T18:08:40+00:00",
+   "atualizado": "2026-11-12T00:08:40+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -1082,7 +1082,7 @@
    "ficheiro": "CM_371.geojson",
    "ok": true,
    "elementos": 118490,
-   "atualizado": "2026-11-11T18:13:20+00:00",
+   "atualizado": "2026-11-12T00:15:21+00:00",
    "erro": null,
    "ladrilhos": {
     "tamanho": 0.05,
@@ -1122,8 +1122,8 @@
    "app": "ren",
    "entidade": "CCDR LVT",
    "ok": false,
-   "tentativa": "2026-11-11T18:14:47+00:00",
-   "erro": "400 Client Error: Bad Request for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_LVT/WFService.aspx?service=WFS&version=2.0.0&request=GetFeature&typeNames=gmgml%3AREN_LVT&count=200&startIndex=0&outputFormat=application%2Fjson&bbox=-118995.56287194129%2C-102736.88965265093%2C-94307.54583455"
+   "tentativa": "2026-11-12T00:20:33+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
   },
   "DGT_DPH": {
    "origem": "DGT (SNIT, SRUP)",
@@ -1131,11 +1131,12 @@
    "app": "hidrico",
    "entidade": "APA, I.P.",
    "ficheiro": "DGT_DPH.geojson",
-   "ok": true,
+   "ok": false,
    "elementos": 5,
    "atualizado": "2026-11-11T18:16:34+00:00",
-   "erro": null,
-   "ladrilhos": null
+   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_DPH_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities",
+   "ladrilhos": null,
+   "tentativa": "2026-11-12T00:23:34+00:00"
   },
   "DGT_IC": {
    "origem": "DGT (SNIT, SRUP)",
@@ -1143,7 +1144,7 @@
    "app": "pat",
    "entidade": "Património Cultural, I.P.",
    "ok": false,
-   "tentativa": "2026-11-11T19:44:28+00:00",
+   "tentativa": "2026-11-12T00:28:15+00:00",
    "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
   },
   "DGT_EIP": {
@@ -1152,7 +1153,7 @@
    "app": "edificios_publicos_valor",
    "entidade": "Entidade que tutela o edifício",
    "ok": false,
-   "tentativa": "2026-11-11T19:49:39+00:00",
+   "tentativa": "2026-11-12T00:33:27+00:00",
    "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
   },
   "DGT_AA": {
@@ -1161,9 +1162,115 @@
    "app": "aero",
    "entidade": "ANAC",
    "ficheiro": "DGT_AA.geojson",
-   "ok": true,
+   "ok": false,
    "elementos": 28,
    "atualizado": "2026-11-11T20:08:24+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)",
+   "ladrilhos": null,
+   "tentativa": "2026-11-12T00:38:39+00:00"
+  },
+  "DGT_GO": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "GO",
+   "app": "gas",
+   "entidade": "REN Gasodutos e DGEG",
+   "ok": false,
+   "tentativa": "2026-11-12T00:43:51+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_TC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "TC",
+   "app": "telecomunicacoes_radioeletricas",
+   "entidade": "ANACOM",
+   "ok": false,
+   "tentativa": "2026-11-12T00:49:02+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_MG": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "MG",
+   "app": "marcos_geodesicos",
+   "entidade": "Direção-Geral do Território",
+   "ok": false,
+   "tentativa": "2026-11-12T00:52:03+00:00",
+   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_MG_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_DN": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "DN",
+   "app": "militar",
+   "entidade": "Ministério da Defesa Nacional",
+   "ok": false,
+   "tentativa": "2026-11-12T00:57:14+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_IPE": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IPE",
+   "app": "militar",
+   "entidade": "PSP / Defesa Nacional",
+   "ok": false,
+   "tentativa": "2026-11-12T01:01:31+00:00",
+   "erro": "502 Server Error: Bad Gateway for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_IPE_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_EPTM": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "EPTM",
+   "app": "estabelecimentos_prisionais",
+   "entidade": "DGRSP",
+   "ok": false,
+   "tentativa": "2026-11-12T01:01:42+00:00",
+   "erro": "502 Server Error: Bad Gateway for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_EPTM_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_IA": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IA",
+   "app": "instalacoes_aduaneiras",
+   "entidade": "Autoridade Tributária e Aduaneira",
+   "ok": false,
+   "tentativa": "2026-11-12T01:01:55+00:00",
+   "erro": "502 Server Error: Bad Gateway for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_IA_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_AIP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AIP",
+   "app": "arvoredo_interesse_publico",
+   "entidade": "ICNF, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-12T01:02:07+00:00",
+   "erro": "502 Server Error: Bad Gateway for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_AIP_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_AP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AP",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-12T01:02:19+00:00",
+   "erro": "503 Server Error: Service Unavailable for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_AP_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_ZPE": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "ZPE",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ficheiro": "DGT_ZPE.geojson",
+   "ok": true,
+   "elementos": 1,
+   "atualizado": "2026-11-12T01:08:18+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_ZEC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "ZEC",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ficheiro": "DGT_ZEC.geojson",
+   "ok": true,
+   "elementos": 1,
+   "atualizado": "2026-11-12T01:10:44+00:00",
    "erro": null,
    "ladrilhos": null
   }
