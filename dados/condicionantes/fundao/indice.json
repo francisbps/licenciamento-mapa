@@ -1,0 +1,192 @@
+{
+ "concelho": "fundao",
+ "gerado": "2026-11-12T00:05:08+00:00",
+ "fontes": {
+  "DGT_REN": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "REN",
+   "app": "ren",
+   "entidade": "CCDR Centro",
+   "ok": false,
+   "tentativa": "2026-11-11T23:02:39+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_DPH": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "DPH",
+   "app": "hidrico",
+   "entidade": "APA, I.P.",
+   "ficheiro": "DGT_DPH.geojson",
+   "ok": true,
+   "elementos": 1,
+   "atualizado": "2026-11-11T17:57:38+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)",
+   "tentativa": "2026-11-11T23:07:50+00:00"
+  },
+  "CM_habitats_naturais_e_semi_naturais_psrn2000": {
+   "origem": "Câmara Municipal de Fundão (planta de condicionantes)",
+   "descricao": "Habitats Naturais e Semi-Naturais PSRN2000",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_habitats_naturais_e_semi_naturais_psrn2000.geojson",
+   "ok": true,
+   "elementos": 166,
+   "atualizado": "2026-11-11T22:57:14+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "CM_ren_fundao": {
+   "origem": "Câmara Municipal de Fundão (planta de condicionantes)",
+   "descricao": "REN Fundão",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_ren_fundao.geojson",
+   "ok": true,
+   "elementos": 10,
+   "atualizado": "2026-11-11T22:57:26+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "CM_ran_fundao": {
+   "origem": "Câmara Municipal de Fundão (planta de condicionantes)",
+   "descricao": "ran fundao",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_ran_fundao.geojson",
+   "ok": true,
+   "elementos": 1,
+   "atualizado": "2026-11-11T22:57:27+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_IC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IC",
+   "app": "pat",
+   "entidade": "Património Cultural, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-11T23:13:02+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_EIP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "EIP",
+   "app": "edificios_publicos_valor",
+   "entidade": "Entidade que tutela o edifício",
+   "ok": false,
+   "tentativa": "2026-11-11T23:15:51+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_AA": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AA",
+   "app": "aero",
+   "entidade": "ANAC",
+   "ok": false,
+   "tentativa": "2026-11-11T23:21:02+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_GO": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "GO",
+   "app": "gas",
+   "entidade": "REN Gasodutos e DGEG",
+   "ok": false,
+   "tentativa": "2026-11-11T23:23:50+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_TC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "TC",
+   "app": "telecomunicacoes_radioeletricas",
+   "entidade": "ANACOM",
+   "ok": false,
+   "tentativa": "2026-11-11T23:26:50+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_MG": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "MG",
+   "app": "marcos_geodesicos",
+   "entidade": "Direção-Geral do Território",
+   "ok": false,
+   "tentativa": "2026-11-11T23:30:09+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_DN": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "DN",
+   "app": "militar",
+   "entidade": "Ministério da Defesa Nacional",
+   "ok": false,
+   "tentativa": "2026-11-11T23:35:21+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_IPE": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IPE",
+   "app": "militar",
+   "entidade": "PSP / Defesa Nacional",
+   "ok": false,
+   "tentativa": "2026-11-11T23:40:32+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_EPTM": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "EPTM",
+   "app": "estabelecimentos_prisionais",
+   "entidade": "DGRSP",
+   "ok": false,
+   "tentativa": "2026-11-11T23:45:43+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_IA": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IA",
+   "app": "instalacoes_aduaneiras",
+   "entidade": "Autoridade Tributária e Aduaneira",
+   "ok": false,
+   "tentativa": "2026-11-11T23:48:44+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_AIP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AIP",
+   "app": "arvoredo_interesse_publico",
+   "entidade": "ICNF, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-11T23:51:45+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_AP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AP",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-11T23:56:56+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_ZPE": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "ZPE",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-11T23:59:56+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_ZEC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "ZEC",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-12T00:05:08+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  }
+ }
+}

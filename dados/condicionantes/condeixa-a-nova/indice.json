@@ -1,0 +1,201 @@
+{
+ "concelho": "condeixa-a-nova",
+ "gerado": "2026-11-12T01:13:43+00:00",
+ "fontes": {
+  "CM_servico": {
+   "origem": "Câmara Municipal de Condeixa-a-Nova (planta de condicionantes)",
+   "descricao": "https://sig.cm-condeixa.pt/arcgis/rest/services/Internet/PDM_COND_2015/MapServer",
+   "ok": false,
+   "tentativa": "2026-11-12T01:01:42+00:00",
+   "erro": "Token Required"
+  },
+  "DGT_REN": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "REN",
+   "app": "ren",
+   "entidade": "CCDR Centro",
+   "ok": false,
+   "tentativa": "2026-11-12T01:01:55+00:00",
+   "erro": "502 Server Error: Bad Gateway for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_CENTRO/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_DPH": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "DPH",
+   "app": "hidrico",
+   "entidade": "APA, I.P.",
+   "ficheiro": "DGT_DPH.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-11T18:09:55+00:00",
+   "erro": "502 Server Error: Bad Gateway for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_DPH_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities",
+   "ladrilhos": null,
+   "tentativa": "2026-11-12T01:02:08+00:00"
+  },
+  "DGT_IC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IC",
+   "app": "pat",
+   "entidade": "Património Cultural, I.P.",
+   "ficheiro": "DGT_IC.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-11T18:12:06+00:00",
+   "erro": "503 Server Error: Service Unavailable for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_IC_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities",
+   "ladrilhos": null,
+   "tentativa": "2026-11-12T01:02:19+00:00"
+  },
+  "DGT_EIP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "EIP",
+   "app": "edificios_publicos_valor",
+   "entidade": "Entidade que tutela o edifício",
+   "ficheiro": "DGT_EIP.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T01:07:41+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_AA": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AA",
+   "app": "aero",
+   "entidade": "ANAC",
+   "ficheiro": "DGT_AA.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T01:10:49+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_GO": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "GO",
+   "app": "gas",
+   "entidade": "REN Gasodutos e DGEG",
+   "ficheiro": "DGT_GO.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T01:11:03+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_TC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "TC",
+   "app": "telecomunicacoes_radioeletricas",
+   "entidade": "ANACOM",
+   "ficheiro": "DGT_TC.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T01:11:48+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_MG": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "MG",
+   "app": "marcos_geodesicos",
+   "entidade": "Direção-Geral do Território",
+   "ok": false,
+   "tentativa": "2026-11-12T01:12:02+00:00",
+   "erro": "500 Server Error: Internal Server Error for url: https://servicos.dgterritorio.pt/SDISNITWFSSRUP_MG_PT1/WFService.aspx?service=WFS&version=2.0.0&request=GetCapabilities"
+  },
+  "DGT_DN": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "DN",
+   "app": "militar",
+   "entidade": "Ministério da Defesa Nacional",
+   "ficheiro": "DGT_DN.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T01:12:18+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_IPE": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IPE",
+   "app": "militar",
+   "entidade": "PSP / Defesa Nacional",
+   "ficheiro": "DGT_IPE.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T01:12:38+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_EPTM": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "EPTM",
+   "app": "estabelecimentos_prisionais",
+   "entidade": "DGRSP",
+   "ficheiro": "DGT_EPTM.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T01:12:49+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_IA": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IA",
+   "app": "instalacoes_aduaneiras",
+   "entidade": "Autoridade Tributária e Aduaneira",
+   "ficheiro": "DGT_IA.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T01:13:02+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_AIP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AIP",
+   "app": "arvoredo_interesse_publico",
+   "entidade": "ICNF, I.P.",
+   "ficheiro": "DGT_AIP.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T01:13:20+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_AP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AP",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ficheiro": "DGT_AP.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T01:13:32+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_ZPE": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "ZPE",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ficheiro": "DGT_ZPE.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T01:13:37+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_ZEC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "ZEC",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ficheiro": "DGT_ZEC.geojson",
+   "ok": true,
+   "elementos": 0,
+   "atualizado": "2026-11-12T01:13:43+00:00",
+   "erro": null,
+   "ladrilhos": null
+  }
+ }
+}

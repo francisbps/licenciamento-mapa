@@ -4,11 +4,14 @@ Uso: python carregar/carregar.py [concelho ...]       (sem argumentos: todos os 
 
 Para cada concelho junta três origens, todas recortadas pelo limite oficial do concelho (CAOP):
 - cartas nacionais da DGT (serviços WFS SRUP);
-- planta de condicionantes da câmara, quando tem serviço (camadas em dados/municipios.json);
+- planta de condicionantes da câmara, quando tem serviço aberto (dados/municipios.json): ArcGIS ou GeoServer;
 - ficheiros carregados à mão em dados/condicionantes/manual/<concelho>/ (respostas escritas de entidades).
 Se uma fonte falhar, fica o ficheiro da semana anterior e o erro fica registado no índice.
 """
 import json
+import math
+import re
+import unicodedata
 import sys
 import time
 import xml.etree.ElementTree as ET
@@ -16,9 +19,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
+import shapely
 from pyproj import Transformer
 from shapely import make_valid
-from shapely.geometry import (LinearRing, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon,
+from shapely.geometry import (LinearRing, box, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon,
                               mapping, shape)
 from shapely.ops import transform
 
@@ -29,8 +33,12 @@ CAOP = "https://ogcapi.dgterritorio.gov.pt/collections/municipios/items/{}?f=jso
 PAGINA_DGT = 200  # páginas pequenas: a REN e o domínio hídrico esgotavam o tempo com 1000
 LOTE_IDS = 200  # elementos por pedido à câmara (o servidor não pagina)
 ESPERA = 150  # segundos por pedido: a DGT é lenta
-TEMPO_FONTE = 1200  # uma fonte que passe disto é dada como falhada nesta semana
+TEMPO_FONTE = 900  # uma fonte que passe disto (15 min) é dada como falhada nesta semana
 SIMPLIFICAR = 0.000005  # cerca de 0,5 m
+CASAS = 6  # casas decimais das coordenadas (cerca de 10 cm)
+LADRILHO = 0.05  # graus (cerca de 5 km): fontes grandes são partidas em ladrilhos
+MAX_FICHEIRO = 8e6  # bytes; acima disto a fonte é partida, para o browser só descarregar a zona do ponto
+CAMPOS_FORA = ("objectid", "shape", "globalid", "fid", "st_area", "st_length", "gml_id")
 CAMPOS_NOME = ("nome", "designa", "denomina", "name", "titulo", "tipo")
 
 sessao = requests.Session()
@@ -39,8 +47,13 @@ de_pttm = Transformer.from_crs(3763, 4326, always_xy=True).transform
 para_pttm = Transformer.from_crs(4326, 3763, always_xy=True).transform
 
 
+PRAZO = [None]  # hora limite da fonte em curso (ver gravar)
+
+
 def pedir(url, params=None, tentativas=2):
     for i in range(tentativas):
+        if PRAZO[0] and time.time() > PRAZO[0]:
+            raise TimeoutError(f"mais de {TEMPO_FONTE // 60} min sem terminar")
         try:
             r = sessao.get(url, params=params, timeout=ESPERA)
             r.raise_for_status()
@@ -59,14 +72,28 @@ def nome_de(props):
     return None
 
 
+def so_um_tipo(g):
+    """Um recorte pode dar uma mistura (polígono + linha solta): fica a parte de maior dimensão."""
+    if g.geom_type != "GeometryCollection":
+        return g
+    partes = [p for p in getattr(g, "geoms", []) if not p.is_empty]
+    if not partes:
+        return g
+    dim = max(shapely.get_dimensions(p) for p in partes)
+    partes = [p for p in partes if shapely.get_dimensions(p) == dim]
+    return shapely.union_all(partes)
+
+
 def elemento(geom, limite, props, **extra):
     """Recorta pelo concelho e devolve um elemento GeoJSON, ou None se ficar fora."""
-    g = make_valid(geom).intersection(limite)
+    g = so_um_tipo(make_valid(geom).intersection(limite))
     if g.is_empty:
         return None
-    g = g.simplify(SIMPLIFICAR, preserve_topology=True)
+    g = shapely.transform(g.simplify(SIMPLIFICAR, preserve_topology=True), lambda c: c.round(CASAS))
+    props = {k: v for k, v in props.items()
+             if v not in (None, "", " ") and not k.lower().startswith(CAMPOS_FORA)}
     return {"type": "Feature", "geometry": mapping(g),
-            "properties": {**extra, "nome": nome_de(props) or extra.get("camada"), "atributos": props}}
+            "properties": {"nome": nome_de(props) or extra.get("camada"), "atributos": props}}
 
 
 def json_ou_erro(r):
@@ -78,40 +105,65 @@ def json_ou_erro(r):
         raise RuntimeError(f"resposta não é JSON ({r.headers.get('content-type', '?')}): {texto}") from None
 
 
+def de_pttm_certo(g, perto):
+    """Passa de PT-TM06 para graus. Alguns serviços trocam a ordem dos eixos (norte, este):
+    fica a leitura que cai perto do concelho."""
+    a = transform(de_pttm, g)
+    if a.intersects(perto):
+        return a
+    b = transform(de_pttm, transform(lambda x, y, z=None: (y, x), g))
+    return b if b.intersects(perto) else a
+
+
 def wfs_dgt(f, limite):
     url = f.get("url") or WFS_DGT.format(f["codigo"])
     caps = ET.fromstring(pedir(url, {"service": "WFS", "version": "2.0.0", "request": "GetCapabilities"}).content)
     nomes = [e.text for e in caps.iter() if e.tag.endswith("}Name") and e.text and ":" in e.text]
     x0, y0, x1, y1 = transform(para_pttm, limite).bounds
-    # Nem todos os serviços aceitam o mesmo pedido: experimenta variantes e fica com a primeira que der JSON.
-    variantes = [
-        {"outputFormat": "application/vnd.geo+json", "bbox": f"{x0},{y0},{x1},{y1},urn:ogc:def:crs:EPSG::3763"},
-        {"outputFormat": "application/vnd.geo+json", "bbox": f"{x0},{y0},{x1},{y1}"},
-        {"outputFormat": "application/json", "bbox": f"{x0},{y0},{x1},{y1}"},
-    ]
-    for camada in nomes:
-        inicio, erro = 0, None
-        while True:
-            for v in list(variantes):
-                try:
-                    lote = json_ou_erro(pedir(url, {
-                        "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
-                        "count": PAGINA_DGT, "startIndex": inicio, **v})).get("features") or []
-                    variantes.remove(v)
-                    variantes.insert(0, v)
+    perto = limite.envelope.buffer(0.05)
+    vistos = set()
+    com_dados = set()
+    # A ordem dos eixos da caixa não é igual em todos os serviços: pede-se na ordem normal e, para as camadas
+    # que não deram nada no concelho, na ordem trocada (o que cair fora do concelho é cortado depois).
+    for n, caixa in enumerate((f"{x0},{y0},{x1},{y1}", f"{y0},{x0},{y1},{x1}")):
+        # Nem todos os serviços aceitam o mesmo pedido: experimenta variantes e fica com a primeira que der JSON.
+        variantes = [
+            {"outputFormat": "application/vnd.geo+json", "bbox": f"{caixa},urn:ogc:def:crs:EPSG::3763"},
+            {"outputFormat": "application/vnd.geo+json", "bbox": caixa},
+            {"outputFormat": "application/json", "bbox": caixa},
+        ]
+        for camada in nomes:
+            if n and camada in com_dados:
+                continue
+            inicio, erro = 0, None
+            while True:
+                for v in list(variantes):
+                    try:
+                        lote = json_ou_erro(pedir(url, {
+                            "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
+                            "count": PAGINA_DGT, "startIndex": inicio, **v})).get("features") or []
+                        variantes.remove(v)
+                        variantes.insert(0, v)
+                        break
+                    except RuntimeError as e:
+                        erro = e
+                else:
+                    raise erro
+                for el in lote:
+                    if not el.get("geometry"):
+                        continue
+                    chave = (camada, el.get("id") or json.dumps(el["geometry"])[:500])
+                    if chave in vistos:
+                        continue
+                    vistos.add(chave)
+                    e = elemento(de_pttm_certo(shape(el["geometry"]), perto), limite, el.get("properties") or {},
+                                 camada=camada.split(":")[-1].replace("_", " "))
+                    if e:
+                        com_dados.add(camada)
+                    yield e
+                if not lote or len(lote) < PAGINA_DGT:
                     break
-                except RuntimeError as e:
-                    erro = e
-            else:
-                raise erro
-            for el in lote:
-                if el.get("geometry"):
-                    geom = transform(de_pttm, shape(el["geometry"]))  # a DGT responde em PT-TM06
-                    yield elemento(geom, limite, el.get("properties") or {},
-                                   camada=camada.split(":")[-1].replace("_", " "))
-            if not lote or len(lote) < PAGINA_DGT:
-                break
-            inicio += len(lote)
+                inicio += len(lote)
 
 
 def esri_para_shape(g):
@@ -153,9 +205,140 @@ def ags_camara(servico, camada, limite):
                                camada=camada["nome"])
 
 
+def camadas_mapserver(servico):
+    """Lista as camadas com elementos de um MapServer (sem os grupos); respeita os ids indicados, se houver."""
+    j = json_ou_erro(pedir(servico["url"], {"f": "json"}))
+    if "error" in j:
+        raise RuntimeError(j["error"].get("message", "erro do serviço"))
+    so = {int(i) for i in str(servico.get("ids") or "").split(",") if i.strip()}
+    return [{"id": c["id"], "nome": c["name"]} for c in j.get("layers") or []
+            if not c.get("subLayerIds") and (not so or c["id"] in so)
+            and not re.search(LIMITES, sem_acentos(c["name"]))]
+
+
+def lonlat(g):
+    """Algumas respostas em EPSG:4326 vêm em latitude, longitude: em Portugal a longitude é negativa."""
+    x, y = g.representative_point().coords[0][:2]
+    return transform(lambda a, b, z=None: (b, a), g) if x > 0 and y < 0 else g
+
+
+def wfs_geoserver(servico, camada, limite):
+    """Camada de um GeoServer municipal, pedida por WFS em páginas."""
+    url, inicio = servico["url"], 0
+    while True:
+        lote = json_ou_erro(pedir(url, {
+            "service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": camada,
+            "outputFormat": "application/json", "srsName": "EPSG:4326", "count": 1000, "startIndex": inicio}))
+        if "features" not in lote:
+            raise RuntimeError(str(lote)[:200])
+        els = lote["features"]
+        for el in els:
+            if el.get("geometry"):
+                yield elemento(lonlat(shape(el["geometry"])), limite, el.get("properties") or {},
+                               camada=servico.get("nome") or camada)
+        if len(els) < 1000:
+            break
+        inicio += len(els)
+
+
+CONDICIONANTE = (r"(^|[^a-z])(ran|ren)([^a-z]|$)|reserva|patrim|prote|servid|perigos|captac|cursos de agua|leitos|"
+                 r"(^|[^a-z])rnt([^a-z]|$)|eletric|rodovi|ferrovi|linha da beira|geositi|concess|jazig|habitat|natura|"
+                 r"(^|[^a-z])(zec|zpe)([^a-z]|$)|incend|aeropor|militar|gasod|marco|vertice|albufeir|cheia|inunda|"
+                 r"arvore|regime florestal|baldio|rega")
+BASE = r"toponimia|curnivel|edificado|cartogener|caop|freguesia|percurso|uopg|qualificacao|espanha|policia|hidrgener|fotovolt|ocupsolo"
+
+
+LIMITES = r"^limite (de |da |do |dos |das )?(freguesia|concelho|municipio|administrativo)"
+
+
+def sem_acentos(t):
+    return unicodedata.normalize("NFD", t).encode("ascii", "ignore").decode().lower().replace("_", " ")
+
+
+def camadas_geoserver(servico):
+    caps = ET.fromstring(pedir(servico["url"], {"service": "WFS", "version": "2.0.0",
+                                                "request": "GetCapabilities"}).content)
+    local = lambda e: e.tag.split("}")[-1]  # nome da etiqueta sem o espaço de nomes
+    nomes = [e.text for t in caps.iter() if local(t) == "FeatureType"
+             for e in t if local(e) == "Name" and e.text]
+    pedidas = [n.strip() for n in str(servico.get("layers") or "").split(",") if n.strip()]
+    if not pedidas:
+        return nomes
+    escolhidas = [n for n in nomes if n.split(":")[-1] in pedidas or n in pedidas]
+    if not escolhidas:
+        # Um nome do WMS pode ser um grupo de camadas: o GeoServer diz quais são as camadas WFS por baixo.
+        try:
+            j = json_ou_erro(pedir(servico["url"], {"service": "WMS", "version": "1.1.1", "request": "DescribeLayer",
+                                                    "layers": ",".join(pedidas), "outputFormat": "application/json"}))
+            tipos = {d.get("typeName") for d in j.get("layerDescriptions") or []}
+            escolhidas = [n for n in nomes if n in tipos or n.split(":")[-1] in {str(t).split(":")[-1] for t in tipos}]
+        except Exception:
+            pass
+    if not escolhidas:
+        # Ou então a lista do grupo no GetCapabilities do WMS.
+        try:
+            wms = ET.fromstring(pedir(servico["url"], {"service": "WMS", "version": "1.3.0",
+                                                       "request": "GetCapabilities"}).content)
+            for camada in wms.iter():
+                if local(camada) != "Layer":
+                    continue
+                nome = next((e.text for e in camada if local(e) == "Name"), None)
+                if nome and nome.split(":")[-1] in pedidas:
+                    filhos = {e.text.split(":")[-1] for c in camada.iter() if local(c) == "Layer" and c is not camada
+                              for e in c if local(e) == "Name" and e.text}
+                    escolhidas = [n for n in nomes if n.split(":")[-1] in filhos]
+                    break
+        except Exception:
+            pass
+    if not escolhidas:
+        # Último recurso: as camadas cujo nome diz que são condicionantes (sem a cartografia de base).
+        escolhidas = [n for n in nomes if re.search(CONDICIONANTE, sem_acentos(n.split(":")[-1]))
+                      and not re.search(BASE, sem_acentos(n.split(":")[-1]))]
+    if not escolhidas:
+        raise RuntimeError(f"camada {', '.join(pedidas)} não existe no WFS (há: {', '.join(n.split(':')[-1] for n in nomes)})"[:1000])
+    return escolhidas
+
+
+def colecao(els):
+    return json.dumps({"type": "FeatureCollection", "features": els}, ensure_ascii=False, separators=(",", ":"))
+
+
+def escrever(pasta, fonte, els):
+    """Grava a fonte num ficheiro; se for grande, parte-a em ladrilhos numa pasta com o nome da fonte."""
+    texto = colecao(els)
+    pasta_l = pasta / fonte
+    for velho in pasta_l.glob("*.geojson") if pasta_l.exists() else []:
+        velho.unlink()
+    if len(texto.encode()) <= MAX_FICHEIRO:
+        (pasta / f"{fonte}.geojson").write_text(texto)
+        return {"ladrilhos": None}
+    (pasta / f"{fonte}.geojson").unlink(missing_ok=True)
+    pasta_l.mkdir(exist_ok=True)
+    grupos = {}
+    for e in els:
+        g = shape(e["geometry"])
+        x0, y0, x1, y1 = g.bounds
+        for ix in range(math.floor(x0 / LADRILHO), math.floor(x1 / LADRILHO) + 1):
+            for iy in range(math.floor(y0 / LADRILHO), math.floor(y1 / LADRILHO) + 1):
+                if g.geom_type.endswith("Polygon") and (x1 - x0 > LADRILHO or y1 - y0 > LADRILHO):
+                    # Elementos grandes: só o pedaço dentro do ladrilho (com 20 m de folga).
+                    caixa = box(ix * LADRILHO, iy * LADRILHO, (ix + 1) * LADRILHO, (iy + 1) * LADRILHO).buffer(0.0002)
+                    parte = g.intersection(caixa)
+                    if parte.is_empty:
+                        continue
+                    e2 = {**e, "geometry": mapping(shapely.transform(parte, lambda c: c.round(CASAS)))}
+                else:
+                    e2 = e
+                grupos.setdefault(f"{ix}_{iy}", []).append(e2)
+    for nome, lista in grupos.items():
+        (pasta_l / f"{nome}.geojson").write_text(colecao(lista))
+    return {"ladrilhos": {"tamanho": LADRILHO, "lista": sorted(grupos)}}
+
+
 def gravar(pasta, fonte, gerador, meta, indice):
     """Grava só se correr bem; em caso de falha mantém o ficheiro anterior."""
     t = time.time()
+    PRAZO[0] = t + TEMPO_FONTE
     try:
         els = []
         for e in gerador:
@@ -163,17 +346,22 @@ def gravar(pasta, fonte, gerador, meta, indice):
                 raise TimeoutError(f"mais de {TEMPO_FONTE // 60} min sem terminar")
             if e:
                 els.append(e)
-        for e in els:
-            e["properties"].update(fonte=fonte, app=meta.get("app"), entidade=meta.get("entidade"))
-        (pasta / f"{fonte}.geojson").write_text(
-            json.dumps({"type": "FeatureCollection", "features": els}, ensure_ascii=False, separators=(",", ":")))
+        if fonte.startswith("CM_") and not meta.get("por_elemento"):
+            # Camada com vários tipos de condicionante (ex.: Póvoa de Varzim, "PDM - Condicionantes - Polígonos"):
+            # o mapa mostra o nome de cada elemento em vez do nome da camada.
+            nomes = {e["properties"].get("nome") for e in els} - {None, meta.get("descricao")}
+            meta = {**meta, "por_elemento": 2 <= len(nomes) <= 50 and len(els) >= 3 * len(nomes)}
+        extra = escrever(pasta, fonte, els)
         indice[fonte] = {**meta, "ficheiro": f"{fonte}.geojson", "ok": True, "elementos": len(els),
-                         "atualizado": agora(), "erro": None}
+                         "atualizado": agora(), "erro": None, **extra}
         print(f"OK    {fonte:28} {len(els):6} elementos  {time.time() - t:5.0f} s")
     except Exception as e:  # uma fonte em baixo não pára as outras
         anterior = indice.get(fonte, {})
-        indice[fonte] = {**anterior, **meta, "ok": False, "tentativa": agora(), "erro": str(e)[:300]}
+        guardado = anterior.get("ok") and anterior.get("atualizado")
+        # Se havia dados bons de uma semana anterior, continuam a valer (o mapa usa-os); fica registada a falha.
+        indice[fonte] = {**anterior, **meta, "ok": bool(guardado), "tentativa": agora(), "erro": str(e)[:300]}
         print(f"FALHA {fonte:28} {e}")
+    PRAZO[0] = None
     gravar_indice(pasta, indice)
 
 
@@ -187,27 +375,93 @@ def agora():
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def carregar(chave, cfg, municipios):
+def limite_caop(cfg):
+    """Limite do concelho na CAOP. O identificador do elemento nem sempre é o código DICO:
+    se não der, procura pelo código e depois pelo nome."""
+    try:
+        return pedir(CAOP.format(cfg["dico"]), tentativas=1).json()
+    except requests.HTTPError:
+        pass
+    base = CAOP.split("/items/")[0] + "/items"
+    nome = cfg["nome"].upper()
+    for filtro in ({"dico": cfg["dico"]}, {"dtmn": cfg["dico"]}, {"municipio": nome}, {"concelho": nome}):
+        try:
+            els = pedir(base, {"f": "json", "limit": 5, **filtro}, tentativas=1).json().get("features") or []
+        except requests.RequestException:
+            continue
+        for el in els:
+            props = " ".join(str(v) for v in (el.get("properties") or {}).values()).upper()
+            if cfg["dico"] in props or nome in props:
+                return el
+    raise RuntimeError(f"limite de {cfg['nome']} ({cfg['dico']}) não encontrado na CAOP")
+
+
+def carregar(chave, cfg, municipios, cfgs):
     pasta = DADOS / chave
     pasta.mkdir(parents=True, exist_ok=True)
     ficheiro_indice = pasta / "indice.json"
     indice = json.loads(ficheiro_indice.read_text())["fontes"] if ficheiro_indice.exists() else {}
 
-    limite = shape(pedir(CAOP.format(cfg["dico"])).json()["geometry"])
+    caop = limite_caop(cfg)
+    limite = shape(caop["geometry"])
+    print(f"== {cfg['nome']} (CAOP {cfg['dico']}: {(caop.get('properties') or {}).get('municipio', '?')})")
     folga = limite.buffer(0.002)  # cerca de 200 m, para servidões que entram a partir do concelho vizinho
     (pasta / "limite.geojson").write_text(json.dumps({"type": "Feature", "geometry": mapping(
         limite.simplify(0.0001)), "properties": {"nome": cfg["nome"], "dico": cfg["dico"]}}))
 
     if cfg.get("camara"):
-        for s in municipios[chave].get("servicos", []):
-            if s.get("tipo") != "ags-query":
+        origem = f"Câmara Municipal de {cfg['nome']} (planta de condicionantes)"
+        m = municipios.get(chave) or municipios.get(chave.replace("-", " ")) or {}
+        servicos = m.get("servicos", [])
+        vistas = set()
+        for n, s in enumerate(servicos, 1):
+            pre = "CM_" if len(servicos) == 1 else f"CM_{n}_"
+            try:
+                if s.get("tipo") == "ags-query":
+                    camadas = s["camadas"]
+                elif s.get("tipo") == "ags-identify":
+                    camadas = camadas_mapserver(s)
+                elif s.get("tipo") == "wms":
+                    camadas = camadas_geoserver(s)
+                else:
+                    continue
+            except Exception as e:
+                indice[f"{pre}servico"] = {"origem": origem, "descricao": s["url"], "ok": False,
+                                           "tentativa": agora(), "erro": str(e)[:1000]}
+                print(f"FALHA {pre}servico {e}")
                 continue
-            for c in s["camadas"]:
-                gravar(pasta, f"CM_{c['id']}", ags_camara(s, c, folga),
-                       {"origem": f"Câmara Municipal de {cfg['nome']} (planta de condicionantes)",
-                        "descricao": c["nome"], "app": c.get("k") or None, "entidade": "Câmara municipal"}, indice)
+            indice.pop(f"{pre}servico", None)
+            for c in camadas:
+                if s.get("tipo") == "wms":
+                    # Uma só camada com todas as condicionantes: o nome de cada uma vem do próprio elemento.
+                    curto = c.split(":")[-1]
+                    rotulo = (s.get("nome") or curto) if len(camadas) == 1 else \
+                        re.sub(r"^(PDM)?\d{4}_", "", curto).replace("_", " ")
+                    fonte = pre + re.sub(r"[^a-z0-9]+", "_", sem_acentos(curto)).strip("_")
+                    gravar(pasta, fonte, wfs_geoserver({**s, "nome": rotulo}, c, folga),
+                           {"origem": origem, "descricao": rotulo, "app": None, "entidade": "Câmara municipal",
+                            "por_elemento": len(camadas) == 1}, indice)
+                else:
+                    fonte = f"{pre}{c['id']}"
+                    gravar(pasta, fonte, ags_camara(s, c, folga),
+                           {"origem": origem, "descricao": c["nome"], "app": c.get("k") or None,
+                            "entidade": "Câmara municipal"}, indice)
+                vistas.add(fonte)
+        if not any(k.endswith("servico") for k in indice):
+            # Camadas que a câmara já não publica (ou que passaram a ficar de fora) saem do site.
+            for k in [k for k in indice if k.startswith("CM_") and k not in vistas]:
+                indice.pop(k)
+                (pasta / f"{k}.geojson").unlink(missing_ok=True)
+                for velho in (pasta / k).glob("*.geojson") if (pasta / k).exists() else []:
+                    velho.unlink()
 
-    for f in cfg.get("nacionais", []):
+    nacionais = cfg.get("nacionais")
+    if nacionais is None:  # cartas nacionais comuns, com a REN da região do concelho
+        ren = cfg.get("ren")
+        nacionais = ([{"fonte": "DGT_REN", "codigo": "REN", "app": "ren", "entidade": cfgs["_ren"][ren],
+                       "url": f"https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_{ren}/WFService.aspx"}]
+                     if ren else []) + cfgs["_nacionais"]
+    for f in nacionais:
         gravar(pasta, f["fonte"], wfs_dgt(f, folga),
                {"origem": "DGT (SNIT, SRUP)", "descricao": f["codigo"], "app": f["app"], "entidade": f["entidade"]}, indice)
 
@@ -229,8 +483,8 @@ def carregar(chave, cfg, municipios):
 def main():
     cfgs = json.loads((RAIZ / "carregar" / "fontes.json").read_text())
     municipios = json.loads((RAIZ / "dados" / "municipios.json").read_text())
-    escolhidos = sys.argv[1:] or list(cfgs)
-    tudo_falhou = [carregar(c, cfgs[c], municipios) for c in escolhidos]
+    escolhidos = sys.argv[1:] or [c for c in cfgs if not c.startswith("_")]
+    tudo_falhou = [carregar(c, cfgs[c], municipios, cfgs) for c in escolhidos]
     sys.exit(1 if all(tudo_falhou) else 0)
 
 
