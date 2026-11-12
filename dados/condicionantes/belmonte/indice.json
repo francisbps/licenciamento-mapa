@@ -1,21 +1,14 @@
 {
  "concelho": "belmonte",
- "gerado": "2026-11-11T20:08:42+00:00",
+ "gerado": "2026-11-12T00:05:08+00:00",
  "fontes": {
-  "CM_servico": {
-   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
-   "descricao": "https://sig.amcb.pt/geoserver/cm_belmonte/ows",
-   "ok": false,
-   "tentativa": "2026-11-11T18:27:37+00:00",
-   "erro": "camada PDM0501_Co_2_m_b não existe no WFS (há: 0501_AHCB, 0501_CALM_Leitos, 0501_CALM_LinhAg, 0501_CartoGener, 0501_CurNivel, 0501_DesdrobFls, 0501_Edificado, 0501_HidrDrenag, 0501_HidrGener, 0501_RAN, 0501_REN_TIP_P, 0501_linhas_CARIA_toponimia, 0501_linhas_inguias_toponimia, 0501_n_policia_CARIA_toponimia, 0501_n_policia_inguias_toponimia, 0501_uopg, CAOP2019, Calsssificação e Qualificação do Solo, Captação de água, Concessões Geológicas, Corredor Ecológico, Cursos de água e respetivos leitos e margens, Estação Esgoto, Estação Água, Geositios, Infraestruturas verdes, Jazigos de Urânio, Limite Freguesia 2019, Linha da Beira Baixa, Oleoes_Belmonte2025, Patrimonio Classificado, Património Zona Proteção, Percursos Pedestres, Perigosidade de Incêndio Rural, RNT, Rede Eletrica, Rede Esgoto Baixa, Rede Rodoviária, Rede de pontos de vigia, Rede de pontos de água, Rede de rega primária, Rede de rega secundária, Rede rodoviária existente, Rede Água Baixa, Reserva Agricola Nacional, Servidão Ro"
-  },
   "DGT_REN": {
    "origem": "DGT (SNIT, SRUP)",
    "descricao": "REN",
    "app": "ren",
    "entidade": "CCDR Centro",
    "ok": false,
-   "tentativa": "2026-11-11T18:33:04+00:00",
+   "tentativa": "2026-11-11T23:02:37+00:00",
    "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
   },
   "DGT_DPH": {
@@ -24,11 +17,12 @@
    "app": "hidrico",
    "entidade": "APA, I.P.",
    "ficheiro": "DGT_DPH.geojson",
-   "ok": true,
+   "ok": false,
    "elementos": 1,
    "atualizado": "2026-11-11T18:34:31+00:00",
-   "erro": null,
-   "ladrilhos": null
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)",
+   "ladrilhos": null,
+   "tentativa": "2026-11-11T23:07:48+00:00"
   },
   "DGT_IC": {
    "origem": "DGT (SNIT, SRUP)",
@@ -36,7 +30,7 @@
    "app": "pat",
    "entidade": "Património Cultural, I.P.",
    "ok": false,
-   "tentativa": "2026-11-11T19:44:02+00:00",
+   "tentativa": "2026-11-11T23:13:00+00:00",
    "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
   },
   "DGT_EIP": {
@@ -45,7 +39,7 @@
    "app": "edificios_publicos_valor",
    "entidade": "Entidade que tutela o edifício",
    "ok": false,
-   "tentativa": "2026-11-11T19:49:13+00:00",
+   "tentativa": "2026-11-11T23:15:51+00:00",
    "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
   },
   "DGT_AA": {
@@ -54,11 +48,373 @@
    "app": "aero",
    "entidade": "ANAC",
    "ficheiro": "DGT_AA.geojson",
-   "ok": true,
+   "ok": false,
    "elementos": 0,
    "atualizado": "2026-11-11T20:08:42+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)",
+   "ladrilhos": null,
+   "tentativa": "2026-11-11T23:21:02+00:00"
+  },
+  "CM_0501_calm_leitos": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "CALM Leitos",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_0501_calm_leitos.geojson",
+   "ok": true,
+   "elementos": 9,
+   "atualizado": "2026-11-11T22:57:09+00:00",
    "erro": null,
    "ladrilhos": null
+  },
+  "CM_0501_ran": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "RAN",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_0501_ran.geojson",
+   "ok": true,
+   "elementos": 1,
+   "atualizado": "2026-11-11T22:57:09+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "CM_0501_ren_tip_p": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "REN TIP P",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_0501_ren_tip_p.geojson",
+   "ok": true,
+   "elementos": 6,
+   "atualizado": "2026-11-11T22:57:14+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "CM_captacao_de_agua": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Captação de água",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_captacao_de_agua.geojson",
+   "ok": true,
+   "elementos": 4,
+   "atualizado": "2026-11-11T22:57:15+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "CM_concessoes_geologicas": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Concessões Geológicas",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_concessoes_geologicas.geojson",
+   "ok": true,
+   "elementos": 6,
+   "atualizado": "2026-11-11T22:57:15+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "CM_cursos_de_agua_e_respetivos_leitos_e_margens": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Cursos de água e respetivos leitos e margens",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_cursos_de_agua_e_respetivos_leitos_e_margens.geojson",
+   "ok": true,
+   "elementos": 22,
+   "atualizado": "2026-11-11T22:57:16+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "CM_geositios": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Geositios",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_geositios.geojson",
+   "ok": true,
+   "elementos": 2,
+   "atualizado": "2026-11-11T22:57:16+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "CM_jazigos_de_uranio": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Jazigos de Urânio",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_jazigos_de_uranio.geojson",
+   "ok": true,
+   "elementos": 8,
+   "atualizado": "2026-11-11T22:57:16+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "CM_linha_da_beira_baixa": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Linha da Beira Baixa",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ok": false,
+   "tentativa": "2026-11-11T22:57:16+00:00",
+   "erro": "too many values to unpack (expected 2)"
+  },
+  "CM_patrimonio_classificado": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Patrimonio Classificado",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_patrimonio_classificado.geojson",
+   "ok": true,
+   "elementos": 9,
+   "atualizado": "2026-11-11T22:57:17+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "CM_patrimonio_zona_protecao": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Património Zona Proteção",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_patrimonio_zona_protecao.geojson",
+   "ok": true,
+   "elementos": 15,
+   "atualizado": "2026-11-11T22:57:17+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "CM_perigosidade_de_incendio_rural": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Perigosidade de Incêndio Rural",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_perigosidade_de_incendio_rural.geojson",
+   "ok": true,
+   "elementos": 286,
+   "atualizado": "2026-11-11T22:57:18+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "CM_rnt": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "RNT",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ok": false,
+   "tentativa": "2026-11-11T22:57:18+00:00",
+   "erro": "too many values to unpack (expected 2)"
+  },
+  "CM_rede_eletrica": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Rede Eletrica",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ok": false,
+   "tentativa": "2026-11-11T22:57:18+00:00",
+   "erro": "too many values to unpack (expected 2)"
+  },
+  "CM_rede_rodoviaria": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Rede Rodoviária",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ok": false,
+   "tentativa": "2026-11-11T22:57:20+00:00",
+   "erro": "too many values to unpack (expected 2)"
+  },
+  "CM_rede_de_rega_primaria": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Rede de rega primária",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ok": false,
+   "tentativa": "2026-11-11T22:57:21+00:00",
+   "erro": "too many values to unpack (expected 2)"
+  },
+  "CM_rede_de_rega_secundaria": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Rede de rega secundária",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ok": false,
+   "tentativa": "2026-11-11T22:57:21+00:00",
+   "erro": "too many values to unpack (expected 2)"
+  },
+  "CM_rede_rodoviaria_existente": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Rede rodoviária existente",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ok": false,
+   "tentativa": "2026-11-11T22:57:23+00:00",
+   "erro": "too many values to unpack (expected 2)"
+  },
+  "CM_reserva_agricola_nacional": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Reserva Agricola Nacional",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_reserva_agricola_nacional.geojson",
+   "ok": true,
+   "elementos": 1,
+   "atualizado": "2026-11-11T22:57:24+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "CM_servidao_rodoviaria": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Servidão Rodoviária",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_servidao_rodoviaria.geojson",
+   "ok": true,
+   "elementos": 5,
+   "atualizado": "2026-11-11T22:57:24+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "CM_vertices_geodesicos": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Vértices Geodésicos",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ok": false,
+   "tentativa": "2026-11-11T22:57:24+00:00",
+   "erro": "too many values to unpack (expected 2)"
+  },
+  "CM_zona_inundavel": {
+   "origem": "Câmara Municipal de Belmonte (planta de condicionantes)",
+   "descricao": "Zona Inundável",
+   "app": null,
+   "entidade": "Câmara municipal",
+   "por_elemento": false,
+   "ficheiro": "CM_zona_inundavel.geojson",
+   "ok": true,
+   "elementos": 4,
+   "atualizado": "2026-11-11T22:57:25+00:00",
+   "erro": null,
+   "ladrilhos": null
+  },
+  "DGT_GO": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "GO",
+   "app": "gas",
+   "entidade": "REN Gasodutos e DGEG",
+   "ok": false,
+   "tentativa": "2026-11-11T23:23:50+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_TC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "TC",
+   "app": "telecomunicacoes_radioeletricas",
+   "entidade": "ANACOM",
+   "ok": false,
+   "tentativa": "2026-11-11T23:26:50+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_MG": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "MG",
+   "app": "marcos_geodesicos",
+   "entidade": "Direção-Geral do Território",
+   "ok": false,
+   "tentativa": "2026-11-11T23:30:09+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_DN": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "DN",
+   "app": "militar",
+   "entidade": "Ministério da Defesa Nacional",
+   "ok": false,
+   "tentativa": "2026-11-11T23:35:21+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_IPE": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IPE",
+   "app": "militar",
+   "entidade": "PSP / Defesa Nacional",
+   "ok": false,
+   "tentativa": "2026-11-11T23:40:32+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_EPTM": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "EPTM",
+   "app": "estabelecimentos_prisionais",
+   "entidade": "DGRSP",
+   "ok": false,
+   "tentativa": "2026-11-11T23:45:44+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_IA": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "IA",
+   "app": "instalacoes_aduaneiras",
+   "entidade": "Autoridade Tributária e Aduaneira",
+   "ok": false,
+   "tentativa": "2026-11-11T23:48:44+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_AIP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AIP",
+   "app": "arvoredo_interesse_publico",
+   "entidade": "ICNF, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-11T23:51:45+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_AP": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "AP",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-11T23:56:56+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_ZPE": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "ZPE",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-11T23:59:56+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
+  },
+  "DGT_ZEC": {
+   "origem": "DGT (SNIT, SRUP)",
+   "descricao": "ZEC",
+   "app": "natura",
+   "entidade": "ICNF, I.P.",
+   "ok": false,
+   "tentativa": "2026-11-12T00:05:08+00:00",
+   "erro": "HTTPSConnectionPool(host='servicos.dgterritorio.pt', port=443): Read timed out. (read timeout=150)"
   }
  }
 }
