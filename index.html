@@ -75,7 +75,7 @@ a { color: var(--brand); }
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   padding-top: 28px; padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px)); }
 header.top { display: grid; gap: 10px; max-width: 860px; width: 100%; justify-self: center; }
-body[data-vista="resumo"] header.top { display: none; }
+body:not([data-vista="obras"]) header.top { display: none; }
 h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(1.7rem, 3.4vw, 2.5rem); line-height: 1.1; margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
 h1 em { font-style: normal; color: var(--brand); }
 .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.78rem; color: var(--muted); font-family: var(--f-mono); }
@@ -88,8 +88,62 @@ h1 em { font-style: normal; color: var(--brand); }
 .passos4 li.fim4 { background: var(--brand); border-color: var(--brand); color: var(--on-brand); padding-left: 12px; }
 
 .grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; align-items: start; }
-body:not([data-vista="resumo"]) #resultado { display: none; }
-body[data-vista="resumo"] #questionario { display: none; }
+body:not([data-vista="resumo"]) #resultado, body:not([data-vista="form"]) #questionario,
+body:not([data-vista="obras"]) #obras, body:not([data-vista="biblioteca"]) #biblioteca { display: none; }
+#obras, #biblioteca { max-width: 860px; width: 100%; justify-self: center; }
+.obras-hd { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.obras-hd h2, #biblioteca h2 { margin: 0; font-family: var(--f-display); font-size: 1.35rem; }
+.obras-acoes { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.obras-acoes label.btn { cursor: pointer; }
+.olist { list-style: none; margin: 0 0 14px; padding: 0; display: grid; gap: 10px; }
+.olist li { border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; display: grid; gap: 8px; background: var(--panel); }
+.olist .ot { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; justify-content: space-between; }
+.olist .ot b { font-size: 1.02rem; }
+.olist .ot button.lk { background: none; border: 0; padding: 0; font: inherit; font-weight: 700; color: var(--ink); text-align: left; cursor: pointer; }
+.olist .ot button.lk:hover { color: var(--brand); text-decoration: underline; }
+.olist .os { font-size: 0.86rem; color: var(--muted); }
+.olist .oa { display: flex; flex-wrap: wrap; gap: 6px; }
+.olist .oa .btn { font-size: 0.84rem; padding: 5px 10px; }
+.olist .proc-tag { font-size: 0.78rem; font-weight: 700; border-radius: 999px; padding: 2px 10px; color: var(--v); background: color-mix(in srgb, var(--v) 12%, var(--panel)); white-space: nowrap; }
+.vazio { border: 1px dashed var(--line); border-radius: var(--r); padding: 18px; display: grid; gap: 10px; justify-items: start; margin-bottom: 14px; }
+.vazio p { margin: 0; }
+.inicio-bib { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; margin-top: 4px; }
+details.req { border-top: 1px solid var(--line); padding-top: 14px; }
+details.req > summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+details.req > summary::-webkit-details-marker { display: none; }
+details.req > summary::after { content: "▾"; color: var(--muted); }
+details.req[open] > summary::after { content: "▴"; }
+details.req .opc { font-size: 0.82rem; font-weight: 500; color: var(--muted); font-family: inherit; }
+details.req > fieldset { margin-top: 12px; }
+.rel-hd { display: grid; gap: 6px; margin-bottom: 16px; }
+.rel-marca { font-family: var(--f-mono); font-size: 0.74rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.rel-hd h2 { margin: 0; font-family: var(--f-display); font-size: clamp(1.3rem, 2.6vw, 1.7rem); line-height: 1.2; }
+.rel-dados { display: grid; grid-template-columns: max-content 1fr; gap: 3px 14px; margin: 4px 0 0; font-size: 0.9rem; }
+.rel-dados dt { color: var(--muted); }
+.rel-dados dd { margin: 0; }
+.indice { display: flex; flex-wrap: wrap; gap: 6px; margin: 20px 0 6px; }
+.indice a { font-size: 0.85rem; font-weight: 600; text-decoration: none; color: var(--brand); background: var(--brand-soft); border-radius: 999px; padding: 4px 12px; }
+.rel-sec { margin-top: 28px; scroll-margin-top: 76px; }
+.rel-sec > h3 { font-family: var(--f-display); font-size: 1.15rem; margin: 0 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--line); }
+.naover { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.resp { display: grid; grid-template-columns: minmax(0, 1fr) max-content; gap: 4px 14px; font-size: 0.88rem; margin: 0; }
+.resp dt { color: var(--muted); } .resp dd { margin: 0; font-weight: 600; text-align: right; }
+.resp dd.falta { color: var(--accent); font-weight: 600; }
+.mbl details { border: 1px solid var(--line); border-radius: var(--r); padding: 10px 14px; margin-bottom: 8px; }
+.mbl summary { cursor: pointer; font-weight: 600; }
+.mbl .mhead { margin-top: 8px; }
+@media (max-width: 560px) { .resp { grid-template-columns: minmax(0, 1fr); } .resp dd { text-align: left; margin-bottom: 6px; } .rel-dados { grid-template-columns: minmax(0, 1fr); } .rel-dados dd { margin-bottom: 4px; } }
+@media print {
+  @page { margin: 16mm 14mm; }
+  body { background: #fff !important; }
+  .topbar, .noprint, .toast, #questionario, #obras, #biblioteca, header.top, .rel-sec.s-minutas, .rodape .legend { display: none !important; }
+  .wrap { padding: 0 !important; max-width: none; }
+  .panel { border: 0 !important; box-shadow: none !important; padding: 0 !important; }
+  .rel-sec { break-inside: auto; } .rel-sec > h3 { break-after: avoid; }
+  .card, .team .m, .steps li, .docs li { break-inside: avoid; }
+  a { color: inherit; text-decoration: none; }
+  .docs input[type=checkbox] { accent-color: #555; }
+}
 #questionario { max-width: 860px; width: 100%; justify-self: center; }
 .resbar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; margin-bottom: 18px; }
 .fim { display: flex; justify-content: flex-end; padding-top: 16px; border-top: 1px solid var(--line); }
@@ -142,6 +196,7 @@ textarea { resize: vertical; min-height: 72px; }
 .multi label { display: flex; gap: 10px; align-items: baseline; font-size: 0.92rem; cursor: pointer; }
 .multi input { accent-color: var(--brand); }
 .seg input:focus-visible + label { outline: 2px solid var(--focus); outline-offset: 1px; }
+.sample[hidden] { display: none; }
 .sample { font-size: 0.86rem; color: var(--brand-ink); background: var(--brand-soft); padding: 8px 8px 8px 14px; border-radius: var(--r); display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
 button { font: inherit; cursor: pointer; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 36px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 8px; padding: 6px 14px; font-size: 0.88rem; font-weight: 600; transition: background .12s, border-color .12s, color .12s; }
@@ -165,6 +220,7 @@ button { font: inherit; cursor: pointer; }
 .tabs button { flex: none; white-space: nowrap; background: none; border: 0; border-bottom: 3px solid transparent; border-radius: 6px 6px 0 0; padding: 10px 12px; font-weight: 600; color: var(--muted); font-size: 0.93rem; margin-bottom: -1px; }
 .tabs button:hover { color: var(--ink); background: var(--chip-bg); }
 .tabs button[aria-selected="true"] { color: var(--brand); border-color: var(--brand); }
+label.f .opc { font-weight: 500; color: var(--muted); font-size: 0.85em; }
 .count { font-family: var(--f-mono); font-size: 0.75rem; font-weight: 400; }
 .docs { list-style: none; padding: 0; margin: 0; display: grid; gap: 2px; }
 .docs h3 { font-family: var(--f-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 16px 0 4px; font-weight: 500; }
@@ -230,7 +286,6 @@ details.gd summary { cursor: pointer; padding: 6px 0; font-family: var(--f-displ
 details.gd summary:hover { color: var(--brand); }
 details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color: var(--muted); margin-left: 6px; }
 .ac { display: grid; gap: 5px; }
-label.f .opc { font-weight: 400; color: var(--muted); }
 .acbox { position: relative; }
 .ac > label.f { display: block; }
 #morada { scroll-margin-top: 76px; }
@@ -260,43 +315,58 @@ label.f .opc { font-weight: 400; color: var(--muted); }
   <header class="top">
     <div class="eyebrow">RJUE · DL 555/99 na redação do DL 108/2026 (em vigor desde 1 de outubro de 2026)</div>
     <h1>A sua obra precisa de licença? <em>Saiba o que fazer.</em></h1>
-    <p class="lede">Diga que obra quer fazer e onde. Fazemos as perguntas que importam para esse caso, identificamos as condicionantes do local e, no fim, mostramos o enquadramento, os documentos, as entidades, os passos e as minutas.</p>
-    <ol class="passos4" aria-label="Como funciona"><li><b>1</b>A obra</li><li><b>2</b>Sobre a obra</li><li><b>3</b>O imóvel</li><li><b>4</b>O requerente</li><li class="fim4">Resumo da situação</li></ol>
+    <p class="lede">Indique onde é a obra e o que quer fazer. Mostramos logo as condicionantes do local, fazemos só as perguntas que importam para esse caso e, no fim, entregamos um relatório com o enquadramento, as entidades, os documentos e os passos.</p>
+    <ol class="passos4" aria-label="Como funciona"><li><b>1</b>O imóvel</li><li><b>2</b>A obra</li><li><b>3</b>Sobre a obra</li><li class="fim4">Relatório</li></ol>
   </header>
 
   <div class="grid">
+    <!-- AS MINHAS OBRAS -->
+    <section class="panel" id="obras" aria-label="As minhas obras">
+      <div class="obras-hd">
+        <h2>As minhas obras</h2>
+        <div class="obras-acoes">
+          <button class="btn primary grande" type="button" id="btnNova">+ Nova obra</button>
+          <label class="btn" for="ficheiroObra">Abrir ficheiro de obra</label>
+          <input type="file" id="ficheiroObra" accept=".json,application/json" class="vh">
+        </div>
+      </div>
+      <div id="listaObras"></div>
+      <p class="note">As obras ficam guardadas só neste navegador. Para as passar para outro computador ou enviar a um colega, use “Guardar ficheiro” e depois “Abrir ficheiro de obra”.</p>
+    </section>
+
+    <!-- BIBLIOTECA -->
+    <section class="panel" id="biblioteca" aria-label="Biblioteca">
+      <div class="resbar"><button class="btn" type="button" data-ir="">← As minhas obras</button></div>
+      <h2>Biblioteca</h2>
+      <p class="note">Consulta geral, sem precisar de preencher uma obra. Dentro de cada obra, o relatório e as minutas já vêm adaptados ao caso.</p>
+      <div class="tabs" role="tablist" id="tabsB">
+        <button role="tab" aria-selected="true" data-tb="guia">Guia do processo</button>
+        <button role="tab" aria-selected="false" data-tb="entidades">Condicionantes e entidades</button>
+        <button role="tab" aria-selected="false" data-tb="minutas">Minutas em branco</button>
+        <button role="tab" aria-selected="false" data-tb="links">Ligações úteis</button>
+      </div>
+      <div class="tabpanel" id="panelB"></div>
+    </section>
+
     <!-- QUESTIONÁRIO -->
     <section class="panel" id="questionario" aria-label="Questionário">
-      <div class="sample" id="sampleBar"><span>Preenchido com um exemplo fictício.</span><span style="display:flex;gap:6px"><button class="btn" type="button" id="btnClear">Limpar tudo</button><button class="btn" type="button" id="btnSample">Repor exemplo</button></span></div>
+      <div class="resbar"><button class="btn" type="button" data-ir="">← As minhas obras</button><span class="note" id="obraNome"></span></div>
+      <div class="sample" id="sampleBar" hidden><span>Esta obra é um exemplo fictício. Pode alterá-la à vontade ou apagá-la na lista de obras.</span></div>
       <form id="f" autocomplete="off" style="margin-top:16px">
-        <fieldset>
-          <legend class="sec"><span class="n" aria-hidden="true">1</span><span class="vh">1 · </span>A obra</legend>
-          <label class="f">Tipo de intervenção
-            <select id="tipoSel" name="tipoSel"></select>
-          </label>
-          <label class="f">Descrição
-            <textarea id="descricao" name="descricao" rows="3" placeholder="Por exemplo: remodelação da cozinha e da casa de banho de um apartamento, com troca de canalizações."></textarea>
-          </label>
-        </fieldset>
-
-        <fieldset id="qs">
-          <legend class="sec"><span class="n" aria-hidden="true">2</span><span class="vh">2 · </span>Sobre a obra</legend>
-        </fieldset>
-
         <fieldset id="cs">
-          <legend class="sec"><span class="n" aria-hidden="true">3</span><span class="vh">3 · </span>O imóvel</legend>
+          <legend class="sec"><span class="n" aria-hidden="true">1</span><span class="vh">1 · </span>O imóvel</legend>
           <div class="ac">
             <label class="f" for="morada">Morada (rua e número)</label>
             <div class="acbox"><input type="text" id="morada" name="morada" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="moradaSug" aria-describedby="moradaAjuda" autocomplete="off" spellcheck="false" placeholder="Comece a escrever, por exemplo: Rua Augusta 100, Lisboa">
             <ul id="moradaSug" class="sug" role="listbox" aria-label="Moradas sugeridas" hidden></ul></div>
-            <p class="note" id="moradaAjuda">Escreva a rua e o número e escolha na lista, ou carregue em “Pesquisar no mapa”. O mapa acerta a morada e preenche a freguesia, o concelho e o código postal.</p>
+            <p class="note" id="moradaAjuda">Escolha a morada na lista. A freguesia, o concelho e o código postal ficam preenchidos e o local aparece no mapa.</p>
           </div>
           <div class="row2">
-            <label class="f"><span>Andar ou fração <span class="opc">(opcional)</span></span><input type="text" id="fracao" name="fracao" placeholder="Por exemplo: 2.º Esq. ou fração B"></label>
-            <label class="f"><span>Código postal <span class="opc">(opcional)</span></span><input type="text" id="codPostal" name="codPostal" inputmode="numeric" placeholder="Preenchido pelo mapa" maxlength="8"></label>
+            <label class="f">Andar ou fração<input type="text" id="fracao" name="fracao" placeholder="Por exemplo: 2.º Esq. ou fração B"></label>
+            <label class="f">Código postal<input type="text" id="codPostal" name="codPostal" inputmode="numeric" placeholder="0000-000" maxlength="8"></label>
           </div>
           <div class="row2">
-            <label class="f"><span>Freguesia <span class="opc">(opcional)</span></span><input type="text" id="freguesia" name="freguesia" placeholder="Preenchida pelo mapa"></label>
+            <label class="f">Freguesia<input type="text" id="freguesia" name="freguesia" placeholder="Preenchida pelo mapa"></label>
             <label class="f">Concelho<input type="text" id="concelho" name="concelho" list="concelhosLista" placeholder="Escreva ou escolha"></label>
           </div>
           <datalist id="concelhosLista"></datalist>
@@ -315,7 +385,25 @@ label.f .opc { font-weight: 400; color: var(--muted); }
         </fieldset>
 
         <fieldset>
-          <legend class="sec"><span class="n" aria-hidden="true">4</span><span class="vh">4 · </span>O requerente</legend>
+          <legend class="sec"><span class="n" aria-hidden="true">2</span><span class="vh">2 · </span>A obra</legend>
+          <label class="f">Tipo de intervenção
+            <select id="tipoSel" name="tipoSel"></select>
+          </label>
+          <label class="f">Nome para a lista de obras <span class="opc">(opcional)</span>
+            <input type="text" id="nomeObra" name="nomeObra" placeholder="Por exemplo: Casa Silva, Arroios">
+          </label>
+          <label class="f">Descrição
+            <textarea id="descricao" name="descricao" rows="3" placeholder="Por exemplo: remodelação da cozinha e da casa de banho de um apartamento, com troca de canalizações."></textarea>
+          </label>
+        </fieldset>
+
+        <fieldset id="qs">
+          <legend class="sec"><span class="n" aria-hidden="true">3</span><span class="vh">3 · </span>Sobre a obra</legend>
+        </fieldset>
+
+        <details class="req" id="reqBox">
+          <summary class="sec"><span class="n" aria-hidden="true">4</span>O requerente <span class="opc">opcional, só para preencher as minutas</span></summary>
+          <fieldset>
           <div class="row2">
             <label class="f">Nome<input type="text" id="nome" name="nome"></label>
             <label class="f">NIF<input type="text" id="nif" name="nif"></label>
@@ -337,29 +425,24 @@ label.f .opc { font-weight: 400; color: var(--muted); }
             <label class="f">Técnico responsável<input type="text" id="tecnico" name="tecnico"></label>
             <label class="f">Inscrição na ordem<input type="text" id="ordem" name="ordem" placeholder="OA n.º / OE n.º"></label>
           </div>
-        </fieldset>
-        <div class="fim"><button class="btn primary grande" type="button" id="btnResumo">Ver o resumo da situação</button></div>
+          </fieldset>
+        </details>
+        <div class="fim"><button class="btn primary grande" type="button" id="btnResumo">Ver o relatório</button></div>
       </form>
     </section>
 
     <!-- RESULTADO -->
     <section class="panel" id="resultado" aria-live="polite" aria-label="Resumo da situação">
-      <div class="resbar"><button class="btn" type="button" id="btnVoltar">← Voltar ao questionário</button><span class="note" id="resLocal"></span></div>
+      <div class="resbar noprint"><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" type="button" id="btnVoltar">← Editar a obra</button><button class="btn" type="button" data-ir="">As minhas obras</button></span><span style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" type="button" id="btnExportar">Guardar ficheiro</button><button class="btn primary" type="button" id="btnImprimir">Imprimir ou guardar PDF</button></span></div>
+      <div class="rel-hd">
+        <div class="rel-marca">Licenciamento PT · Relatório de enquadramento</div>
+        <h2 id="relTitulo"></h2>
+        <dl class="rel-dados" id="relDados"></dl>
+      </div>
       <div class="eyebrow">Enquadramento provável</div>
       <div class="verdict" id="verdict"></div>
       <ul class="alerts" id="alerts"></ul>
-
-      <div class="tabs" role="tablist" id="tabs">
-        <button role="tab" id="tab-docs" aria-selected="true" data-tab="docs">Documentos <span class="count" id="docCount"></span></button>
-        <button role="tab" id="tab-entidades" aria-selected="false" data-tab="entidades">Entidades <span class="count" id="entCount"></span></button>
-        <button role="tab" id="tab-camara" aria-selected="false" data-tab="camara">Regras da câmara</button>
-        <button role="tab" id="tab-equipa" aria-selected="false" data-tab="equipa">Equipa técnica</button>
-        <button role="tab" id="tab-passos" aria-selected="false" data-tab="passos">Passo a passo</button>
-        <button role="tab" id="tab-guia" aria-selected="false" data-tab="guia">Guia completo</button>
-        <button role="tab" id="tab-minutas" aria-selected="false" data-tab="minutas">Minutas</button>
-        <button role="tab" id="tab-mercado" aria-selected="false" data-tab="mercado">Propostas</button>
-        <button role="tab" id="tab-consultar" aria-selected="false" data-tab="consultar">Mapa e consultas</button>
-      </div>
+      <nav class="indice noprint" id="indice" aria-label="Partes do relatório"></nav>
       <div class="tabpanel" id="panel"></div>
     </section>
   </div>
@@ -376,12 +459,16 @@ label.f .opc { font-weight: 400; color: var(--muted); }
 
   // Regras de enquadramento: vêm de regras.js (o mesmo ficheiro que os testes usam).
   const { G_EXIST, G_NOVA, G_USO, G_TERR, G_CURSO, TIPOS, USOS, SNS, EXIST, TERRENO, TIPOS_OBRA, NOVAS, menos, q_, tem, rural, escassaAnexo, escassaMuro, revIgual, semControlo, COM_PLANO, PREDIO_OPTS, COM_TITULO, QUESTIONS, VISIVEL, RESP_COND, tipoBase, nomeDe, sync, COND, norm, DETECT, PATRIMONIO_RE, PATRIMONIO_FRACO_RE, detectar, condOrigem, effCond, effQ, PROC, decide } = window.Regras;
-  function renderCond() {
+  function condItens() {
     const o = condOrigem(state), q = effQ(state);
     const itens = COND.filter((x) => o[x.k]).map((x) => ({ l: x.l, ent: x.ent, o: o[x.k] }));
     if (q.prot) itens.unshift({ l: q.prot === "cl" ? "Imóvel classificado, em vias de classificação ou em conjunto classificado" : "Zona de proteção de imóvel classificado", ent: "Património Cultural, I.P. (ou a CCDR)", o: (state.condMapa || []).includes("pat") ? "mapa" : "resposta" });
-    const tag = { mapa: "encontrada no mapa", resposta: "pela sua resposta" };
-    $("condBox").innerHTML = itens.length ? itens.map((x) => `<div class="cond-item"><b>${esc(x.l)}</b><span class="tag ok">${tag[x.o]}</span><span class="note">Entidade a consultar: ${esc(x.ent || "câmara municipal")}</span></div>`).join("")
+    return itens;
+  }
+  const condHTML = (itens) => itens.map((x) => `<div class="cond-item"><b>${esc(x.l)}</b><span class="tag ok">${{ mapa: "encontrada no mapa", resposta: "pela sua resposta" }[x.o]}</span><span class="note">Entidade a consultar: ${esc(x.ent || "câmara municipal")}</span></div>`).join("");
+  function renderCond() {
+    const itens = condItens();
+    $("condBox").innerHTML = itens.length ? condHTML(itens)
       : `<p class="note">${state.doMapa ? "O mapa não encontrou condicionantes neste local. Responda às perguntas abaixo." : "Escolha a morada na lista de sugestões (ou carregue em “Pesquisar no mapa”). As condicionantes do local aparecem aqui."}</p>`;
   }
 
@@ -394,16 +481,39 @@ label.f .opc { font-weight: 400; color: var(--muted); }
     q: { predio: "apartamento", classificado: "nao", fachada: "nao", estrutura: "nao", comuns: "nao", viaPublica: "sim", anterior1951: "nao" }, cond: {}
   };
 
-  let state = load() || structuredClone(SAMPLE);
+  // Várias obras, guardadas neste navegador: { obras: { id: estado }, atual: id }.
+  // A versão anterior (v1) guardava uma só obra: passa a ser a primeira da lista.
+  const KEY2 = "licenciamento-obras-v2";
+  const novoId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  // semTipo: obra nova ainda sem tipo escolhido (as regras assumem "conservação" quando falta o tipo).
+  const OBRA_VAZIA = () => ({ tipoSel: "", semTipo: true, q: {}, cond: {} });
+  function carregarLoja() {
+    try { const t = localStorage.getItem(KEY2); const l = t && JSON.parse(t); if (l && l.obras) return l; } catch (e) {}
+    const loja = { obras: {}, atual: null };
+    try {
+      const o = JSON.parse(localStorage.getItem(KEY) || "null");
+      if (o && o.q) {
+        const id = novoId();
+        if (o.nome === SAMPLE.nome && o.morada === SAMPLE.morada) o.exemplo = true;
+        loja.obras[id] = Object.assign(o, { criado: Date.now(), atualizado: Date.now() }); loja.atual = id;
+      }
+    } catch (e) {}
+    return loja;
+  }
+  const LOJA = carregarLoja();
+  function guardarLoja() { try { localStorage.setItem(KEY2, JSON.stringify(LOJA)); } catch (e) { toast("Não foi possível guardar neste navegador."); } }
+  let state = (LOJA.atual && LOJA.obras[LOJA.atual]) || OBRA_VAZIA();
   let tab = "docs";
   let minuta = null;
   let checks = (state.checks || {});
 
-  function load() { try { const s = localStorage.getItem(KEY); return s ? JSON.parse(s) : null; } catch (e) { return null; } }
-  function save() { try { state.checks = checks; localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function save() {
+    if (!LOJA.atual || !LOJA.obras[LOJA.atual]) return;
+    state.checks = checks; state.atualizado = Date.now(); LOJA.obras[LOJA.atual] = state; guardarLoja();
+  }
 
   // ---------- Formulário ----------
-  const FIELDS = ["tipoSel","descricao","morada","fracao","codPostal","freguesia","concelho","artigo","descPredial","codCertidao","nome","nif","moradaReq","email","qualidade","tecnico","ordem"];
+  const FIELDS = ["tipoSel","nomeObra","descricao","morada","fracao","codPostal","freguesia","concelho","artigo","descPredial","codCertidao","nome","nif","moradaReq","email","qualidade","tecnico","ordem"];
 
   function htmlPergunta(qq) {
     const v = state.q[qq.id] || "", opts = (typeof qq.opts === "function" ? qq.opts(state) : qq.opts) || SNS;
@@ -420,21 +530,25 @@ label.f .opc { font-weight: 400; color: var(--muted); }
   let qsVis = "";
   function renderQuestions(force) {
     sync(state);
-    const vis = QUESTIONS.filter((qq) => VISIVEL(qq, state));
+    const vis = state.semTipo ? [] : QUESTIONS.filter((qq) => VISIVEL(qq, state));
     const chave = vis.map((qq) => qq.id).join(",");
     if (!force && chave === qsVis) return;
     qsVis = chave;
     const box = $("qs");
     box.querySelectorAll(".q, .note").forEach((n) => n.remove());
-    box.insertAdjacentHTML("beforeend", vis.filter((qq) => qq.step === 2).map(htmlPergunta).join("") || `<p class="note">Escolha o tipo de intervenção.</p>`);
+    box.insertAdjacentHTML("beforeend", vis.filter((qq) => qq.step === 2).map(htmlPergunta).join("") || `<p class="note">Escolha primeiro o tipo de obra. As perguntas aparecem aqui.</p>`);
     const q3 = vis.filter((qq) => qq.step === 3);
     $("qs3").innerHTML = q3.length ? `<p class="sub">Para confirmar outras condicionantes</p>` + q3.map(htmlPergunta).join("") : "";
   }
 
   function fillForm() {
     sync(state);
-    $("tipoSel").innerHTML = [...new Set(TIPOS.map((x) => x[2]))].map((gr) => `<optgroup label="${esc(gr)}">${TIPOS.filter((x) => x[2] === gr).map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("")}</optgroup>`).join("");
+    $("tipoSel").innerHTML = `<option value="">Escolha o tipo de obra…</option>` + [...new Set(TIPOS.map((x) => x[2]))].map((gr) => `<optgroup label="${esc(gr)}">${TIPOS.filter((x) => x[2] === gr).map(([v, l]) => `<option value="${v}">${esc(l)}</option>`).join("")}</optgroup>`).join("");
     FIELDS.forEach((k) => { const el = $(k); if (el) el.value = state[k] || ""; });
+    if (state.semTipo) $("tipoSel").value = "";
+    if (!state.qualidade) $("qualidade").value = "proprietário";
+    $("sampleBar").hidden = !state.exemplo;
+    $("obraNome").textContent = tituloObra(state);
     renderQuestions(true);
   }
 
@@ -455,17 +569,118 @@ label.f .opc { font-weight: 400; color: var(--muted); }
     if (t.name && t.name.startsWith("q-")) respostaQ(t);
     else if (t.name && t.name.startsWith("qm-")) respostaMulti(t);
     else if (FIELDS.includes(t.id)) state[t.id] = t.value;
-    if (t.id === "tipoSel") minuta = null;
+    if (t.id === "tipoSel") { minuta = null; if (t.value) delete state.semTipo; else state.semTipo = true; }
+    if (["nomeObra", "morada", "fracao"].includes(t.id)) $("obraNome").textContent = tituloObra(state);
     sync(state); save(); renderQuestions(); render();
   });
   $("f").addEventListener("change", (e) => { const n = e.target.name || ""; if (n.startsWith("q-") || n.startsWith("qm-")) { if (n.startsWith("qm-")) respostaMulti(e.target); else respostaQ(e.target); sync(state); save(); renderQuestions(); render(); } });
   $("f").addEventListener("submit", (e) => e.preventDefault());
 
   // Página inicial (questionário) e página do resumo.
-  function vista(v) { document.body.dataset.vista = v; if (v === "resumo") { render(); scrollTo(0, 0); } }
-  $("btnResumo").addEventListener("click", () => { if (location.hash !== "#resumo") location.hash = "resumo"; else vista("resumo"); });
-  $("btnVoltar").addEventListener("click", () => { if (location.hash === "#resumo") history.back(); else vista("form"); });
-  window.addEventListener("hashchange", () => vista(location.hash === "#resumo" ? "resumo" : "form"));
+  // Páginas: "" = as minhas obras, #obra = editar, #resumo = relatório, #biblioteca.
+  const VISTAS = { "": "obras", "#obra": "form", "#resumo": "resumo", "#biblioteca": "biblioteca" };
+  function aplicarVista() {
+    let v = VISTAS[location.hash] || "obras";
+    if ((v === "form" || v === "resumo") && !LOJA.obras[LOJA.atual]) v = "obras";
+    if (v === "resumo" && state.semTipo) v = "form";
+    const antes = document.body.dataset.vista;
+    document.body.dataset.vista = v;
+    if (v === "resumo") render();
+    if (v === "obras") renderObras();
+    if (v === "biblioteca") renderBib();
+    if (antes !== v) scrollTo(0, 0);
+  }
+  function ir(dest) {
+    const h = dest ? "#" + dest : "";
+    if ((location.hash || "") === h) aplicarVista();
+    else if (h) location.hash = h;
+    else { history.pushState(null, "", location.pathname + location.search); aplicarVista(); }
+  }
+  window.addEventListener("hashchange", aplicarVista);
+  window.addEventListener("popstate", aplicarVista);
+  document.addEventListener("click", (e) => { const b = e.target.closest("[data-ir]"); if (b) { e.preventDefault(); ir(b.dataset.ir); } });
+  $("btnResumo").addEventListener("click", () => {
+    if (state.semTipo) { toast("Escolha primeiro o tipo de obra."); $("tipoSel").focus(); $("tipoSel").scrollIntoView({ block: "center" }); return; }
+    ir("resumo");
+  });
+  $("btnVoltar").addEventListener("click", () => ir("obra"));
+  $("btnImprimir").addEventListener("click", () => window.print());
+  $("btnExportar").addEventListener("click", () => exportar(LOJA.atual));
+
+  // ---------- As minhas obras ----------
+  function tituloObra(o) { return (o.nomeObra || "").trim() || [o.morada, o.fracao].filter(Boolean).join(", ") || "Obra sem morada"; }
+  const dataPT = (t) => t ? new Date(t).toLocaleDateString("pt-PT", { day: "numeric", month: "short", year: "numeric" }) : "";
+  function abrirObra(id, destino) {
+    if (!LOJA.obras[id]) return;
+    LOJA.atual = id; guardarLoja();
+    state = LOJA.obras[id]; if (!state.q) state.q = {};
+    checks = state.checks || {}; minuta = null;
+    fillForm(); render();
+    if (window.recarregarMapa) window.recarregarMapa();
+    ir(destino || "obra");
+  }
+  function novaObra(base) {
+    const id = novoId(), agora = Date.now();
+    LOJA.obras[id] = Object.assign(structuredClone(base || OBRA_VAZIA()), { criado: agora, atualizado: agora });
+    abrirObra(id, "obra");
+    if (!base) setTimeout(() => $("morada").focus(), 60);
+  }
+  function exportar(id) {
+    const o = LOJA.obras[id]; if (!o) return;
+    const nome = tituloObra(o).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 50) || "obra";
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([JSON.stringify({ app: "licenciamento-pt", versao: 1, obra: o }, null, 2)], { type: "application/json" }));
+    a.download = "obra-" + nome + ".json";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    toast("Ficheiro da obra guardado nas transferências.");
+  }
+  let apagarPendente = null;
+  function renderObras() {
+    const ids = Object.keys(LOJA.obras).sort((a, b) => (LOJA.obras[b].atualizado || 0) - (LOJA.obras[a].atualizado || 0));
+    let h = ids.length ? `<ul class="olist">` + ids.map((id) => {
+      const o = LOJA.obras[id];
+      let P = null;
+      try { if (!o.semTipo) { const c = structuredClone(o); sync(c); P = PROC[decide(c).p]; } } catch (e) {}
+      const sub = [o.semTipo ? "tipo de obra por escolher" : nomeDe(TIPOS, o.tipoSel), [o.freguesia, o.concelho].filter(Boolean).join(", "), o.exemplo ? "exemplo fictício" : "", o.atualizado ? "alterada a " + dataPT(o.atualizado) : ""].filter(Boolean).join(" · ");
+      const conf = apagarPendente === id;
+      return `<li><div class="ot"><button type="button" class="lk" data-o="abrir" data-id="${id}">${esc(tituloObra(o))}</button>${P ? `<span class="proc-tag" style="--v:${P.cor}">${esc(P.nome)}</span>` : `<span class="proc-tag" style="--v:var(--muted)">por preencher</span>`}</div>
+        <div class="os">${esc(sub)}</div>
+        <div class="oa"><button class="btn" type="button" data-o="abrir" data-id="${id}">Editar</button>${P ? `<button class="btn" type="button" data-o="relatorio" data-id="${id}">Relatório</button>` : ""}<button class="btn" type="button" data-o="duplicar" data-id="${id}">Duplicar</button><button class="btn" type="button" data-o="exportar" data-id="${id}">Guardar ficheiro</button><button class="btn${conf ? " primary" : ""}" type="button" data-o="apagar" data-id="${id}">${conf ? "Confirmar: apagar" : "Apagar"}</button></div></li>`;
+    }).join("") + `</ul>`
+      : `<div class="vazio"><p><b>Ainda não tem obras guardadas.</b></p><p class="note">Carregue em “Nova obra” e comece pela morada. Se quiser ver primeiro como funciona, abra um exemplo.</p><button class="btn" type="button" data-o="exemplo">Ver um exemplo</button></div>`;
+    h += `<div class="inicio-bib"><span class="note">Só quer consultar?</span><button class="btn" type="button" data-ir="biblioteca">Abrir a biblioteca: guia, entidades e minutas</button></div>`;
+    $("listaObras").innerHTML = h;
+  }
+  $("btnNova").addEventListener("click", () => novaObra());
+  $("listaObras").addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-o]"); if (!b) return;
+    const id = b.dataset.id, o = b.dataset.o;
+    if (o !== "apagar") apagarPendente = null;
+    if (o === "abrir") abrirObra(id, "obra");
+    else if (o === "relatorio") abrirObra(id, "resumo");
+    else if (o === "exemplo") novaObra(Object.assign(structuredClone(SAMPLE), { exemplo: true }));
+    else if (o === "duplicar") {
+      const c = structuredClone(LOJA.obras[id]); c.nomeObra = tituloObra(c) + " (cópia)"; delete c.exemplo;
+      const nid = novoId(); LOJA.obras[nid] = Object.assign(c, { criado: Date.now(), atualizado: Date.now() }); guardarLoja(); renderObras(); toast("Obra duplicada.");
+    } else if (o === "exportar") exportar(id);
+    else if (o === "apagar") {
+      if (apagarPendente !== id) { apagarPendente = id; renderObras(); return; }
+      apagarPendente = null; delete LOJA.obras[id];
+      if (LOJA.atual === id) { LOJA.atual = null; state = OBRA_VAZIA(); checks = {}; }
+      guardarLoja(); renderObras(); toast("Obra apagada.");
+    }
+  });
+  $("ficheiroObra").addEventListener("change", (e) => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    f.text().then((t) => {
+      const j = JSON.parse(t), o = j && (j.obra || j);
+      if (!o || typeof o !== "object" || typeof o.q !== "object") throw new Error("formato");
+      const id = novoId(); LOJA.obras[id] = Object.assign(o, { atualizado: Date.now() });
+      abrirObra(id, o.semTipo ? "obra" : "resumo"); toast("Obra aberta a partir do ficheiro.");
+    }).catch(() => toast("Este ficheiro não é uma obra do Licenciamento PT."))
+      .finally(() => { e.target.value = ""; });
+  });
   // Sem mapa integrado (versão claude.ai), o botão abre o mapa noutro separador.
   $("btnMapa").addEventListener("click", () => {
     const q = [state.morada, state.freguesia, state.concelho].filter(Boolean).join(", ");
@@ -544,12 +759,6 @@ label.f .opc { font-weight: 400; color: var(--muted); }
     inp.addEventListener("focus", () => { if (matchMedia("(max-width: 760px)").matches) setTimeout(() => inp.scrollIntoView({ block: "start", behavior: "smooth" }), 250); });
     inp.addEventListener("focus", () => { if (sug.length && inp.value.trim().length >= 3 && !escolhida) mostrar(); });
   })();
-
-  $("btnSample").addEventListener("click", () => { state = structuredClone(SAMPLE); checks = {}; minuta = null; save(); fillForm(); render(); $("sampleBar").firstElementChild.textContent = "Preenchido com um exemplo fictício."; });
-  $("btnClear").addEventListener("click", () => {
-    state = { tipoSel: "conservacao", q: {}, cond: {} }; checks = {}; minuta = null; save(); fillForm(); render();
-    $("sampleBar").firstElementChild.textContent = "Formulário vazio. Preencha os dados do seu caso.";
-  });
 
 
   // ---------- Documentos ----------
@@ -890,8 +1099,8 @@ label.f .opc { font-weight: 400; color: var(--muted); }
     if (DADOS) return;
     DADOS = { pronto: false };
     Promise.all(["dados/municipios.json", "dados/regras.json"].map((u) => fetch(u).then((r) => r.ok ? r.json() : {})))
-      .then(([m, g]) => { DADOS = { pronto: true, muni: m, regras: g }; if (tab === "camara") render(); })
-      .catch(() => { DADOS = { pronto: true, muni: {}, regras: {} }; if (tab === "camara") render(); });
+      .then(([m, g]) => { DADOS = { pronto: true, muni: m, regras: g }; if (document.body.dataset.vista === "resumo") render(); })
+      .catch(() => { DADOS = { pronto: true, muni: {}, regras: {} }; if (document.body.dataset.vista === "resumo") render(); });
   }
   function renderCamara() {
     carregarDados();
@@ -1002,7 +1211,7 @@ label.f .opc { font-weight: 400; color: var(--muted); }
   }
   function softRender() {
     const a = document.activeElement;
-    if ((tab === "mercado" || tab === "equipa") && a && $("panel").contains(a) && /INPUT|TEXTAREA|SELECT/.test(a.tagName)) { pending = true; return; }
+    if (a && $("panel").contains(a) && /INPUT|TEXTAREA|SELECT/.test(a.tagName)) { pending = true; return; }
     render();
   }
   $("panel").addEventListener("focusout", () => setTimeout(() => {
@@ -1216,12 +1425,42 @@ label.f .opc { font-weight: 400; color: var(--muted); }
   // ---------- Render ----------
   const esc =(t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+  // Câmaras com a planta de condicionantes guardada no site (dados/condicionantes/).
+  const COM_DADOS = ["Lisboa", "Sintra", "Loures", "Penacova", "Mondim de Basto", "Belmonte", "Póvoa de Varzim", "Fundão"].map(norm);
+  function respostas() {
+    return QUESTIONS.filter((qq) => VISIVEL(qq, state)).map((qq) => {
+      const opts = (typeof qq.opts === "function" ? qq.opts(state) : qq.opts) || SNS;
+      const lab = [].concat(state.q[qq.id] || []).map((x) => (opts.find((o) => o[0] === x) || [, x])[1]).join(", ");
+      return [qq.q, lab];
+    });
+  }
+  function naoVerificado() {
+    const out = [], c = (state.concelho || "").trim();
+    if (!state.doMapa) out.push("O local não foi confirmado no mapa. As condicionantes indicadas resultam só das respostas dadas.");
+    else if (c && !COM_DADOS.includes(norm(c))) out.push(`Para ${c}, o site ainda não tem a planta de condicionantes da câmara: o mapa só cruzou as cartas nacionais (REN, RAN, Rede Natura, património classificado e outras). Confirme a planta de condicionantes do PDM de ${c}.`);
+    out.push("A planta de ordenamento do PDM e os planos de urbanização e de pormenor não são verificados. Confirme a classe de espaço e os parâmetros aplicáveis (cércea, índices, alinhamentos).");
+    out.push("Servidões que as entidades não publicam em mapa (aeroportos, portos, metropolitano, linhas elétricas e gasodutos, estradas e ferrovia) podem não aparecer. Se a obra estiver perto destas infraestruturas, confirme por escrito com a entidade.");
+    if (c && DADOS && DADOS.pronto && !DADOS.regras[norm(c)]) out.push(`Não há regras do regulamento municipal de ${c} recolhidas nesta app. Leia o regulamento municipal de urbanização e edificação (RMUE).`);
+    else out.push("As regras da câmara aqui mostradas são um resumo e podem estar incompletas. O regulamento municipal (RMUE) prevalece.");
+    const falta = respostas().filter(([, l]) => !l).length;
+    if (falta) out.push(`${falta === 1 ? "Ficou 1 pergunta" : `Ficaram ${falta} perguntas`} sem resposta (ver “Respostas dadas”). O enquadramento pode mudar quando as responder.`);
+    out.push("A portaria que lista os elementos a entregar ao abrigo do DL 108/2026 ainda não está confirmada nesta app: a lista de documentos segue a referência geral.");
+    return out;
+  }
+
   function render() {
     sync(state);
     renderCond();
-    $("resLocal").textContent = [nomeDe(TIPOS, state.tipoSel), [state.morada, state.fracao, state.concelho].filter(Boolean).join(", ")].filter(Boolean).join(" · ");
+    if (document.body.dataset.vista !== "resumo") return;
+    carregarDados();
     const r = decide(state);
     const P = PROC[r.p];
+    $("relTitulo").textContent = tituloObra(state);
+    const hoje = new Date().toLocaleDateString("pt-PT", { day: "numeric", month: "long", year: "numeric" });
+    const dados = [["Tipo de obra", nomeDe(TIPOS, state.tipoSel) || "por escolher"], ["Descrição", state.descricao], ["Morada", [state.morada, state.fracao, state.codPostal].filter(Boolean).join(", ")],
+      ["Freguesia", state.freguesia], ["Concelho", state.concelho], ["Artigo matricial", state.artigo], ["Descrição predial", state.descPredial],
+      ["Requerente", state.nome], ["Técnico", [state.tecnico, state.ordem].filter(Boolean).join(", ")], ["Data do relatório", hoje]].filter(([, x]) => x);
+    $("relDados").innerHTML = dados.map(([k, x]) => `<dt>${esc(k)}</dt><dd>${esc(x)}</dd>`).join("");
     $("verdict").style.setProperty("--v", P.cor);
     $("verdict").innerHTML = `<p class="proc">${P.nome}</p><p>${esc(r.motivo)}</p><p style="color:var(--muted)">${P.resumo}</p><div class="refs">${r.refs.map((x) => `<span class="ref">${esc(x)}</span>`).join("")}</div>`;
     $("alerts").innerHTML = r.alerts.map((a) => `<li class="${a.i ? "info" : ""}">${esc(a.t)}</li>`).join("");
@@ -1229,47 +1468,47 @@ label.f .opc { font-weight: 400; color: var(--muted); }
     const D = docs(state, r);
     const keys = D.flatMap((g) => g.itens.map((i) => i.t));
     const done = keys.filter((k) => checks[k]).length;
-    $("docCount").textContent = `${done}/${keys.length}`;
-    $("entCount").textContent = String(entidades(state, r).length);
-
-    document.querySelectorAll("#tabs button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
-    const panel = $("panel");
-    if (tab === "docs") {
-      panel.innerHTML = `<div class="progress">${done} de ${keys.length} reunidos. A marcação fica guardada neste navegador.</div><ul class="docs">` +
-        D.map((G) => `<li><h3>${esc(G.grupo)}</h3></li>` + G.itens.map((it, i) => {
+    const ci = condItens();
+    const ativos = COND.filter((x) => effCond(state)[x.k] && VIEW[x.k]);
+    const M = minutas(state, r), rec = recomendadas(r, state);
+    if (!minuta || !M[minuta]) minuta = rec[0] || "info";
+    const order = [...rec, ...Object.keys(M).filter((k) => !rec.includes(k))];
+    const resp = respostas();
+    const S = [
+      ["cond", "Condicionantes do local", (ci.length ? condHTML(ci) : `<p class="note">${state.doMapa ? "O mapa não encontrou condicionantes neste local e as respostas não indicam nenhuma." : "Nenhuma condicionante indicada. O local não foi confirmado no mapa."}</p>`) +
+        (ativos.length ? `<p class="note" style="margin-top:10px">Onde confirmar nos mapas oficiais:</p><div class="team">${ativos.map((x) => `<div class="m"><div><b>${esc(x.l)}</b><span>${esc(VIEW[x.k].d)}</span></div><a class="tag" href="${VIEW[x.k].u}" target="_blank" rel="noopener">${esc(VIEW[x.k].n)}</a></div>`).join("")}</div>` : "")],
+      ["entidades", "Entidades a consultar", renderEntidades(r)],
+      ["naover", "O que não foi verificado", `<ul class="naover">${naoVerificado().map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`],
+      ["docs", `Documentos (${done} de ${keys.length} reunidos)`, `<p class="note noprint">Marque o que já tem. Fica guardado nesta obra.</p><ul class="docs">` +
+        D.map((G) => `<li><h3>${esc(G.grupo)}</h3></li>` + G.itens.map((it) => {
           const id = "d-" + btoa(unescape(encodeURIComponent(it.t))).replace(/[^a-z0-9]/gi, "").slice(0, 24);
           return `<li><label for="${id}"><input type="checkbox" id="${id}" data-k="${esc(it.t)}" ${checks[it.t] ? "checked" : ""}><span><span class="t">${esc(it.t)}</span>${it.d ? `<span class="d">${esc(it.d)}</span>` : ""}</span></label></li>`;
-        }).join("")).join("") + `</ul>`;
-    } else if (tab === "guia") {
-      panel.innerHTML = renderGuia(r);
-      panel.querySelectorAll("details.gd").forEach((d) => d.addEventListener("toggle", () => { guiaAbertos[d.dataset.g] = d.open; }));
-    } else if (tab === "entidades") {
-      panel.innerHTML = renderEntidades(r);
-    } else if (tab === "camara") {
-      panel.innerHTML = renderCamara();
-    } else if (tab === "equipa") {
-      panel.innerHTML = renderEquipa(r);
-    } else if (tab === "mercado") {
-      panel.innerHTML = renderMercado(r);
-    } else if (tab === "passos") {
-      panel.innerHTML = `<ol class="steps">${passos(r, state).map(([t, d]) => `<li><div><b>${esc(t)}</b><span>${esc(d)}</span></div></li>`).join("")}</ol>`;
-    } else if (tab === "minutas") {
-      const M = minutas(state, r), rec = recomendadas(r, state);
-      if (!minuta || !M[minuta]) minuta = rec[0] || "info";
-      const order = [...rec, ...Object.keys(M).filter((k) => !rec.includes(k))];
-      panel.innerHTML = `<div class="minutas">
+        }).join("")).join("") + `</ul>`],
+      ["passos", "Passo a passo", `<ol class="steps">${passos(r, state).map(([t, d]) => `<li><div><b>${esc(t)}</b><span>${esc(d)}</span></div></li>`).join("")}</ol>`],
+      ["equipa", "Equipa técnica", renderEquipa(r)],
+      ["camara", "Regras da câmara", renderCamara()],
+      ["respostas", "Respostas dadas", resp.length ? `<dl class="resp">${resp.map(([q, l]) => `<dt>${esc(q)}</dt><dd class="${l ? "" : "falta"}">${l ? esc(l) : "sem resposta"}</dd>`).join("")}</dl>` : `<p class="note">Sem perguntas para este tipo de obra.</p>`],
+      ["minutas", "Minutas para esta obra", `<div class="minutas">
         <div class="mbar">${order.map((k) => `<button type="button" data-m="${k}" class="${k === minuta ? "on" : ""}">${rec.includes(k) ? '<span class="rec">●</span> ' : ""}${esc(M[k].nome)}</button>`).join("")}</div>
-        <div class="mhead"><p>${esc(M[minuta].desc)} ${rec.includes(minuta) ? "Recomendada para o seu caso." : ""} Os campos a vermelho faltam preencher.</p><button class="btn primary" type="button" id="copy">Copiar texto</button></div>
-        <pre class="doc" id="doc">${M[minuta].txt}</pre></div>`;
-    } else {
-      const end = [state.morada, state.freguesia, state.concelho, "Portugal"].filter(Boolean).join(", ");
-      const ativos = COND.filter((x) => effCond(state)[x.k] && VIEW[x.k]);
-      const temMorada = !!(state.morada || state.concelho);
-      panel.innerHTML = `<div class="card" style="margin-bottom:14px"><div class="hd"><b>Ver o local no mapa</b>${temMorada ? `<a class="btn primary" style="text-decoration:none" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(end)}" target="_blank" rel="noopener">Abrir no Google Maps</a>` : ""}</div>
-        <p class="note">${temMorada ? esc(end) : "Indique a morada no questionário."}</p>
-        ${ativos.length ? `<p class="note">Confirme no mapa oficial as condicionantes assinaladas:</p><div class="team">${ativos.map((x) => `<div class="m"><div><b>${esc(x.l)}</b><span>${esc(VIEW[x.k].d)}</span></div><a class="tag" href="${VIEW[x.k].u}" target="_blank" rel="noopener">${esc(VIEW[x.k].n)}</a></div>`).join("")}</div>` : ""}
-      </div>
-      <div class="links">
+        <div class="mhead"><p>${esc(M[minuta].desc)} ${rec.includes(minuta) ? "Recomendada para este caso." : ""} Os campos a vermelho faltam preencher.</p><button class="btn primary" type="button" data-copiar="doc">Copiar texto</button></div>
+        <pre class="doc" id="doc">${M[minuta].txt}</pre></div>`],
+    ];
+    $("indice").innerHTML = S.map(([k, t]) => `<a href="#sec-${k}" data-sec="${k}">${esc(t.replace(/ \(.*\)$/, ""))}</a>`).join("");
+    $("panel").innerHTML = S.map(([k, t, h]) => `<section class="rel-sec s-${k}" id="sec-${k}"><h3>${esc(t)}</h3>${h}</section>`).join("");
+  }
+  // O índice do relatório desliza até à secção sem mudar o endereço (fica #resumo).
+  $("indice").addEventListener("click", (e) => { const a = e.target.closest("a[data-sec]"); if (!a) return; e.preventDefault(); const el = $("sec-" + a.dataset.sec); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); });
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-copiar]"); if (!b) return;
+    const el = $(b.dataset.copiar); if (!el) return;
+    const ok = () => toast("Texto copiado.");
+    const fallback = () => { const sel = window.getSelection(), rg = document.createRange(); rg.selectNodeContents(el); sel.removeAllRanges(); sel.addRange(rg); toast("Texto selecionado. Use Ctrl+C para copiar."); };
+    try { navigator.clipboard.writeText(el.innerText).then(ok, fallback); } catch (err) { fallback(); }
+  });
+
+  // ---------- Biblioteca: consulta geral, sem obra ----------
+  let tabB = "guia";
+  const LINKS = `<div class="links">
         <a href="https://www.predialonline.pt" target="_blank" rel="noopener"><b>Predial Online</b><span>Certidão permanente do registo predial</span></a>
         <a href="https://www.portaldasfinancas.gov.pt" target="_blank" rel="noopener"><b>Portal das Finanças</b><span>Caderneta predial e artigo matricial</span></a>
         <a href="https://snit.dgterritorio.gov.pt" target="_blank" rel="noopener"><b>SNIT (DGT)</b><span>PDM em vigor: ordenamento e condicionantes</span></a>
@@ -1277,22 +1516,33 @@ label.f .opc { font-weight: 400; color: var(--muted); }
         <a href="https://www.impic.pt" target="_blank" rel="noopener"><b>IMPIC</b><span>Confirmar alvará ou certificado do empreiteiro</span></a>
         <a href="https://diariodarepublica.pt" target="_blank" rel="noopener"><b>Diário da República</b><span>RJUE consolidado e regulamento municipal</span></a>
       </div>
-      <p class="foot" style="margin-top:14px">Procure também o geoportal do seu município${state.concelho ? ` (${esc(state.concelho)})` : ""}: costuma ter o PDM interativo, a carta de património e o arquivo de processos de obra.</p>`;
-    }
+      <p class="foot" style="margin-top:14px">Procure também o geoportal do município: costuma ter o PDM interativo, a carta de património e o arquivo de processos de obra.</p>`;
+  function renderBib() {
+    document.querySelectorAll("#tabsB button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tb === tabB)));
+    let h = "";
+    if (tabB === "guia") {
+      h = `<p class="note">Tudo o que pode acontecer num processo de obra: situações, ferramentas, direitos, obrigações e custos. Os custos são indicativos e as taxas variam por concelho.</p>` +
+        GUIA.map((g, i) => `<details class="gd" ${i === 0 ? "open" : ""}><summary><b>${g.t}</b> <span class="count">${g.itens.length}</span></summary><div class="team">` +
+          g.itens.map((x) => `<div class="m"><div><b>${esc(x.t)}</b><span>${esc(x.d)}</span>${x.b ? `<span class="ref" style="display:inline-block;margin-top:4px">${esc(x.b)}</span>` : ""}</div></div>`).join("") + `</div></details>`).join("");
+    } else if (tabB === "entidades") {
+      h = `<p class="note">Condicionantes que a app identifica e a entidade que dá parecer em cada uma. Numa obra, aparecem só as do local.</p><div class="team">` +
+        [{ l: "Imóvel classificado, em vias de classificação, ou zona de proteção", ent: "Património Cultural, I.P. (ou a CCDR)" }].concat(COND.filter((x) => x.l))
+          .map((x) => `<div class="m"><div><b>${esc(x.l)}</b><span>${esc(x.ent || "Câmara municipal")}</span>${VIEW[x.k] ? `<span class="note">Mapa oficial: <a href="${VIEW[x.k].u}" target="_blank" rel="noopener">${esc(VIEW[x.k].n)}</a></span>` : ""}</div></div>`).join("") + `</div>`;
+    } else if (tabB === "minutas") {
+      const s0 = { tipoSel: "interior", q: {}, cond: {} }; sync(s0);
+      const M = minutas(s0, decide(s0));
+      h = `<p class="note">Modelos com os campos por preencher a vermelho. Dentro de uma obra, as minutas já vêm preenchidas com os dados dessa obra.</p><div class="mbl">` +
+        Object.keys(M).map((k) => `<details><summary>${esc(M[k].nome)}</summary><div class="mhead"><p>${esc(M[k].desc)}</p><button class="btn" type="button" data-copiar="mb-${k}">Copiar texto</button></div><pre class="doc" id="mb-${k}">${M[k].txt}</pre></details>`).join("") + `</div>`;
+    } else h = LINKS;
+    $("panelB").innerHTML = h;
   }
+  $("tabsB").addEventListener("click", (e) => { const b = e.target.closest("button[data-tb]"); if (b) { tabB = b.dataset.tb; renderBib(); } });
 
-  $("tabs").addEventListener("click", (e) => { const b = e.target.closest("button[data-tab]"); if (b) { tab = b.dataset.tab; render(); } });
-  $("panel").addEventListener("change", (e) => { if (e.target.dataset.k) { checks[e.target.dataset.k] = e.target.checked; save(); render(); } });
+  $("panel").addEventListener("change", (e) => { if (e.target.dataset.k) { checks[e.target.dataset.k] = e.target.checked; save(); const y = scrollY; render(); scrollTo(0, y); } });
   $("panel").addEventListener("click", (e) => {
-    const m = e.target.closest("button[data-m]"); if (m) { minuta = m.dataset.m; render(); return; }
+    const m = e.target.closest("button[data-m]"); if (m) { minuta = m.dataset.m; const y = scrollY; render(); scrollTo(0, y); return; }
     const pp = e.target.closest("button[data-papel]"); if (pp) { papel = pp.dataset.papel; editPerfil = false; render(); return; }
     const a = e.target.closest("button[data-act]"); if (a && DB) { acaoMercado(a); return; }
-    if (e.target.id === "copy") {
-      const txt = $("doc").innerText;
-      const ok = () => toast("Texto copiado.");
-      const fallback = () => { const sel = window.getSelection(), rg = document.createRange(); rg.selectNodeContents($("doc")); sel.removeAllRanges(); sel.addRange(rg); toast("Texto selecionado. Use Ctrl+C para copiar."); };
-      try { navigator.clipboard.writeText(txt).then(ok, fallback); } catch (err) { fallback(); }
-    }
   });
   let tt;
   function toast(m) { const t = $("toast"); t.textContent = m; t.hidden = false; clearTimeout(tt); tt = setTimeout(() => (t.hidden = true), 2200); }
@@ -1315,6 +1565,12 @@ label.f .opc { font-weight: 400; color: var(--muted); }
   const qMapa = () => [state.morada, state.freguesia, state.concelho].filter(Boolean).join(", ");
   frame.src = "mapa/?embed=1" + (state.doMapa && qMapa() ? "&q=" + encodeURIComponent(qMapa()) : "");
   if (state.doMapa && qMapa()) { pedidoApp = Date.now(); pinAtivo = true; }
+  // Ao abrir outra obra, o mapa recarrega com a morada dessa obra.
+  window.recarregarMapa = () => {
+    pinAtivo = false;
+    frame.src = "mapa/?embed=1" + (state.doMapa && qMapa() ? "&q=" + encodeURIComponent(qMapa()) : "");
+    if (state.doMapa && qMapa()) { pedidoApp = Date.now(); pinAtivo = true; }
+  };
   window.pesquisarNoMapa = (q) => {
     pedidoApp = Date.now(); pinAtivo = true;
     frame.contentWindow.postMessage({ tipo: "pesquisar", q }, location.origin);
@@ -1336,12 +1592,14 @@ label.f .opc { font-weight: 400; color: var(--muted); }
     state.condMapa = []; state.doMapa = false; save(); render();
   });
   ["morada", "freguesia", "concelho"].forEach((id) => $(id).addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); $("btnMapa").click(); } }));
-  // Dados vindos do Mapa de Condicionantes: #mapa.<base64url de {m, f, c, k}>
+  // Dados vindos do Mapa de Condicionantes: #mapa.<base64url de {m, f, c, k}> abrem uma obra nova.
+  let vindoDoMapa = false;
   try {
     const h = location.hash || "";
     if (h.startsWith("#mapa.")) {
       const b = h.slice(6).replace(/-/g, "+").replace(/_/g, "/");
       const d = JSON.parse(decodeURIComponent(escape(atob(b + "===".slice((b.length + 3) % 4)))));
+      const id = novoId(); LOJA.obras[id] = state = Object.assign(OBRA_VAZIA(), { criado: Date.now() }); LOJA.atual = id; checks = {}; vindoDoMapa = true;
       if (d.m) state.morada = d.m; if (d.f) state.freguesia = d.f; if (d.c) state.concelho = d.c;
       state.condMapa = (d.k || []).filter((k) => k === "pat" || COND.some((x) => x.k === k));
       state.doMapa = true; save();
@@ -1350,7 +1608,8 @@ label.f .opc { font-weight: 400; color: var(--muted); }
   } catch (e) {}
   fillForm();
   render();
-  vista(location.hash === "#resumo" ? "resumo" : "form");
+  if (vindoDoMapa) history.replaceState(null, "", location.pathname + "#obra");
+  aplicarVista();
   initMercado();
 })();
 </script>
