@@ -167,7 +167,7 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
   L.control.layers({ "Mapa": osm, "Satélite": sat }, null, { position: "topright" }).addTo(map);
 
   // Muitos serviços oficiais não deixam o browser ler as respostas (CORS): o pedir() passa então pelo intermediário.
-  const PROXY = "https://iybqipmtpthdovykgoyl.supabase.co/functions/v1/mapa-proxy";
+  const PROXY = "https://mlsrswxtvyzoqqkozhka.supabase.co/functions/v1/mapa-proxy";
   const viaProxy = {};
   ["servicos.dgterritorio.pt", "websig.cm-lisboa.pt", "si.icnf.pt"].forEach((h) => (viaProxy[h] = true));
   // A DGT deixa de responder (503) com muitos pedidos ao mesmo tempo: no máximo 4 em curso por servidor.
