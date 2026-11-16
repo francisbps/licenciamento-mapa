@@ -91,7 +91,7 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
   </div>
   <section>
     <h2>Camadas no mapa</h2>
-    <p class="note" id="layersNota">Nas câmaras com dados guardados no site, as áreas são desenhadas a partir desses dados (aproxime o mapa e toque numa área para ver o nome). Fora delas, a imagem vem do serviço oficial.</p>
+    <p class="note" id="layersNota">Não precisa de ligar nada: a lista “Neste local” já verifica todas as cartas para o ponto escolhido. Se quiser ver as áreas desenhadas no mapa, ligue as camadas que lhe interessam (aproxime o mapa e toque numa área para ver o nome).</p>
     <div id="layers" class="layers"></div>
   </section>
   <p class="foot">Dados: Direção-Geral do Território (SNIT, servidões e restrições de utilidade pública) e ICNF. Mapa base © colaboradores do OpenStreetMap; pesquisa de moradas Nominatim. A informação é indicativa: a referência legal é a planta de condicionantes do PDM em vigor, disponível na câmara municipal. Algumas cartas nacionais podem estar desatualizadas ou incompletas para o seu concelho.</p>
@@ -111,13 +111,13 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
   // layers vazio = descobre os nomes no GetCapabilities do serviço. classe: só conta se a resposta tiver essa classe.
   const G = { pat: "Património", nat: "Natureza e água", solo: "Solo, floresta e incêndio", inf: "Infraestruturas", def: "Defesa e segurança", urb: "Urbanismo" };
   const LAYERS = [
-    { id: "pc", g: "pat", nome: "Património cultural (classificado, em vias, ZEP e ZGP)", ent: "Património Cultural, I.P.", url: "https://geo.patrimoniocultural.gov.pt/arcgis/services/PatrimonioClassificadoEmViasClassificacao/Atlas_Patrimonio_Servicos/MapServer/WMSServer", layers: "0,1,2", app: "pat", cor: "#8e3b8e", on: true },
+    { id: "pc", g: "pat", nome: "Património cultural (classificado, em vias, ZEP e ZGP)", ent: "Património Cultural, I.P.", url: "https://geo.patrimoniocultural.gov.pt/arcgis/services/PatrimonioClassificadoEmViasClassificacao/Atlas_Patrimonio_Servicos/MapServer/WMSServer", layers: "0,1,2", app: "pat", cor: "#8e3b8e" },
     { id: "pcr", g: "pat", nome: "Áreas com restrições patrimoniais (sensibilidade arqueológica, non aedificandi)", ent: "Património Cultural, I.P.", url: "https://geo.patrimoniocultural.gov.pt/arcgis/services/PatrimonioClassificadoEmViasClassificacao/Atlas_Patrimonio_Servicos/MapServer/WMSServer", layers: "3", app: "arqueologia", cor: "#b07cb0" },
     { id: "ic", g: "pat", nome: "Imóveis classificados e zonas de proteção (carta SRUP)", ent: "Património Cultural, I.P.", url: DGT("IC"), layers: "Imóveis_Classificados_com_Zona_de_Proteção,Imóveis_Classificados", app: "pat", cor: "#6d2f6d" },
     { id: "eip", g: "pat", nome: "Edifícios de interesse público", ent: "Entidade que tutela o edifício", url: DGT("EIP"), layers: "Edifícios_de_Interesse_Público", app: "edificios_publicos_valor", cor: "#a05a2c" },
     { id: "arq", g: "pat", nome: "Sítios arqueológicos (até 100 m)", ent: "Património Cultural, I.P.", tipo: "ags", url: "https://geo.patrimoniocultural.gov.pt/arcgis/rest/services/PatrimonioArqueologico/Sitios_Arqueologicos/MapServer/0", dist: 100, app: "arqueologia", cor: "#c9a0c9" },
-    { id: "ren", g: "nat", nome: "Reserva Ecológica Nacional (REN)", ent: "CCDR", url: DGT("REN"), layers: "REN_em_Vigor", app: "ren", cor: "#2f7d4a", on: true },
-    { id: "dph", g: "nat", nome: "Domínio público hídrico", ent: "APA, I.P.", url: DGT("DPH"), layers: "Domínio_Público_Hídrico", app: "hidrico", cor: "#2c6fb0", on: true },
+    { id: "ren", g: "nat", nome: "Reserva Ecológica Nacional (REN)", ent: "CCDR", url: DGT("REN"), layers: "REN_em_Vigor", app: "ren", cor: "#2f7d4a" },
+    { id: "dph", g: "nat", nome: "Domínio público hídrico", ent: "APA, I.P.", url: DGT("DPH"), layers: "Domínio_Público_Hídrico", app: "hidrico", cor: "#2c6fb0" },
     { id: "cheias", g: "nat", nome: "Zonas adjacentes (ocupação condicionada ou proibida)", ent: "APA, I.P.", url: DGT("DPH"), layers: "Zona_de_Ocupação_Condicionada,Zona_de_Ocupação_Proibida", app: "hidrico", cor: "#4aa3d8" },
     { id: "inund", g: "nat", nome: "Zonas inundáveis (áreas de risco, cheia de 20 anos)", ent: "APA, I.P.", url: APA("NZ_Diretiva200760CE_ptcont_20"), layers: "NZ.FloodedArea", app: "hidrico", cor: "#5fb4e6" },
     { id: "poc", g: "nat", nome: "Orla costeira: faixas de salvaguarda (galgamento, erosão)", ent: "APA, I.P.", url: "https://inspire.apambiente.pt/arcgis/services/INSPIRE/NZ_RiskZone_POC/MapServer/WMSServer", layers: "", app: "hidrico", cor: "#1f5f8f" },
@@ -127,7 +127,7 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     { id: "zpe", g: "nat", nome: "Rede Natura 2000: Zonas de Proteção Especial", ent: "ICNF, I.P.", url: DGT("ZPE"), layers: "Zonas_de_Protecao_Especial_-_ZPE", app: "natura", cor: "#6aa84f" },
     { id: "zec", g: "nat", nome: "Rede Natura 2000: Zonas Especiais de Conservação", ent: "ICNF, I.P.", url: DGT("ZEC"), layers: "Zonas_Especiais_de_Conservacao_-_ZEC", app: "natura", cor: "#93c47d" },
     { id: "sic", g: "nat", nome: "Rede Natura 2000: Sítios de Importância Comunitária (ICNF)", ent: "ICNF, I.P.", url: "https://si.icnf.pt/geoserver/INSPIRE/wms", layers: "sic_INSPIREcompliant", app: "natura", cor: "#b6d7a8", json: true },
-    { id: "ran", g: "solo", nome: "Reserva Agrícola Nacional (RAN)", ent: "Entidade Regional da RAN", url: DGT("RAN"), layers: "Reserva_Agricola_Nacional", app: "ran", cor: "#9a8a1a", on: true },
+    { id: "ran", g: "solo", nome: "Reserva Agrícola Nacional (RAN)", ent: "Entidade Regional da RAN", url: DGT("RAN"), layers: "Reserva_Agricola_Nacional", app: "ran", cor: "#9a8a1a" },
     { id: "oah", g: "solo", nome: "Aproveitamentos hidroagrícolas (perímetros de rega)", ent: "DGADR e associação de regantes", url: DGT("OAH"), layers: "Perímetros_de_Rega", app: "aproveitamentos_hidroagricolas", cor: "#c2b13b" },
     { id: "rf", g: "solo", nome: "Regime florestal (matas nacionais, perímetros florestais)", ent: "ICNF, I.P.", url: "https://si.icnf.pt/wms/refloa_rf", layers: "refloa_rf", app: "regime_florestal", cor: "#5b7f3a", json: true },
     { id: "eaf", g: "solo", nome: "Espécies protegidas (sobreiro, azinheira, oliveira)", ent: "ICNF, I.P. / DRAP", url: DGT("EAF"), layers: "Sobreiro,Oliveiras,Azinheiras", app: "sobreiro_azinheira", cor: "#8a9a5b" },
@@ -135,7 +135,7 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     { id: "cpir", g: "solo", nome: "Perigosidade de incêndio rural alta ou muito alta", ent: "ICNF, I.P. e câmara (CMGIFR)", url: DGT("CPIR"), layers: "Carta_de_Perigosidade_de_Incendio_Rural", classe: /muito\s*alta|\balta\b/i, app: "incendio", cor: "#e06c2f" },
     { id: "fgc", g: "solo", nome: "Rede primária de faixas de gestão de combustível", ent: "ICNF, I.P.", urls: ["PRAN_RP", "PRAC_RP", "PRALVT_RP", "PRAALT_RP", "PSA_AMP", "PSA_OESTE", "PSA_MT", "PSA_AML", "PSA_TS"].map((c) => DGTX("SGIFR_" + c)), layers: "", app: "incendio", cor: "#cc4125" },
     { id: "rg", g: "solo", nome: "Recursos geológicos (pedreiras, minas, águas minerais)", ent: "DGEG", url: DGT("RG"), layers: "Pedreiras_-_Jazigo_de_Urânio,Pedreiras_-_Zona_de_Proteção_a_Jazigo_de_Urânio,Pedreiras_-_Concessão_Mineira,Pedreiras_-_Área_Cativa,Pedreiras_-_Área_de_Reserva,Águas_Minerais_Naturais_-_Perímetro_de_Proteção,Águas_Minerais_Naturais_-_Concessão_Hidromineral", app: "", cor: "#7f6000" },
-    { id: "aa", g: "inf", nome: "Servidões aeronáuticas (aeroportos e aeródromos)", ent: "ANAC", url: DGT("AA"), layers: "Aeroportos_de_Navegação_Aérea_-__Zona_de_Ocupação,Aeroportos_e_Aerodromos_-_Zonas_,Radiofarois_-_Zonas", app: "aero", cor: "#0b5394", on: true },
+    { id: "aa", g: "inf", nome: "Servidões aeronáuticas (aeroportos e aeródromos)", ent: "ANAC", url: DGT("AA"), layers: "Aeroportos_de_Navegação_Aérea_-__Zona_de_Ocupação,Aeroportos_e_Aerodromos_-_Zonas_,Radiofarois_-_Zonas", app: "aero", cor: "#0b5394" },
     { id: "go", g: "inf", nome: "Gasodutos e oleodutos", ent: "Operador da rede (REN Gasodutos) e DGEG", url: DGT("GO"), layers: "Servidão_aos_Ramais,Concessionários", app: "gas", cor: "#bf9000" },
     { id: "tc", g: "inf", nome: "Telecomunicações (feixes hertzianos, centros radioelétricos)", ent: "ANACOM", url: DGT("TC"), layers: "Radioelétrica_-_Zona_Desobstrução_aos_Feixes,Radioelétrica_-_Zona_de_Libertação_Secundária,Radioelétrica_-_Zona_de_Libertação_Primária", app: "telecomunicacoes_radioeletricas", cor: "#674ea7" },
     { id: "mg", g: "inf", nome: "Marcos geodésicos (zona de proteção)", ent: "Direção-Geral do Território", url: DGT("MG"), layers: "Zona_de_Segurança_aos_Marcos_Geodésicos", app: "marcos_geodesicos", cor: "#999999" },
@@ -209,7 +209,7 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     }
     on ? vis[l.id].addTo(map) : map.removeLayer(vis[l.id]);
   }
-  $("layers").innerHTML = `<details open><summary>Câmara municipal</summary><label><input type="checkbox" data-cm checked><span><span class="sw" style="display:inline-block;width:10px;height:10px;background:var(--red);margin-right:6px;border-radius:2px"></span>Planta de condicionantes do PDM (dados guardados)</span></label></details>` + Object.entries(G).map(([g, gn]) => `<details${g === "pat" ? " open" : ""}><summary>${esc(gn)}</summary>` +
+  $("layers").innerHTML = `<details open><summary>Câmara municipal</summary><label><input type="checkbox" data-cm><span><span class="sw" style="display:inline-block;width:10px;height:10px;background:var(--red);margin-right:6px;border-radius:2px"></span>Planta de condicionantes do PDM (dados guardados)</span></label></details>` + Object.entries(G).map(([g, gn]) => `<details${g === "pat" ? " open" : ""}><summary>${esc(gn)}</summary>` +
     LAYERS.filter((l) => l.g === g).map((l) => `<label><input type="checkbox" data-l="${l.id}" ${l.on ? "checked" : ""}><span><span class="sw" style="display:inline-block;width:10px;height:10px;background:${l.cor};margin-right:6px;border-radius:2px"></span>${esc(l.nome)}</span></label>`).join("") + `</details>`).join("");
   $("layers").addEventListener("change", (e) => { const l = LAYERS.find((x) => x.id === e.target.dataset.l); if (l) mostrarCamada(l, e.target.checked); desenhar(); });
   const ligada = (id) => { const c = document.querySelector(`#layers [data-l="${id}"]`); return !!(c && c.checked); };
