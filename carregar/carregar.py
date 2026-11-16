@@ -8,12 +8,14 @@ Para cada concelho junta três origens, todas recortadas pelo limite oficial do 
 - ficheiros carregados à mão em dados/condicionantes/manual/<concelho>/ (respostas escritas de entidades).
 Se uma fonte falhar, fica o ficheiro da semana anterior e o erro fica registado no índice.
 """
+import io
 import json
 import math
 import re
 import unicodedata
 import sys
 import time
+import zipfile
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
@@ -227,6 +229,55 @@ def lonlat(g):
     """Algumas respostas em EPSG:4326 vêm em latitude, longitude: em Portugal a longitude é negativa."""
     x, y = g.representative_point().coords[0][:2]
     return transform(lambda a, b, z=None: (b, a), g) if x > 0 and y < 0 else g
+
+
+OGCAPI = "https://ogcapi.dgterritorio.gov.pt/collections/{}/items"
+
+
+def ogcapi_dgt(f, limite):
+    """Cartas SRUP da OGC API da DGT (GeoJSON em graus, por páginas, só a zona do concelho).
+    É o mesmo servidor da CAOP e responde muito melhor do que os WFS antigos da DGT."""
+    x0, y0, x1, y1 = limite.bounds
+    for col in f["ogc"]:
+        url, params = OGCAPI.format(col), {"f": "json", "limit": 500, "bbox": f"{x0},{y0},{x1},{y1}"}
+        while url:
+            j = json_ou_erro(pedir(url, params))
+            if "features" not in j:
+                raise RuntimeError(f"{col}: {str(j)[:200]}")
+            for el in j["features"]:
+                props = el.get("properties") or {}
+                # Cartas por classes (perigosidade de incêndio): só se guardam as classes que contam.
+                if f.get("classe") and not re.search(f["classe"], json.dumps(props, ensure_ascii=False), re.I):
+                    continue
+                if el.get("geometry"):
+                    yield elemento(lonlat(shape(el["geometry"])), limite, props, camada=f.get("descricao") or col)
+            url = next((l["href"] for l in j.get("links") or [] if l.get("rel") == "next"), None) if j["features"] else None
+            params = None
+
+
+def zip_shp(f, limite):
+    """Shapefile nacional em .zip (APA): descarrega-se o ficheiro todo e fica só o que toca no concelho."""
+    import shapefile  # pyshp
+    z = zipfile.ZipFile(io.BytesIO(pedir(f["url"]).content))
+    nomes = {n.lower(): n for n in z.namelist()}
+    x0, y0, x1, y1 = transform(para_pttm, limite).bounds
+    shps = [n for n in nomes if n.endswith(".shp")]
+    if not shps:
+        raise RuntimeError("o ficheiro não tem nenhum .shp")
+    for shp in shps:
+        base = shp[:-4]
+        ler = lambda ext: io.BytesIO(z.read(nomes[base + ext])) if base + ext in nomes else None  # noqa: E731
+        prj = z.read(nomes[base + ".prj"]).decode(errors="ignore") if base + ".prj" in nomes else ""
+        graus = prj.lstrip().upper().startswith("GEOGCS")
+        sf = shapefile.Reader(shp=ler(".shp"), shx=ler(".shx"), dbf=ler(".dbf"), encodingErrors="replace")
+        for rec in sf.iterShapeRecords():
+            if not rec.shape.points:
+                continue
+            bx0, by0, bx1, by1 = rec.shape.bbox
+            if not graus and (bx1 < x0 or bx0 > x1 or by1 < y0 or by0 > y1):
+                continue
+            g = shape(rec.shape.__geo_interface__)
+            yield elemento(g if graus else transform(de_pttm, g), limite, rec.record.as_dict(), camada=f["descricao"])
 
 
 def wfs_geoserver(servico, camada, limite):
@@ -509,7 +560,7 @@ def carregar(chave, cfg, municipios, cfgs):
     if nacionais is None:  # cartas nacionais comuns, com a REN da região do concelho
         ren = cfg.get("ren")
         nacionais = ([{"fonte": "DGT_REN", "codigo": "REN", "app": "ren", "entidade": cfgs["_ren"][ren],
-                       "url": f"https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_{ren}/WFService.aspx"}]
+                       "descricao": "Reserva Ecológica Nacional", "ogc": ["srup_ren_areal", "srup_ren_linear"]}]
                      if ren else []) + cfgs["_nacionais"]
     esperas_dgt = 0
     for f in nacionais:
@@ -522,13 +573,17 @@ def carregar(chave, cfg, municipios, cfgs):
             gerador = (e for c in f["camadas"] for e in ags_camara(f, {"id": c, "nome": meta["descricao"]}, folga))
         elif f.get("tipo") == "wfs":
             gerador = wfs_geoserver({**f, "nome": meta["descricao"]}, f["camada"], folga)
+        elif f.get("tipo") == "zipshp":
+            gerador = zip_shp(f, folga)
+        elif f.get("ogc"):
+            gerador = ogcapi_dgt(f, folga)
         elif esperas_dgt >= 3:
             # A DGT não respondeu a 3 cartas seguidas: as restantes ficam para a próxima semana (mantêm os dados).
             gerador = iter_erro(RuntimeError("DGT sem resposta nesta execução"))
         else:
             gerador = wfs_dgt(f, folga)
         gravar(pasta, f["fonte"], gerador, meta, indice)
-        if f.get("tipo") is None and esperas_dgt < 3:
+        if f.get("tipo") is None and not f.get("ogc") and esperas_dgt < 3:
             r = indice.get(f["fonte"], {})
             falhou_agora = r.get("erro") and r.get("tentativa", "") >= (r.get("atualizado") or "")
             # Conta também os erros do servidor (500, 502, 503): com a DGT em baixo, cada carta gastava 15 min.
@@ -553,9 +608,6 @@ def carregar(chave, cfg, municipios, cfgs):
 def main():
     cfgs = json.loads((RAIZ / "carregar" / "fontes.json").read_text())
     municipios = json.loads((RAIZ / "dados" / "municipios.json").read_text())
-    if sys.argv[1:] == ["explorar"]:
-        import explorar  # noqa: F401  (temporário)
-        return
     escolhidos = sys.argv[1:] or [c for c in cfgs if not c.startswith("_")]
     tudo_falhou = [carregar(c, cfgs[c], municipios, cfgs) for c in escolhidos]
     sys.exit(1 if all(tudo_falhou) else 0)
