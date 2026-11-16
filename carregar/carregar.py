@@ -53,17 +53,24 @@ PRAZO = [None]  # hora limite da fonte em curso (ver gravar)
 
 
 def pedir(url, params=None, tentativas=2):
-    for i in range(tentativas):
+    falhas, esperas = 0, 0
+    while True:
         if PRAZO[0] and time.time() > PRAZO[0]:
             raise TimeoutError(f"mais de {TEMPO_FONTE // 60} min sem terminar")
         try:
             r = sessao.get(url, params=params, timeout=ESPERA)
+            if r.status_code == 429 and esperas < 6:
+                # Demasiados pedidos (vários concelhos ao mesmo tempo): espera o que o servidor pedir e repete.
+                esperas += 1
+                time.sleep(min(int(r.headers.get("Retry-After") or 0) or 20 * esperas, 120))
+                continue
             r.raise_for_status()
             return r
         except requests.RequestException:
-            if i == tentativas - 1:
+            falhas += 1
+            if falhas >= tentativas:
                 raise
-            time.sleep(10 * (i + 1))
+            time.sleep(10 * falhas)
 
 
 def nome_de(props):
@@ -270,6 +277,7 @@ def zip_shp(f, limite):
         prj = z.read(nomes[base + ".prj"]).decode(errors="ignore") if base + ".prj" in nomes else ""
         graus = prj.lstrip().upper().startswith("GEOGCS")
         sf = shapefile.Reader(shp=ler(".shp"), shx=ler(".shx"), dbf=ler(".dbf"), encodingErrors="replace")
+        print(f"   {f['fonte']}: {shp} ({len(sf)} elementos, caixa {[round(v) for v in sf.bbox]}, prj {prj[:60]!r})")
         for rec in sf.iterShapeRecords():
             if not rec.shape.points:
                 continue
