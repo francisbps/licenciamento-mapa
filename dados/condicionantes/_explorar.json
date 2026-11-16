@@ -1,0 +1,3677 @@
+{
+ "ogcapi": [
+  [
+   "ortos-rgb",
+   "OrtoSat 30 cm - Portugal Continental - 2023 (Cor Verdadeira)"
+  ],
+  [
+   "ortos-irg",
+   "OrtoSat 30 cm - Portugal Continental - 2023 (Falsa Cor)"
+  ],
+  [
+   "cadastro",
+   "Cadastro Predial (Continente)"
+  ],
+  [
+   "cos2018v3",
+   "COS2018v3-S2"
+  ],
+  [
+   "cos2018v4",
+   "COS2018v4-S2"
+  ],
+  [
+   "cos2023v1",
+   "COS2023v1-S2"
+  ],
+  [
+   "cos2025v1",
+   "COS2025v1-S2"
+  ],
+  [
+   "municipios",
+   "CAOP2025 Municípios"
+  ],
+  [
+   "freguesias",
+   "CAOP2025 Freguesias"
+  ],
+  [
+   "admin",
+   "CAOP2025 Áreas administrativas"
+  ],
+  [
+   "nuts1",
+   "CAOP2025 NUTSI"
+  ],
+  [
+   "nuts2",
+   "CAOP2025 NUTSII"
+  ],
+  [
+   "nuts3",
+   "CAOP2025 NUTSIII"
+  ],
+  [
+   "trocos",
+   "CAOP2025 Troços"
+  ],
+  [
+   "distritos",
+   "CAOP2025 Distritos"
+  ],
+  [
+   "snig",
+   "SNIG"
+  ],
+  [
+   "point",
+   "PoInT"
+  ],
+  [
+   "snig-hvd",
+   "SNIG-HVD"
+  ],
+  [
+   "cosc2018",
+   "Carta de Ocupação do Solo Conjuntural - 2018"
+  ],
+  [
+   "cosc2020",
+   "Carta de Ocupação do Solo Conjuntural - 2020"
+  ],
+  [
+   "cosc2021",
+   "Carta de Ocupação do Solo Conjuntural - 2021"
+  ],
+  [
+   "cosc2022",
+   "Carta de Ocupação do Solo Conjuntural - 2022"
+  ],
+  [
+   "cosc2023",
+   "Carta de Ocupação do Solo Conjuntural - 2023"
+  ],
+  [
+   "COSc2024",
+   "Carta de Ocupação do Solo Conjuntural - 2024"
+  ],
+  [
+   "COSc2025",
+   "Carta de Ocupação do Solo Conjuntural - 2025"
+  ],
+  [
+   "ortos2018-rgb",
+   "Ortofotos 25 cm - Portugal Continental - 2018 - (Cor Verdadeira)"
+  ],
+  [
+   "ortos2018-irg",
+   "Ortofotos 25 cm - Portugal Continental - 2018 - (Falsa Cor)"
+  ],
+  [
+   "ortos2015-rgb",
+   "Ortofotos 50 cm - Portugal Continental - 2015 - (Cor Verdadeira)"
+  ],
+  [
+   "ortos2015-irg",
+   "Ortofotos 50 cm - Portugal Continental - 2015 - (Falsa Cor)"
+  ],
+  [
+   "ortos2012-rgb",
+   "Ortofotos 50 cm - Portugal Continental - 2012 - (Cor Verdadeira)"
+  ],
+  [
+   "ortos2012-irg",
+   "Ortofotos 50 cm - Portugal Continental - 2012 - (Falsa Cor)"
+  ],
+  [
+   "ortos2010-rgb",
+   "Ortofotos 50 cm - Portugal Continental - 2010 - (Cor Verdadeira)"
+  ],
+  [
+   "ortos2010-irg",
+   "Ortofotos 50 cm - Portugal Continental - 2010 - (Falsa Cor)"
+  ],
+  [
+   "ortos2004-2006-rgb",
+   "Ortofotos 50 cm - Portugal Continental - 2004-2006 - (Cor Verdadeira)"
+  ],
+  [
+   "ortos2004-2006-irg",
+   "Ortofotos 50 cm - Portugal Continental - 2004-2006 - (Falsa Cor)"
+  ],
+  [
+   "ortos1995-irg",
+   "Ortofotos 1 m - Portugal Continental - 1995 - (Falsa Cor)"
+  ],
+  [
+   "ortos2007-rgb",
+   "Ortofotos 50 cm - Portugal Continental - 2007 - (Cor Verdadeira)"
+  ],
+  [
+   "ortos2007-irg",
+   "Ortofotos 50 cm - Portugal Continental - 2007 - (Falsa Cor)"
+  ],
+  [
+   "geoide",
+   "Modelo do Geóide - GeodPT08 (Continente)"
+  ],
+  [
+   "IPSentinel2PT-jan-2025-RGB",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Janeiro 2025) - (Cor Verdadeira)"
+  ],
+  [
+   "IPSentinel2PT-jan-2025-IRG",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Janeiro 2025) - (Falsa Cor)"
+  ],
+  [
+   "IPSentinel2PT-fev-2025-RGB",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Fevereiro 2025) - (Cor Verdadeira)"
+  ],
+  [
+   "IPSentinel2PT-fev-2025-IRG",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Fevereiro 2025) - (Falsa Cor)"
+  ],
+  [
+   "IPSentinel2PT-mar-2025-RGB",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Março 2025) - (Cor Verdadeira)"
+  ],
+  [
+   "IPSentinel2PT-mar-2025-IRG",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Março 2025) - (Falsa Cor)"
+  ],
+  [
+   "IPSentinel2PT-abr-2025-RGB",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Abril 2025) - (Cor Verdadeira)"
+  ],
+  [
+   "IPSentinel2PT-abr-2025-IRG",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Abril 2025) - (Falsa Cor)"
+  ],
+  [
+   "IPSentinel2PT-mai-2025-RGB",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Maio 2025) - (Cor Verdadeira)"
+  ],
+  [
+   "IPSentinel2PT-mai-2025-IRG",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Maio 2025) - (Falsa Cor)"
+  ],
+  [
+   "IPSentinel2PT-jun-2025-RGB",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Junho 2025) - (Cor Verdadeira)"
+  ],
+  [
+   "IPSentinel2PT-jun-2025-IRG",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Junho 2025) - (Falsa Cor)"
+  ],
+  [
+   "IPSentinel2PT-jul-2025-RGB",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Julho 2025) - (Cor Verdadeira)"
+  ],
+  [
+   "IPSentinel2PT-jul-2025-IRG",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Julho 2025) - (Falsa Cor)"
+  ],
+  [
+   "IPSentinel2PT-ago-2025-RGB",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Agosto 2025) - (Cor Verdadeira)"
+  ],
+  [
+   "IPSentinel2PT-ago-2025-IRG",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Agosto 2025) - (Falsa Cor)"
+  ],
+  [
+   "IPSentinel2PT-set-2025-RGB",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Setembro 2025) - (Cor Verdadeira)"
+  ],
+  [
+   "IPSentinel2PT-set-2025-IRG",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Setembro 2025) - (Falsa Cor)"
+  ],
+  [
+   "IPSentinel2PT-out-2025-RGB",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Outubro 2025) - (Cor Verdadeira)"
+  ],
+  [
+   "IPSentinel2PT-out-2025-IRG",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Outubro 2025) - (Falsa Cor)"
+  ],
+  [
+   "IPSentinel2PT-nov-2025-RGB",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Novembro 2025) - (Cor Verdadeira)"
+  ],
+  [
+   "IPSentinel2PT-nov-2025-IRG",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Novembro 2025) - (Falsa Cor)"
+  ],
+  [
+   "IPSentinel2PT-dez-2025-RGB",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Dezembro 2025) - (Cor Verdadeira)"
+  ],
+  [
+   "IPSentinel2PT-dez-2025-IRG",
+   "Mosaico composto por imagens Sentinel-2 de Portugal continental com resolução de 10 m (Dezembro 2025) - (Falsa Cor)"
+  ],
+  [
+   "crus",
+   "CRUS Portugal Continental"
+  ],
+  [
+   "srup_ren_areal",
+   "SRUP - Reserva Ecológica Nacional - Áreas"
+  ],
+  [
+   "srup_ren_linear",
+   "SRUP - Reserva Ecológica Nacional - Linhas"
+  ],
+  [
+   "sgifr_areas",
+   "SRUP - Sistemas de Gestão Integrada de Fogos Rurais - Áreas"
+  ],
+  [
+   "sgifr_linhas",
+   "SRUP - Sistemas de Gestão Integrada de Fogos Rurais - Linhas"
+  ],
+  [
+   "sgifr_pontos",
+   "SRUP - Sistemas de Gestão Integrada de Fogos Rurais - Pontos"
+  ],
+  [
+   "srup_ran",
+   "SRUP - Reserva Agrícola Nacional"
+  ],
+  [
+   "srup_areas_protegidas",
+   "SRUP - Áreas Protegidas"
+  ],
+  [
+   "srup_arvores_areal",
+   "SRUP - Árvores de Interesse Público - Áreas"
+  ],
+  [
+   "srup_arvores_point",
+   "SRUP - Árvores de Interesse Público - Pontos"
+  ],
+  [
+   "srup_marcos_geod",
+   "SRUP - Marcos Geodésicos"
+  ],
+  [
+   "srup_aeronautica",
+   "SRUP - Aeroportos e Aeródromos - Aeronautica"
+  ],
+  [
+   "srup_albufeiras",
+   "SRUP - Albufeiras de águas públicas classificadas"
+  ],
+  [
+   "srup_aquiferos",
+   "SRUP - Captação de águas subterrâneas para abastecimento público"
+  ],
+  [
+   "srup_defesa_militar",
+   "SRUP - Defesa Nacional - Defesa Militar"
+  ],
+  [
+   "srup_defesa_militar_zonas",
+   "SRUP - Defesa Nacional - Defesa Militar Zonas"
+  ],
+  [
+   "srup_zpe",
+   "SRUP - Rede Natura 2000 - Zonas de Proteção Especial - Áreas"
+  ],
+  [
+   "srup_zec",
+   "SRUP - Rede Natura 2000 - Zonas Especiais de Conservação"
+  ],
+  [
+   "srup_perigosidade_inc_rural",
+   "SRUP - Carta de Perigosidade de Incêndio Rural"
+  ],
+  [
+   "srup_rede_viaria",
+   "SRUP - Rede Rodoviária Nacional"
+  ],
+  [
+   "srup_rede_ferroviaria",
+   "SRUP - Rede Ferroviária"
+  ],
+  [
+   "srup_rede_ferroviaria_estacoes",
+   "SRUP - Rede Ferroviária Estações"
+  ],
+  [
+   "srup_rede_eletrica",
+   "SRUP - Rede Elétrica"
+  ],
+  [
+   "altimetria_curvas_nivel",
+   "Altimetria - Curva de nível"
+  ],
+  [
+   "altimetria_pontos",
+   "Altimetria - Cota altimétrica"
+  ],
+  [
+   "toponimia",
+   "Toponímia de Portugal Continental 1:200 000"
+  ],
+  [
+   "Hipsometria",
+   "Hipsometria de Portugal Continental"
+  ],
+  [
+   "estradas",
+   "Redes de Transporte de Portugal Continental - Estradas"
+  ],
+  [
+   "ferrovia",
+   "Redes de Transporte de Portugal Continental - Ferrovia"
+  ],
+  [
+   "linhas_agua",
+   "Hidrografia de Portugal Continental - Linhas de água"
+  ],
+  [
+   "linha_costa",
+   "Hidrografia de Portugal Continental - Linha de costa"
+  ]
+ ],
+ "dados_gov": [
+  {
+   "q": "srup",
+   "titulo": "SRUP - Reserva Ecológica Nacional",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wms",
+     "SRUP - Reserva Ecológica Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_REN_PT1/WMService.aspx?service=WMS&request=getcapabilities"
+    ],
+    [
+     "wfs",
+     "SRUP - Reserva Ecológica Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_NORTE/WFService.aspx?service=WFS&request=getcapabilities"
+    ],
+    [
+     "wfs",
+     "SRUP - Reserva Ecológica Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_CENTRO/WFService.aspx?service=WFS&request=getcapabilities"
+    ],
+    [
+     "wfs",
+     "SRUP - Reserva Ecológica Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_LVT/WFService.aspx?service=WFS&request=getcapabilities"
+    ],
+    [
+     "wfs",
+     "SRUP - Reserva Ecológica Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_ALENTEJO/WFService.aspx?service=WFS&request=getcapabilities"
+    ],
+    [
+     "wfs",
+     "SRUP - Reserva Ecológica Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_ALGARVE/WFService.aspx?service=WFS&request=getcapabilities"
+    ],
+    [
+     "wfs",
+     "SRUP - Reserva Ecológica Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_PT1/WFService.aspx?service=WFS&request=getcapabilities"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Telecomunicações",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Telecomunicações",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_TC_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Telecomunicações",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_TC_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Áreas Protegidas",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Áreas Protegidas",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_AP_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Áreas Protegidas",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_AP_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Marcos Geodésicos",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Marcos Geodésicos",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_MG_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Marcos Geodésicos",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_MG_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Instalações Aduaneiras",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Instalações Aduaneiras",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_IA_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Instalações Aduaneiras",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_IA_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Regime Florestal",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Regime Florestal",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_RF_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Regime Florestal",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_RF_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Imóveis Classificados",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Imóveis Classificados",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_IC_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Imóveis Classificados",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_IC_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Defesa Nacional",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Defesa Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_DN_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Defesa Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_DN_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Recursos Geológicos",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Recursos Geológicos",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_RG_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Recursos Geológicos",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_RG_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Reserva Agrícola Nacional",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Reserva Agrícola Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_RAN_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Reserva Agrícola Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_RAN_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Gasodutos e Oleodutos",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Gasodutos e Oleodutos",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_GO_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Gasodutos e Oleodutos",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_GO_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Aeroportos e Aeródromos",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Aeroportos e Aeródromos",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_AA_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Aeroportos e Aeródromos",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_AA_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Domínio Público Hídrico",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Domínio Público Hídrico",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_DPH_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Domínio Público Hídrico",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_DPH_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Árvores de Interesse Público",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Árvores de Interesse Público",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_AIP_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Árvores de Interesse Público",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_AIP_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Instalações com Produtos Explosivos",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Instalações com Produtos Explosivos",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_IPE_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Instalações com Produtos Explosivos",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_IPE_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Obras de Aproveitamento Hidroagrícola",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Obras de Aproveitamento Hidroagrícola",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_OAH_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Obras de Aproveitamento Hidroagrícola",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_OAH_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Edifícios de Interesse Público",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Edifícios de Interesse Público",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_EIP_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Edifícios de Interesse Público",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_EIP_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Espécies Agrícolas e Florestais",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Espécies Agrícolas e Florestais",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_EAF_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Espécies Agrícolas e Florestais",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_EAF_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Albufeiras de Águas Públicas Classificadas",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Albufeiras de Águas Públicas Classificadas",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_AAPC_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Albufeiras de Águas Públicas Classificadas",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_AAPC_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Carta de Perigosidade de Incêndio Rural",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "WFS",
+     "SRUP - Carta de Perigosidade de Incêndio Rural",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_CPIR_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "WMS",
+     "SRUP - Carta de Perigosidade de Incêndio Rural",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_CPIR_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ],
+    [
+     "zip",
+     "SRUP - Carta de Perigosidade de Incêndio Rural",
+     "https://www.dgterritorio.gov.pt/download/CARTA_PERIGOSIDADE_INCENDIO_RURAL/PERIGOSIDADE_INCENDIO_RURAL.zip"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Carta de Perigosidade de Incêndio Rural",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Carta de Perigosidade de Incêndio Rural",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_CPIR_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Carta de Perigosidade de Incêndio Rural",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_CPIR_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ],
+    [
+     "zip",
+     "SRUP - Carta de Perigosidade de Incêndio Rural",
+     "https://snit-mais.dgterritorio.gov.pt/SNIT/DOWNLOAD/SRUP/CARTA_PERIGOSIDADE_INCENDIO_RURAL/PERIGOSIDADE_INCENDIO_RURAL.zip"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Estabelecimentos Prisionais e Tutelares de Menores",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Estabelecimentos Prisionais e Tutelares de Menores",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_EPTM_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Estabelecimentos Prisionais e Tutelares de Menores",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_EPTM_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Captações de Águas Subterrâneas para Abastecimento Público",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Captações de Águas Subterrâneas para Abastecimento Público",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_CASAP_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Captações de Águas Subterrâneas para Abastecimento Público",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_CASAP_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Rede Natura 2000 - Zonas de Proteção Especial",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Rede Natura 2000 - Zonas de Proteção Especial",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_ZPE_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Rede Natura 2000 - Zonas de Proteção Especial",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_ZPE_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "srup",
+   "titulo": "SRUP - Rede Natura 2000 - Zonas Especiais de Conservação",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Rede Natura 2000 - Zonas Especiais de Conservação",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_ZEC_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Rede Natura 2000 - Zonas Especiais de Conservação",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_ZEC_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "reserva ecologica nacional",
+   "titulo": "SRUP - Reserva Ecológica Nacional",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wms",
+     "SRUP - Reserva Ecológica Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_REN_PT1/WMService.aspx?service=WMS&request=getcapabilities"
+    ],
+    [
+     "wfs",
+     "SRUP - Reserva Ecológica Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_NORTE/WFService.aspx?service=WFS&request=getcapabilities"
+    ],
+    [
+     "wfs",
+     "SRUP - Reserva Ecológica Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_CENTRO/WFService.aspx?service=WFS&request=getcapabilities"
+    ],
+    [
+     "wfs",
+     "SRUP - Reserva Ecológica Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_LVT/WFService.aspx?service=WFS&request=getcapabilities"
+    ],
+    [
+     "wfs",
+     "SRUP - Reserva Ecológica Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_ALENTEJO/WFService.aspx?service=WFS&request=getcapabilities"
+    ],
+    [
+     "wfs",
+     "SRUP - Reserva Ecológica Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_ALGARVE/WFService.aspx?service=WFS&request=getcapabilities"
+    ],
+    [
+     "wfs",
+     "SRUP - Reserva Ecológica Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_PT1/WFService.aspx?service=WFS&request=getcapabilities"
+    ]
+   ]
+  },
+  {
+   "q": "reserva ecologica nacional",
+   "titulo": "Planta da Reserva Ecológica Nacional",
+   "org": "Câmara Municipal da Calheta",
+   "rec": [
+    [
+     "pdf",
+     "planta-ren.pdf",
+     "https://dados.gov.pt/s/resources/planta-da-reserva-ecologica-nacional/20260304-100720/planta-ren.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "reserva ecologica nacional",
+   "titulo": "PDM 2024 - Planta de Condicionantes – Reserva Agrícola Nacional",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Condicionantes - Reserva Agrícola Nacional",
+     "https://dadosabertos.cm-agueda.pt/dataset/bd31938f-15ea-4066-8a1d-36fd15688311/resource/00195771-7e6a-4c76-8e48-57ffa1f055a5/download/ran.gpkg"
+    ],
+    [
+     "dxf",
+     "Planta de Condicionantes - Reserva Agrícola Nacional",
+     "https://dadosabertos.cm-agueda.pt/dataset/bd31938f-15ea-4066-8a1d-36fd15688311/resource/f963c7d7-1a59-416a-8a78-c70087b6b65f/download/ran.dxf"
+    ],
+    [
+     "kml",
+     "Planta de Condicionantes - Reserva Agrícola Nacional",
+     "https://dadosabertos.cm-agueda.pt/dataset/bd31938f-15ea-4066-8a1d-36fd15688311/resource/138e40d9-d5e9-427e-9ed4-7d2c543c5264/download/ran.kml"
+    ],
+    [
+     "wms",
+     "Planta de Condicionantes - Reserva Agrícola Nacional",
+     "https://geoserver.sig.cm-agueda.pt/geoserver/dadosAbertos/ran/wms?service=WMS&version=1.1.0&request=GetMap&Layers"
+    ],
+    [
+     "geojson",
+     "Planta de Condicionantes - Reserva Agrícola Nacional",
+     "https://dadosabertos.cm-agueda.pt/dataset/bd31938f-15ea-4066-8a1d-36fd15688311/resource/304be7a4-7157-456e-9618-2838b2ba0f58/download/ranv2.geojson"
+    ]
+   ]
+  },
+  {
+   "q": "reserva ecologica nacional",
+   "titulo": "PDM 2024 - Planta de Ordenamento - Estrutura Ecológica Municipal",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Estrutura Ecológica Municipal",
+     "https://dadosabertos.cm-agueda.pt/dataset/331652d0-1e12-423f-9874-6f39eb9dcd98/resource/bb6a7778-e1b2-42f4-89a3-88967135ee4e/download/estruturaecologicamunicipal.gpkg"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Estrutura Ecológica Municipal",
+     "https://dadosabertos.cm-agueda.pt/dataset/331652d0-1e12-423f-9874-6f39eb9dcd98/resource/f7e6234c-f099-49e0-8fea-520416c7ad21/download/eem_26.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Estrutura Ecológica Municipal",
+     "https://dadosabertos.cm-agueda.pt/dataset/331652d0-1e12-423f-9874-6f39eb9dcd98/resource/6bb706d7-7447-402c-b96d-a4f2bf207da1/download/estrutura_ecologica_municipal_26.kml"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Estrutura Ecológica Municipal",
+     "https://dadosabertos.cm-agueda.pt/dataset/331652d0-1e12-423f-9874-6f39eb9dcd98/resource/9b91a1ac-3593-4e74-acb2-4a31e48455d4/download/estrutura_ecologica_municipal_26.dxf"
+    ]
+   ]
+  },
+  {
+   "q": "reserva ecologica nacional",
+   "titulo": "PDM 2024 - Planta de Ordenamento - Ordenamento",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Ordenamento",
+     "https://dadosabertos.cm-agueda.pt/dataset/f9c7002c-77c3-40a3-97f9-90dc18b15a8f/resource/3fbe6c38-4674-48f9-be34-aee0e8367721/download/ordenamento.gpkg"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Ordenamento",
+     "https://dadosabertos.cm-agueda.pt/dataset/f9c7002c-77c3-40a3-97f9-90dc18b15a8f/resource/2579bbaa-f9f4-4caf-831f-6cfcdf879502/download/ordenamento.dxf"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Ordenamento",
+     "https://dadosabertos.cm-agueda.pt/dataset/f9c7002c-77c3-40a3-97f9-90dc18b15a8f/resource/a1945046-b560-4ea6-8b5b-72eab46872f5/download/ordenamento.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Ordenamento",
+     "https://dadosabertos.cm-agueda.pt/dataset/f9c7002c-77c3-40a3-97f9-90dc18b15a8f/resource/3f97f404-117f-476a-a59a-39b5481d0b1a/download/ordenamento.kml"
+    ]
+   ]
+  },
+  {
+   "q": "reserva ecologica nacional",
+   "titulo": "PDM 2024 - Planta de Condicionantes –            Rede de Defesa da Floresta Contra Incêndios",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Condicionantes - Rede de Defesa da Floresta Contra Incêndios, GPKG",
+     "https://dadosabertos.cm-agueda.pt/dataset/35ef0ccc-ffcf-4bec-86ea-f390b52d69bc/resource/2112f289-d5da-48e2-adb8-b2bc2af463d1/download/plantacrdfci.gpkg"
+    ],
+    [
+     "dxf",
+     "Planta de Condicionantes - Rede de Defesa da Floresta Contra Incêndios, dxf",
+     "https://dadosabertos.cm-agueda.pt/dataset/35ef0ccc-ffcf-4bec-86ea-f390b52d69bc/resource/e25b7ee4-5db8-48d6-b9cc-b77b63b1485c/download/plantacrdfci.dxf"
+    ],
+    [
+     "kml",
+     "Planta de Condicionantes - Rede de Defesa da Floresta Contra Incêndios, kml",
+     "https://dadosabertos.cm-agueda.pt/dataset/35ef0ccc-ffcf-4bec-86ea-f390b52d69bc/resource/28ecf45b-8577-42e1-93d3-98e4181c17a4/download/plantacrdfci.kml"
+    ]
+   ]
+  },
+  {
+   "q": "reserva ecologica nacional",
+   "titulo": "PDM 2024 - Planta de Ordenamento - Património",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Património",
+     "https://dadosabertos.cm-agueda.pt/dataset/406f9c1d-4f59-42a9-af1c-dcd585483e74/resource/1b02f718-275a-43d8-b952-8c8b8f5ce867/download/patrimonio.gpkg"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Património",
+     "https://dadosabertos.cm-agueda.pt/dataset/406f9c1d-4f59-42a9-af1c-dcd585483e74/resource/6db9ffda-e46b-47bb-96a0-05d3d2320da2/download/patrimonio.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Património",
+     "https://dadosabertos.cm-agueda.pt/dataset/406f9c1d-4f59-42a9-af1c-dcd585483e74/resource/d7aec4c6-0f6e-4384-a3c0-e07b0187efd9/download/patrimonio.kml"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Património",
+     "https://dadosabertos.cm-agueda.pt/dataset/406f9c1d-4f59-42a9-af1c-dcd585483e74/resource/7939cb55-73e9-4709-b117-679616c3aeeb/download/patrimoniov2.dxf"
+    ]
+   ]
+  },
+  {
+   "q": "reserva ecologica nacional",
+   "titulo": "PDM 2024 - Planta de Ordenamento – Zonas Sensíveis e Mistas",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Zonas Sensíveis e Mistas",
+     "https://dadosabertos.cm-agueda.pt/dataset/13bb60d8-9c1b-4f13-8324-e9327bff043e/resource/36359b38-2116-487a-8f44-599c7327a942/download/zonassensiveismistas.gpkg"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Zonas Sensíveis e Mistas",
+     "https://dadosabertos.cm-agueda.pt/dataset/13bb60d8-9c1b-4f13-8324-e9327bff043e/resource/6d5d3683-5251-4244-a6e8-3e2df5eb6389/download/zonassensiveismistas.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Zonas Sensíveis e Mistas",
+     "https://dadosabertos.cm-agueda.pt/dataset/13bb60d8-9c1b-4f13-8324-e9327bff043e/resource/61043fca-f14c-4370-8884-197ddea6c607/download/zonassensiveisemistas.kml"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Zonas Sensíveis e Mistas",
+     "https://dadosabertos.cm-agueda.pt/dataset/13bb60d8-9c1b-4f13-8324-e9327bff043e/resource/e4c01ad7-fce8-4e26-9032-b467ee91aead/download/zonassensiveisemistas.dxf"
+    ]
+   ]
+  },
+  {
+   "q": "reserva ecologica nacional",
+   "titulo": "PDM 2024 - Planta de Ordenamento - Superfícies de Desobstrução",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Superfícies de Desobstrução",
+     "https://dadosabertos.cm-agueda.pt/dataset/0ba62001-e58a-4f4a-b529-c4dac6a82243/resource/20796e50-24b8-4dfc-a22a-c41f7ebef63c/download/superficiesdedesobstrucao.gpkg"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Superfícies de Desobstrução",
+     "https://dadosabertos.cm-agueda.pt/dataset/0ba62001-e58a-4f4a-b529-c4dac6a82243/resource/a5e99063-4668-40ea-86a6-fe6b1fe19e96/download/superficiesdedesobstrucao.dxf"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Superfícies de Desobstrução",
+     "https://dadosabertos.cm-agueda.pt/dataset/0ba62001-e58a-4f4a-b529-c4dac6a82243/resource/5e132d40-6e4a-4dc7-999d-a8300e978048/download/superficiesdedesobstrucao.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Superfícies de Desobstrução",
+     "https://dadosabertos.cm-agueda.pt/dataset/0ba62001-e58a-4f4a-b529-c4dac6a82243/resource/75d52abb-7c25-4c40-bffd-bdba766fb43c/download/superficiesdedesobstrucao.kml"
+    ]
+   ]
+  },
+  {
+   "q": "reserva ecologica nacional",
+   "titulo": "PDM 2024 - Planta de Condicionantes – Perigosidade de Incêndio Florestal",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "wms",
+     "Planta de Condicionantes - Perigosidade de Incêndio Florestal",
+     "https://geoserver.sig.cm-agueda.pt/geoserver/dadosAbertos/perigosidade2024pdm/wms?"
+    ],
+    [
+     "dxf",
+     "Planta de Condicionantes - Perigosidade de Incêndio Florestal",
+     "https://dadosabertos.cm-agueda.pt/dataset/ef84ae09-3dac-4289-8f8c-e1ca41ae89ee/resource/dd4f156d-bd23-4c8d-8610-cb3ae76df8fb/download/perigosidadedeincendio.dxf"
+    ],
+    [
+     "gpkg",
+     "Planta de Condicionantes - Perigosidade de Incêndio Florestal",
+     "https://dadosabertos.cm-agueda.pt/dataset/ef84ae09-3dac-4289-8f8c-e1ca41ae89ee/resource/3b020fac-ee55-4ab7-a541-cc85515862b0/download/perigosidadedeincendio.gpkg"
+    ],
+    [
+     "sld",
+     "Planta de Condicionantes - Perigosidade de Incêndio Florestal",
+     "https://dadosabertos.cm-agueda.pt/dataset/ef84ae09-3dac-4289-8f8c-e1ca41ae89ee/resource/89f7093d-02d0-4462-9897-7c5af122e74b/download/perigosidadedeincendio.sld"
+    ],
+    [
+     "geojson",
+     "Planta de Condicionantes - Perigosidade de Incêndio Florestal",
+     "https://dadosabertos.cm-agueda.pt/dataset/ef84ae09-3dac-4289-8f8c-e1ca41ae89ee/resource/7d7d737a-895f-46ff-a0b8-1590b9aa5e35/download/perigosidadeincendioflorestal.geojson"
+    ]
+   ]
+  },
+  {
+   "q": "reserva ecologica nacional",
+   "titulo": "PDM 2024 - Planta de Condicionantes – Condicionantes Gerais",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Condicionantes - Condicionantes Gerais",
+     "https://dadosabertos.cm-agueda.pt/dataset/04636627-733c-487a-bbb0-4314d6f0a923/resource/621815c7-763a-4488-81b2-4f6662e42d95/download/condicionantesgerais.gpkg"
+    ],
+    [
+     "dxf",
+     "Planta de Condicionantes - Condicionantes Gerais",
+     "https://dadosabertos.cm-agueda.pt/dataset/04636627-733c-487a-bbb0-4314d6f0a923/resource/ea271cab-4750-4a08-8c2d-cbd58196d112/download/condicionantesgerais.dxf"
+    ],
+    [
+     "geojson",
+     "Planta de Condicionantes - Condicionantes Gerais",
+     "https://dadosabertos.cm-agueda.pt/dataset/04636627-733c-487a-bbb0-4314d6f0a923/resource/b5cfabe2-b5c6-4114-bc88-1a9eee646aec/download/condicionantesgerais.geojson"
+    ]
+   ]
+  },
+  {
+   "q": "reserva ecologica nacional",
+   "titulo": "PDM 2024 - Planta de Ordenamento - Risco de Cheias e Inundações",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Risco de Cheias e Inundações",
+     "https://dadosabertos.cm-agueda.pt/dataset/4dbe6042-3825-495d-8e04-562c01084d7a/resource/3c79e8e6-55a2-4930-9422-bfa49c3f379e/download/plantaoriscocheiaseinundacoes.gpkg"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Risco de Cheias e Inundações",
+     "https://dadosabertos.cm-agueda.pt/dataset/4dbe6042-3825-495d-8e04-562c01084d7a/resource/9146ca63-9ca9-41c9-8976-358d7f00aa58/download/plantaoriscocheiaseinundacoes.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Risco de Cheias e Inundações",
+     "https://dadosabertos.cm-agueda.pt/dataset/4dbe6042-3825-495d-8e04-562c01084d7a/resource/ae94d035-cbaa-440e-a518-757c96c542a8/download/plantaoriscocheiaseinundacoes.kml"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Risco de Cheias e Inundações",
+     "https://dadosabertos.cm-agueda.pt/dataset/4dbe6042-3825-495d-8e04-562c01084d7a/resource/d9f2a01d-2a5b-4dbf-8dc4-8a663a9a9c07/download/plantaoriscocheiaseinundacoes.dxf"
+    ]
+   ]
+  },
+  {
+   "q": "reserva ecologica nacional",
+   "titulo": "Potenciais Áreas de Aceleração de Energias Renováveis (PAER)",
+   "org": "Laboratório Nacional de Energia e Geologia - LNEG",
+   "rec": [
+    [
+     "wms",
+     "Potenciais Áreas de Aceleração de Energias Renováveis (PAER)",
+     "https://sig.lneg.pt/server/services/AreasAceleracaoEnergiasRenovaveis/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    ],
+    [
+     "remote",
+     "Potenciais Áreas de Aceleração de Energias Renováveis (PAER)",
+     "https://geoportal.lneg.pt/pt/dados_abertos/info_recursosenergeticos?id=4004"
+    ]
+   ]
+  },
+  {
+   "q": "reserva ecologica nacional",
+   "titulo": "Cotas de Cheia",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Cotas de Cheia, gpkg",
+     "https://dadosabertos.cm-agueda.pt/dataset/76a76316-974c-4595-b886-c8c4003cf1ac/resource/ccc52212-a233-4b79-b305-f2065aa3a73b/download/cotas_de_cheia.gpkg"
+    ],
+    [
+     "geojson",
+     "Cotas de Cheia, geojson",
+     "https://dadosabertos.cm-agueda.pt/dataset/76a76316-974c-4595-b886-c8c4003cf1ac/resource/51ebb54b-0249-46b6-8aa9-edf5365a9976/download/cotas_de_cheia.geojson"
+    ],
+    [
+     "kml",
+     "Cotas de Cheia, kml",
+     "https://dadosabertos.cm-agueda.pt/dataset/76a76316-974c-4595-b886-c8c4003cf1ac/resource/e460b674-d664-4b2d-a961-bd83214c7a5b/download/cotas_de_cheia.kml"
+    ],
+    [
+     "dxf",
+     "Cotas de Cheia, dxf",
+     "https://dadosabertos.cm-agueda.pt/dataset/76a76316-974c-4595-b886-c8c4003cf1ac/resource/7535a636-e1d1-4e8b-b396-3655375110d7/download/cotas_de_cheia.dxf"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "SRUP - Reserva Agrícola Nacional",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Reserva Agrícola Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_RAN_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Reserva Agrícola Nacional",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_RAN_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "PDM 2024 - Planta de Condicionantes – Reserva Agrícola Nacional",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Condicionantes - Reserva Agrícola Nacional",
+     "https://dadosabertos.cm-agueda.pt/dataset/bd31938f-15ea-4066-8a1d-36fd15688311/resource/00195771-7e6a-4c76-8e48-57ffa1f055a5/download/ran.gpkg"
+    ],
+    [
+     "dxf",
+     "Planta de Condicionantes - Reserva Agrícola Nacional",
+     "https://dadosabertos.cm-agueda.pt/dataset/bd31938f-15ea-4066-8a1d-36fd15688311/resource/f963c7d7-1a59-416a-8a78-c70087b6b65f/download/ran.dxf"
+    ],
+    [
+     "kml",
+     "Planta de Condicionantes - Reserva Agrícola Nacional",
+     "https://dadosabertos.cm-agueda.pt/dataset/bd31938f-15ea-4066-8a1d-36fd15688311/resource/138e40d9-d5e9-427e-9ed4-7d2c543c5264/download/ran.kml"
+    ],
+    [
+     "wms",
+     "Planta de Condicionantes - Reserva Agrícola Nacional",
+     "https://geoserver.sig.cm-agueda.pt/geoserver/dadosAbertos/ran/wms?service=WMS&version=1.1.0&request=GetMap&Layers"
+    ],
+    [
+     "geojson",
+     "Planta de Condicionantes - Reserva Agrícola Nacional",
+     "https://dadosabertos.cm-agueda.pt/dataset/bd31938f-15ea-4066-8a1d-36fd15688311/resource/304be7a4-7157-456e-9618-2838b2ba0f58/download/ranv2.geojson"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "Planta da Reserva Agrícola Nacional",
+   "org": "Câmara Municipal da Calheta",
+   "rec": [
+    [
+     "pdf",
+     "planta-ran.pdf",
+     "https://dados.gov.pt/s/resources/planta-da-reserva-agricola-nacional/20260304-100842/planta-ran.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "RAN - Reserva Agricola Nacional",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "dxf",
+     "RAN, dxf",
+     "https://dadosabertos.cm-agueda.pt/dataset/30bee636-ba99-4f82-ac79-1fe4d4a081cb/resource/26f5214a-fd4a-4afd-99e2-5165eb885d5f/download/ran.dxf"
+    ],
+    [
+     "geojson",
+     "RAN, GeoJSON",
+     "https://dadosabertos.cm-agueda.pt/dataset/30bee636-ba99-4f82-ac79-1fe4d4a081cb/resource/11cf93ae-c7d9-4bd7-8f1e-a61f3f376412/download/ran.geojson"
+    ],
+    [
+     "gpkg",
+     "RAN, GeoPackage",
+     "https://dadosabertos.cm-agueda.pt/dataset/30bee636-ba99-4f82-ac79-1fe4d4a081cb/resource/2fa68503-adf5-4aec-8653-1f00c2ed66f3/download/ran.gpkg"
+    ],
+    [
+     "kml",
+     "RAN, kml",
+     "https://dadosabertos.cm-agueda.pt/dataset/30bee636-ba99-4f82-ac79-1fe4d4a081cb/resource/fa3defe1-44f4-492c-9e59-ab67a5d824bd/download/ran.kml"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "RAN - Reserva Agricola Nacional",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "dxf",
+     "RAN, dxf",
+     "https://ckan.sig.cm-agueda.pt/dataset/30bee636-ba99-4f82-ac79-1fe4d4a081cb/resource/26f5214a-fd4a-4afd-99e2-5165eb885d5f/download/ran.dxf"
+    ],
+    [
+     "geojson",
+     "RAN, GeoJSON",
+     "https://ckan.sig.cm-agueda.pt/dataset/30bee636-ba99-4f82-ac79-1fe4d4a081cb/resource/11cf93ae-c7d9-4bd7-8f1e-a61f3f376412/download/ran.geojson"
+    ],
+    [
+     "gpkg",
+     "RAN, GeoPackage",
+     "https://ckan.sig.cm-agueda.pt/dataset/30bee636-ba99-4f82-ac79-1fe4d4a081cb/resource/2fa68503-adf5-4aec-8653-1f00c2ed66f3/download/ran.gpkg"
+    ],
+    [
+     "kml",
+     "RAN, kml",
+     "https://ckan.sig.cm-agueda.pt/dataset/30bee636-ba99-4f82-ac79-1fe4d4a081cb/resource/fa3defe1-44f4-492c-9e59-ab67a5d824bd/download/ran.kml"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "PDM 2024 - Planta de Condicionantes – Perigosidade de Incêndio Florestal",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "wms",
+     "Planta de Condicionantes - Perigosidade de Incêndio Florestal",
+     "https://geoserver.sig.cm-agueda.pt/geoserver/dadosAbertos/perigosidade2024pdm/wms?"
+    ],
+    [
+     "dxf",
+     "Planta de Condicionantes - Perigosidade de Incêndio Florestal",
+     "https://dadosabertos.cm-agueda.pt/dataset/ef84ae09-3dac-4289-8f8c-e1ca41ae89ee/resource/dd4f156d-bd23-4c8d-8610-cb3ae76df8fb/download/perigosidadedeincendio.dxf"
+    ],
+    [
+     "gpkg",
+     "Planta de Condicionantes - Perigosidade de Incêndio Florestal",
+     "https://dadosabertos.cm-agueda.pt/dataset/ef84ae09-3dac-4289-8f8c-e1ca41ae89ee/resource/3b020fac-ee55-4ab7-a541-cc85515862b0/download/perigosidadedeincendio.gpkg"
+    ],
+    [
+     "sld",
+     "Planta de Condicionantes - Perigosidade de Incêndio Florestal",
+     "https://dadosabertos.cm-agueda.pt/dataset/ef84ae09-3dac-4289-8f8c-e1ca41ae89ee/resource/89f7093d-02d0-4462-9897-7c5af122e74b/download/perigosidadedeincendio.sld"
+    ],
+    [
+     "geojson",
+     "Planta de Condicionantes - Perigosidade de Incêndio Florestal",
+     "https://dadosabertos.cm-agueda.pt/dataset/ef84ae09-3dac-4289-8f8c-e1ca41ae89ee/resource/7d7d737a-895f-46ff-a0b8-1590b9aa5e35/download/perigosidadeincendioflorestal.geojson"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "PDM 2024 - Planta de Condicionantes – Condicionantes Gerais",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Condicionantes - Condicionantes Gerais",
+     "https://dadosabertos.cm-agueda.pt/dataset/04636627-733c-487a-bbb0-4314d6f0a923/resource/621815c7-763a-4488-81b2-4f6662e42d95/download/condicionantesgerais.gpkg"
+    ],
+    [
+     "dxf",
+     "Planta de Condicionantes - Condicionantes Gerais",
+     "https://dadosabertos.cm-agueda.pt/dataset/04636627-733c-487a-bbb0-4314d6f0a923/resource/ea271cab-4750-4a08-8c2d-cbd58196d112/download/condicionantesgerais.dxf"
+    ],
+    [
+     "geojson",
+     "Planta de Condicionantes - Condicionantes Gerais",
+     "https://dadosabertos.cm-agueda.pt/dataset/04636627-733c-487a-bbb0-4314d6f0a923/resource/b5cfabe2-b5c6-4114-bc88-1a9eee646aec/download/condicionantesgerais.geojson"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "PDM 2024 - Planta de Ordenamento - Património",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Património",
+     "https://dadosabertos.cm-agueda.pt/dataset/406f9c1d-4f59-42a9-af1c-dcd585483e74/resource/1b02f718-275a-43d8-b952-8c8b8f5ce867/download/patrimonio.gpkg"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Património",
+     "https://dadosabertos.cm-agueda.pt/dataset/406f9c1d-4f59-42a9-af1c-dcd585483e74/resource/6db9ffda-e46b-47bb-96a0-05d3d2320da2/download/patrimonio.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Património",
+     "https://dadosabertos.cm-agueda.pt/dataset/406f9c1d-4f59-42a9-af1c-dcd585483e74/resource/d7aec4c6-0f6e-4384-a3c0-e07b0187efd9/download/patrimonio.kml"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Património",
+     "https://dadosabertos.cm-agueda.pt/dataset/406f9c1d-4f59-42a9-af1c-dcd585483e74/resource/7939cb55-73e9-4709-b117-679616c3aeeb/download/patrimoniov2.dxf"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "PDM 2024 - Planta de Ordenamento – Zonas Sensíveis e Mistas",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Zonas Sensíveis e Mistas",
+     "https://dadosabertos.cm-agueda.pt/dataset/13bb60d8-9c1b-4f13-8324-e9327bff043e/resource/36359b38-2116-487a-8f44-599c7327a942/download/zonassensiveismistas.gpkg"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Zonas Sensíveis e Mistas",
+     "https://dadosabertos.cm-agueda.pt/dataset/13bb60d8-9c1b-4f13-8324-e9327bff043e/resource/6d5d3683-5251-4244-a6e8-3e2df5eb6389/download/zonassensiveismistas.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Zonas Sensíveis e Mistas",
+     "https://dadosabertos.cm-agueda.pt/dataset/13bb60d8-9c1b-4f13-8324-e9327bff043e/resource/61043fca-f14c-4370-8884-197ddea6c607/download/zonassensiveisemistas.kml"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Zonas Sensíveis e Mistas",
+     "https://dadosabertos.cm-agueda.pt/dataset/13bb60d8-9c1b-4f13-8324-e9327bff043e/resource/e4c01ad7-fce8-4e26-9032-b467ee91aead/download/zonassensiveisemistas.dxf"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "PDM 2024 - Planta de Ordenamento - Superfícies de Desobstrução",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Superfícies de Desobstrução",
+     "https://dadosabertos.cm-agueda.pt/dataset/0ba62001-e58a-4f4a-b529-c4dac6a82243/resource/20796e50-24b8-4dfc-a22a-c41f7ebef63c/download/superficiesdedesobstrucao.gpkg"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Superfícies de Desobstrução",
+     "https://dadosabertos.cm-agueda.pt/dataset/0ba62001-e58a-4f4a-b529-c4dac6a82243/resource/a5e99063-4668-40ea-86a6-fe6b1fe19e96/download/superficiesdedesobstrucao.dxf"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Superfícies de Desobstrução",
+     "https://dadosabertos.cm-agueda.pt/dataset/0ba62001-e58a-4f4a-b529-c4dac6a82243/resource/5e132d40-6e4a-4dc7-999d-a8300e978048/download/superficiesdedesobstrucao.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Superfícies de Desobstrução",
+     "https://dadosabertos.cm-agueda.pt/dataset/0ba62001-e58a-4f4a-b529-c4dac6a82243/resource/75d52abb-7c25-4c40-bffd-bdba766fb43c/download/superficiesdedesobstrucao.kml"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "PDM 2024 - Planta de Condicionantes –            Rede de Defesa da Floresta Contra Incêndios",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Condicionantes - Rede de Defesa da Floresta Contra Incêndios, GPKG",
+     "https://dadosabertos.cm-agueda.pt/dataset/35ef0ccc-ffcf-4bec-86ea-f390b52d69bc/resource/2112f289-d5da-48e2-adb8-b2bc2af463d1/download/plantacrdfci.gpkg"
+    ],
+    [
+     "dxf",
+     "Planta de Condicionantes - Rede de Defesa da Floresta Contra Incêndios, dxf",
+     "https://dadosabertos.cm-agueda.pt/dataset/35ef0ccc-ffcf-4bec-86ea-f390b52d69bc/resource/e25b7ee4-5db8-48d6-b9cc-b77b63b1485c/download/plantacrdfci.dxf"
+    ],
+    [
+     "kml",
+     "Planta de Condicionantes - Rede de Defesa da Floresta Contra Incêndios, kml",
+     "https://dadosabertos.cm-agueda.pt/dataset/35ef0ccc-ffcf-4bec-86ea-f390b52d69bc/resource/28ecf45b-8577-42e1-93d3-98e4181c17a4/download/plantacrdfci.kml"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "PDM 2024 - Planta de Ordenamento - Estrutura Ecológica Municipal",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Estrutura Ecológica Municipal",
+     "https://dadosabertos.cm-agueda.pt/dataset/331652d0-1e12-423f-9874-6f39eb9dcd98/resource/bb6a7778-e1b2-42f4-89a3-88967135ee4e/download/estruturaecologicamunicipal.gpkg"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Estrutura Ecológica Municipal",
+     "https://dadosabertos.cm-agueda.pt/dataset/331652d0-1e12-423f-9874-6f39eb9dcd98/resource/f7e6234c-f099-49e0-8fea-520416c7ad21/download/eem_26.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Estrutura Ecológica Municipal",
+     "https://dadosabertos.cm-agueda.pt/dataset/331652d0-1e12-423f-9874-6f39eb9dcd98/resource/6bb706d7-7447-402c-b96d-a4f2bf207da1/download/estrutura_ecologica_municipal_26.kml"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Estrutura Ecológica Municipal",
+     "https://dadosabertos.cm-agueda.pt/dataset/331652d0-1e12-423f-9874-6f39eb9dcd98/resource/9b91a1ac-3593-4e74-acb2-4a31e48455d4/download/estrutura_ecologica_municipal_26.dxf"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "PDM 2024 - Planta de Ordenamento - Ordenamento",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Ordenamento",
+     "https://dadosabertos.cm-agueda.pt/dataset/f9c7002c-77c3-40a3-97f9-90dc18b15a8f/resource/3fbe6c38-4674-48f9-be34-aee0e8367721/download/ordenamento.gpkg"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Ordenamento",
+     "https://dadosabertos.cm-agueda.pt/dataset/f9c7002c-77c3-40a3-97f9-90dc18b15a8f/resource/2579bbaa-f9f4-4caf-831f-6cfcdf879502/download/ordenamento.dxf"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Ordenamento",
+     "https://dadosabertos.cm-agueda.pt/dataset/f9c7002c-77c3-40a3-97f9-90dc18b15a8f/resource/a1945046-b560-4ea6-8b5b-72eab46872f5/download/ordenamento.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Ordenamento",
+     "https://dadosabertos.cm-agueda.pt/dataset/f9c7002c-77c3-40a3-97f9-90dc18b15a8f/resource/3f97f404-117f-476a-a59a-39b5481d0b1a/download/ordenamento.kml"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "PDM 2024 - Planta de Ordenamento - Risco de Cheias e Inundações",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Risco de Cheias e Inundações",
+     "https://dadosabertos.cm-agueda.pt/dataset/4dbe6042-3825-495d-8e04-562c01084d7a/resource/3c79e8e6-55a2-4930-9422-bfa49c3f379e/download/plantaoriscocheiaseinundacoes.gpkg"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Risco de Cheias e Inundações",
+     "https://dadosabertos.cm-agueda.pt/dataset/4dbe6042-3825-495d-8e04-562c01084d7a/resource/9146ca63-9ca9-41c9-8976-358d7f00aa58/download/plantaoriscocheiaseinundacoes.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Risco de Cheias e Inundações",
+     "https://dadosabertos.cm-agueda.pt/dataset/4dbe6042-3825-495d-8e04-562c01084d7a/resource/ae94d035-cbaa-440e-a518-757c96c542a8/download/plantaoriscocheiaseinundacoes.kml"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Risco de Cheias e Inundações",
+     "https://dadosabertos.cm-agueda.pt/dataset/4dbe6042-3825-495d-8e04-562c01084d7a/resource/d9f2a01d-2a5b-4dbf-8dc4-8a663a9a9c07/download/plantaoriscocheiaseinundacoes.dxf"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "SRUP - Espécies Agrícolas e Florestais",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Espécies Agrícolas e Florestais",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_EAF_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Espécies Agrícolas e Florestais",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_EAF_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "reserva agricola nacional",
+   "titulo": "Potenciais Áreas de Aceleração de Energias Renováveis (PAER)",
+   "org": "Laboratório Nacional de Energia e Geologia - LNEG",
+   "rec": [
+    [
+     "wms",
+     "Potenciais Áreas de Aceleração de Energias Renováveis (PAER)",
+     "https://sig.lneg.pt/server/services/AreasAceleracaoEnergiasRenovaveis/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    ],
+    [
+     "remote",
+     "Potenciais Áreas de Aceleração de Energias Renováveis (PAER)",
+     "https://geoportal.lneg.pt/pt/dados_abertos/info_recursosenergeticos?id=4004"
+    ]
+   ]
+  },
+  {
+   "q": "carta de perigosidade de incendio",
+   "titulo": "SRUP - Carta de Perigosidade de Incêndio Rural",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Carta de Perigosidade de Incêndio Rural",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_CPIR_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Carta de Perigosidade de Incêndio Rural",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_CPIR_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ],
+    [
+     "zip",
+     "SRUP - Carta de Perigosidade de Incêndio Rural",
+     "https://snit-mais.dgterritorio.gov.pt/SNIT/DOWNLOAD/SRUP/CARTA_PERIGOSIDADE_INCENDIO_RURAL/PERIGOSIDADE_INCENDIO_RURAL.zip"
+    ]
+   ]
+  },
+  {
+   "q": "carta de perigosidade de incendio",
+   "titulo": "SRUP - Carta de Perigosidade de Incêndio Rural",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "WFS",
+     "SRUP - Carta de Perigosidade de Incêndio Rural",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_CPIR_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "WMS",
+     "SRUP - Carta de Perigosidade de Incêndio Rural",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_CPIR_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ],
+    [
+     "zip",
+     "SRUP - Carta de Perigosidade de Incêndio Rural",
+     "https://www.dgterritorio.gov.pt/download/CARTA_PERIGOSIDADE_INCENDIO_RURAL/PERIGOSIDADE_INCENDIO_RURAL.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "PGRH Alentejo - RH7 - Parte 2 - Carta das zonas inundáveis",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "pdf",
+     "PGRH Alentejo - RH7 - Parte 2 - Carta das zonas inundáveis",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/geoportaldocs/Planos/PGRH7/VolumeI_Relatorio/Parte2/Tomo4/Tomo4B/AX_RH7_4101_ZonasInundaveis.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "PGRH Alentejo - RH6 - Parte 2 - Tomo 4B - Carta das zonas inundáveis",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "pdf",
+     "PGRH Alentejo - RH6 - Parte 2 - Tomo 4B - Carta das zonas inundáveis",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/geoportaldocs/Planos/PGRH6/VolumeI_Relatorio/Parte2/Tomo4/Tomo4B/AX_RH6_4101_ZonasInundaveis.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "PGRH Algarve - RH8 - Carta de avaliação preliminar de zonas inundáveis",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "pdf",
+     "PGRH Algarve - RH8 - Carta de avaliação preliminar de zonas inundáveis",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/geoportaldocs/Planos/PGRH8/VolumeI_Relatorio/Parte2/Tomo4/Tomo4B/Cartas/4101_CartaAvaliacaoPreliminarZonasInundaveis.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Velocidade de Escoamento",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "wms",
+     "Carta de zonas inundáveis - Portugal continental - Velocidade de Escoamento",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/NZ_Diretiva200760CE_ptcont_20/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    ],
+    [
+     "wms",
+     "Carta de zonas inundáveis - Portugal continental - Velocidade de Escoamento",
+     "https://sniambgeoogc.apambiente.pt/getogc/services/SNIAmb/Diretiva200760CE_2c/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    ],
+    [
+     "wfs",
+     "Carta de zonas inundáveis - Portugal continental - Velocidade de Escoamento",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/NZ_Diretiva200760CE_ptcont_20/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ],
+    [
+     "zip",
+     "Carta de zonas inundáveis - Portugal continental - Velocidade de Escoamento",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/gpkgzips/d312_apa_ai_2c_velocidade_pc_gpkg.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Profundidade da Inundação",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "wms",
+     "Carta de zonas inundáveis - Portugal continental - Profundidade da Inundação",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/NZ_Diretiva200760CE_ptcont_20/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    ],
+    [
+     "wms",
+     "Carta de zonas inundáveis - Portugal continental - Profundidade da Inundação",
+     "https://sniambgeoogc.apambiente.pt/getogc/services/SNIAmb/Diretiva200760CE_2c/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    ],
+    [
+     "wfs",
+     "Carta de zonas inundáveis - Portugal continental - Profundidade da Inundação",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/NZ_Diretiva200760CE_ptcont_20/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ],
+    [
+     "zip",
+     "Carta de zonas inundáveis - Portugal continental - Profundidade da Inundação",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/gpkgzips/d312_apa_ai_2c_profundidade_pc_gpkg.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Profundidade da Inundação",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "wms",
+     "Carta de zonas inundáveis - Portugal continental - Profundidade da Inundação",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/NZ_Diretiva200760CE_ptcont_20/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Velocidade de Escoamento",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "wms",
+     "Carta de zonas inundáveis - Portugal continental - Velocidade de Escoamento",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/NZ_Diretiva200760CE_ptcont_20/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Limite da área de inundação",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de zonas inundáveis - Portugal continental - Limite da área de inundação",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/d312_apa_ai_2c_limite_pc.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Limite da área de inundação",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de zonas inundáveis - Portugal continental - Limite da área de inundação",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/d312_apa_ai_2c_limite_pc.zip"
+    ],
+    [
+     "wms",
+     "Carta de zonas inundáveis - Portugal continental - Limite da área de inundação",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/NZ_Diretiva200760CE_ptcont_20/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    ],
+    [
+     "wms",
+     "Carta de zonas inundáveis - Portugal continental - Limite da área de inundação",
+     "https://sniambgeoogc.apambiente.pt/getogc/services/SNIAmb/Diretiva200760CE_2c/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    ],
+    [
+     "wfs",
+     "Carta de zonas inundáveis - Portugal continental - Limite da área de inundação",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/NZ_Diretiva200760CE_ptcont_20/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Velocidade de Escoamento (Período de Retorno de 100 anos): CDG INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de zonas inundáveis - Portugal continental - Velocidade de Escoamento (Período de Retorno de 100 anos): CDG INSPIRE",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AI_T100_Velocidade_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Profundidade da Inundação (Período de Retorno de 1000 anos): CDG INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de zonas inundáveis - Portugal continental - Profundidade da Inundação (Período de Retorno de 1000 anos): CDG INSPIRE",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AI_T1000_Profundidade_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Velocidade de Escoamento (Período de Retorno de 1000 anos): CGD INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de zonas inundáveis - Portugal continental - Velocidade de Escoamento (Período de Retorno de 1000 anos): CGD INSPIRE",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AI_T1000_Velocidade_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Velocidade de Escoamento (Período de Retorno de 20 anos): CDG INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "wms",
+     "Carta de zonas inundáveis - Portugal continental - Velocidade de Escoamento (Período de Retorno de 20 anos): CDG INSPIRE",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/NZ_Diretiva200760CE_ptcont_20/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Profundidade da Inundação (Período de Retorno de 100 anos): CDG INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de zonas inundáveis - Portugal continental - Profundidade da Inundação (Período de Retorno de 100 anos): CDG INSPIRE",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AI_T100_Profundidade_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Profundidade da Inundação (Período de Retorno de 20 anos): CDG INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de zonas inundáveis - Portugal continental - Profundidade da Inundação (Período de Retorno de 20 anos): CDG INSPIRE",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AI_T020_Profundidade_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Limite da área de inundação (Período de Retorno de 1000 anos): CDG INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de zonas inundáveis - Portugal continental - Limite da área de inundação (Período de Retorno de 1000 anos): CDG INSPIRE",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AI_T1000_Limite_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Limite da área de inundação (Período de Retorno de 100 anos): CDG INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de zonas inundáveis - Portugal continental - Limite da área de inundação (Período de Retorno de 100 anos): CDG INSPIRE",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AI_T100_Limite_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de zonas inundáveis - Portugal continental - Limite da área de inundação (Período de Retorno de 20 anos): CDG INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de zonas inundáveis - Portugal continental - Limite da área de inundação (Período de Retorno de 20 anos): CDG INSPIRE",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AI_T020_Limite_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Guadiana - RH7",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "pdf",
+     "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Guadiana - RH7",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/geoportaldocs/_Agua/DRH/PlaneamentoOrdenamento/PGRI/2022-2027/2_fase/Relatorio_cartografia_RH7.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Douro - RH3",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "pdf",
+     "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Douro - RH3",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/geoportaldocs/_Agua/DRH/PlaneamentoOrdenamento/PGRI/2022-2027/2_fase/Relatorio_cartografia_RH3.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Algarve - RH8",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "pdf",
+     "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Algarve - RH8",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/geoportaldocs/_Agua/DRH/PlaneamentoOrdenamento/PGRI/2022-2027/2_fase/Relatorio_cartografia_RH8.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Minho e Lima - RH1",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "pdf",
+     "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Minho e Lima - RH1",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/geoportaldocs/_Agua/DRH/PlaneamentoOrdenamento/PGRI/2022-2027/2_fase/Relatorio_cartografia_RH1.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Sado e Mira - RH6",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "pdf",
+     "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Sado e Mira - RH6",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/geoportaldocs/_Agua/DRH/PlaneamentoOrdenamento/PGRI/2022-2027/2_fase/Relatorio_cartografia_RH6.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Cávado, Ave e Leça - RH2",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "pdf",
+     "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Cávado, Ave e Leça - RH2",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/geoportaldocs/_Agua/DRH/PlaneamentoOrdenamento/PGRI/2022-2027/2_fase/Relatorio_cartografia_RH2.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Vouga, Mondego e Lis - RH4A",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "pdf",
+     "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Vouga, Mondego e Lis - RH4A",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/geoportaldocs/_Agua/DRH/PlaneamentoOrdenamento/PGRI/2022-2027/2_fase/Relatorio_cartografia_RH4A.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Tejo e Ribeiras do Oeste - RH5A",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "pdf",
+     "Cartas de Zonas Inundáveis de Riscos de Inundações Região Hidrográfica do Tejo e Ribeiras do Oeste - RH5A",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/geoportaldocs/_Agua/DRH/PlaneamentoOrdenamento/PGRI/2022-2027/2_fase/Relatorio_cartografia_RH5A.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Inundações - Habitantes afectados (Período de Retorno de 20 anos)",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Inundações - Habitantes afectados (Período de Retorno de 20 anos)",
+     "http://sniamb.apambiente.pt/infos/shpzips/D312_APA_HabAfect20_p_20150213_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de risco de inundação - Portugal continental - Consequência / Exposição de Inundação (Período de Retorno de 20 anos): CGD INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de risco de inundação - Portugal continental - Consequência / Exposição de Inundação (Período de Retorno de 20 anos): CGD INSPIRE",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AR_T020_Consequencia_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Vias de comunicação afectadas (Período de Retorno de 1000 anos)",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Vias de comunicação afectadas (Período de Retorno de 1000 anos)",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_ViasAfectadas_1000anos_20150323_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de risco de inundação - Portugal continental - Risco de Inundação (Período de Retorno de 1000 anos): CDG INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de risco de inundação - Portugal continental - Risco de Inundação (Período de Retorno de 1000 anos): CDG INSPIRE",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AR_T1000_Risco_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de risco de inundação - Portugal continental - Consequência / Exposição de Inundação (Período de Retorno de 100 anos): CDG INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de risco de inundação - Portugal continental - Consequência / Exposição de Inundação (Período de Retorno de 100 anos): CDG INSPIRE",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AR_T100_Consequencia_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Probabilidade de Inundações (Baixa, Moderada e Elevada) Ribeira de Agualva - Terceira",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Probabilidade de Inundações (Baixa, Moderada e Elevada) Ribeira de Agualva - Terceira",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_ag_ter_poligono_20150123_AC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Prevenção e Controlo Integrados da Poluição Período de Retorno de 100 anos - Diretiva 60CE/2007",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Prevenção e Controlo Integrados da Poluição Período de Retorno de 100 anos - Diretiva 60CE/2007",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_IPPC_100anos_20150710_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Probabilidade de Inundações (Baixa, Moderada, Elevada) Ribeira Grande - Flores",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Probabilidade de Inundações (Baixa, Moderada, Elevada) Ribeira Grande - Flores",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_rgd_flo_poligono_20150123_AO.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de risco de inundação - Portugal continental - Perigosidade da Inundação (Período de Retorno de 1000 anos): CDG INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de risco de inundação - Portugal continental - Perigosidade da Inundação (Período de Retorno de 1000 anos): CDG INSPIRE",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AR_T1000_Perigo_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Inundações - Habitantes afectados (Período de Retorno de 100 anos)",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Inundações - Habitantes afectados (Período de Retorno de 100 anos)",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_HabAfect100_p_20150213_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de risco de inundação - Portugal continental - Risco de Inundação (Período de Retorno de 100 anos): CDG INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de risco de inundação - Portugal continental - Risco de Inundação (Período de Retorno de 100 anos): CDG INSPIRE",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AR_T100_Risco_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Probabilidade de Inundações (Baixa, Moderada, Elevada) Rib. do Testo - Terceira",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Probabilidade de Inundações (Baixa, Moderada, Elevada) Rib. do Testo - Terceira",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_rt_ter_poligono_20150123_AC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Patrimonio Cultural Afetado pela Área de Inundação num Período de Retorno de 20 Anos",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Patrimonio Cultural Afetado pela Área de Inundação num Período de Retorno de 20 Anos",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_PatrimonioCultural_20anos_20150319_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "zonas inundaveis",
+   "titulo": "Carta de risco de inundação - Portugal continental - Perigosidade da Inundação (Período de Retorno de 100 anos): CGD INSPIRE",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Carta de risco de inundação - Portugal continental - Perigosidade da Inundação (Período de Retorno de 100 anos): CGD INSPIRE",
+     "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AR_T100_Perigo_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "regime florestal",
+   "titulo": "SRUP - Regime Florestal",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Regime Florestal",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_RF_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Regime Florestal",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_RF_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "regime florestal",
+   "titulo": "Regime Florestal e outras áreas (REFLOA)",
+   "org": "Instituto da Conservação da Natureza e das Florestas, I. P - ICNF",
+   "rec": [
+    [
+     "pdf",
+     "Regime Florestal e outras áreas (REFLOA)",
+     "https://geocatalogo.icnf.pt/docs/REFLOA%20-%20Documento%20de%20contexto.pdf"
+    ],
+    [
+     "wms",
+     "Regime Florestal e outras áreas (REFLOA)",
+     "https://si.icnf.pt/wms/refloa_rf?service=wms&version=1.3.0&request=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Regime Florestal e outras áreas (REFLOA)",
+     "https://si.icnf.pt/wfs/refloa_rf?service=wfs&version=2.0.0&request=GetCapabilities"
+    ],
+    [
+     "remote",
+     "Regime Florestal e outras áreas (REFLOA)",
+     "https://geocatalogo.icnf.pt/geovisualizador/refloa/"
+    ]
+   ]
+  },
+  {
+   "q": "regime florestal",
+   "titulo": "Perimetro Regime Florestal Parcial",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "dxf",
+     "Perímetro do Regime Florestal Parcial, dxf",
+     "https://dadosabertos.cm-agueda.pt/dataset/c463fa0c-9353-4eff-a973-7e10ad872dfd/resource/dbf34bfb-1203-49f7-a923-f403145472f9/download/perimetroregimeflorestalparcial.dxf"
+    ],
+    [
+     "geojson",
+     "Perímetro do Regime Florestal Parcial, GeoJSON",
+     "https://dadosabertos.cm-agueda.pt/dataset/c463fa0c-9353-4eff-a973-7e10ad872dfd/resource/1896168a-8e48-481a-b64e-03a4d7be6791/download/perimetroregimeflorestalparcial.geojson"
+    ],
+    [
+     "gpkg",
+     "Perímetro do Regime Florestal Parcial, GeoPackage",
+     "https://dadosabertos.cm-agueda.pt/dataset/c463fa0c-9353-4eff-a973-7e10ad872dfd/resource/5cf9d4e0-9dbe-4741-a4d2-5c4b7d4c80d6/download/perimetroregimeflorestalparcial.gpkg"
+    ]
+   ]
+  },
+  {
+   "q": "regime florestal",
+   "titulo": "Perimetro Regime Florestal Parcial",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "dxf",
+     "Perímetro do Regime Florestal Parcial, dxf",
+     "https://ckan.sig.cm-agueda.pt/dataset/c463fa0c-9353-4eff-a973-7e10ad872dfd/resource/dbf34bfb-1203-49f7-a923-f403145472f9/download/perimetroregimeflorestalparcial.dxf"
+    ],
+    [
+     "geojson",
+     "Perímetro do Regime Florestal Parcial, GeoJSON",
+     "https://ckan.sig.cm-agueda.pt/dataset/c463fa0c-9353-4eff-a973-7e10ad872dfd/resource/1896168a-8e48-481a-b64e-03a4d7be6791/download/perimetroregimeflorestalparcial.geojson"
+    ],
+    [
+     "gpkg",
+     "Perímetro do Regime Florestal Parcial, GeoPackage",
+     "https://ckan.sig.cm-agueda.pt/dataset/c463fa0c-9353-4eff-a973-7e10ad872dfd/resource/5cf9d4e0-9dbe-4741-a4d2-5c4b7d4c80d6/download/perimetroregimeflorestalparcial.gpkg"
+    ]
+   ]
+  },
+  {
+   "q": "regime florestal",
+   "titulo": "Zonas de Intervenção Florestal (ZIF)",
+   "org": "Instituto da Conservação da Natureza e das Florestas, I. P - ICNF",
+   "rec": [
+    [
+     "wms",
+     "Zonas de Intervenção Florestal (ZIF)",
+     "https://si.icnf.pt/wms/zif?service=wms&version=1.3.0&request=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Zonas de Intervenção Florestal (ZIF)",
+     "https://si.icnf.pt/wfs/zif?service=wfs&version=2.0.0&request=GetCapabilities"
+    ]
+   ]
+  },
+  {
+   "q": "regime florestal",
+   "titulo": "Reserva Florestal de Recreio - Região Autónoma dos Açores (RAA)",
+   "org": "Secretaria Regional da Agricultura e Alimentação / Governo dos Açores",
+   "rec": [
+    [
+     "wfs",
+     "Serviço de descarregamento (25N)",
+     "https://infogeo.agricultura.azores.gov.pt/qgis/qgis_mapserv.fcgi.exe?map=/webserver/QGIS_PUBLISH/Inspire/Cartografia_DRRF_25N.qgs&SERVICE=WFS&request=GetCapabilities&VERSION=1.0.0"
+    ],
+    [
+     "wfs",
+     "Serviço de descarregamento (26N)",
+     "https://infogeo.agricultura.azores.gov.pt/qgis/qgis_mapserv.fcgi.exe?map=/webserver/QGIS_PUBLISH/Inspire/Cartografia_DRRF_26N.qgs&SERVICE=WFS&request=GetCapabilities&VERSION=1.0.0"
+    ],
+    [
+     "wms",
+     "Serviço de visualização (25N)",
+     "https://infogeo.agricultura.azores.gov.pt/qgis/qgis_mapserv.fcgi.exe?map=/webserver/QGIS_PUBLISH/Inspire/Cartografia_DRRF_25N.qgs&SERVICE=WMS&request=GetCapabilities&VERSION=1.3.0"
+    ],
+    [
+     "wms",
+     "Serviço de visualização (26N)",
+     "https://infogeo.agricultura.azores.gov.pt/qgis/qgis_mapserv.fcgi.exe?map=/webserver/QGIS_PUBLISH/Inspire/Cartografia_DRRF_26N.qgs&SERVICE=WMS&request=GetCapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "regime florestal",
+   "titulo": "Carta de Uso e Ocupação do Solo (COS) - Série 1 -  (1995v2 - 2018v2)",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wms",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 1 -  (1995v2 - 2018v2)",
+     "https://geo2.dgterritorio.gov.pt/geoserver/COS-S1/wms?service=wms&version=1.3.0&request=GetCapabilities"
+    ],
+    [
+     "zip",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 1 -  (1995v2 - 2018v2)",
+     "https://geo2.dgterritorio.gov.pt/cos/S1/COS1995/COS1995v2-S1-gpkg.zip"
+    ],
+    [
+     "zip",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 1 -  (1995v2 - 2018v2)",
+     "https://geo2.dgterritorio.gov.pt/cos/S1/COS1995/COS1995v2-S1-shp.zip"
+    ],
+    [
+     "zip",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 1 -  (1995v2 - 2018v2)",
+     "https://geo2.dgterritorio.gov.pt/cos/S1/COS2007/COS2007v3-S1-gpkg.zip"
+    ],
+    [
+     "zip",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 1 -  (1995v2 - 2018v2)",
+     "https://geo2.dgterritorio.gov.pt/cos/S1/COS2007/COS2007v3-S1-shp.zip"
+    ],
+    [
+     "zip",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 1 -  (1995v2 - 2018v2)",
+     "https://geo2.dgterritorio.gov.pt/cos/S1/COS2010/COS2010v2-S1-gpkg.zip"
+    ],
+    [
+     "zip",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 1 -  (1995v2 - 2018v2)",
+     "https://geo2.dgterritorio.gov.pt/cos/S1/COS2010/COS2010v2-S1-shp.zip"
+    ],
+    [
+     "zip",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 1 -  (1995v2 - 2018v2)",
+     "https://geo2.dgterritorio.gov.pt/cos/S1/COS2015/COS2015v2-S1-gpkg.zip"
+    ]
+   ]
+  },
+  {
+   "q": "regime florestal",
+   "titulo": "Carta de Uso e Ocupação do Solo (COS) - Série 2 -  (2018v3 - 2023v1)",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wms",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 2 -  (2018v3 - 2023v1)",
+     "https://geo2.dgterritorio.gov.pt/geoserver/COS-S2/wms?service=wms&version=1.3.0&request=GetCapabilities"
+    ],
+    [
+     "html",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 2 -  (2018v3 - 2023v1)",
+     "https://geo2.dgterritorio.gov.pt/cos/S2/COS2018/COS2018v3-S2-gpkg.zip"
+    ],
+    [
+     "html",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 2 -  (2018v3 - 2023v1)",
+     "https://geo2.dgterritorio.gov.pt/cos/S2/COS2023/COS2023v1-S2-gpkg.zip"
+    ],
+    [
+     "remote",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 2 -  (2018v3 - 2023v1)",
+     "https://ogcapi.dgterritorio.gov.pt/collections/cos2018v3"
+    ]
+   ]
+  },
+  {
+   "q": "regime florestal",
+   "titulo": "Carta de Uso e Ocupação do Solo (COS) - Série 2 - (2018v4 - 2025v1)",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wms",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 2 - (2018v4 - 2025v1)",
+     "https://geo2.dgterritorio.gov.pt/geoserver/COS-S2/wms?service=wms&version=1.3.0&request=GetCapabilities"
+    ],
+    [
+     "html",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 2 - (2018v4 - 2025v1)",
+     "https://geo2.dgterritorio.gov.pt/cos/S2/COS2018/COS2018v4-S2-gpkg.zip"
+    ],
+    [
+     "html",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 2 - (2018v4 - 2025v1)",
+     "https://geo2.dgterritorio.gov.pt/cos/S2/COS2025/COS2025v1-S2-gpkg.zip"
+    ],
+    [
+     "remote",
+     "Carta de Uso e Ocupação do Solo (COS) - Série 2 - (2018v4 - 2025v1)",
+     "https://ogcapi.dgterritorio.gov.pt/collections/cos2018v4"
+    ]
+   ]
+  },
+  {
+   "q": "regime florestal",
+   "titulo": "PDM 2024 - Planta de Ordenamento - Estrutura Ecológica Municipal",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Estrutura Ecológica Municipal",
+     "https://dadosabertos.cm-agueda.pt/dataset/331652d0-1e12-423f-9874-6f39eb9dcd98/resource/bb6a7778-e1b2-42f4-89a3-88967135ee4e/download/estruturaecologicamunicipal.gpkg"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Estrutura Ecológica Municipal",
+     "https://dadosabertos.cm-agueda.pt/dataset/331652d0-1e12-423f-9874-6f39eb9dcd98/resource/f7e6234c-f099-49e0-8fea-520416c7ad21/download/eem_26.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Estrutura Ecológica Municipal",
+     "https://dadosabertos.cm-agueda.pt/dataset/331652d0-1e12-423f-9874-6f39eb9dcd98/resource/6bb706d7-7447-402c-b96d-a4f2bf207da1/download/estrutura_ecologica_municipal_26.kml"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Estrutura Ecológica Municipal",
+     "https://dadosabertos.cm-agueda.pt/dataset/331652d0-1e12-423f-9874-6f39eb9dcd98/resource/9b91a1ac-3593-4e74-acb2-4a31e48455d4/download/estrutura_ecologica_municipal_26.dxf"
+    ]
+   ]
+  },
+  {
+   "q": "regime florestal",
+   "titulo": "PDM 2024 - Planta de Ordenamento - Ordenamento",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Ordenamento",
+     "https://dadosabertos.cm-agueda.pt/dataset/f9c7002c-77c3-40a3-97f9-90dc18b15a8f/resource/3fbe6c38-4674-48f9-be34-aee0e8367721/download/ordenamento.gpkg"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Ordenamento",
+     "https://dadosabertos.cm-agueda.pt/dataset/f9c7002c-77c3-40a3-97f9-90dc18b15a8f/resource/2579bbaa-f9f4-4caf-831f-6cfcdf879502/download/ordenamento.dxf"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Ordenamento",
+     "https://dadosabertos.cm-agueda.pt/dataset/f9c7002c-77c3-40a3-97f9-90dc18b15a8f/resource/a1945046-b560-4ea6-8b5b-72eab46872f5/download/ordenamento.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Ordenamento",
+     "https://dadosabertos.cm-agueda.pt/dataset/f9c7002c-77c3-40a3-97f9-90dc18b15a8f/resource/3f97f404-117f-476a-a59a-39b5481d0b1a/download/ordenamento.kml"
+    ]
+   ]
+  },
+  {
+   "q": "regime florestal",
+   "titulo": "PDM 2024 - Planta de Ordenamento - Risco de Cheias e Inundações",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Planta de Ordenamento - Risco de Cheias e Inundações",
+     "https://dadosabertos.cm-agueda.pt/dataset/4dbe6042-3825-495d-8e04-562c01084d7a/resource/3c79e8e6-55a2-4930-9422-bfa49c3f379e/download/plantaoriscocheiaseinundacoes.gpkg"
+    ],
+    [
+     "geojson",
+     "Planta de Ordenamento - Risco de Cheias e Inundações",
+     "https://dadosabertos.cm-agueda.pt/dataset/4dbe6042-3825-495d-8e04-562c01084d7a/resource/9146ca63-9ca9-41c9-8976-358d7f00aa58/download/plantaoriscocheiaseinundacoes.geojson"
+    ],
+    [
+     "kml",
+     "Planta de Ordenamento - Risco de Cheias e Inundações",
+     "https://dadosabertos.cm-agueda.pt/dataset/4dbe6042-3825-495d-8e04-562c01084d7a/resource/ae94d035-cbaa-440e-a518-757c96c542a8/download/plantaoriscocheiaseinundacoes.kml"
+    ],
+    [
+     "dxf",
+     "Planta de Ordenamento - Risco de Cheias e Inundações",
+     "https://dadosabertos.cm-agueda.pt/dataset/4dbe6042-3825-495d-8e04-562c01084d7a/resource/d9f2a01d-2a5b-4dbf-8dc4-8a663a9a9c07/download/plantaoriscocheiaseinundacoes.dxf"
+    ]
+   ]
+  },
+  {
+   "q": "regime florestal",
+   "titulo": "Carta de Interface de Áreas Edificadas Estrutural 2018",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wms",
+     "Carta de Interface de Áreas Edificadas Estrutural 2018",
+     "https://geo2.dgterritorio.gov.pt/geoserver/AE/wms?service=wms&version=1.3.0&request=GetCapabilities"
+    ],
+    [
+     "zip",
+     "Carta de Interface de Áreas Edificadas Estrutural 2018",
+     "https://geo2.dgterritorio.gov.pt/aeur/Interface_E2018.zip"
+    ]
+   ]
+  },
+  {
+   "q": "area de reabilitacao urbana",
+   "titulo": "Área de Reabilitação Urbana do Centro da Cidade de Oliveira de Azeméis (em vigor)",
+   "org": "Câmara Municipal de Oliveira de Azeméis",
+   "rec": [
+    [
+     "pdf",
+     "MOA-ARU-CentroOliveiraAzemeis-ProgramaEstrategicoReabilitacao.pdf",
+     "http://dados.cm-oaz.pt/dataset/50495625-fd1e-44ae-a481-295fff7f95be/resource/7ddacf6a-e096-4a3f-917b-1c523e12a3de/download/moa-aru-centrooliveiraazemeis-programaestrategicoreabilitacao.pdf"
+    ],
+    [
+     "geojson",
+     "MOA-ARU-CentroOliveiraAzemeis-delimitacao.geojson",
+     "http://dados.cm-oaz.pt/dataset/50495625-fd1e-44ae-a481-295fff7f95be/resource/0a4e20fe-165a-447a-89d8-e1ba17b90b5e/download/moa-aru-centrooliveiraazemeis-delimitacao-wgs84.geojson"
+    ],
+    [
+     "dxf",
+     "MOA-ARU-CentroOliveiraAzemeis-delimitacao_epsg3763.dxf",
+     "http://dados.cm-oaz.pt/dataset/50495625-fd1e-44ae-a481-295fff7f95be/resource/89a28824-23d9-4e9d-b30f-9c05d3ee1e33/download/moa-aru-centrooliveiraazemeis-delimitacao_epsg3763.dxf"
+    ],
+    [
+     "pdf",
+     "MOA-ARU-CentroOliveiraAzemeis-Deliberacao-1950-2014.pdf",
+     "http://dados.cm-oaz.pt/dataset/50495625-fd1e-44ae-a481-295fff7f95be/resource/13d6495a-1621-401c-b40b-e2d750c1df08/download/moa-aru-centrooliveiraazemeis-deliberacao-1950-2014.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "area de reabilitacao urbana",
+   "titulo": "Áreas de Reabilitação Urbana - ARU 2023",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "ARU 2023 v2, gpkg",
+     "https://dadosabertos.cm-agueda.pt/dataset/5df5aa64-cd56-4aa1-bad8-d0b2fe6e5122/resource/8e95182b-1089-4e52-b328-25b60c521ef5/download/aru2023v2.gpkg"
+    ],
+    [
+     "kml",
+     "ARU 2023v2, kml",
+     "https://dadosabertos.cm-agueda.pt/dataset/5df5aa64-cd56-4aa1-bad8-d0b2fe6e5122/resource/6b07bb9e-2f6f-4fdc-ad14-80b5299119be/download/aru2023v2.kml"
+    ],
+    [
+     "wms",
+     "ARU 2023v2, wms",
+     "https://geoserver.sig.cm-agueda.pt/geoserver/dadosAbertos/aru_2023v2/wms?"
+    ]
+   ]
+  },
+  {
+   "q": "area de reabilitacao urbana",
+   "titulo": "Área de Reabilitação Urbana do Centro Vidreiro (em vigor)",
+   "org": "Câmara Municipal de Oliveira de Azeméis",
+   "rec": [
+    [
+     "pdf",
+     "MOA-ARU-Centrovidreiro-propostadedelimitacao.pdf",
+     "http://dados.cm-oaz.pt/dataset/84423d48-0d83-47fe-b307-ed3acc936cb6/resource/d349eed1-5d27-4d01-be43-682942ed8350/download/moa-aru-centrovidreiro-propostadedelimitacao.pdf"
+    ],
+    [
+     "dxf",
+     "MOA-ARU-Centrovidreiro-delimitacao_epsg3763.dxf",
+     "http://dados.cm-oaz.pt/dataset/84423d48-0d83-47fe-b307-ed3acc936cb6/resource/bc13128b-f4da-4c7d-9826-9e529bac4b59/download/moa-aru-centrovidreiro-delimitacao_epsg3763.dxf"
+    ],
+    [
+     "geojson",
+     "MOA-ARU-Centrovidreiro-delimitacao.geojson",
+     "http://dados.cm-oaz.pt/dataset/84423d48-0d83-47fe-b307-ed3acc936cb6/resource/a69ea6db-3b81-4e17-bf85-4516cb504d01/download/moa-aru-centrovidreiro-delimitacao-wgs84.geojson"
+    ]
+   ]
+  },
+  {
+   "q": "area de reabilitacao urbana",
+   "titulo": "Área de Reabilitação Urbana (ARU)",
+   "org": "Município de Lisboa",
+   "rec": [
+    [
+     "geojson",
+     "Limites ARU",
+     "https://services.arcgis.com/1dSrzEWVQn5kHHyK/arcgis/rest/services/Limites_AUGI_ARU/FeatureServer/1/query?outFields=*&where=1%3D1&f=geojson"
+    ]
+   ]
+  },
+  {
+   "q": "area de reabilitacao urbana",
+   "titulo": "Instrumentos de Gestão do Território: Áreas de Reabilitação Urbana (ARU)",
+   "org": "Câmara Municipal de Oeiras",
+   "rec": [
+    [
+     "wfs",
+     "Áreas de Reabilitação Urbana (WFS)",
+     "https://oeirasinterativa.oeiras.pt/gis/services/dados_abertos/w_aru/wfs"
+    ]
+   ]
+  },
+  {
+   "q": "area de reabilitacao urbana",
+   "titulo": "ÁREA DE REABILITAÇÃO URBANA ",
+   "org": "Município de Velas",
+   "rec": [
+    [
+     "pdf",
+     "ARU Carregadouro – Santa Rita – Velas",
+     "https://dados.gov.pt/s/resources/area-de-reabilitacao-urbana/20250925-112057/aru-caregadouro-s-rita-velas-.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "area de reabilitacao urbana",
+   "titulo": "Instrumentos de Gestão do Território: Operações de Reabilitação Urbana",
+   "org": "Câmara Municipal de Oeiras",
+   "rec": [
+    [
+     "geojson",
+     "Operações de Reabilitação Urbana",
+     "https://oeirasinterativa.oeiras.pt/dadosabertos/dataset/6ded03b9-6769-4e4d-9722-2a7288dc681a/resource/01c40c3f-0973-4522-8753-e2861b929485/download/operacoes_reabilitacao_urbana.geojson"
+    ],
+    [
+     "wfs",
+     "Operações de Reabilitação Urbana (WFS)",
+     "https://oeirasinterativa.oeiras.pt/gis/services/dados_abertos/w_oru/wfs"
+    ]
+   ]
+  },
+  {
+   "q": "area de reabilitacao urbana",
+   "titulo": "Áreas de reabilitação urbana (N.º)",
+   "org": "Instituto Nacional de Estatística",
+   "rec": [
+    [
+     "json",
+     "Dados (JSON)",
+     "https://www.ine.pt/ine/json_indicador/pindica.jsp?op=2&varcd=0004254&lang=PT"
+    ],
+    [
+     "json",
+     "Metainfo (JSON)",
+     "https://www.ine.pt/ine/json_indicador/pindicaMeta.jsp?varcd=0004254&lang=PT"
+    ]
+   ]
+  },
+  {
+   "q": "area de reabilitacao urbana",
+   "titulo": "Area de reabilitação de Alcobaça",
+   "org": "Município de Alcobaça",
+   "rec": [
+    [
+     "pdf",
+     "peru-aru-alcobaca.pdf",
+     "https://dados.gov.pt/s/resources/teste-14/20250924-102533/peru-aru-alcobaca.pdf"
+    ],
+    [
+     "pdf",
+     "aru-de-alcobaca-planta-de-delimitacao-versao-discussao-publica-20181206.pdf",
+     "https://dados.gov.pt/s/resources/teste-14/20250924-102601/aru-de-alcobaca-planta-de-delimitacao-versao-discussao-publica-20181206.pdf"
+    ],
+    [
+     "pdf",
+     "dr.pdf",
+     "https://dados.gov.pt/s/resources/teste-14/20250924-102601/dr.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "area de reabilitacao urbana",
+   "titulo": "Áreas suscetíveis de recurso ao Instrumento Financeiro para a Reabilitação e Revitalização Urbanas (IFRRU 2020)",
+   "org": "Município de Lisboa",
+   "rec": [
+    [
+     "geojson",
+     "Áreas suscetíveis de recurso ao Instrumento Financeiro para a Reabilitação e Revitalização Urbanas (IFRRU 2020)",
+     "https://services.arcgis.com/1dSrzEWVQn5kHHyK/arcgis/rest/services/AreasIFRRU/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson"
+    ]
+   ]
+  },
+  {
+   "q": "area de reabilitacao urbana",
+   "titulo": "ARU - Águeda cidade",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "ARU, Águeda cidade, GeoPackage",
+     "https://ckan.sig.cm-agueda.pt/dataset/d7cdb250-e519-4423-a9a7-f2ffdff934dd/resource/dd11d777-c9da-4e78-b344-52b6fba599f9/download/arucidadeagueda.gpkg"
+    ]
+   ]
+  },
+  {
+   "q": "area de reabilitacao urbana",
+   "titulo": "ARU - Águeda cidade",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "ARU, Águeda cidade, GeoPackage",
+     "https://dadosabertos.cm-agueda.pt/dataset/d7cdb250-e519-4423-a9a7-f2ffdff934dd/resource/dd11d777-c9da-4e78-b344-52b6fba599f9/download/arucidadeagueda.gpkg"
+    ]
+   ]
+  },
+  {
+   "q": "area de reabilitacao urbana",
+   "titulo": "ARU - Aglomerados urbanos",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "ARU, Aglomerados urbanos, GeoPackage",
+     "https://dadosabertos.cm-agueda.pt/dataset/d93597f7-9e3c-4de5-ae24-1fd70267450e/resource/f7a039a5-ba33-4dd3-8813-bb9eb650964b/download/aruaglomeradosurbanos.gpkg"
+    ]
+   ]
+  },
+  {
+   "q": "area de reabilitacao urbana",
+   "titulo": "ARU - Aglomerados urbanos",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "ARU, Aglomerados urbanos, GeoPackage",
+     "https://ckan.sig.cm-agueda.pt/dataset/d93597f7-9e3c-4de5-ae24-1fd70267450e/resource/f7a039a5-ba33-4dd3-8813-bb9eb650964b/download/aruaglomeradosurbanos.gpkg"
+    ]
+   ]
+  },
+  {
+   "q": "faixas de gestao de combustivel",
+   "titulo": "Faixas de gestão de combustível - PMDFCI",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Faixas de gestão de combustível PMDFCI, GeoPackage",
+     "https://ckan.sig.cm-agueda.pt/dataset/1aba1d01-0b3b-4dc9-a50c-d231a4f48d67/resource/f9e39b4b-2a0b-4901-9d30-f104b3eac05d/download/fgcpmdfci.gpkg"
+    ],
+    [
+     "geojson",
+     "Faixas de gestão de combustível PMDFCI, GeoJSON",
+     "https://ckan.sig.cm-agueda.pt/dataset/1aba1d01-0b3b-4dc9-a50c-d231a4f48d67/resource/b15c139a-58a1-4a16-b0de-d49329cbe6b2/download/fgcpmdfci.geojson"
+    ]
+   ]
+  },
+  {
+   "q": "faixas de gestao de combustivel",
+   "titulo": "Faixas de gestão de combustível - PMDFCI",
+   "org": " Câmara Municipal de Águeda ",
+   "rec": [
+    [
+     "gpkg",
+     "Faixas de gestão de combustível PMDFCI, GeoPackage",
+     "https://dadosabertos.cm-agueda.pt/dataset/1aba1d01-0b3b-4dc9-a50c-d231a4f48d67/resource/f9e39b4b-2a0b-4901-9d30-f104b3eac05d/download/fgcpmdfci.gpkg"
+    ],
+    [
+     "geojson",
+     "Faixas de gestão de combustível PMDFCI, GeoJSON",
+     "https://dadosabertos.cm-agueda.pt/dataset/1aba1d01-0b3b-4dc9-a50c-d231a4f48d67/resource/b15c139a-58a1-4a16-b0de-d49329cbe6b2/download/fgcpmdfci.geojson"
+    ]
+   ]
+  },
+  {
+   "q": "faixas de gestao de combustivel",
+   "titulo": "Mapa de Cortes de Vegetação em Áreas Lineares",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wms",
+     "Mapa de Cortes de Vegetação em Áreas Lineares",
+     "https://geo2.dgterritorio.gov.pt/geoserver/DRFloresta/wms?service=wms&request=getcapabilities&version=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "imoveis classificados",
+   "titulo": "SRUP - Imóveis Classificados",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Imóveis Classificados",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_IC_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Imóveis Classificados",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_IC_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "imoveis classificados",
+   "titulo": "Património Classificado dos Açores - Região Autónoma dos Açores (RAA)",
+   "org": "Secretaria Regional da Educação, Cultura e Desporto / Governo dos Açores",
+   "rec": [
+    [
+     "wms",
+     "Serviço de Visualização (WMS) do Património Classificado dos Açores",
+     "https://visualizador-idea.ambiente.azores.gov.pt/postgresql/externos/public/patrimonio_classificado/cgi-bin/qgis_mapserv.fcgi?request=GetCapabilities&service=WMS&version=1.3.0"
+    ],
+    [
+     "wfs",
+     "Serviço de Descarregamento (WFS) do Património Classificado dos Açores",
+     "https://visualizador-idea.ambiente.azores.gov.pt/postgresql/externos/public/patrimonio_classificado/cgi-bin/qgis_mapserv.fcgi?request=GetCapabilities&service=WFS&version=1.1.0"
+    ]
+   ]
+  },
+  {
+   "q": "imoveis classificados",
+   "titulo": "SRUP - Edifícios de Interesse Público",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Edifícios de Interesse Público",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_EIP_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Edifícios de Interesse Público",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_EIP_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "imoveis classificados",
+   "titulo": "SRUP - Árvores de Interesse Público",
+   "org": "Direção-Geral do Território",
+   "rec": [
+    [
+     "wfs",
+     "SRUP - Árvores de Interesse Público",
+     "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_AIP_PT1/WFService.aspx?service=WFS&request=getcapabilities&VERSION=2.0.0"
+    ],
+    [
+     "wms",
+     "SRUP - Árvores de Interesse Público",
+     "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_AIP_PT1/WMService.aspx?service=WMS&request=getcapabilities&VERSION=1.3.0"
+    ]
+   ]
+  },
+  {
+   "q": "imoveis classificados",
+   "titulo": "Lista_Bens_Imoveis_Class_EmViasClass_CM_Calamidade",
+   "org": "Património Cultural, I.P.",
+   "rec": [
+    [
+     "xlsx",
+     "lista-bens-imoveis-class-emviasclass-cm-calamidade.xlsx",
+     "https://dados.gov.pt/s/resources/lista-bens-imoveis-class-emviasclass-cm-calamidade/20260223-142012/lista-bens-imoveis-class-emviasclass-cm-calamidade.xlsx"
+    ],
+    [
+     "xlsx",
+     "copia-de-lista-bens-imoveis-class-emviasclass-cm-calamidade.xlsx",
+     "https://dados.gov.pt/s/resources/lista-bens-imoveis-class-emviasclass-cm-calamidade/20260223-141656/copia-de-lista-bens-imoveis-class-emviasclass-cm-calamidade.xlsx"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Rede Urbana Costeira",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Rede Urbana Costeira",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_RedeUrbCosteira_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Rede Urbana Costeira",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Rede Urbana Costeira",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_RedeUrbCosteira_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Rede Urbana Costeira",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Rede Urbana Costeira",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Faixas de Salvaguarda ao Galgamento e Inundação Costeira",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Faixas de Salvaguarda ao Galgamento e Inundação Costeira",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_POC_FxSalvLitArenGalg_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Faixas de Salvaguarda ao Galgamento e Inundação Costeira",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Faixas de Salvaguarda ao Galgamento e Inundação Costeira",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_POC_FxSalvLitArenGalg_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Faixas de Salvaguarda ao Galgamento e Inundação Costeira",
+     "https://inspire.apambiente.pt/arcgis/services/INSPIRE/NZ_RiskZone_POC/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Faixas de Salvaguarda ao Galgamento e Inundação Costeira",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/NZ_RiskZone_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Faixas de Salvaguarda à Erosão Costeira",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Faixas de Salvaguarda à Erosão Costeira",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_POC_FxSalvLitArenEros_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Faixas de Salvaguarda à Erosão Costeira",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Faixas de Salvaguarda à Erosão Costeira",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_POC_FxSalvLitArenEros_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Faixas de Salvaguarda à Erosão Costeira",
+     "https://inspire.apambiente.pt/arcgis/services/INSPIRE/NZ_RiskZone_POC/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Faixas de Salvaguarda à Erosão Costeira",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/NZ_RiskZone_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Ondas com Especial Valor para os Desportos de Deslize",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Ondas com Especial Valor para os Desportos de Deslize",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_OndasPotencDesl_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Ondas com Especial Valor para os Desportos de Deslize",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Ondas com Especial Valor para os Desportos de Deslize",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Ondas com Especial Valor para os Desportos de Deslize",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Ondas com Especial Valor para os Desportos de Deslize",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_OndasPotencDesl_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Limites Praias Marítimas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Limites Praias Marítimas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_PraiaMaritLimite_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Limites Praias Marítimas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Limites Praias Marítimas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_PraiaMaritLimite_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Limites Praias Marítimas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Limites Praias Marítimas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Nome e Classificação Praias Marítimas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Nome e Classificação Praias Marítimas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_PraiaMaritTipolog_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Nome e Classificação Praias Marítimas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Nome e Classificação Praias Marítimas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Nome e Classificação Praias Marítimas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Nome e Classificação Praias Marítimas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_PraiaMaritTipolog_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Plano de Ordenamento da Orla Costeira da Ilha das Flores",
+   "org": "Município de Santa Cruz das Flores",
+   "rec": [
+    [
+     "pdf",
+     "plano-de-ordenamento-da-orla-costeira-da-ilha-das-flores.pdf",
+     "https://dados.gov.pt/s/resources/plano-de-ordenamento-da-orla-costeira-da-ilha-das-flores/20251117-150802/plano-de-ordenamento-da-orla-costeira-da-ilha-das-flores.pdf"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Áreas Predominantemente Artificializadas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Áreas Predominantemente Artificializadas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_ArPredomArtific_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Áreas Predominantemente Artificializadas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Áreas Predominantemente Artificializadas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Áreas Predominantemente Artificializadas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Áreas Predominantemente Artificializadas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_ArPredomArtific_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Plano de Ordenamento da Orla Costeira (POOC) da ilha de São Miguel - Região Autónoma dos Açores (RAA)",
+   "org": "Secretaria Regional da Agricultura e Alimentação / Governo dos Açores",
+   "rec": [
+    [
+     "wms",
+     "Serviço de Visualização (WMS) do Plano de Ordenamento da Orla Costeira (POOC) da ilha de São Miguel",
+     "https://visualizador-idea.ambiente.azores.gov.pt/postgresql/idea/public/pooc_smg/cgi-bin/qgis_mapserv.fcgi?request=GetCapabilities&service=WMS&version=1.3.0"
+    ],
+    [
+     "wfs",
+     "Serviço de Descarregamento (WFS) do Plano de Ordenamento da Orla Costeira (POOC) da ilha de São Miguel",
+     "https://visualizador-idea.ambiente.azores.gov.pt/postgresql/idea/public/pooc_smg/cgi-bin/qgis_mapserv.fcgi?request=GetCapabilities&service=WFS&version=1.0.0"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Plano de Ordenamento da Orla Costeira (POOC) da ilha de São Jorge - Região Autónoma dos Açores (RAA)",
+   "org": "Secretaria Regional do Ambiente e Ação Climática / Governo dos Açores ",
+   "rec": [
+    [
+     "wms",
+     "Visualizador Geográfico IDE.A – Serviço de Visualização (WMS) do Plano de Ordenamento da Orla Costeira (POOC) da ilha de São Jorge",
+     "https://visualizador-idea.ambiente.azores.gov.pt/postgresql/idea/public/pooc_sjo/cgi-bin/qgis_mapserv.fcgi?request=GetCapabilities&service=WMS&version=1.3.0"
+    ],
+    [
+     "wfs",
+     "Visualizador Geográfico IDE.A – Serviço de Descarregamento (WFS) do Plano de Ordenamento da Orla Costeira (POOC) da ilha de São Jorge",
+     "https://visualizador-idea.ambiente.azores.gov.pt/postgresql/idea/public/pooc_sjo/cgi-bin/qgis_mapserv.fcgi?request=GetCapabilities&service=WFS&version=1.0.0"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Áreas Criticas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Áreas Criticas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_POC_AreasCriticas_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Áreas Criticas",
+     "https://inspire.apambiente.pt/arcgis/services/INSPIRE/NZ_RiskZone_POC/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Áreas Criticas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/NZ_RiskZone_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Áreas Criticas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Áreas Criticas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_POC_AreasCriticas_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Áreas Portuárias",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Áreas Portuárias",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_AreaPortuaria_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Áreas Portuárias",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Áreas Portuárias",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_AreaPortuaria_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Áreas Portuárias",
+     "https://inspire.apambiente.pt/arcgis/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Áreas Portuárias",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Núcleos Piscatórios",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Núcleos Piscatórios",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_NucleoPescatorio_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Núcleos Piscatórios",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Núcleos Piscatórios",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Núcleos Piscatórios",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Núcleos Piscatórios",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_NucleoPescatorio_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Áreas de Intervenção",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Áreas de Intervenção",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_AreaIntervencao_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Áreas de Intervenção",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Áreas de Intervenção",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_AreaIntervencao_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Áreas de Intervenção",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Áreas de Intervenção",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Margem das Águas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Margem das Águas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_Margem_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Margem das Águas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Margem das Águas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_Margem_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Margem das Águas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Margem das Águas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Zonas Reservadas das lagoas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Zonas Reservadas das lagoas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_Lag_ZnReservada_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Zonas Reservadas das lagoas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Zonas Reservadas das lagoas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_Lag_ZnReservada_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Zonas Reservadas das lagoas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Zonas Reservadas das lagoas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Zonas Balneares em lagoas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Zonas Balneares em lagoas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_Lag_ArRecLazZb_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Zonas Balneares em lagoas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Zonas Balneares em lagoas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Zonas Balneares em lagoas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Zonas Balneares em lagoas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_Lag_ArRecLazZb_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Zona Terrestre de Proteção",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Zona Terrestre de Proteção",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_ZnTerreProtecao_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Zona Marítima de Proteção",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Zona Marítima de Proteção",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_ZnMaritProtecao_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Zona Marítima de Proteção",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Zona Marítima de Proteção",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Zona Marítima de Proteção",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Zona Marítima de Proteção",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_ZnMaritProtecao_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Zona Terrestre de Proteção",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Zona Terrestre de Proteção",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_ZnTerreProtecao_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Zona Terrestre de Proteção",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Zona Terrestre de Proteção",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Planos de Água das lagoas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Planos de Água das lagoas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_Lag_PlanoAgua_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Planos de Água das lagoas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Planos de Água das lagoas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Planos de Água das lagoas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Planos de Água das lagoas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D311_APA_POC_Lag_PlanoAgua_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Faixas de Proteção das lagoas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Faixas de Proteção das lagoas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_POC_Lag_FxProtLag_PC.zip"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Faixas de Proteção das lagoas",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "zip",
+     "Programas da Orla Costeira (POC) - Faixas de Proteção das lagoas",
+     "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_POC_Lag_FxProtLag_PC.zip"
+    ],
+    [
+     "wms",
+     "Programas da Orla Costeira (POC) - Faixas de Proteção das lagoas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WMSServer?SERVICE=WMS&REQUEST=GetCapabilities"
+    ],
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Faixas de Proteção das lagoas",
+     "https://inspire.apambiente.pt/getogc/services/INSPIRE/LU_SpatialPlan_POC/MapServer/WFSServer?request=GetCapabilities&service=WFS"
+    ]
+   ]
+  },
+  {
+   "q": "orla costeira",
+   "titulo": "Programas da Orla Costeira (POC) - Áreas Estratégicas para Gestão Sedimentar",
+   "org": "Agência Portuguesa do Ambiente",
+   "rec": [
+    [
+     "wfs",
+     "Programas da Orla Costeira (POC) - Áreas Estratégicas para Gestão Sedimentar",
+     "https://sniambgeoogc.apambiente.pt/getogc/services/SNIAmb/POC/MapServer/WFSServer?SERVICE=WFS&REQUEST=GetCapabilities"
+    ]
+   ]
+  }
+ ],
+ "snig_ren": [
+  200,
+  "application/xml",
+  [
+   "http://inspire.ec.europa.eu/metadata-codelist/LimitationsOnPublicAccess/otherRestrictions",
+   "http://inspire.ec.europa.eu/metadata-codelist/OnLineDescriptionCode/accessPoint",
+   "http://schemas.opengis.net/iso/19139/20070417/gmd/gmd.xsd",
+   "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmx",
+   "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode",
+   "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#CI_RoleCode",
+   "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#MD_ClassificationCode",
+   "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#MD_ScopeCode",
+   "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode",
+   "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/gmxCodelists.xml#MD_SpatialRepresentationTypeCode",
+   "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_RestrictionCode",
+   "http://www.eionet.europa.eu/gemet/inspire_themes",
+   "http://www.isotc211.org/2005/gco",
+   "http://www.isotc211.org/2005/gmd",
+   "http://www.isotc211.org/2005/gmx",
+   "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode",
+   "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_OnLineFunctionCode",
+   "http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode",
+   "http://www.loc.gov/standards/iso639-2/",
+   "http://www.opengis.net/gml",
+   "http://www.w3.org/1999/xlink",
+   "http://www.w3.org/2001/XMLSchema-instance",
+   "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_ALENTEJO/WFService.aspx?service=WFS&amp;request=getcapabilities",
+   "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_ALGARVE/WFService.aspx?service=WFS&amp;request=getcapabilities",
+   "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_CENTRO/WFService.aspx?service=WFS&amp;request=getcapabilities",
+   "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_LVT/WFService.aspx?service=WFS&amp;request=getcapabilities",
+   "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_NORTE/WFService.aspx?service=WFS&amp;request=getcapabilities",
+   "https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_PT1/WFService.aspx?service=WFS&amp;request=getcapabilities",
+   "https://servicos.dgterritorio.pt/SDISNITWMSSRUP_REN_PT1/WMService.aspx?service=WMS&amp;request=getcapabilities",
+   "https://www.dgterritorio.gov.pt",
+   "https://www.dgterritorio.gov.pt)."
+  ]
+ ],
+ "wfs_REN_LVT": [
+  404,
+  "text/html; charset=utf-8",
+  [],
+  1.001756
+ ],
+ "wfs_RAN": [
+  200,
+  "text/xml",
+  [
+   "1.1.0",
+   "2.0.0",
+   "EPSG:3763",
+   "EPSG:3785",
+   "EPSG:3857",
+   "EPSG:4258",
+   "EPSG:4326",
+   "GenerateNew",
+   "KVP",
+   "RSS",
+   "SOAP",
+   "XML",
+   "application/gml+xml; version=2.1.2",
+   "application/gml+xml; version=3.0.0",
+   "application/gml+xml; version=3.1.1",
+   "application/gml+xml; version=3.2",
+   "application/vnd.geo+json",
+   "application/vnd.google-earth.kml+xml",
+   "application/x-protobuf",
+   "hits",
+   "myVR",
+   "results",
+   "text/csv",
+   "text/xml",
+   "text/xml; subtype=gml/2.1.2",
+   "text/xml; subtype=gml/3.0.0",
+   "text/xml; subtype=gml/3.1.1",
+   "text/xml; subtype=gml/3.2",
+   "wfs:Query"
+  ],
+  3.995906
+ ],
+ "wfs_IC": [
+  200,
+  "text/xml",
+  [
+   "1.1.0",
+   "2.0.0",
+   "EPSG:3763",
+   "EPSG:3785",
+   "EPSG:3857",
+   "EPSG:4258",
+   "EPSG:4326",
+   "GenerateNew",
+   "KVP",
+   "RSS",
+   "SOAP",
+   "XML",
+   "application/gml+xml; version=2.1.2",
+   "application/gml+xml; version=3.0.0",
+   "application/gml+xml; version=3.1.1",
+   "application/gml+xml; version=3.2",
+   "application/vnd.geo+json",
+   "application/vnd.google-earth.kml+xml",
+   "application/x-protobuf",
+   "hits",
+   "myVR",
+   "results",
+   "text/csv",
+   "text/xml",
+   "text/xml; subtype=gml/2.1.2",
+   "text/xml; subtype=gml/3.0.0",
+   "text/xml; subtype=gml/3.1.1",
+   "text/xml; subtype=gml/3.2",
+   "wfs:Query"
+  ],
+  5.312328
+ ],
+ "wfs_MG": [
+  500,
+  "text/html; charset=utf-8",
+  [],
+  3.295693
+ ],
+ "wfs_CPIR": [
+  200,
+  "text/xml",
+  [
+   "1.1.0",
+   "2.0.0",
+   "EPSG:3763",
+   "EPSG:3857",
+   "EPSG:4258",
+   "EPSG:4326",
+   "GenerateNew",
+   "KVP",
+   "RSS",
+   "SOAP",
+   "XML",
+   "application/gml+xml; version=2.1.2",
+   "application/gml+xml; version=3.0.0",
+   "application/gml+xml; version=3.1.1",
+   "application/gml+xml; version=3.2",
+   "application/vnd.geo+json",
+   "application/vnd.google-earth.kml+xml",
+   "application/x-protobuf",
+   "hits",
+   "myVR",
+   "results",
+   "text/csv",
+   "text/xml",
+   "text/xml; subtype=gml/2.1.2",
+   "text/xml; subtype=gml/3.0.0",
+   "text/xml; subtype=gml/3.1.1",
+   "text/xml; subtype=gml/3.2",
+   "wfs:Query"
+  ],
+  1.589463
+ ]
+}
