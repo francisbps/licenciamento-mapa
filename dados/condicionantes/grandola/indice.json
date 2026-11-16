@@ -1,6 +1,6 @@
 {
  "concelho": "grandola",
- "gerado": "2026-11-16T18:18:58+00:00",
+ "gerado": "2026-11-16T19:05:40+00:00",
  "fontes": {
   "DGT_REN": {
    "origem": "DGT (SNIT, SRUP)",
@@ -10,7 +10,7 @@
    "ficheiro": "DGT_REN.geojson",
    "ok": true,
    "elementos": 7,
-   "atualizado": "2026-11-16T17:28:50+00:00",
+   "atualizado": "2026-11-16T18:24:03+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -22,7 +22,7 @@
    "ficheiro": "PC_CLASSIFICADO.geojson",
    "ok": true,
    "elementos": 41,
-   "atualizado": "2026-11-16T17:30:39+00:00",
+   "atualizado": "2026-11-16T18:26:22+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -34,7 +34,7 @@
    "ficheiro": "PC_RESTRICOES.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-16T17:30:40+00:00",
+   "atualizado": "2026-11-16T18:26:23+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -47,7 +47,7 @@
    "ficheiro": "PC_ARQ.geojson",
    "ok": true,
    "elementos": 47,
-   "atualizado": "2026-11-16T17:30:41+00:00",
+   "atualizado": "2026-11-16T18:26:24+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -59,7 +59,7 @@
    "ficheiro": "ICNF_SIC.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-16T17:30:41+00:00",
+   "atualizado": "2026-11-16T18:26:25+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -71,7 +71,7 @@
    "ficheiro": "DGT_RAN.geojson",
    "ok": true,
    "elementos": 4,
-   "atualizado": "2026-11-16T17:30:50+00:00",
+   "atualizado": "2026-11-16T18:26:31+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -83,7 +83,7 @@
    "ficheiro": "DGT_AP.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-16T17:30:51+00:00",
+   "atualizado": "2026-11-16T18:26:31+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -95,7 +95,7 @@
    "ficheiro": "DGT_AIP.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-16T17:30:51+00:00",
+   "atualizado": "2026-11-16T18:26:31+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -107,7 +107,7 @@
    "ficheiro": "DGT_MG.geojson",
    "ok": true,
    "elementos": 76,
-   "atualizado": "2026-11-16T17:30:52+00:00",
+   "atualizado": "2026-11-16T18:26:32+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -119,7 +119,7 @@
    "ficheiro": "DGT_AA.geojson",
    "ok": true,
    "elementos": 0,
-   "atualizado": "2026-11-16T17:30:52+00:00",
+   "atualizado": "2026-11-16T18:26:32+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -131,7 +131,7 @@
    "ficheiro": "DGT_AAPC.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-16T17:30:54+00:00",
+   "atualizado": "2026-11-16T18:26:33+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -143,7 +143,7 @@
    "ficheiro": "DGT_CASAP.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-16T17:30:54+00:00",
+   "atualizado": "2026-11-16T18:26:33+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -155,7 +155,7 @@
    "ficheiro": "DGT_DN.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-16T17:30:55+00:00",
+   "atualizado": "2026-11-16T18:26:33+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -167,7 +167,7 @@
    "ficheiro": "DGT_ZPE.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-16T17:30:55+00:00",
+   "atualizado": "2026-11-16T18:26:33+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -179,7 +179,7 @@
    "ficheiro": "DGT_ZEC.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-16T17:30:55+00:00",
+   "atualizado": "2026-11-16T18:26:34+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -190,7 +190,7 @@
    "entidade": "ICNF, I.P. e câmara (CMGIFR)",
    "classe": "muito alta|\\balta\\b",
    "ok": false,
-   "tentativa": "2026-11-16T17:31:49+00:00",
+   "tentativa": "2026-11-16T18:34:30+00:00",
    "erro": "429 Client Error: Too Many Requests for url: https://ogcapi.dgterritorio.gov.pt/collections/srup_perigosidade_inc_rural/items?f=json&offset=10000&limit=500&bbox=-8.914865886538173,38.021453035021054,-8.236175830920354,38.50734150121178"
   },
   "DGT_SGIFR": {
@@ -201,7 +201,7 @@
    "ficheiro": "DGT_SGIFR.geojson",
    "ok": true,
    "elementos": 1,
-   "atualizado": "2026-11-16T17:31:54+00:00",
+   "atualizado": "2026-11-16T18:34:37+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -213,7 +213,7 @@
    "ficheiro": "DGT_RRN.geojson",
    "ok": true,
    "elementos": 26,
-   "atualizado": "2026-11-16T17:31:54+00:00",
+   "atualizado": "2026-11-16T18:34:38+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -225,7 +225,7 @@
    "ficheiro": "DGT_RFN.geojson",
    "ok": true,
    "elementos": 18,
-   "atualizado": "2026-11-16T17:31:55+00:00",
+   "atualizado": "2026-11-16T18:34:39+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -237,7 +237,7 @@
    "ficheiro": "DGT_RE.geojson",
    "ok": true,
    "elementos": 12,
-   "atualizado": "2026-11-16T17:31:55+00:00",
+   "atualizado": "2026-11-16T18:34:40+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -249,7 +249,7 @@
    "ficheiro": "APA_INUND.geojson",
    "ok": true,
    "elementos": 0,
-   "atualizado": "2026-11-16T17:32:00+00:00",
+   "atualizado": "2026-11-16T18:34:45+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -261,7 +261,7 @@
    "ficheiro": "APA_POC_GALG.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-16T17:32:04+00:00",
+   "atualizado": "2026-11-16T18:34:49+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -273,7 +273,7 @@
    "ficheiro": "APA_POC_EROS.geojson",
    "ok": true,
    "elementos": 2,
-   "atualizado": "2026-11-16T17:32:05+00:00",
+   "atualizado": "2026-11-16T18:34:51+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -285,7 +285,7 @@
    "ficheiro": "ICNF_RF.geojson",
    "ok": true,
    "elementos": 0,
-   "atualizado": "2026-11-16T17:32:06+00:00",
+   "atualizado": "2026-11-16T18:34:52+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -297,7 +297,7 @@
    "ficheiro": "DGT_DPH.geojson",
    "ok": true,
    "elementos": 0,
-   "atualizado": "2026-11-16T17:33:32+00:00",
+   "atualizado": "2026-11-16T18:35:16+00:00",
    "erro": null,
    "ladrilhos": null
   },
@@ -307,7 +307,7 @@
    "app": "pat",
    "entidade": "Património Cultural, I.P.",
    "ok": false,
-   "tentativa": "2026-11-16T17:48:45+00:00",
+   "tentativa": "2026-11-16T18:50:29+00:00",
    "erro": "mais de 15 min sem terminar"
   },
   "DGT_EIP": {
@@ -316,7 +316,7 @@
    "app": "edificios_publicos_valor",
    "entidade": "Entidade que tutela o edifício",
    "ok": false,
-   "tentativa": "2026-11-16T18:03:56+00:00",
+   "tentativa": "2026-11-16T19:05:40+00:00",
    "erro": "mais de 15 min sem terminar"
   },
   "DGT_GO": {
