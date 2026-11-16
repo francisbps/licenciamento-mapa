@@ -553,6 +553,9 @@ def carregar(chave, cfg, municipios, cfgs):
 def main():
     cfgs = json.loads((RAIZ / "carregar" / "fontes.json").read_text())
     municipios = json.loads((RAIZ / "dados" / "municipios.json").read_text())
+    if sys.argv[1:] == ["explorar"]:
+        import explorar  # noqa: F401  (temporário)
+        return
     escolhidos = sys.argv[1:] or [c for c in cfgs if not c.startswith("_")]
     tudo_falhou = [carregar(c, cfgs[c], municipios, cfgs) for c in escolhidos]
     sys.exit(1 if all(tudo_falhou) else 0)
