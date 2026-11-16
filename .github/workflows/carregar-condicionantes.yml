@@ -57,7 +57,8 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "Condicionantes de ${{ matrix.concelho }} atualizadas ($(date -u +%F))"
           for i in 1 2 3 4 5; do
-            git pull --rebase origin "$GITHUB_REF_NAME" && git push && exit 0
+            git pull --rebase -X theirs origin "$GITHUB_REF_NAME" && git push && exit 0
+            git rebase --abort 2>/dev/null || true
             sleep $((i * 15))
           done
           exit 1
