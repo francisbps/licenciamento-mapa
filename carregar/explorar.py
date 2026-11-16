@@ -1,4 +1,4 @@
-"""Exploração (temporária): que descarregamentos em ficheiro existem para as cartas da DGT e outras."""
+"""Exploração (temporária), 2.ª ronda: amostras das coleções SRUP da OGC API, tamanhos dos zips da APA, WFS ARU/ICNF."""
 import json
 import re
 from pathlib import Path
@@ -8,14 +8,7 @@ import requests
 S = requests.Session()
 S.headers["User-Agent"] = "licenciamento-mapa (carregador de condicionantes)"
 out = {}
-
-
-def get(url, **kw):
-    try:
-        r = S.get(url, timeout=60, **kw)
-        return r.status_code, r.headers.get("content-type", ""), r
-    except Exception as e:
-        return None, str(e)[:200], None
+BB = "-9.23,38.69,-9.09,38.80"  # Lisboa
 
 
 def guardar(k, v):
@@ -23,35 +16,51 @@ def guardar(k, v):
     Path("dados/condicionantes/_explorar.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
 
 
-# 1. OGC API da DGT: coleções
-st, ct, r = get("https://ogcapi.dgterritorio.gov.pt/collections?f=json")
-try:
-    guardar("ogcapi", [(c["id"], c.get("title")) for c in r.json()["collections"]])
-except Exception as e:
-    guardar("ogcapi", [st, ct, str(e)[:200]])
-
-# 2. dados.gov.pt: conjuntos SRUP e recursos
-res = []
-for q in ("srup", "reserva ecologica nacional", "reserva agricola nacional", "carta de perigosidade de incendio",
-          "zonas inundaveis", "regime florestal", "area de reabilitacao urbana", "faixas de gestao de combustivel",
-          "imoveis classificados", "orla costeira"):
-    st, ct, r = get("https://dados.gov.pt/api/1/datasets/", params={"q": q, "page_size": 40})
+for c in ["srup_ren_areal", "srup_ren_linear", "sgifr_areas", "sgifr_linhas", "sgifr_pontos", "srup_ran",
+          "srup_areas_protegidas", "srup_arvores_areal", "srup_arvores_point", "srup_marcos_geod", "srup_aeronautica",
+          "srup_albufeiras", "srup_aquiferos", "srup_defesa_militar", "srup_defesa_militar_zonas", "srup_zpe", "srup_zec",
+          "srup_perigosidade_inc_rural", "srup_rede_viaria", "srup_rede_ferroviaria", "srup_rede_ferroviaria_estacoes",
+          "srup_rede_eletrica"]:
     try:
-        for d in r.json()["data"]:
-            res.append({"q": q, "titulo": d["title"], "org": (d.get("organization") or {}).get("name"),
-                        "rec": [(x.get("format"), x.get("title"), x["url"]) for x in d.get("resources", [])][:8]})
+        r = S.get(f"https://ogcapi.dgterritorio.gov.pt/collections/{c}/items", params={"f": "json", "limit": 3, "bbox": BB}, timeout=90)
+        j = r.json()
+        fs = j.get("features") or []
+        guardar(c, {"status": r.status_code, "s": round(r.elapsed.total_seconds(), 1), "matched": j.get("numberMatched"),
+                    "n": len(fs), "tipos": [f["geometry"]["type"] for f in fs if f.get("geometry")],
+                    "props": [f.get("properties") for f in fs[:2]], "links": [l.get("rel") for l in j.get("links", [])]})
     except Exception as e:
-        res.append({"q": q, "erro": [st, ct, str(e)[:200]]})
-guardar("dados_gov", res)
+        guardar(c, str(e)[:300])
+# valores distintos da perigosidade
+try:
+    r = S.get("https://ogcapi.dgterritorio.gov.pt/collections/srup_perigosidade_inc_rural/items", params={"f": "json", "limit": 200, "bbox": "-9.4,38.7,-9.1,38.9"}, timeout=120)
+    vals = {}
+    for f in r.json().get("features", []):
+        for k, v in (f.get("properties") or {}).items():
+            if isinstance(v, (str, int)) and len(vals.setdefault(k, [])) < 12 and v not in vals[k]:
+                vals[k].append(v)
+    guardar("cpir_valores", vals)
+except Exception as e:
+    guardar("cpir_valores", str(e)[:300])
 
-# 3. SNIG: registo de metadados da REN (CSW) e pesquisa de serviços de descarregamento
-st, ct, r = get("https://snig.dgterritorio.gov.pt/rndg/srv/api/records/ad95b02a-fbd2-4b8e-89b6-f699a9ff3c0d/formatters/xml")
-guardar("snig_ren", [st, ct, sorted(set(re.findall(r"https?://[^<\"' ]+", r.text)))[:80] if r is not None else None])
+for u in ["https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AI_T020_Limite_PC.zip",
+          "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AI_T100_Limite_PC.zip",
+          "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_POC_FxSalvLitArenGalg_PC.zip",
+          "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_POC_FxSalvLitArenEros_PC.zip",
+          "https://snit-mais.dgterritorio.gov.pt/SNIT/DOWNLOAD/SRUP/CARTA_PERIGOSIDADE_INCENDIO_RURAL/PERIGOSIDADE_INCENDIO_RURAL.zip",
+          "https://snit-mais.dgterritorio.gov.pt/SNIT/DOWNLOAD/SRUP/"]:
+    try:
+        r = S.head(u, timeout=60, allow_redirects=True)
+        guardar(u, [r.status_code, r.headers.get("content-length"), r.headers.get("content-type")])
+    except Exception as e:
+        guardar(u, str(e)[:200])
 
-# 4. WFS da DGT: quanto tempo demora o GetCapabilities de algumas cartas, e se há outputFormat de ficheiro
-for c in ("REN_LVT", "RAN", "IC", "MG", "CPIR"):
-    st, ct, r = get(f"https://servicos.dgterritorio.pt/SDISNITWFSSRUP_{c}_PT1/WFService.aspx",
-                    params={"service": "WFS", "version": "2.0.0", "request": "GetCapabilities"})
-    fmts = sorted(set(re.findall(r"<ows:Value>([^<]+)</ows:Value>", r.text)))[:40] if r is not None else None
-    guardar(f"wfs_{c}", [st, ct, fmts, r.elapsed.total_seconds() if r is not None else None])
-print(json.dumps(out, ensure_ascii=False)[:3000])
+for nome, u in [("aru", "https://servicos.dgterritorio.pt/SDISNITWFSARU/WFService.aspx"),
+                ("icnf_inspire", "https://si.icnf.pt/geoserver/INSPIRE/wfs"),
+                ("icnf_ows", "https://si.icnf.pt/geoserver/ows")]:
+    try:
+        r = S.get(u, params={"service": "WFS", "version": "2.0.0", "request": "GetCapabilities"}, timeout=90)
+        nomes = re.findall(r"<(?:wfs:)?Name>([^<]+)</(?:wfs:)?Name>", r.text)
+        guardar(nome, [r.status_code, [n for n in nomes if re.search(r"aru|flor|rf|regime|refloa|ardid|perim", n, re.I)][:40], len(nomes)])
+    except Exception as e:
+        guardar(nome, str(e)[:200])
+print(json.dumps(out, ensure_ascii=False)[:2000])
