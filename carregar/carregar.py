@@ -241,25 +241,53 @@ def lonlat(g):
 OGCAPI = "https://ogcapi.dgterritorio.gov.pt/collections/{}/items"
 
 
+OGC_MAX = 10000  # o servidor da DGT não pagina para lá deste deslocamento (responde 429)
+
+
 def ogcapi_dgt(f, limite):
     """Cartas SRUP da OGC API da DGT (GeoJSON em graus, por páginas, só a zona do concelho).
-    É o mesmo servidor da CAOP e responde muito melhor do que os WFS antigos da DGT."""
-    x0, y0, x1, y1 = limite.bounds
-    for col in f["ogc"]:
-        url, params = OGCAPI.format(col), {"f": "json", "limit": 500, "bbox": f"{x0},{y0},{x1},{y1}"}
+    É o mesmo servidor da CAOP e responde muito melhor do que os WFS antigos da DGT.
+    Cartas muito pormenorizadas (perigosidade, faixas de gestão de combustível) passam dos
+    10 000 elementos por pedido: aí a zona divide-se em quatro e pede-se cada parte."""
+    vistos = set()
+    filtros = f.get("filtros") or [{}]
+
+    def zona(col, filtro, caixa, nivel):
+        x0, y0, x1, y1 = caixa
+        if not limite.intersects(box(x0, y0, x1, y1)):
+            return
+        url, params = OGCAPI.format(col), {"f": "json", "limit": 500, "bbox": f"{x0},{y0},{x1},{y1}", **filtro}
+        lote, offset = [], 0
         while url:
             j = json_ou_erro(pedir(url, params))
             if "features" not in j:
                 raise RuntimeError(f"{col}: {str(j)[:200]}")
-            for el in j["features"]:
-                props = el.get("properties") or {}
-                # Cartas por classes (perigosidade de incêndio): só se guardam as classes que contam.
-                if f.get("classe") and not re.search(f["classe"], json.dumps(props, ensure_ascii=False), re.I):
-                    continue
-                if el.get("geometry"):
-                    yield elemento(lonlat(shape(el["geometry"])), limite, props, camada=f.get("descricao") or col)
+            total = j.get("numberMatched")
+            if nivel < 6 and ((isinstance(total, int) and total > OGC_MAX) or offset + len(j["features"]) >= OGC_MAX):
+                mx, my = (x0 + x1) / 2, (y0 + y1) / 2
+                for c in ((x0, y0, mx, my), (mx, y0, x1, my), (x0, my, mx, y1), (mx, my, x1, y1)):
+                    yield from zona(col, filtro, c, nivel + 1)
+                return
+            lote += j["features"]
+            offset += len(j["features"])
             url = next((l["href"] for l in j.get("links") or [] if l.get("rel") == "next"), None) if j["features"] else None
             params = None
+        for el in lote:
+            chave = (col, el.get("id")) if el.get("id") is not None else None
+            if chave:
+                if chave in vistos:
+                    continue
+                vistos.add(chave)
+            props = el.get("properties") or {}
+            # Cartas por classes (perigosidade de incêndio): só se guardam as classes que contam.
+            if f.get("classe") and not re.search(f["classe"], json.dumps(props, ensure_ascii=False), re.I):
+                continue
+            if el.get("geometry"):
+                yield elemento(lonlat(shape(el["geometry"])), limite, props, camada=f.get("descricao") or col)
+
+    for col in f["ogc"]:
+        for filtro in filtros:
+            yield from zona(col, filtro, limite.bounds, 0)
 
 
 def zip_shp(f, limite):
@@ -452,23 +480,45 @@ def agora():
 
 
 def limite_caop(cfg):
-    """Limite do concelho na CAOP. O identificador do elemento nem sempre é o código DICO:
-    se não der, procura pelo código e depois pelo nome."""
+    """Limite do concelho na CAOP. O identificador do elemento nem sempre é o código DICO
+    (o elemento 1312 é Arouca, não o Porto): confirma-se sempre pelo código ou pelo nome."""
+    nome = sem_acentos(cfg["nome"]).upper()
+
+    def e_este(el):
+        p = (el or {}).get("properties") or {}
+        for k, v in p.items():
+            k = k.lower()
+            if ("dico" in k or k == "dtmn") and str(v).zfill(4) == cfg["dico"]:
+                return True
+            if k in ("municipio", "concelho") and sem_acentos(str(v)).upper() == nome:
+                return True
+        return False
+
     try:
-        return pedir(CAOP.format(cfg["dico"]), tentativas=1).json()
+        el = pedir(CAOP.format(cfg["dico"]), tentativas=1).json()
+        if e_este(el):
+            return el
     except requests.HTTPError:
         pass
     base = CAOP.split("/items/")[0] + "/items"
-    nome = cfg["nome"].upper()
-    for filtro in ({"dico": cfg["dico"]}, {"dtmn": cfg["dico"]}, {"municipio": nome}, {"concelho": nome}):
+    for filtro in ({"dico": cfg["dico"]}, {"dtmn": cfg["dico"]}, {"municipio": cfg["nome"]},
+                   {"municipio": nome}, {"concelho": cfg["nome"]}, {"concelho": nome}):
         try:
-            els = pedir(base, {"f": "json", "limit": 5, **filtro}, tentativas=1).json().get("features") or []
+            els = pedir(base, {"f": "json", "limit": 20, **filtro}, tentativas=1).json().get("features") or []
         except requests.RequestException:
             continue
         for el in els:
-            props = " ".join(str(v) for v in (el.get("properties") or {}).values()).upper()
-            if cfg["dico"] in props or nome in props:
+            if e_este(el):
                 return el
+    # Último recurso: percorrer a lista toda (308 municípios).
+    url, params = base, {"f": "json", "limit": 500}
+    while url:
+        j = pedir(url, params, tentativas=2).json()
+        for el in j.get("features") or []:
+            if e_este(el):
+                return el
+        url = next((l["href"] for l in j.get("links") or [] if l.get("rel") == "next"), None)
+        params = None
     raise RuntimeError(f"limite de {cfg['nome']} ({cfg['dico']}) não encontrado na CAOP")
 
 
