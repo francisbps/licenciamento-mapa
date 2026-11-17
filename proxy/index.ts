@@ -1,6 +1,6 @@
 // Intermediário para o mapa: pede aos serviços oficiais (WMS e ArcGIS) o que o browser não pode ler por CORS.
 // Supabase Edge Function "mapa-proxy", sem verificação de JWT. Uso: GET ?url=<endereço do serviço>
-const ORIGENS = ["https://francisbps.github.io", "http://localhost:8765"];
+const ORIGENS = ["https://licenciamentopt.com", "https://www.licenciamentopt.com", "https://francisbps.github.io", "http://localhost:8765"];
 // Só servidores públicos portugueses e só pedidos de mapa (WMS, WFS, ArcGIS).
 const HOST_OK = /(^|\.)(gov\.pt|apambiente\.pt|icnf\.pt|amcb\.pt|oestedigital\.pt|city-platform\.com|agol\.pt|(cm|mun)-[a-z-]+\.pt|[a-z-]+\.pt)$/i;
 const PEDIDO_OK = /(service=wm[st]|service=wfs|\/mapserver\/|\/featureserver\/|\/rest\/services\/)/i;

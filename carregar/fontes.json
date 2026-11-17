@@ -51,6 +51,200 @@
       "entidade": "ICNF, I.P."
     },
     {
+      "fonte": "DGT_RAN",
+      "app": "ran",
+      "entidade": "Entidade Regional da RAN",
+      "ogc": [
+        "srup_ran"
+      ],
+      "descricao": "Reserva Agrícola Nacional",
+      "origem": "DGT (SNIT, SRUP, OGC API)"
+    },
+    {
+      "fonte": "DGT_AP",
+      "app": "natura",
+      "entidade": "ICNF, I.P.",
+      "ogc": [
+        "srup_areas_protegidas"
+      ],
+      "descricao": "Áreas protegidas",
+      "origem": "DGT (SNIT, SRUP, OGC API)"
+    },
+    {
+      "fonte": "DGT_AIP",
+      "app": "arvoredo_interesse_publico",
+      "entidade": "ICNF, I.P.",
+      "ogc": [
+        "srup_arvores_areal",
+        "srup_arvores_point"
+      ],
+      "descricao": "Árvores de interesse público",
+      "origem": "DGT (SNIT, SRUP, OGC API)"
+    },
+    {
+      "fonte": "DGT_MG",
+      "app": "marcos_geodesicos",
+      "entidade": "Direção-Geral do Território",
+      "ogc": [
+        "srup_marcos_geod"
+      ],
+      "descricao": "Marcos geodésicos",
+      "origem": "DGT (SNIT, SRUP, OGC API)"
+    },
+    {
+      "fonte": "DGT_AA",
+      "app": "aero",
+      "entidade": "ANAC",
+      "ogc": [
+        "srup_aeronautica"
+      ],
+      "descricao": "Servidões aeronáuticas",
+      "origem": "DGT (SNIT, SRUP, OGC API)"
+    },
+    {
+      "fonte": "DGT_AAPC",
+      "app": "albufeiras_aguas_publicas",
+      "entidade": "APA, I.P.",
+      "ogc": [
+        "srup_albufeiras"
+      ],
+      "descricao": "Albufeiras de águas públicas",
+      "origem": "DGT (SNIT, SRUP, OGC API)"
+    },
+    {
+      "fonte": "DGT_CASAP",
+      "app": "captacoes_agua_subterranea",
+      "entidade": "APA, I.P. e entidade gestora",
+      "ogc": [
+        "srup_aquiferos"
+      ],
+      "descricao": "Captações de água subterrânea",
+      "origem": "DGT (SNIT, SRUP, OGC API)"
+    },
+    {
+      "fonte": "DGT_DN",
+      "app": "militar",
+      "entidade": "Ministério da Defesa Nacional",
+      "ogc": [
+        "srup_defesa_militar",
+        "srup_defesa_militar_zonas"
+      ],
+      "descricao": "Servidões militares",
+      "origem": "DGT (SNIT, SRUP, OGC API)"
+    },
+    {
+      "fonte": "DGT_ZPE",
+      "app": "natura",
+      "entidade": "ICNF, I.P.",
+      "ogc": [
+        "srup_zpe"
+      ],
+      "descricao": "Rede Natura 2000: ZPE",
+      "origem": "DGT (SNIT, SRUP, OGC API)"
+    },
+    {
+      "fonte": "DGT_ZEC",
+      "app": "natura",
+      "entidade": "ICNF, I.P.",
+      "ogc": [
+        "srup_zec"
+      ],
+      "descricao": "Rede Natura 2000: ZEC",
+      "origem": "DGT (SNIT, SRUP, OGC API)"
+    },
+    {
+      "fonte": "DGT_CPIR",
+      "app": "incendio",
+      "entidade": "ICNF, I.P. e câmara (CMGIFR)",
+      "classe": "muito alta|\\balta\\b",
+      "ogc": [
+        "srup_perigosidade_inc_rural"
+      ],
+      "descricao": "Perigosidade de incêndio rural (alta e muito alta)",
+      "origem": "DGT (SNIT, SRUP, OGC API)"
+    },
+    {
+      "fonte": "DGT_SGIFR",
+      "ogc": [
+        "sgifr_areas",
+        "sgifr_linhas",
+        "sgifr_pontos"
+      ],
+      "descricao": "Gestão de fogos rurais (faixas de gestão de combustível, rede viária florestal, pontos de água)",
+      "origem": "DGT (SNIT, SRUP, OGC API)",
+      "app": "incendio",
+      "entidade": "ICNF, I.P. e AGIF"
+    },
+    {
+      "fonte": "DGT_RRN",
+      "ogc": [
+        "srup_rede_viaria"
+      ],
+      "descricao": "Rede rodoviária (zonas de servidão)",
+      "origem": "DGT (SNIT, SRUP, OGC API)",
+      "app": "estradas",
+      "entidade": "Infraestruturas de Portugal ou câmara"
+    },
+    {
+      "fonte": "DGT_RFN",
+      "ogc": [
+        "srup_rede_ferroviaria",
+        "srup_rede_ferroviaria_estacoes"
+      ],
+      "descricao": "Rede ferroviária (zonas de servidão)",
+      "origem": "DGT (SNIT, SRUP, OGC API)",
+      "app": "estradas",
+      "entidade": "Infraestruturas de Portugal"
+    },
+    {
+      "fonte": "DGT_RE",
+      "ogc": [
+        "srup_rede_eletrica"
+      ],
+      "descricao": "Rede elétrica (servidão de linhas)",
+      "origem": "DGT (SNIT, SRUP, OGC API)",
+      "app": "eletrica",
+      "entidade": "REN / E-Redes e DGEG"
+    },
+    {
+      "fonte": "APA_INUND",
+      "tipo": "zipshp",
+      "url": "https://sniambgeoviewer.apambiente.pt/Geodocs/shpzips/D312_APA_AI_T100_Limite_PC.zip",
+      "descricao": "Zonas inundáveis (cheia de 100 anos)",
+      "origem": "APA, I.P. (Diretiva Inundações)",
+      "app": "hidrico",
+      "entidade": "APA, I.P."
+    },
+    {
+      "fonte": "APA_POC_GALG",
+      "tipo": "zipshp",
+      "url": "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_POC_FxSalvLitArenGalg_PC.zip",
+      "descricao": "Orla costeira: faixa de salvaguarda ao galgamento e inundação",
+      "origem": "APA, I.P. (Programas da Orla Costeira)",
+      "app": "hidrico",
+      "entidade": "APA, I.P."
+    },
+    {
+      "fonte": "APA_POC_EROS",
+      "tipo": "zipshp",
+      "url": "https://sniambgeoviewer.apambiente.pt/GeoDocs/shpzips/D312_APA_POC_FxSalvLitArenEros_PC.zip",
+      "descricao": "Orla costeira: faixa de salvaguarda à erosão costeira",
+      "origem": "APA, I.P. (Programas da Orla Costeira)",
+      "app": "hidrico",
+      "entidade": "APA, I.P."
+    },
+    {
+      "fonte": "ICNF_RF",
+      "tipo": "wfs",
+      "url": "https://si.icnf.pt/wfs/refloa_rf",
+      "camada": "refloa_rf",
+      "caixa": true,
+      "descricao": "Regime florestal",
+      "origem": "ICNF, I.P.",
+      "app": "regime_florestal",
+      "entidade": "ICNF, I.P."
+    },
+    {
       "fonte": "DGT_DPH",
       "codigo": "DPH",
       "app": "hidrico",
@@ -69,12 +263,6 @@
       "entidade": "Entidade que tutela o edifício"
     },
     {
-      "fonte": "DGT_AA",
-      "codigo": "AA",
-      "app": "aero",
-      "entidade": "ANAC"
-    },
-    {
       "fonte": "DGT_GO",
       "codigo": "GO",
       "app": "gas",
@@ -85,18 +273,6 @@
       "codigo": "TC",
       "app": "telecomunicacoes_radioeletricas",
       "entidade": "ANACOM"
-    },
-    {
-      "fonte": "DGT_MG",
-      "codigo": "MG",
-      "app": "marcos_geodesicos",
-      "entidade": "Direção-Geral do Território"
-    },
-    {
-      "fonte": "DGT_DN",
-      "codigo": "DN",
-      "app": "militar",
-      "entidade": "Ministério da Defesa Nacional"
     },
     {
       "fonte": "DGT_IPE",
@@ -117,48 +293,6 @@
       "entidade": "Autoridade Tributária e Aduaneira"
     },
     {
-      "fonte": "DGT_AIP",
-      "codigo": "AIP",
-      "app": "arvoredo_interesse_publico",
-      "entidade": "ICNF, I.P."
-    },
-    {
-      "fonte": "DGT_AP",
-      "codigo": "AP",
-      "app": "natura",
-      "entidade": "ICNF, I.P."
-    },
-    {
-      "fonte": "DGT_ZPE",
-      "codigo": "ZPE",
-      "app": "natura",
-      "entidade": "ICNF, I.P."
-    },
-    {
-      "fonte": "DGT_ZEC",
-      "codigo": "ZEC",
-      "app": "natura",
-      "entidade": "ICNF, I.P."
-    },
-    {
-      "fonte": "DGT_RAN",
-      "codigo": "RAN",
-      "app": "ran",
-      "entidade": "Entidade Regional da RAN"
-    },
-    {
-      "fonte": "DGT_AAPC",
-      "codigo": "AAPC",
-      "app": "albufeiras_aguas_publicas",
-      "entidade": "APA, I.P."
-    },
-    {
-      "fonte": "DGT_CASAP",
-      "codigo": "CASAP",
-      "app": "captacoes_agua_subterranea",
-      "entidade": "APA, I.P. e entidade gestora"
-    },
-    {
       "fonte": "DGT_OAH",
       "codigo": "OAH",
       "app": "aproveitamentos_hidroagricolas",
@@ -169,13 +303,6 @@
       "codigo": "EAF",
       "app": "sobreiro_azinheira",
       "entidade": "ICNF, I.P. / DRAP"
-    },
-    {
-      "fonte": "DGT_CPIR",
-      "codigo": "CPIR",
-      "app": "incendio",
-      "entidade": "ICNF, I.P. e câmara (CMGIFR)",
-      "classe": "muito alta|\\balta\\b"
     },
     {
       "fonte": "DGT_RG",
@@ -196,6 +323,30 @@
     "dico": "1106",
     "camara": true,
     "ren": "LVT"
+  },
+  "porto": {
+    "nome": "Porto",
+    "dico": "1312",
+    "camara": true,
+    "ren": "NORTE"
+  },
+  "braga": {
+    "nome": "Braga",
+    "dico": "0303",
+    "camara": true,
+    "ren": "NORTE"
+  },
+  "grandola": {
+    "nome": "Grândola",
+    "dico": "1505",
+    "camara": true,
+    "ren": "ALENTEJO"
+  },
+  "sines": {
+    "nome": "Sines",
+    "dico": "1513",
+    "camara": true,
+    "ren": "ALENTEJO"
   },
   "_parados": {
     "_nota": "Câmaras paradas por decisão do Francisco (2026-11-12): os dados já publicados ficam no site, mas não são recarregados. Para retomar, mover a entrada para fora de _parados.",

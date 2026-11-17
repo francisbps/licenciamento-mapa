@@ -8,12 +8,14 @@ Para cada concelho junta três origens, todas recortadas pelo limite oficial do 
 - ficheiros carregados à mão em dados/condicionantes/manual/<concelho>/ (respostas escritas de entidades).
 Se uma fonte falhar, fica o ficheiro da semana anterior e o erro fica registado no índice.
 """
+import io
 import json
 import math
 import re
 import unicodedata
 import sys
 import time
+import zipfile
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
@@ -51,17 +53,24 @@ PRAZO = [None]  # hora limite da fonte em curso (ver gravar)
 
 
 def pedir(url, params=None, tentativas=2):
-    for i in range(tentativas):
+    falhas, esperas = 0, 0
+    while True:
         if PRAZO[0] and time.time() > PRAZO[0]:
             raise TimeoutError(f"mais de {TEMPO_FONTE // 60} min sem terminar")
         try:
             r = sessao.get(url, params=params, timeout=ESPERA)
+            if r.status_code == 429 and esperas < 6:
+                # Demasiados pedidos (vários concelhos ao mesmo tempo): espera o que o servidor pedir e repete.
+                esperas += 1
+                time.sleep(min(int(r.headers.get("Retry-After") or 0) or 20 * esperas, 120))
+                continue
             r.raise_for_status()
             return r
         except requests.RequestException:
-            if i == tentativas - 1:
+            falhas += 1
+            if falhas >= tentativas:
                 raise
-            time.sleep(10 * (i + 1))
+            time.sleep(10 * falhas)
 
 
 def nome_de(props):
@@ -229,6 +238,84 @@ def lonlat(g):
     return transform(lambda a, b, z=None: (b, a), g) if x > 0 and y < 0 else g
 
 
+OGCAPI = "https://ogcapi.dgterritorio.gov.pt/collections/{}/items"
+
+
+OGC_MAX = 10000  # o servidor da DGT não pagina para lá deste deslocamento (responde 429)
+
+
+def ogcapi_dgt(f, limite):
+    """Cartas SRUP da OGC API da DGT (GeoJSON em graus, por páginas, só a zona do concelho).
+    É o mesmo servidor da CAOP e responde muito melhor do que os WFS antigos da DGT.
+    Cartas muito pormenorizadas (perigosidade, faixas de gestão de combustível) passam dos
+    10 000 elementos por pedido: aí a zona divide-se em quatro e pede-se cada parte."""
+    vistos = set()
+    filtros = f.get("filtros") or [{}]
+
+    def zona(col, filtro, caixa, nivel):
+        x0, y0, x1, y1 = caixa
+        if not limite.intersects(box(x0, y0, x1, y1)):
+            return
+        url, params = OGCAPI.format(col), {"f": "json", "limit": 500, "bbox": f"{x0},{y0},{x1},{y1}", **filtro}
+        lote, offset = [], 0
+        while url:
+            j = json_ou_erro(pedir(url, params))
+            if "features" not in j:
+                raise RuntimeError(f"{col}: {str(j)[:200]}")
+            total = j.get("numberMatched")
+            if nivel < 6 and ((isinstance(total, int) and total > OGC_MAX) or offset + len(j["features"]) >= OGC_MAX):
+                mx, my = (x0 + x1) / 2, (y0 + y1) / 2
+                for c in ((x0, y0, mx, my), (mx, y0, x1, my), (x0, my, mx, y1), (mx, my, x1, y1)):
+                    yield from zona(col, filtro, c, nivel + 1)
+                return
+            lote += j["features"]
+            offset += len(j["features"])
+            url = next((l["href"] for l in j.get("links") or [] if l.get("rel") == "next"), None) if j["features"] else None
+            params = None
+        for el in lote:
+            chave = (col, el.get("id")) if el.get("id") is not None else None
+            if chave:
+                if chave in vistos:
+                    continue
+                vistos.add(chave)
+            props = el.get("properties") or {}
+            # Cartas por classes (perigosidade de incêndio): só se guardam as classes que contam.
+            if f.get("classe") and not re.search(f["classe"], json.dumps(props, ensure_ascii=False), re.I):
+                continue
+            if el.get("geometry"):
+                yield elemento(lonlat(shape(el["geometry"])), limite, props, camada=f.get("descricao") or col)
+
+    for col in f["ogc"]:
+        for filtro in filtros:
+            yield from zona(col, filtro, limite.bounds, 0)
+
+
+def zip_shp(f, limite):
+    """Shapefile nacional em .zip (APA): descarrega-se o ficheiro todo e fica só o que toca no concelho."""
+    import shapefile  # pyshp
+    z = zipfile.ZipFile(io.BytesIO(pedir(f["url"]).content))
+    nomes = {n.lower(): n for n in z.namelist()}
+    x0, y0, x1, y1 = transform(para_pttm, limite).bounds
+    shps = [n for n in nomes if n.endswith(".shp")]
+    if not shps:
+        raise RuntimeError("o ficheiro não tem nenhum .shp")
+    for shp in shps:
+        base = shp[:-4]
+        ler = lambda ext: io.BytesIO(z.read(nomes[base + ext])) if base + ext in nomes else None  # noqa: E731
+        prj = z.read(nomes[base + ".prj"]).decode(errors="ignore") if base + ".prj" in nomes else ""
+        graus = prj.lstrip().upper().startswith("GEOGCS")
+        sf = shapefile.Reader(shp=ler(".shp"), shx=ler(".shx"), dbf=ler(".dbf"), encodingErrors="replace")
+        print(f"   {f['fonte']}: {shp} ({len(sf)} elementos, caixa {[round(v) for v in sf.bbox]}, prj {prj[:60]!r})")
+        for rec in sf.iterShapeRecords():
+            if not rec.shape.points:
+                continue
+            bx0, by0, bx1, by1 = rec.shape.bbox
+            if not graus and (bx1 < x0 or bx0 > x1 or by1 < y0 or by0 > y1):
+                continue
+            g = shape(rec.shape.__geo_interface__)
+            yield elemento(g if graus else transform(de_pttm, g), limite, rec.record.as_dict(), camada=f["descricao"])
+
+
 def wfs_geoserver(servico, camada, limite):
     """Camada de um GeoServer, pedida por WFS em páginas. Com "caixa", só a zona do concelho
     (na forma urn, a ordem latitude, longitude é a da norma)."""
@@ -393,23 +480,45 @@ def agora():
 
 
 def limite_caop(cfg):
-    """Limite do concelho na CAOP. O identificador do elemento nem sempre é o código DICO:
-    se não der, procura pelo código e depois pelo nome."""
+    """Limite do concelho na CAOP. O identificador do elemento nem sempre é o código DICO
+    (o elemento 1312 é Arouca, não o Porto): confirma-se sempre pelo código ou pelo nome."""
+    nome = sem_acentos(cfg["nome"]).upper()
+
+    def e_este(el):
+        p = (el or {}).get("properties") or {}
+        for k, v in p.items():
+            k = k.lower()
+            if ("dico" in k or k == "dtmn") and str(v).zfill(4) == cfg["dico"]:
+                return True
+            if k in ("municipio", "concelho") and sem_acentos(str(v)).upper() == nome:
+                return True
+        return False
+
     try:
-        return pedir(CAOP.format(cfg["dico"]), tentativas=1).json()
+        el = pedir(CAOP.format(cfg["dico"]), tentativas=1).json()
+        if e_este(el):
+            return el
     except requests.HTTPError:
         pass
     base = CAOP.split("/items/")[0] + "/items"
-    nome = cfg["nome"].upper()
-    for filtro in ({"dico": cfg["dico"]}, {"dtmn": cfg["dico"]}, {"municipio": nome}, {"concelho": nome}):
+    for filtro in ({"dico": cfg["dico"]}, {"dtmn": cfg["dico"]}, {"municipio": cfg["nome"]},
+                   {"municipio": nome}, {"concelho": cfg["nome"]}, {"concelho": nome}):
         try:
-            els = pedir(base, {"f": "json", "limit": 5, **filtro}, tentativas=1).json().get("features") or []
+            els = pedir(base, {"f": "json", "limit": 20, **filtro}, tentativas=1).json().get("features") or []
         except requests.RequestException:
             continue
         for el in els:
-            props = " ".join(str(v) for v in (el.get("properties") or {}).values()).upper()
-            if cfg["dico"] in props or nome in props:
+            if e_este(el):
                 return el
+    # Último recurso: percorrer a lista toda (308 municípios).
+    url, params = base, {"f": "json", "limit": 500}
+    while url:
+        j = pedir(url, params, tentativas=2).json()
+        for el in j.get("features") or []:
+            if e_este(el):
+                return el
+        url = next((l["href"] for l in j.get("links") or [] if l.get("rel") == "next"), None)
+        params = None
     raise RuntimeError(f"limite de {cfg['nome']} ({cfg['dico']}) não encontrado na CAOP")
 
 
@@ -509,7 +618,7 @@ def carregar(chave, cfg, municipios, cfgs):
     if nacionais is None:  # cartas nacionais comuns, com a REN da região do concelho
         ren = cfg.get("ren")
         nacionais = ([{"fonte": "DGT_REN", "codigo": "REN", "app": "ren", "entidade": cfgs["_ren"][ren],
-                       "url": f"https://servicos.dgterritorio.pt/SDISNITWFSSRUP_REN_{ren}/WFService.aspx"}]
+                       "descricao": "Reserva Ecológica Nacional", "ogc": ["srup_ren_areal", "srup_ren_linear"]}]
                      if ren else []) + cfgs["_nacionais"]
     esperas_dgt = 0
     for f in nacionais:
@@ -522,13 +631,17 @@ def carregar(chave, cfg, municipios, cfgs):
             gerador = (e for c in f["camadas"] for e in ags_camara(f, {"id": c, "nome": meta["descricao"]}, folga))
         elif f.get("tipo") == "wfs":
             gerador = wfs_geoserver({**f, "nome": meta["descricao"]}, f["camada"], folga)
+        elif f.get("tipo") == "zipshp":
+            gerador = zip_shp(f, folga)
+        elif f.get("ogc"):
+            gerador = ogcapi_dgt(f, folga)
         elif esperas_dgt >= 3:
             # A DGT não respondeu a 3 cartas seguidas: as restantes ficam para a próxima semana (mantêm os dados).
             gerador = iter_erro(RuntimeError("DGT sem resposta nesta execução"))
         else:
             gerador = wfs_dgt(f, folga)
         gravar(pasta, f["fonte"], gerador, meta, indice)
-        if f.get("tipo") is None and esperas_dgt < 3:
+        if f.get("tipo") is None and not f.get("ogc") and esperas_dgt < 3:
             r = indice.get(f["fonte"], {})
             falhou_agora = r.get("erro") and r.get("tentativa", "") >= (r.get("atualizado") or "")
             # Conta também os erros do servidor (500, 502, 503): com a DGT em baixo, cada carta gastava 15 min.

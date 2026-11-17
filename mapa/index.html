@@ -147,6 +147,9 @@ html.embed aside > div:first-child { padding-top: 0; }
     { id: "go", g: "inf", nome: "Gasodutos e oleodutos", ent: "Operador da rede (REN Gasodutos) e DGEG", url: DGT("GO"), layers: "Servidão_aos_Ramais,Concessionários", app: "gas", cor: "#bf9000" },
     { id: "tc", g: "inf", nome: "Telecomunicações (feixes hertzianos, centros radioelétricos)", ent: "ANACOM", url: DGT("TC"), layers: "Radioelétrica_-_Zona_Desobstrução_aos_Feixes,Radioelétrica_-_Zona_de_Libertação_Secundária,Radioelétrica_-_Zona_de_Libertação_Primária", app: "telecomunicacoes_radioeletricas", cor: "#674ea7" },
     { id: "mg", g: "inf", nome: "Marcos geodésicos (zona de proteção)", ent: "Direção-Geral do Território", url: DGT("MG"), layers: "Zona_de_Segurança_aos_Marcos_Geodésicos", app: "marcos_geodesicos", cor: "#999999" },
+    { id: "rrn", g: "inf", nome: "Estradas (zonas de servidão)", ent: "Infraestruturas de Portugal ou câmara", app: "estradas", cor: "#8d6e4f" },
+    { id: "rfn", g: "inf", nome: "Ferrovia (zonas de servidão)", ent: "Infraestruturas de Portugal", app: "estradas", cor: "#5d4a3a" },
+    { id: "re", g: "inf", nome: "Linhas elétricas de alta e muito alta tensão (servidão)", ent: "REN / E-Redes e DGEG", app: "eletrica", cor: "#d4a017" },
     { id: "dn", g: "def", nome: "Servidões militares", ent: "Ministério da Defesa Nacional", url: DGT("DN"), layers: "Áreas_Abrangidas_pela_Servidão,Zonas_da_Servidão", app: "militar", cor: "#6b6b6b" },
     { id: "ipe", g: "def", nome: "Instalações com produtos explosivos", ent: "PSP / Defesa Nacional", url: DGT("IPE"), layers: "Zona_de_Proteção_a_Fábricas,Zona_de_Proteção_a_Oficinas,Zona_de_Protecão_a_Paióis", app: "militar", cor: "#990000" },
     { id: "eptm", g: "def", nome: "Estabelecimentos prisionais e tutelares de menores", ent: "DGRSP", url: DGT("EPTM"), layers: "Edifícios_Prisionais_-_Zona_de_Proteção", app: "estabelecimentos_prisionais", cor: "#434343" },
@@ -203,7 +206,7 @@ html.embed aside > div:first-child { padding-top: 0; }
   // Imagens dos serviços oficiais (criadas só quando se ligam). Onde há dados guardados, desenha-se a partir deles (ver desenhar).
   const vis = {};
   async function mostrarCamada(l, on) {
-    on = on && !temLocal(l.id);
+    on = on && !temLocal(l.id) && !!(l.url || l.urls);
     if (!on && !vis[l.id]) return;
     if (!vis[l.id]) {
       if (l.tipo === "ags") { vis[l.id] = L.layerGroup(); }
@@ -254,50 +257,14 @@ html.embed aside > div:first-child { padding-top: 0; }
       return peloProxy();
     }
   }
-  // Pergunta a um WMS se há algo no ponto (GetFeatureInfo). Devolve "sim", "nao" ou "erro".
-  async function gfi(l, url, lat, lng) {
-    const camadas = await camadasDe(l, url);
-    if (!camadas) return "erro";
-    const d = 0.0004;
-    const p = new URLSearchParams({
-      SERVICE: "WMS", VERSION: "1.3.0", REQUEST: "GetFeatureInfo", LAYERS: camadas, QUERY_LAYERS: camadas, STYLES: "",
-      CRS: "EPSG:4326", BBOX: [lat - d, lng - d, lat + d, lng + d].join(","), WIDTH: "101", HEIGHT: "101", I: "50", J: "50",
-      INFO_FORMAT: l.json ? "application/json" : "text/xml", FEATURE_COUNT: "5",
-    });
-    const txt = await pedir(url + "?" + p.toString());
-    if (l.json) { const j = JSON.parse(txt); return (j.features || []).length ? (l.classe && !l.classe.test(JSON.stringify(j.features)) ? "nao" : "sim") : "nao"; }
-    if (/ServiceException|ExceptionReport/i.test(txt)) return "erro";
-    const doc = new DOMParser().parseFromString(txt, "text/xml");
-    const all = [...doc.getElementsByTagName("*")];
-    const hits = all.filter((n) => /^(featureMember|member|FIELDS|Feature|FeatureInfo|Row)$/i.test(n.localName) || /featureMember$/i.test(n.localName));
-    // Alguns servidores devolvem um contentor vazio quando não há nada no ponto.
-    const temDados = hits.length > 0 && hits.some((n) => n.textContent.trim().length > 0 || n.attributes.length > 0);
-    if (!temDados) return "nao";
-    if (l.classe) { const t = hits.map((n) => n.textContent + " " + [...n.attributes].map((a) => a.value).join(" ")).join(" "); return l.classe.test(t) ? "sim" : "nao"; }
-    return "sim";
-  }
-  // ArcGIS REST: há elementos a menos de "dist" metros do ponto?
-  async function agsConta(base, lat, lng, dist) {
-    const p = new URLSearchParams({ geometry: `${lng},${lat}`, geometryType: "esriGeometryPoint", inSR: "4326", spatialRel: "esriSpatialRelIntersects", returnGeometry: "false", outFields: "*", f: "json" });
-    if (dist) { p.set("distance", dist); p.set("units", "esriSRUnit_Meter"); }
-    const j = JSON.parse(await pedir(base + "/query?" + p.toString()));
-    if (j.error) throw new Error("ags");
-    return j.features || [];
-  }
-  async function consultar(l, lat, lng) {
-    try {
-      if (l.tipo === "ags") return (await agsConta(l.url, lat, lng, l.dist)).length ? "sim" : "nao";
-      const rs = await Promise.all(urlsDe(l).map((u) => gfi(l, u, lat, lng).catch(() => "erro")));
-      return rs.includes("sim") ? "sim" : rs.every((r) => r === "erro") ? "erro" : "nao";
-    } catch (e) { return "erro"; }
-  }
-
   // Condicionantes já descarregadas para o site (dados/condicionantes/<concelho>/, atualizadas todas as semanas).
   // Quando existem, a resposta sai daqui, sem perguntar aos serviços oficiais.
   const FONTE_LOCAL = { pc: "PC_CLASSIFICADO", pcr: "PC_RESTRICOES", arq: "PC_ARQ", sic: "ICNF_SIC",
     ren: "DGT_REN", dph: "DGT_DPH", ic: "DGT_IC", eip: "DGT_EIP", aa: "DGT_AA", go: "DGT_GO", tc: "DGT_TC", mg: "DGT_MG", dn: "DGT_DN", ipe: "DGT_IPE", eptm: "DGT_EPTM", ia: "DGT_IA",
-    aip: "DGT_AIP", ap: "DGT_AP", zpe: "DGT_ZPE", zec: "DGT_ZEC", ran: "DGT_RAN", aapc: "DGT_AAPC", casap: "DGT_CASAP", oah: "DGT_OAH", eaf: "DGT_EAF", cpir: "DGT_CPIR", rg: "DGT_RG" };
-  const CAMADA_DE = Object.fromEntries(Object.entries(FONTE_LOCAL).map(([id, f]) => [f, LAYERS.find((l) => l.id === id)]));
+    aip: "DGT_AIP", ap: "DGT_AP", zpe: "DGT_ZPE", zec: "DGT_ZEC", ran: "DGT_RAN", aapc: "DGT_AAPC", casap: "DGT_CASAP", oah: "DGT_OAH", eaf: "DGT_EAF", cpir: "DGT_CPIR", rg: "DGT_RG",
+    fgc: "DGT_SGIFR", rrn: "DGT_RRN", rfn: "DGT_RFN", re: "DGT_RE", inund: "APA_INUND", poc: ["APA_POC_GALG", "APA_POC_EROS"], rf: "ICNF_RF" };
+  const fontesDe = (id) => [].concat(FONTE_LOCAL[id] || []);
+  const CAMADA_DE = Object.fromEntries(Object.keys(FONTE_LOCAL).flatMap((id) => fontesDe(id).map((f) => [f, LAYERS.find((l) => l.id === id)])));
   const locais = {};
   function dadosLocais(concelho) {
     const k = norm(concelho).replace(/\s+/g, "-");
@@ -367,7 +334,7 @@ html.embed aside > div:first-child { padding-top: 0; }
     return false;
   }
   // Algumas cartas só contam numa classe (perigosidade de incêndio alta ou muito alta).
-  const daClasse = (fonte) => { if (!fonte.classe) return () => true; const re = fonte.re || (fonte.re = new RegExp(fonte.classe, "i")); return (e) => re.test(Object.values(e.p || {}).join(" ")); };
+  const daClasse = (fonte) => { if (!fonte.classe) return () => true; const re = fonte.re || (fonte.re = new RegExp(fonte.classe, "i")); return (e) => re.test(JSON.stringify(e.p || {})); };
   function tocados(fonte, lat, lng) {
     const tol = fonte.dist || TOL, m = 0.0001 + tol / 100000, ok = daClasse(fonte);
     return fonte.els.filter((e) => lng >= e.b[0] - m && lng <= e.b[2] + m && lat >= e.b[1] - m && lat <= e.b[3] + m && ok(e) && toca(e.g, lng, lat, tol));
@@ -385,7 +352,7 @@ html.embed aside > div:first-child { padding-top: 0; }
     try { const r = await fetch(`../dados/condicionantes/${k}/limite.geojson`); if (!r.ok) return null; const f = await r.json(); return { k, g: f.geometry, b: caixa(f.geometry.coordinates) }; } catch (e) { return null; }
   }))).then((l) => l.filter(Boolean)).catch(() => []));
   let aqui = null; // dados do concelho no centro do mapa (null fora deles ou longe demais)
-  const temLocal = (id) => { const f = aqui && aqui.fontes[FONTE_LOCAL[id]]; return !!(f && f.elementos); };
+  const temLocal = (id) => !!aqui && fontesDe(id).some((k) => (aqui.fontes[k] || {}).elementos);
   const cruza = (b, v) => b[0] <= v.getEast() && b[2] >= v.getWest() && b[1] <= v.getNorth() && b[3] >= v.getSouth();
   let gerV = 0;
   async function desenhar() {
@@ -437,40 +404,13 @@ html.embed aside > div:first-child { padding-top: 0; }
   // Planta de condicionantes do PDM: serviços municipais conhecidos (dados/municipios.json).
   let MUNI = null;
   const municipios = () => MUNI || (MUNI = fetch("../dados/municipios.json").then((r) => r.json()).catch(() => ({})));
-  async function consultarMunicipio(concelho, lat, lng) {
-    const todos = await municipios(), reg = /a[cç]ores/i.test(local.regiao || "") ? "acores" : /madeira/i.test(local.regiao || "") ? "madeira" : "";
-    const m = todos[norm(concelho) + "|" + reg] || todos[norm(concelho)];
-    if (!m) return { m: null, hits: [], estado: "sem" };
-    const hits = []; let erro = false, feitos = 0;
-    for (const s of m.servicos || []) {
-      try {
-        if (s.tipo === "ags-query") {
-          const rs = await Promise.all(s.camadas.map((c) => agsConta(s.url + "/" + c.id, lat, lng, c.dist).then((f) => f.length, () => -1)));
-          if (rs.every((n) => n < 0)) throw new Error("ags");
-          s.camadas.forEach((c, i) => { if (rs[i] > 0) hits.push({ nome: c.nome, k: c.k ?? chaveDe(c.nome) }); });
-        } else if (s.tipo === "ags-identify") {
-          const d = 0.003, p = new URLSearchParams({ geometry: `${lng},${lat}`, geometryType: "esriGeometryPoint", sr: "4326", layers: s.ids ? "all:" + s.ids : "all", tolerance: "2", mapExtent: [lng - d, lat - d, lng + d, lat + d].join(","), imageDisplay: "600,600,96", returnGeometry: "false", f: "json" });
-          const j = JSON.parse(await pedir(s.url + "/identify?" + p.toString()));
-          if (j.error) throw new Error("ags");
-          [...new Set((j.results || []).map((r) => r.layerName))].forEach((n) => hits.push({ nome: n, k: chaveDe(n) }));
-        } else if (s.tipo === "wms") {
-          const d = 0.0004, p = new URLSearchParams({ SERVICE: "WMS", VERSION: "1.3.0", REQUEST: "GetFeatureInfo", LAYERS: s.layers, QUERY_LAYERS: s.layers, STYLES: "", CRS: "EPSG:4326", BBOX: [lat - d, lng - d, lat + d, lng + d].join(","), WIDTH: "101", HEIGHT: "101", I: "50", J: "50", INFO_FORMAT: "application/json", FEATURE_COUNT: "20" });
-          const j = JSON.parse(await pedir(s.url + "?" + p.toString()));
-          [...new Set((j.features || []).map((f) => (f.id || "").split(".")[0] || s.nome))].forEach((n) => hits.push({ nome: n, k: chaveDe(n) }));
-        }
-        feitos++;
-      } catch (e) { erro = true; }
-    }
-    return { m, hits, estado: (m.servicos || []).length === 0 ? "sem" : feitos === 0 ? "erro" : "ok" };
-  }
-
   function renderRes() {
-    const linha = (l) => { const s = estado[l.id] || "wait"; const lab = { wait: "a consultar…", sim: "abrangido", nao: "não abrangido", erro: "sem resposta" }[s];
-      return `<div class="row"><span class="sw" style="background:${l.cor}"></span><div><b>${esc(l.nome)}</b><span class="d">${s === "sim" ? "Parecer ou autorização: " + esc(l.ent) : s === "erro" ? "O serviço não respondeu. Ligue a camada no mapa e veja se o ponto fica dentro da mancha." : ""}</span></div><span class="tag ${s}">${lab}</span></div>`; };
+    const linha = (l) => { const s = estado[l.id] || "wait"; const lab = { wait: "a consultar…", sim: "abrangido", nao: "não abrangido", erro: "sem dados" }[s];
+      return `<div class="row"><span class="sw" style="background:${l.cor}"></span><div><b>${esc(l.nome)}</b><span class="d">${s === "sim" ? "Parecer ou autorização: " + esc(l.ent) : s === "erro" ? "Ainda não temos esta carta guardada para este concelho. Pode ligar a camada no mapa e ver se o ponto fica dentro da mancha." : ""}</span></div><span class="tag ${s}">${lab}</span></div>`; };
     const sim = LAYERS.filter((l) => estado[l.id] === "sim"), espera = LAYERS.filter((l) => !estado[l.id]);
     const nao = LAYERS.filter((l) => estado[l.id] === "nao"), erro = LAYERS.filter((l) => estado[l.id] === "erro");
-    let h = `<h3 class="sub">Cartas nacionais</h3>` + (sim.length ? sim.map(linha).join("") : espera.length ? "" : `<p class="note">Nenhuma servidão nacional neste ponto.</p>`) + espera.map(linha).join("");
-    if (erro.length) h += `<details class="grp"><summary>Sem resposta do serviço (${erro.length})</summary>${erro.map(linha).join("")}</details>`;
+    let h = `<h3 class="sub">Cartas nacionais</h3>` + (sim.length ? sim.map(linha).join("") : espera.length ? "" : nao.length ? `<p class="note">Nenhuma servidão nacional neste ponto.</p>` : `<p class="note">Ainda não temos as cartas nacionais guardadas para este concelho.</p>`) + espera.map(linha).join("");
+    if (erro.length) h += `<details class="grp"><summary>Ainda sem dados guardados (${erro.length})</summary>${erro.map(linha).join("")}</details>`;
     if (nao.length) h += `<details class="grp"><summary>Não abrangido (${nao.length})</summary>${nao.map(linha).join("")}</details>`;
     h += `<h3 class="sub">Planta de condicionantes do PDM${local.concelho ? " de " + esc(local.concelho) : ""}</h3>`;
     if (!muni) h += `<p class="note">A consultar a câmara…</p>`;
@@ -479,7 +419,7 @@ html.embed aside > div:first-child { padding-top: 0; }
       if (muni.data) h += `<p class="note">Dados guardados no site, atualizados em ${esc(dataCurta(muni.data))}.</p>`;
       if (muni.estado === "ok") h += muni.hits.length ? muni.hits.map((x) => `<div class="row"><span class="sw" style="background:var(--red)"></span><div><b>${esc(x.nome)}</b>${x.documento ? `<span class="d">${esc([x.entidade, x.documento].filter(Boolean).join(" · "))}</span>` : ""}</div><span class="tag sim">abrangido</span></div>`).join("") : `<p class="note">${muni.data ? "A planta de condicionantes" : "O serviço da câmara"} não mostra condicionantes neste ponto.</p>`;
       else if (muni.estado === "erro") h += `<p class="note">O serviço da câmara não respondeu.</p>`;
-      else h += `<p class="note">${m ? "A câmara não tem um serviço que se possa consultar automaticamente." : "Ainda não temos os dados desta câmara."} Servidões como aeroportos, aquedutos, estradas, linhas elétricas ou cemitérios só aparecem na planta de condicionantes do PDM: confirme lá.</p>`;
+      else h += `<p class="note">Ainda não temos a planta de condicionantes desta câmara guardada no site. Servidões como aeroportos, aquedutos, estradas, linhas elétricas ou cemitérios só aparecem na planta de condicionantes do PDM: confirme lá.</p>`;
       const links = [m && m.condicionantes && `<a href="${esc(m.condicionantes)}" target="_blank" rel="noopener">Planta de condicionantes</a>`, m && m.geoportal && `<a href="${esc(m.geoportal)}" target="_blank" rel="noopener">Geoportal da câmara</a>`, `<a href="https://snit-mais.dgterritorio.gov.pt/portalsnit/" target="_blank" rel="noopener">PDM no SNIT (DGT)</a>`].filter(Boolean);
       h += `<p class="links">${links.join(" · ")}</p>`;
     }
@@ -501,9 +441,10 @@ html.embed aside > div:first-child { padding-top: 0; }
     enviado = false;
     setTimeout(() => { if (g === ger && !enviado) atualizarCTA(); }, 1500);
     const nac = Promise.all(LAYERS.map(async (l) => {
-      // Uma carta descarregada sem nenhum elemento no concelho pode ser falha da fonte: aí pergunta-se ao serviço.
-      const f = dl && dl.fontes[FONTE_LOCAL[l.id]];
-      const s = f && f.elementos ? (tocados(f, lat, lng).length ? "sim" : "nao") : await consultar(l, lat, lng);
+      // Só dados guardados no site: não se pergunta nada às entidades. Uma carta guardada sem elementos
+      // no concelho quer dizer "não abrangido"; uma carta que ainda não temos fica como "sem dados".
+      const fs = dl ? fontesDe(l.id).map((k) => dl.fontes[k]).filter((f) => f && f.ok) : [];
+      const s = fs.length ? (fs.some((f) => f.elementos && tocados(f, lat, lng).length) ? "sim" : "nao") : "erro";
       if (g !== ger) return; estado[l.id] = s; if (s === "sim" && l.app) achados[l.app] = true; renderRes();
     }));
     const mun = (async () => {
@@ -524,7 +465,7 @@ html.embed aside > div:first-child { padding-top: 0; }
           nomes.forEach((nome) => hits.push({ nome, k: v.app || chaveDe(nome || "") || chaveDe(v.descricao || ""), origem: v.origem, entidade: v.entidade, documento: v.documento }));
         });
         r = { m: (await municipios())[norm(concelho)] || null, hits, estado: "ok", data: dl.indice.gerado };
-      } else r = await consultarMunicipio(concelho, lat, lng);
+      } else r = { m: (await municipios())[norm(concelho)] || null, hits: [], estado: "sem" };
       if (g !== ger) return; muni = r; r.hits.forEach((x) => { if (x.k) achados[x.k] = true; }); renderRes();
     })();
     await Promise.all([nac, mun]);
