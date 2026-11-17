@@ -60,6 +60,11 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
 .layers summary { color: var(--ink); font-weight: 600; }
 .links { font-size: 0.86rem; margin-top: 6px; }
 .links a { color: var(--blue); }
+/* Pesquisa, local e nota das camadas ficam fixos no topo do painel enquanto a lista desliza. */
+aside, html.embed aside { padding-top: 0; }
+aside > div:first-child { padding-top: 18px; }
+html.embed aside > div:first-child { padding-top: 0; }
+.topo { position: sticky; top: 0; z-index: 5; display: grid; gap: 10px; background: var(--panel); padding: 12px 0 10px; border-bottom: 1px solid var(--line); }
 .pin { background: none; border: 0; filter: drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
 /* Dentro da app (?embed=1): sem título nem rodapé, painel mais estreito. */
 .embed .eyebrow, .embed h1, .embed .intro, .embed #cta, .embed .foot { display: none; }
@@ -75,11 +80,14 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
     <h1>Mapa de Condicionantes</h1>
     <p class="note intro" style="margin-top:4px">Escreva a morada ou clique no mapa. A página consulta as cartas oficiais nesse ponto e diz que condicionantes se aplicam.</p>
   </div>
+  <div class="topo">
   <form id="f" role="search">
     <input type="search" id="q" placeholder="Rua, número, concelho" aria-label="Morada" autocomplete="street-address">
     <button type="submit">Procurar</button>
   </form>
+  <p class="note" id="camadasAjuda">Não precisa de ligar nada: a lista “Neste local” já verifica todas as cartas para o ponto escolhido. Se quiser ver as áreas desenhadas no mapa, ligue as camadas que lhe interessam em “Camadas no mapa”, mais abaixo.</p>
   <div id="where" class="where" hidden></div>
+  </div>
   <section>
     <h2>Neste local</h2>
     <div id="res" class="res"><p class="note">Ainda não escolheu um local.</p></div>
@@ -91,7 +99,7 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
   </div>
   <section>
     <h2>Camadas no mapa</h2>
-    <p class="note" id="layersNota">Não precisa de ligar nada: a lista “Neste local” já verifica todas as cartas para o ponto escolhido. Se quiser ver as áreas desenhadas no mapa, ligue as camadas que lhe interessam (aproxime o mapa e toque numa área para ver o nome).</p>
+    <p class="note" id="layersNota" hidden></p>
     <div id="layers" class="layers"></div>
   </section>
   <p class="foot">Dados: Direção-Geral do Território (SNIT, servidões e restrições de utilidade pública) e ICNF. Mapa base © colaboradores do OpenStreetMap; pesquisa de moradas Nominatim. A informação é indicativa: a referência legal é a planta de condicionantes do PDM em vigor, disponível na câmara municipal. Algumas cartas nacionais podem estar desatualizadas ou incompletas para o seu concelho.</p>
@@ -386,7 +394,8 @@ details.grp summary, .layers summary { cursor: pointer; font-size: 0.86rem; colo
         return `${proprio ? `<b>${esc(n)}</b><br>${esc(v0.descricao || "")}` : `<b>${esc(v0.descricao || "")}</b>`}<br><small>${esc([v0.entidade, v0.origem].filter(Boolean).join(" · "))}${v0.atualizado ? " · atualizado em " + esc(dataCurta(v0.atualizado)) : ""}</small>`;
       }),
     })));
-    $("layersNota").textContent = cortado ? "Há demasiadas áreas para desenhar a esta escala: aproxime o mapa para as ver todas." : "Nas câmaras com dados guardados no site, as áreas são desenhadas a partir desses dados (aproxime o mapa e toque numa área para ver o nome). Fora delas, a imagem vem do serviço oficial.";
+    $("layersNota").textContent = cortado ? "Há demasiadas áreas para desenhar a esta escala: aproxime o mapa para as ver todas." : "";
+    $("layersNota").hidden = !cortado;
   }
   map.on("moveend", desenhar);
   desenhar();
