@@ -68,8 +68,36 @@ a { color: var(--brand); }
 .marca svg { width: 34px; height: 34px; flex: none; display: block; }
 .marca .nome { font-family: var(--f-display); font-weight: 800; font-size: 1.15rem; letter-spacing: -0.015em; white-space: nowrap; }
 .marca .pt { display: inline-block; margin-left: 5px; padding: 1px 6px 2px; border-radius: 5px; background: var(--accent); color: #fff; font-size: 0.78em; letter-spacing: 0.02em; vertical-align: 2px; }
+/* Menu */
+.menu { display: flex; align-items: center; gap: 4px 6px; flex-wrap: wrap; justify-content: flex-end; }
+.menu a { text-decoration: none; color: var(--ink); font-weight: 600; font-size: 0.92rem; padding: 6px 10px; border-radius: 8px; }
+.menu a:hover { background: var(--chip-bg); }
+.menu a[aria-current="page"] { color: var(--brand); background: var(--brand-soft); }
+.menu .modos { display: inline-flex; gap: 6px; margin-left: 8px; padding-left: 10px; border-left: 1px solid var(--line); }
+.chip { font: inherit; font-size: 0.82rem; font-weight: 600; border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 999px; padding: 4px 11px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+.menu-btn { display: none; font: inherit; font-weight: 600; border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+@media (max-width: 900px) {
+  .menu-btn { display: inline-block; }
+  .topbar .in { position: relative; }
+  .menu { display: none; position: absolute; top: 60px; right: 0; left: 0; background: var(--panel); border-bottom: 1px solid var(--line); box-shadow: var(--shadow);
+    flex-direction: column; align-items: stretch; padding: 8px max(16px, env(safe-area-inset-right, 0px)) 12px max(16px, env(safe-area-inset-left, 0px)); }
+  .menu.aberto { display: flex; }
+  .menu a { padding: 10px 8px; }
+  .menu .modos { margin: 6px 0 0; padding: 10px 0 0; border-left: 0; border-top: 1px solid var(--line); }
+}
+/* Modo simples: sem artigos nem referências legais. */
+body[data-modo="simples"] .ref, body[data-modo="simples"] .refs, body[data-modo="simples"] .rel-sec.s-respostas, body[data-modo="simples"] .indice a[data-sec="respostas"] { display: none !important; }
+/* Páginas de texto */
+.texto { max-width: 860px; width: 100%; justify-self: center; }
+.texto h2 { font-family: var(--f-display); margin: 0 0 6px; font-size: 1.35rem; }
+.texto h3 { font-family: var(--f-display); font-size: 1.05rem; margin: 22px 0 6px; }
+.texto p, .texto li { max-width: 70ch; }
+.texto ul { padding-left: 20px; display: grid; gap: 6px; }
+body:not([data-vista="ajuda"]) #ajuda, body:not([data-vista="privacidade"]) #privacidade, body:not([data-vista="aviso"]) #aviso { display: none; }
+.rodape .lks { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 0.86rem; }
 .lei { font-family: var(--f-mono); font-size: 0.72rem; color: var(--muted); background: var(--chip-bg); border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
-@media (max-width: 560px) { .lei { display: none; } }
+.lei { display: none; }
 
 .wrap { max-width: 1240px; margin: 0 auto; display: grid; gap: 20px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -136,7 +164,7 @@ details.req > fieldset { margin-top: 12px; }
 @media print {
   @page { margin: 16mm 14mm; }
   body { background: #fff !important; }
-  .topbar, .noprint, .toast, #questionario, #obras, #biblioteca, header.top, .rel-sec.s-minutas, .rodape .legend { display: none !important; }
+  .topbar, .noprint, #ajuda, #privacidade, #aviso, .toast, #questionario, #obras, #biblioteca, header.top, .rel-sec.s-minutas, .rodape .legend { display: none !important; }
   .wrap { padding: 0 !important; max-width: none; }
   .panel { border: 0 !important; box-shadow: none !important; padding: 0 !important; }
   .rel-sec { break-inside: auto; } .rel-sec > h3 { break-after: avoid; }
@@ -309,7 +337,17 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
 
 <div class="topbar"><div class="in">
   <a class="marca" href="./" aria-label="Licenciamento PT, início"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#1f4e8c"/><path d="M24 9.5 38.5 22.5H34.5V36.5a2.5 2.5 0 0 1-2.5 2.5H16a2.5 2.5 0 0 1-2.5-2.5V22.5H9.5Z" fill="#fff"/><path d="M18.5 29 22.5 33 30 25" fill="none" stroke="#c2562b" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nome">Licenciamento<span class="pt">PT</span></span></a>
-  <span class="lei" title="RJUE · DL 555/99 na redação do DL 108/2026 (em vigor desde 1 de outubro de 2026)">RJUE · DL 108/2026</span>
+  <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="menu"><span aria-hidden="true">☰</span> Menu</button>
+  <nav class="menu" id="menu" aria-label="Menu principal">
+    <a href="./" data-ir="" data-v="obras">As minhas obras</a>
+    <a href="#biblioteca" data-ir="biblioteca" data-v="biblioteca">Biblioteca</a>
+    <a href="#ajuda" data-ir="ajuda" data-v="ajuda">Ajuda</a>
+    <a href="#privacidade" data-ir="privacidade" data-v="privacidade">Privacidade</a>
+    <span class="modos">
+      <button type="button" id="btnModo" class="chip" title="Mostrar ou esconder artigos e referências legais">Modo técnico</button>
+      <button type="button" id="btnTema" class="chip" title="Mudar entre claro e escuro">Escuro</button>
+    </span>
+  </nav>
 </div></div>
 <div class="wrap">
   <header class="top">
@@ -346,6 +384,57 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
         <button role="tab" aria-selected="false" data-tb="links">Ligações úteis</button>
       </div>
       <div class="tabpanel" id="panelB"></div>
+    </section>
+
+    <!-- AJUDA -->
+    <section class="panel texto" id="ajuda" aria-label="Ajuda">
+      <h2>Ajuda</h2>
+      <p>O Licenciamento PT ajuda a perceber que procedimento uma obra exige (isenção, comunicação prévia, licença ou utilização), que condicionantes tem o local, que entidades têm de ser ouvidas, que documentos reunir e que passos seguir.</p>
+      <h3>Como usar</h3>
+      <ul>
+        <li><b>Nova obra:</b> comece pela morada. O mapa encontra o local e mostra as condicionantes (património, REN, RAN, domínio hídrico, servidões e outras).</li>
+        <li><b>A obra:</b> escolha o tipo de obra e responda só às perguntas que aparecem. São as que mudam o enquadramento.</li>
+        <li><b>Relatório:</b> mostra o enquadramento provável, as entidades, os documentos, os passos e o que não foi verificado. Pode imprimi-lo ou guardá-lo em PDF.</li>
+        <li><b>As minhas obras:</b> as obras ficam guardadas neste navegador. Para as levar para outro computador ou enviar a um colega, use “Guardar ficheiro” e depois “Abrir ficheiro de obra”.</li>
+        <li><b>Biblioteca:</b> guia do processo, condicionantes e entidades, minutas em branco e ligações úteis, sem preencher nada.</li>
+      </ul>
+      <h3>Modo técnico e modo simples</h3>
+      <p>No modo técnico aparecem os artigos da lei, as referências e as respostas dadas. No modo simples ficam só as explicações. Mude no botão do menu (“Modo técnico” ou “Modo simples”). O botão “Escuro” ou “Claro” muda as cores. As duas escolhas ficam guardadas neste navegador.</p>
+      <h3>Limites</h3>
+      <p>É uma ferramenta de apoio. A decisão é sempre da câmara municipal, e os regulamentos municipais podem acrescentar regras. Veja o <a href="#aviso" data-ir="aviso">aviso legal</a>.</p>
+    </section>
+
+    <!-- PRIVACIDADE -->
+    <section class="panel texto" id="privacidade" aria-label="Privacidade">
+      <h2>Privacidade</h2>
+      <p>Não há contas, nem registo, nem base de dados nossa. Não usamos cookies nem ferramentas de estatística ou publicidade.</p>
+      <h3>O que fica guardado e onde</h3>
+      <ul>
+        <li>As obras que preenche, incluindo nome, NIF, morada e respostas, ficam <b>só neste navegador</b> (armazenamento local). Não são enviadas para nenhum servidor nosso.</li>
+        <li>Pode apagar cada obra em “As minhas obras”. Para apagar tudo, limpe os dados deste site nas definições do navegador.</li>
+        <li>O ficheiro de obra (“Guardar ficheiro”) fica no seu computador. Só sai daí se for o utilizador a enviá-lo.</li>
+      </ul>
+      <h3>Serviços externos que o site usa</h3>
+      <ul>
+        <li><b>Sugestões de morada:</b> o texto que escreve no campo da morada é enviado ao Photon (Komoot, com dados do OpenStreetMap) para devolver sugestões. A pesquisa no mapa usa o Nominatim (OpenStreetMap).</li>
+        <li><b>Mapa:</b> as imagens do mapa vêm do OpenStreetMap e da Esri (satélite). As camadas oficiais vêm da Direção-Geral do Território, do ICNF, da APA e do Património Cultural. Estes serviços recebem a zona do mapa que está a ver.</li>
+        <li><b>Intermediário:</b> alguns pedidos aos serviços oficiais passam por uma função nossa no Supabase, só para contornar limites técnicos do navegador. Não guarda os pedidos.</li>
+        <li><b>Alojamento:</b> o site está no GitHub Pages, que pode registar o endereço IP de quem visita, como qualquer servidor web.</li>
+        <li><b>Tipos de letra:</b> vêm do Google Fonts.</li>
+      </ul>
+      <p>Nenhum destes pedidos inclui o nome, o NIF ou os outros dados do requerente.</p>
+    </section>
+
+    <!-- AVISO LEGAL -->
+    <section class="panel texto" id="aviso" aria-label="Aviso legal">
+      <h2>Aviso legal</h2>
+      <p>O Licenciamento PT é uma ferramenta de apoio gratuita. Não é parecer jurídico nem técnico e não substitui a consulta da câmara municipal, das entidades competentes ou de um técnico habilitado.</p>
+      <ul>
+        <li>O enquadramento é <b>provável</b>: a decisão é sempre da câmara municipal.</li>
+        <li>Base legal: RJUE (DL 555/99) na redação do DL 108/2026, com a Declaração de Retificação 29-A/2026 e o DL 155-B/2026, aplicável aos processos iniciados desde 1 de outubro de 2026. Confirme sempre a redação em vigor no Diário da República.</li>
+        <li>Os regulamentos municipais (RMUE) e os planos (PDM, planos de urbanização e de pormenor) podem acrescentar regras que a app não verifica. O relatório indica o que não foi verificado.</li>
+        <li>As condicionantes vêm de cartas oficiais publicadas, que podem estar desatualizadas ou incompletas. A referência legal é a planta de condicionantes do PDM em vigor.</li>
+      </ul>
     </section>
 
     <!-- QUESTIONÁRIO -->
@@ -447,7 +536,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     </section>
   </div>
 
-  <div class="rodape"><svg class="lg" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#1f4e8c"/><path d="M24 9.5 38.5 22.5H34.5V36.5a2.5 2.5 0 0 1-2.5 2.5H16a2.5 2.5 0 0 1-2.5-2.5V22.5H9.5Z" fill="#fff"/><path d="M18.5 29 22.5 33 30 25" fill="none" stroke="#c2562b" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg><div style="display:grid;gap:10px"><p class="foot">Ferramenta de apoio, não é parecer jurídico. A decisão final é da câmara municipal, e os regulamentos municipais (RMUE) podem acrescentar regras, como a definição de obras de escassa relevância ou os elementos a entregar. Base: RJUE na redação do DL 108/2026, com a Declaração de Retificação 29-A/2026 e o DL 155-B/2026, aplicável aos processos iniciados desde 1 de outubro de 2026 e aos que nessa data ainda estavam em saneamento. A portaria dos elementos instrutórios ainda não está confirmada nesta app. Confirme sempre a redação em vigor no Diário da República antes de submeter.</p><div class="legend" title="Convenção das peças desenhadas"><span class="r">a construir</span><span class="y">a demolir</span></div></div></div>
+  <div class="rodape"><svg class="lg" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#1f4e8c"/><path d="M24 9.5 38.5 22.5H34.5V36.5a2.5 2.5 0 0 1-2.5 2.5H16a2.5 2.5 0 0 1-2.5-2.5V22.5H9.5Z" fill="#fff"/><path d="M18.5 29 22.5 33 30 25" fill="none" stroke="#c2562b" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg><div style="display:grid;gap:10px"><p class="foot">Ferramenta de apoio, não é parecer jurídico. A decisão final é da câmara municipal, e os regulamentos municipais (RMUE) podem acrescentar regras, como a definição de obras de escassa relevância ou os elementos a entregar. Base: RJUE na redação do DL 108/2026, com a Declaração de Retificação 29-A/2026 e o DL 155-B/2026, aplicável aos processos iniciados desde 1 de outubro de 2026 e aos que nessa data ainda estavam em saneamento. A portaria dos elementos instrutórios ainda não está confirmada nesta app. Confirme sempre a redação em vigor no Diário da República antes de submeter.</p><div class="lks"><a href="#ajuda" data-ir="ajuda">Ajuda</a><a href="#privacidade" data-ir="privacidade">Privacidade</a><a href="#aviso" data-ir="aviso">Aviso legal</a></div><div class="legend" title="Convenção das peças desenhadas"><span class="r">a construir</span><span class="y">a demolir</span></div></div></div>
 </div>
 <div class="toast" id="toast" hidden></div>
 
@@ -578,7 +667,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
 
   // Página inicial (questionário) e página do resumo.
   // Páginas: "" = as minhas obras, #obra = editar, #resumo = relatório, #biblioteca.
-  const VISTAS = { "": "obras", "#obra": "form", "#resumo": "resumo", "#biblioteca": "biblioteca" };
+  const VISTAS = { "": "obras", "#obra": "form", "#resumo": "resumo", "#biblioteca": "biblioteca", "#ajuda": "ajuda", "#privacidade": "privacidade", "#aviso": "aviso" };
   function aplicarVista() {
     let v = VISTAS[location.hash] || "obras";
     if ((v === "form" || v === "resumo") && !LOJA.obras[LOJA.atual]) v = "obras";
@@ -588,6 +677,9 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     if (v === "resumo") render();
     if (v === "obras") renderObras();
     if (v === "biblioteca") renderBib();
+    const atual = { form: "obras", resumo: "obras" }[v] || v;
+    document.querySelectorAll("#menu a[data-v]").forEach((a) => { if (a.dataset.v === atual) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+    fecharMenu();
     if (antes !== v) scrollTo(0, 0);
   }
   function ir(dest) {
@@ -596,6 +688,25 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     else if (h) location.hash = h;
     else { history.pushState(null, "", location.pathname + location.search); aplicarVista(); }
   }
+  // Menu (no telemóvel abre por baixo da barra) e modos guardados neste navegador.
+  const PREF = "licenciamento-pt-pref";
+  const pref = (() => { try { return JSON.parse(localStorage.getItem(PREF) || "{}"); } catch (e) { return {}; } })();
+  const guardarPref = () => { try { localStorage.setItem(PREF, JSON.stringify(pref)); } catch (e) {} };
+  function fecharMenu() { $("menu").classList.remove("aberto"); $("menuBtn").setAttribute("aria-expanded", "false"); }
+  $("menuBtn").addEventListener("click", () => { const a = $("menu").classList.toggle("aberto"); $("menuBtn").setAttribute("aria-expanded", String(a)); });
+  function aplicarModo() {
+    const tec = pref.modo !== "simples";
+    document.body.dataset.modo = tec ? "tecnico" : "simples";
+    $("btnModo").textContent = tec ? "Modo técnico" : "Modo simples";
+  }
+  $("btnModo").addEventListener("click", () => { pref.modo = pref.modo === "simples" ? "tecnico" : "simples"; guardarPref(); aplicarModo(); toast(pref.modo === "simples" ? "Modo simples: sem artigos nem referências legais." : "Modo técnico: com artigos e referências legais."); });
+  function temaAtual() { return pref.tema || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); }
+  function aplicarTema() {
+    if (pref.tema) document.documentElement.dataset.theme = pref.tema; else delete document.documentElement.dataset.theme;
+    $("btnTema").textContent = temaAtual() === "dark" ? "Claro" : "Escuro";
+  }
+  $("btnTema").addEventListener("click", () => { pref.tema = temaAtual() === "dark" ? "light" : "dark"; guardarPref(); aplicarTema(); });
+  aplicarModo(); aplicarTema();
   window.addEventListener("hashchange", aplicarVista);
   window.addEventListener("popstate", aplicarVista);
   document.addEventListener("click", (e) => { const b = e.target.closest("[data-ir]"); if (b) { e.preventDefault(); ir(b.dataset.ir); } });
