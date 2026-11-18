@@ -1540,7 +1540,22 @@ window.I18N_EN = {
 "Alterações em obra que ampliam ou mudam a implantação de uma obra isenta por PIP precisam de nova informação prévia, só com os elementos alterados.": "Changes during works that extend or move the footprint of works exempted by a PIP need a new prior information request, with only the changed elements.",
 "Fazer o pedido à câmara": "Apply to the council",
 "Requerimento à câmara": "Application to the council",
-"Obras exteriores com mudança de uso": "External works with change of use"
+"Obras exteriores com mudança de uso": "External works with change of use",
+"sem dados": "no data",
+"Ainda não temos esta carta guardada para este concelho. Pode ligar a camada no mapa e ver se o ponto fica dentro da mancha.": "We do not have this map stored for this municipality yet. You can turn on the layer on the map and see whether the point falls inside the shaded area.",
+"Ainda não temos esta carta guardada para este concelho.": "We do not have this map stored for this municipality yet.",
+"Pode ligar a camada no mapa e ver se o ponto fica dentro da mancha.": "You can turn on the layer on the map and see whether the point falls inside the shaded area.",
+"Ainda não temos as cartas nacionais guardadas para este concelho.": "We do not have the national maps stored for this municipality yet.",
+"Ainda não temos a planta de condicionantes desta câmara guardada no site.": "The site does not yet have this council's constraints plan stored.",
+"Estradas (zonas de servidão)": "Roads (easement zones)",
+"Ferrovia (zonas de servidão)": "Railways (easement zones)",
+"Linhas elétricas de alta e muito alta tensão (servidão)": "High and very high voltage power lines (easement)",
+"Infraestruturas de Portugal": "Infraestruturas de Portugal",
+"Infraestruturas de Portugal ou câmara": "Infraestruturas de Portugal or council",
+"REN / E-Redes e DGEG": "REN / E-Redes and DGEG",
+"Cartas nacionais": "National maps",
+"abrangido": "covered",
+"não abrangido": "not covered"
 },
 "h": {
 "A sua obra precisa de licença? <em>Saiba o que fazer.</em>": "Does your project need a licence? <em>Find out what to do.</em>",
@@ -1633,6 +1648,10 @@ window.I18N_EN = {
 [
 "(.+?) fora dos casos de comunicação prévia\\.",
 "{1} outside the prior notification cases."
+],
+[
+"Ainda sem dados guardados \\((\\d+)\\)",
+"No stored data yet ($1)"
 ]
 ],
 "a": {
