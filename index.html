@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Enquadramento de obras no RJUE: procedimento, condicionantes do local no mapa, entidades, documentos, passos e minutas.">
 <title>Licenciamento PT</title>
+<script src="i18n.js"></script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%231f4e8c'/%3E%3Cpath d='M24 9.5 38.5 22.5H34.5V36.5a2.5 2.5 0 0 1-2.5 2.5H16a2.5 2.5 0 0 1-2.5-2.5V22.5H9.5Z' fill='%23fff'/%3E%3Cpath d='M18.5 29 22.5 33 30 25' fill='none' stroke='%23c2562b' stroke-width='3.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <meta name="theme-color" content="#1f4e8c">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -187,6 +188,8 @@ details.regra { border-bottom: 1px solid var(--line); padding-bottom: 6px; }
 .rg { padding: 6px 0 6px 12px; border-left: 2px solid var(--brand-soft); margin: 4px 0; }
 .rg p { margin: 0; }
 ul.regs { margin: 0 0 12px; padding-left: 18px; }
+.so-en { display: none; }
+html[lang="en"] .so-en { display: block; }
 .mapa iframe { width: 100%; height: 560px; border: 1px solid var(--line); border-radius: 6px; display: block; background: var(--bg); }
 .mapa p { margin: 4px 0 0; text-align: right; }
 @media (max-width: 760px) { .mapa iframe { height: 720px; } }
@@ -336,7 +339,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
 <body>
 
 <div class="topbar"><div class="in">
-  <a class="marca" href="./" aria-label="Licenciamento PT, início"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#1f4e8c"/><path d="M24 9.5 38.5 22.5H34.5V36.5a2.5 2.5 0 0 1-2.5 2.5H16a2.5 2.5 0 0 1-2.5-2.5V22.5H9.5Z" fill="#fff"/><path d="M18.5 29 22.5 33 30 25" fill="none" stroke="#c2562b" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nome">Licenciamento<span class="pt">PT</span></span></a>
+  <a class="marca" href="./" aria-label="Licenciamento PT, início"><svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="12" fill="#1f4e8c"/><path d="M24 9.5 38.5 22.5H34.5V36.5a2.5 2.5 0 0 1-2.5 2.5H16a2.5 2.5 0 0 1-2.5-2.5V22.5H9.5Z" fill="#fff"/><path d="M18.5 29 22.5 33 30 25" fill="none" stroke="#c2562b" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="nome" data-noi18n>Licenciamento<span class="pt">PT</span></span></a>
   <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="menu"><span aria-hidden="true">☰</span> Menu</button>
   <nav class="menu" id="menu" aria-label="Menu principal">
     <a href="./" data-ir="" data-v="obras">As minhas obras</a>
@@ -346,6 +349,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     <span class="modos">
       <button type="button" id="btnModo" class="chip" title="Mostrar ou esconder artigos e referências legais">Modo técnico</button>
       <button type="button" id="btnTema" class="chip" title="Mudar entre claro e escuro">Escuro</button>
+      <button type="button" id="btnLang" class="chip" title="Mudar de língua" data-noi18n>EN</button>
     </span>
   </nav>
 </div></div>
@@ -711,6 +715,12 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     $("btnTema").textContent = temaAtual() === "dark" ? "Claro" : "Escuro";
   }
   $("btnTema").addEventListener("click", () => { pref.tema = temaAtual() === "dark" ? "light" : "dark"; guardarPref(); aplicarTema(); });
+  // Língua: o botão mostra a outra língua (EN no site em português, PT no site em inglês).
+  const LANG = (window.I18N && I18N.lang) || "pt";
+  $("btnLang").textContent = LANG === "en" ? "PT" : "EN";
+  $("btnLang").setAttribute("aria-label", LANG === "en" ? "Ver em português" : "View in English");
+  $("btnLang").title = LANG === "en" ? "Ver em português" : "View in English";
+  $("btnLang").addEventListener("click", () => { if (window.I18N) I18N.mudar(LANG === "en" ? "pt" : "en"); });
   aplicarModo(); aplicarTema();
   window.addEventListener("hashchange", aplicarVista);
   window.addEventListener("popstate", aplicarVista);
@@ -725,7 +735,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
 
   // ---------- As minhas obras ----------
   function tituloObra(o) { return (o.nomeObra || "").trim() || [o.morada, o.fracao].filter(Boolean).join(", ") || "Obra sem morada"; }
-  const dataPT = (t) => t ? new Date(t).toLocaleDateString("pt-PT", { day: "numeric", month: "short", year: "numeric" }) : "";
+  const dataPT = (t) => t ? new Date(t).toLocaleDateString(window.I18N && I18N.lang === "en" ? "en-GB" : "pt-PT", { day: "numeric", month: "short", year: "numeric" }) : "";
   function abrirObra(id, destino) {
     if (!LOJA.obras[id]) return;
     LOJA.atual = id; guardarLoja();
@@ -1227,9 +1237,10 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     const links = [m && m.condicionantes && `<a href="${esc(m.condicionantes)}" target="_blank" rel="noopener">Planta de condicionantes do PDM</a>`, m && m.geoportal && `<a href="${esc(m.geoportal)}" target="_blank" rel="noopener">Geoportal da câmara</a>`, `<a href="https://snit-mais.dgterritorio.gov.pt/portalsnit/" target="_blank" rel="noopener">PDM no SNIT (DGT)</a>`].filter(Boolean);
     let h = `<div class="card" style="margin-bottom:14px"><div class="hd"><b>Câmara Municipal de ${esc(m ? m.nome : conc)}</b>${m && m.pdm ? `<span class="note">${esc(m.pdm)}</span>` : ""}</div><p class="note">${links.join(" · ")}</p></div>`;
     if (!g) return h + `<p class="note">Ainda não recolhemos as regras do regulamento municipal deste concelho. Antes do projeto, confirme no Regulamento Municipal de Urbanização e Edificação e, se o imóvel estiver num centro histórico, no respetivo plano ou regulamento: caixilharia (material e cor), ar condicionado e outros equipamentos na fachada, painéis solares, cores e revestimentos, coberturas, estores, marquises e estendais, muros, estacionamento e taxas.</p>`;
-    if (g.regulamentos.length) h += `<p class="sec" style="margin:0 0 6px">Regulamentos</p><ul class="regs">${g.regulamentos.map((r) => `<li>${r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.nome)}</a>` : esc(r.nome)}${r.ref ? ` <span class="note">(${esc(r.ref)})</span>` : ""}</li>`).join("")}</ul>`;
+    if (g.regulamentos.length) h += `<p class="sec" style="margin:0 0 6px">Regulamentos</p><ul class="regs" data-noi18n>${g.regulamentos.map((r) => `<li>${r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.nome)}</a>` : esc(r.nome)}${r.ref ? ` <span class="note">(${esc(r.ref)})</span>` : ""}</li>`).join("")}</ul>`;
     const temas = Object.keys(TEMA_NOME).filter((t) => g.regras.some((r) => r.tema === t));
-    h += temas.length ? temas.map((t) => `<details class="regra" open><summary>${esc(TEMA_NOME[t])}</summary>${g.regras.filter((r) => r.tema === t).map((r) => `<div class="rg"><p>${esc(r.regra)}</p><p class="note">${[r.zona && "Onde: " + esc(r.zona), r.artigo && (r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.artigo)}</a>` : esc(r.artigo))].filter(Boolean).join(" · ")}</p></div>`).join("")}</details>`).join("")
+    if (temas.length) h += `<p class="note so-en">The council rules below are quoted in Portuguese, as published in each municipal regulation.</p>`;
+    h += temas.length ? temas.map((t) => `<details class="regra" open><summary>${esc(TEMA_NOME[t])}</summary>${g.regras.filter((r) => r.tema === t).map((r) => `<div class="rg" data-noi18n><p>${esc(r.regra)}</p><p class="note">${[r.zona && "Onde: " + esc(r.zona), r.artigo && (r.url ? `<a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.artigo)}</a>` : esc(r.artigo))].filter(Boolean).join(" · ")}</p></div>`).join("")}</details>`).join("")
       : `<p class="note">Temos os regulamentos, mas ainda não extraímos as regras: consulte-os nos links acima.</p>`;
     return h + `<p class="note" style="margin-top:12px">Regras lidas nos regulamentos publicados. Confirme sempre a versão em vigor e a zona do imóvel; a câmara pode ter alterado o regulamento.</p>`;
   }
@@ -1572,7 +1583,7 @@ details.gd summary .count { font-family: var(--f-mono); font-weight: 400; color:
     const r = decide(state);
     const P = PROC[r.p];
     $("relTitulo").textContent = tituloObra(state);
-    const hoje = new Date().toLocaleDateString("pt-PT", { day: "numeric", month: "long", year: "numeric" });
+    const hoje = new Date().toLocaleDateString(window.I18N && I18N.lang === "en" ? "en-GB" : "pt-PT", { day: "numeric", month: "long", year: "numeric" });
     const dados = [["Tipo de obra", nomeDe(TIPOS, state.tipoSel) || "por escolher"], ["Descrição", state.descricao], ["Morada", [state.morada, state.fracao, state.codPostal].filter(Boolean).join(", ")],
       ["Freguesia", state.freguesia], ["Concelho", state.concelho], ["Artigo matricial", state.artigo], ["Descrição predial", state.descPredial],
       ["Requerente", state.nome], ["Técnico", [state.tecnico, state.ordem].filter(Boolean).join(", ")], ["Data do relatório", hoje]].filter(([, x]) => x);
